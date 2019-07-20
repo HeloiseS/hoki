@@ -5,6 +5,8 @@ hoki
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
+.. image:: ./images/logo.png
+
 Interface with BPASS
 
 
