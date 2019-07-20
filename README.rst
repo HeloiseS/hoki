@@ -1,11 +1,10 @@
-hoki 
+
+.. image:: ./images/hoki.png 
 --------------------
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
-
-.. image:: ./images/logo.png
 
 Interface with BPASS
 
