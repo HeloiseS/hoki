@@ -1,5 +1,7 @@
 
-.. image:: ./images/hoki.png 
+.. image:: ./images/hoki.png
+    :height: 50px
+
 --------------------
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
