@@ -26,3 +26,13 @@ def stellar_numbers(path):
                               'K', 'M_lL', 'WNH_lL', 'WN_lL', 'WC_lL',], engine='python')
     return data
 
+
+def yields(path):
+    """
+    Load One yields file into a dataframe
+    """
+    data = pd.read_csv(path, sep=r"\s*",
+                       names=['age_log', 'H_wind', 'He_wind', 'Z_wind', 'E_wind',
+                              'E_sn', 'H_sn', 'He_sn', 'Z_sn'], engine='python')
+    return data
+
