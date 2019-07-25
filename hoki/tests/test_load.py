@@ -8,6 +8,8 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 sn_file = data_path+'/supernova-bin-imf_chab100.z008.dat'
 nmbr_file = data_path+'/numbers-bin-imf_chab100.z001.dat'
 yields_file = data_path+'/yields-bin-imf_chab100.z001.dat'
+masses_file_sin = data_path+'/starmass-sin-imf_chab100.z006.dat'
+masses_file_bin = data_path+'/starmass-bin-imf_chab100.z014.dat'
 
 
 def test_load_sn_rates():
@@ -24,5 +26,18 @@ def test_load_stellar_numbers():
 
 def test_load_yields():
     data = load.yields(yields_file)
-    assert data.shape[0] > 0, "The DataFrame is empty"
-    assert data.shape[1] == 9, "There should be 9 columns, instead there are "+str(data.shape[1])
+    assert data.shape[0] > 0, "the dataframe is empty"
+    assert data.shape[1] == 9, "there should be 9 columns, instead there are "+str(data.shape[1])
+
+
+def test_load_stellar_masses_sin():
+    data = load.stellar_masses(masses_file_sin)
+    assert data.shape[0] > 0, "the dataframe is empty"
+    assert data.shape[1] == 3, "there should be 3 columns, instead there are "+str(data.shape[1])
+
+
+
+def test_load_stellar_masses_bin():
+    data = load.stellar_masses(masses_file_bin)
+    assert data.shape[0] > 0, "the dataframe is empty"
+    assert data.shape[1] == 3, "there should be 3 columns, instead there are "+str(data.shape[1])

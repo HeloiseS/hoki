@@ -1,7 +1,7 @@
 import pandas as pd
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
-# data frame good enough?
+#       data frame good enough?
 
 
 def sn_rates(path):
@@ -34,5 +34,14 @@ def yields(path):
     data = pd.read_csv(path, sep=r"\s*",
                        names=['age_log', 'H_wind', 'He_wind', 'Z_wind', 'E_wind',
                               'E_sn', 'H_sn', 'He_sn', 'Z_sn'], engine='python')
+    return data
+
+
+def stellar_masses(path):
+    """
+    Load One stellar masses file into a dataframe
+    """
+    data = pd.read_csv(path, sep=r"\s*",
+                       names=['age_log', 'stellar_mass', 'remnant_mass'], engine='python')
     return data
 
