@@ -4,14 +4,25 @@ import pandas as pd
 # data frame good enough?
 
 
-def sn_models(path):
+def sn_rates(path):
     """
     Loads One Supernova rate file into a dataframe
     """
     data = pd.read_csv(path, sep=r"\s*",
-                names=['age_log', 'ia', 'iip', 'ii', 'ib', 'ic', 'lgrb', 'pisne', 'low_mass',
-                       'e_ia', 'e_iip', 'e_ii', 'e_ib', 'e_ic', 'e_lgrb', 'e_pisne', 'e_low_mass',
+                       names=['age_log', 'Ia', 'IIP', 'II', 'Ib', 'Ic', 'LGRB', 'PISNe', 'low_mass',
+                       'e_Ia', 'e_IIP', 'e_II', 'e_Ib', 'e_Ic', 'e_LGRB', 'e_PISNe', 'e_low_mass',
                        'age_yrs'], engine='python')
     return data
 
+
+def stellar_numbers(path):
+    """
+    Load One stellar type number file into a dataframe
+    """
+    data = pd.read_csv(path, sep=r"\s*",
+                       names=['age_log', 'O_hL', 'Of_hL', 'B_hL', 'A_hL', 'YSG_hL',
+                              'K', 'M_hL', 'WNH_hL', 'WN_hL', 'WC_hL',
+                              'O_lL', 'Of_lL', 'B_lL', 'A_lL', 'YSG_lL',
+                              'K', 'M_lL', 'WNH_lL', 'WN_lL', 'WC_lL',], engine='python')
+    return data
 
