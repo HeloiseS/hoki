@@ -19,13 +19,21 @@ class HRDiagram(object):
     Need a Doc String!
     """
     # TODO: write documentation
-    # TODO: WRITE TESTS!
 
     t = BPASS_TIME_BINS
     dt = BPASS_TIME_INTERVALS
     _time_weights = BPASS_TIME_WEIGHT_GRID
 
     def __init__(self, high_H_input, medium_H_input, low_H_input, hr_type):
+        """
+
+        Parameters
+        ----------
+        high_H_input
+        medium_H_input
+        low_H_input
+        hr_type
+        """
 
         # Initialise core attributes
         self.type = hr_type
@@ -44,7 +52,6 @@ class HRDiagram(object):
         self.all_stacked = None
 
     def stack(self, age_min=None, age_max=None):
-        # TODO: Finish the documentation (if we even keep this)
         """
         Creates a stack of HR diagrams within a range of ages
 
@@ -57,38 +64,25 @@ class HRDiagram(object):
         -------
 
         """
+        print(self.t[0], self.t[-1])
 
-        # Just making sure the limits given make sense
-        if age_min is not None and age_max is None:
-            assert age_min < self.t[-1], "FATAL ERROR: age_min should be smaller than maximum age"
-        elif age_max is not None and age_min is None:
-            assert age_max > self.t[0], "FATAL ERROR: age_max should be grater than the minimum age"
+        if age_min is None and age_max is not None:
+            age_min = self.t[0]
+            assert age_max <= self.t[-1], "FATAL ERROR: age_max too large"
 
-        # Detecting whether the limits were given in log space or in years
-        if age_min is None:
-            age_min_log = self.t[0]
-
-        if age_max is None:
-            age_max_log = self.t[-1]+0.1
+        if age_max is None and age_min is not None:
+            age_max = self.t[-1]
+            assert age_min >= self.t[0], "FATAL: age_min too low"
 
         if age_min is not None and age_max is not None:
             assert age_min < age_max, "FATAL ERROR: age_max should be greater than age_min"
 
-            if age_min >= BPASS_TIME_BINS[0] and age_max <= BPASS_TIME_BINS[-1]:
-                age_min_log, age_max_log = age_min, age_max
-
-            elif age_min > 999999 and age_max > 999999:
-                print("WARNING: It looks like you gave me the time interval in years, "
-                      "I'll convert to logs")
-                age_min_log, age_max_log = np.log10(age_min), np.log10(age_max)
-
-            else:
-                assert age_min >= BPASS_TIME_BINS[0] and age_max <= BPASS_TIME_BINS[-1], \
-                    "FATAL ERROR: The age range requested is outside the valid range " \
-                    "(6.0 to 11.1 inclusive)"
+            assert age_min >= self.t[0] and age_max <= self.t[-1], \
+                "FATAL ERROR: The age range requested is outside the valid range " \
+                "(6.0 to 11.1 inclusive)"+str(age_min)+" "+str(age_max)
 
         # Now that we have time limits we calculate what bins they correspond to.
-        bin_min, bin_max = int(np.round(10*(age_min_log-6))), int(np.round(10*(age_max_log-6)))
+        bin_min, bin_max = int(np.round(10*(age_min-6))), int(np.round(10*(age_max-6)))
 
         # And now we slice!
         for hrd1, hrd2, hrd3 in zip(self.high_H[bin_min:bin_max],
@@ -144,7 +138,6 @@ class HRDiagram(object):
 
         """
         assert abundances != (0, 0, 0), "abundances cannot be (0, 0, 0) - You're plotting nothing."
-        #TODO TEST EVERYTHING
         hr_plot = None
 
         # Case were no age or age range are given
