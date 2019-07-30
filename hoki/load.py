@@ -55,9 +55,9 @@ def hrTL(path):
     """
     # 'a' is just a place order which contains the whole file in an array of shape (45900,100)
     a = np.loadtxt(path)
-    hrTL_object = hr.HRdiagram(a[0:5100,:].reshape(51,100,100),
-                        a[5100:10200,:].reshape(51,100,100),
-                        a[10200:15300,:].reshape(51,100,100))
+    hrTL_object = hr.HRDiagram(a[0:5100,:].reshape(51,100,100),
+                                a[5100:10200,:].reshape(51,100,100),
+                                a[10200:15300,:].reshape(51,100,100))
 
     return hrTL_object
 
@@ -67,7 +67,7 @@ def hrTg(path):
     Load One HR diagrams (Tg type)
     """
     a = np.loadtxt(path)
-    hrTg_object = hr.HRdiagram(a[15300:20400,:].reshape(51,100,100),
+    hrTg_object = hr.HRDiagram(a[15300:20400,:].reshape(51,100,100),
                         a[20400:25500,:].reshape(51,100,100),
                         a[25500:30600,:].reshape(51,100,100))
 
@@ -79,7 +79,7 @@ def hrTTG(path):
     Load One HR diagrams (T/TG type)
     """
     a = np.loadtxt(path)
-    hrTTG_object = hr.HRdiagram(a[30600:35700,:].reshape(51,100,100),
+    hrTTG_object = hr.HRDiagram(a[30600:35700,:].reshape(51,100,100),
                         a[35700:40800,:].reshape(51,100,100),
                         a[40800:,:].reshape(51,100,100))
 
