@@ -57,7 +57,7 @@ def hrTL(path):
     a = np.loadtxt(path)
     hrTL_object = hr.HRDiagram(a[0:5100,:].reshape(51,100,100),
                                 a[5100:10200,:].reshape(51,100,100),
-                                a[10200:15300,:].reshape(51,100,100))
+                                a[10200:15300,:].reshape(51,100,100), hr_type='TL')
 
     return hrTL_object
 
@@ -69,7 +69,7 @@ def hrTg(path):
     a = np.loadtxt(path)
     hrTg_object = hr.HRDiagram(a[15300:20400,:].reshape(51,100,100),
                         a[20400:25500,:].reshape(51,100,100),
-                        a[25500:30600,:].reshape(51,100,100))
+                        a[25500:30600,:].reshape(51,100,100), hr_type='Tg')
 
     return hrTg_object
 
@@ -81,6 +81,6 @@ def hrTTG(path):
     a = np.loadtxt(path)
     hrTTG_object = hr.HRDiagram(a[30600:35700,:].reshape(51,100,100),
                         a[35700:40800,:].reshape(51,100,100),
-                        a[40800:,:].reshape(51,100,100))
+                        a[40800:,:].reshape(51,100,100), hr_type='TTG')
 
     return hrTTG_object

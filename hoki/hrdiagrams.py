@@ -24,13 +24,11 @@ class HRDiagram(object):
     t = BPASS_TIME_BINS
     dt = BPASS_TIME_INTERVALS
     _time_weights = BPASS_TIME_WEIGHT_GRID
-    logg_bins = np.arange(-2.9, 7.1, 0.1)
-    logTG_bins = np.arange(-2.9, 7.1, 0.1)
 
-    def __init__(self, high_H_input, medium_H_input, low_H_input):
+    def __init__(self, high_H_input, medium_H_input, low_H_input, hr_type):
 
         # Initialise core attributes
-
+        self.type = hr_type
         self.high_H_not_weighted = high_H_input
         self.medium_H_not_weighted = medium_H_input
         self.low_H_not_weighted = low_H_input
@@ -121,6 +119,7 @@ class HRDiagram(object):
             - [3] : Low hydrogen abundance (X < E-3)
 
         """
+
         assert log_age >= 6.0 and log_age <= 11.1, \
             "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
 
@@ -129,7 +128,7 @@ class HRDiagram(object):
         return (self.high_H[bin_i]+self.medium_H[bin_i]+self.low_H[bin_i], self.high_H[bin_i],
                 self.medium_H[bin_i], self.low_H[bin_i])
 
-    def plot(self, log_age=None, age_range=None, kind='TL', abundances=(1,1,1), **kwargs):
+    def plot(self, log_age=None, age_range=None, abundances=(1,1,1), **kwargs):
         """
         Plots the HR Diagram - calls hoki.hrdiagrams.plot_hrdiagram()
 
@@ -156,25 +155,25 @@ class HRDiagram(object):
                                                  self.medium_H_stacked, self.low_H_stacked
 
             if abundances == (1, 1, 1):
-                hr_plot = plot_hrdiagram(all_hr, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(all_hr, kind=self.type, **kwargs)
             elif abundances == (1, 1 , 0):
                 hr_data = high_hr + medium_hr
-                hr_plot = plot_hrdiagram(hr_data, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(hr_data, kind=self.type, **kwargs)
             elif abundances == (1, 0, 0):
-                hr_plot = plot_hrdiagram(high_hr, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(high_hr, kind=self.type, **kwargs)
             elif abundances == (0, 1, 1):
                 hr_data = medium_hr+low_hr
-                hr_plot = plot_hrdiagram(hr_data, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(hr_data, kind=self.type, **kwargs)
             elif abundances == (0, 1, 0):
-                hr_plot = plot_hrdiagram(medium_hr, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(medium_hr, kind=self.type, **kwargs)
             elif abundances == (0, 0, 1):
-                hr_plot = plot_hrdiagram(low_hr, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(low_hr, kind=self.type, **kwargs)
             elif abundances == (1, 0, 1):
                 hr_data = high_hr+low_hr
-                hr_plot = plot_hrdiagram(hr_data, kind=kind, **kwargs)
+                hr_plot = plot_hrdiagram(hr_data, kind=self.type, **kwargs)
 
-            hr_plot.set_xlabel("log"+kind[0])
-            hr_plot.set_ylabel("log"+kind[:-1])
+            hr_plot.set_xlabel("log"+self.type[0])
+            hr_plot.set_ylabel("log"+self.type[1:])
 
             return hr_plot
 
@@ -199,25 +198,25 @@ class HRDiagram(object):
                   "precedent. If you wanted to plot a single age, this will be WRONG.")
 
         if abundances == (1, 1, 1):
-            hr_plot = plot_hrdiagram(all_hr, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(all_hr, kind=self.type, **kwargs)
         elif abundances == (1, 1 , 0):
             hr_data = high_hr + medium_hr
-            hr_plot = plot_hrdiagram(hr_data, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(hr_data, kind=self.type, **kwargs)
         elif abundances == (1, 0, 0):
-            hr_plot = plot_hrdiagram(high_hr, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(high_hr, kind=self.type, **kwargs)
         elif abundances == (0, 1, 1):
             hr_data = medium_hr+low_hr
-            hr_plot = plot_hrdiagram(hr_data, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(hr_data, kind=self.type, **kwargs)
         elif abundances == (0, 1, 0):
-            hr_plot = plot_hrdiagram(medium_hr, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(medium_hr, kind=self.type, **kwargs)
         elif abundances == (0, 0, 1):
-            hr_plot = plot_hrdiagram(low_hr, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(low_hr, kind=self.type, **kwargs)
         elif abundances == (1, 0, 1):
             hr_data = high_hr+low_hr
-            hr_plot = plot_hrdiagram(hr_data, kind='TL', **kwargs)
+            hr_plot = plot_hrdiagram(hr_data, kind=self.type, **kwargs)
 
-        hr_plot.set_xlabel("log"+kind[0])
-        hr_plot.set_ylabel("log"+kind[1:])
+        hr_plot.set_xlabel("log"+self.type[0])
+        hr_plot.set_ylabel("log"+self.type[1:])
 
         return hr_plot
 
