@@ -2,13 +2,20 @@
    sphinx-quickstart on Wed Jul 31 14:29:43 2019.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
-   
+ 
 #################################
-Welcome to hoki's documentation!
+**Welcome to Hoki!**
 #################################
 
+
 .. toctree::
-   plots
+   intro
+   quick_start
+   :maxdepth: 3
+   :Caption: Introduction
+
+.. toctree::
+   plot_hrdiagrams
    :maxdepth: 2
    :caption: Cook Book
 
@@ -16,9 +23,8 @@ Welcome to hoki's documentation!
 .. toctree::
    load
    hrdiagrams
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Package Documentation
-   
 
 
 Indices and tables

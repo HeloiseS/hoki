@@ -1,6 +1,6 @@
-##########
+################
 **hrdiagrams**
-##########
+################
 
 
 .. automodule:: hoki.hrdiagrams

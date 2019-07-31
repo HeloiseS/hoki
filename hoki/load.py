@@ -11,6 +11,22 @@ import hoki.hrdiagrams as hr
 #       data frame good enough?
 
 def population_output(path, hr_type=None):
+    """
+    Loads a population output file
+
+    Parameters
+    ----------
+    path : str
+        Path to the file containing the target data.
+
+    hr_type : str, optional
+        Type of HR diagram to load: 'TL', 'Tg' or 'TTG'.
+
+    Returns
+    -------
+    Output Data : pandas.DataFrame or hoki.hrdiagrams.HRDiagrams object
+
+    """
 
     assert isinstance(path, str), "The location of the file is expected to be a string."
     assert hr_type in [None,'TL', 'Tg', 'TTG'], "The HR diagram type is invalid. " \
