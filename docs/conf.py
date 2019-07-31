@@ -35,6 +35,8 @@ try:
 except ImportError:
     print('ERROR: the documentation requires the sphinx-astropy package to be installed')
     sys.exit(1)
+    
+extensions+=['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'numpydoc']
 
 # Get configuration information from setup.cfg
 from configparser import ConfigParser

@@ -1,3 +1,7 @@
+"""
+This module implements the tools to easily load BPASS data.
+"""
+
 import pandas as pd
 import numpy as np
 import hoki.hrdiagrams as hr
@@ -6,8 +10,40 @@ import hoki.hrdiagrams as hr
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
 
+def population_output(path, hr_type=None):
 
-def sn_rates(path):
+    assert isinstance(path, str), "The location of the file is expected to be a string."
+    assert hr_type in [None,'TL', 'Tg', 'TTG'], "The HR diagram type is invalid. " \
+                                                "Available options are: 'TL', 'Tg', 'TTG'. "
+
+    if "supernova" in path:
+        return _sn_rates(path)
+
+    elif "numbers" in path:
+        return _stellar_numbers(path)
+
+    elif "yields" in path:
+        return _yields(path)
+
+    elif "starmass" in path:
+        return _stellar_masses(path)
+
+    elif "hrs" in path and hr_type == 'TL':
+        return _hrTL(path)
+
+    elif "hrs" in path and hr_type == 'Tg':
+        return _hrTg(path)
+
+    elif "hrs" in path and hr_type == 'TTG':
+        return _hrTTG(path)
+
+    else:
+        print("Could not load the Stellar Population output. "
+              "Trouble shooting:\n1) Is the filename correct?"
+              "\n2) Trying to load an HR diagram? Make sure hr_type is set!")
+
+
+def _sn_rates(path):
     """
     Loads One Supernova rate file into a dataframe
     """
@@ -18,7 +54,7 @@ def sn_rates(path):
     return data
 
 
-def stellar_numbers(path):
+def _stellar_numbers(path):
     """
     Load One stellar type number file into a dataframe
     """
@@ -30,7 +66,7 @@ def stellar_numbers(path):
     return data
 
 
-def yields(path):
+def _yields(path):
     """
     Load One yields file into a dataframe
     """
@@ -40,7 +76,7 @@ def yields(path):
     return data
 
 
-def stellar_masses(path):
+def _stellar_masses(path):
     """
     Load One stellar masses file into a dataframe
     """
@@ -49,7 +85,7 @@ def stellar_masses(path):
     return data
 
 
-def hrTL(path):
+def _hrTL(path):
     """
     Load HR diagrams (TL type)
     """
@@ -62,7 +98,7 @@ def hrTL(path):
     return hrTL_object
 
 
-def hrTg(path):
+def _hrTg(path):
     """
     Load One HR diagrams (Tg type)
     """
@@ -74,7 +110,7 @@ def hrTg(path):
     return hrTg_object
 
 
-def hrTTG(path):
+def _hrTTG(path):
     """
     Load One HR diagrams (T/TG type)
     """

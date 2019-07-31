@@ -7,16 +7,16 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 
 hr_file = data_path+'/hrs-sin-imf_chab100.zem4.dat'
 
-hrtl = load.hrTL(hr_file)
-hrtg = load.hrTg(hr_file)
-hrttg = load.hrTTG(hr_file)
+hrtl = load._hrTL(hr_file)
+hrtg = load._hrTg(hr_file)
+hrttg = load._hrTTG(hr_file)
 
 
 # I cant' test whether matplotlib is doing the right thing but I can check it runs.
 def test_stack():
-    hrtl.stack(age_min=6.1)
-    hrtl.stack(age_max=7.0)
-    hrtl.stack(age_min=6.2, age_max=6.8)
+    hrtl.stack(log_age_min=6.1)
+    hrtl.stack(log_age_max=7.0)
+    hrtl.stack(log_age_min=6.2, log_age_max=6.8)
 
 
 def test_at_log_age():

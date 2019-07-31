@@ -1,9 +1,5 @@
 """
-Dr. H. F. Stevance - hfstevance@gmail.com
-The University of Auckland
-
-
-
+This module implements the HR diagram infrastructure.
 """
 
 import numpy as np
@@ -16,9 +12,74 @@ BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME
 
 class HRDiagram(object):
     """
-    Need a Doc String!
+    **A class containing the HR diagram data produced by BPASS.**
+
+    This class is called by the functions hrTL(), hrTg() and hrTTG() in hoki.load and users should
+    not need to create an HRDiagram object themselves.
+
+    For more details on the BPASS outputs - and therefore why the data structure is as it is -
+    please refer to the manual:
+    https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf
+
+
+    Notes
+    -----
+    **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time
+    weighted arrays corresponding to the 3 different abundances.
+
+
+    Attributes
+    ----------
+    self.high_H : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins with a hydrogen abundance X > 0.4. Time weighted.
+
+    self.medium_H : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins with a hydrogen abundance E-3 < X < 0.4. Time weighted.
+
+    self.low_H : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins with a hydrogen abundance X < E-3. Time weighted.
+
+    self.type : str
+        Type of HR diagram: TL, Tg or TTG
+
+    self.high_H_not_weighted : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins with a hydrogen abundance X > 0.4.
+
+    self.medium_H_not_weighted : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins with a hydrogen abundance E-3 < X < 0.4.
+
+    self.low_H_not_weighted : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins with a hydrogen abundance X < E-3.
+
+    self._all_H : np.ndarray (51x100x100)
+        HR diagrams for 51 time bins - all hydrogen abundances stacked. This attribute is private
+        because it can simply be called using the indexing capabilities of the class.
+
+    self.high_H_stacked : np.ndarray (51x100x100)
+        HR diagram stacked for a given age range - hydrogen abundance X > 0.4. None before calling
+        self.stack()
+
+    self.medium_H_stacked : np.ndarray (51x100x100)
+        HR diagram stacked for a given age range - hydrogen abundance E-3 < X < 0.4. None before
+        calling self.stack()
+
+    self.low_H_stacked : np.ndarray (51x100x100)
+        HR diagram stacked for a given age range - hydrogen abundance E-3 > X. None before calling
+        self.stack()
+
+    self.all_stacked : np.ndarray (51x100x100)
+        HR diagram stacked for a given age range - all abundances added up. None before calling
+        self.stack()
+
+    self.t : np.ndarray 1D
+        **Class attribute** - The time bins in BPASS - note they are in LOG SPACE
+
+    self.dt : np.ndarray 1D
+        **Class attribute** - Time intervals between bins NOT in log space
+
+
+
     """
-    # TODO: write documentation
 
     t = BPASS_TIME_BINS
     dt = BPASS_TIME_INTERVALS
@@ -26,13 +87,27 @@ class HRDiagram(object):
 
     def __init__(self, high_H_input, medium_H_input, low_H_input, hr_type):
         """
+        Initialisation of HRDiagrams.
+
+        Note
+        ----
+        Initialisation from a text file is done through the hoki.load functions
 
         Parameters
         ----------
-        high_H_input
-        medium_H_input
-        low_H_input
-        hr_type
+        high_H_input : np.ndarray with shape (51x100x100)
+            This inputs the HR diagrams corresponding to a hydrogen abundance X > 0.4.
+
+        medium_H_input : np.ndarray with shape (51x100x100)
+            This inputs the HR diagrams corresponding to a hydrogen abundance E-3 < X < 0.4.
+
+        low_H_input : np.ndarray with shape (51x100x100)
+            This inputs the HR diagrams corresponding to a hydrogen abundance X < E-3.
+
+        hr_type : str - Valid options are 'TL' , 'Tg', 'TTG'
+            This tells the class what type of HR diagrams are being given. For more details on what
+            the 3 options mean, consult the BPASS manual section on HR diagram isocontours.
+
         """
 
         # Initialise core attributes
@@ -51,38 +126,43 @@ class HRDiagram(object):
                                                                          np.zeros((100, 100))
         self.all_stacked = None
 
-    def stack(self, age_min=None, age_max=None):
+    def stack(self, log_age_min=None, log_age_max=None):
         """
         Creates a stack of HR diagrams within a range of ages
 
         Parameters
         ----------
-        age_min
-        age_max
+        log_age_min : int or float, optional
+            Minimum log(age) to stack
+        log_age_max : int or float, optional
+            Maximum log(age) to stack
+
 
         Returns
         -------
+        None
+            This method stores the stacked values in the class attributes self.high_H_stacked,
+            self.medium_H_stacked, self.low_H_stacked and self.all_stacked.
 
         """
-        print(self.t[0], self.t[-1])
 
-        if age_min is None and age_max is not None:
-            age_min = self.t[0]
-            assert age_max <= self.t[-1], "FATAL ERROR: age_max too large"
+        if log_age_min is None and log_age_max is not None:
+            log_age_min = self.t[0]
+            assert log_age_max <= self.t[-1], "FATAL ERROR: age_max too large. Give the log age."
 
-        if age_max is None and age_min is not None:
-            age_max = self.t[-1]
-            assert age_min >= self.t[0], "FATAL: age_min too low"
+        if log_age_max is None and log_age_min is not None:
+            log_age_max = self.t[-1]
+            assert log_age_min >= self.t[0], "FATAL: age_min too low"
 
-        if age_min is not None and age_max is not None:
-            assert age_min < age_max, "FATAL ERROR: age_max should be greater than age_min"
+        if log_age_min is not None and log_age_max is not None:
+            assert log_age_min < log_age_max, "FATAL ERROR: age_max should be greater than age_min"
 
-            assert age_min >= self.t[0] and age_max <= self.t[-1], \
+            assert log_age_min >= self.t[0] and log_age_max <= self.t[-1], \
                 "FATAL ERROR: The age range requested is outside the valid range " \
-                "(6.0 to 11.1 inclusive)"+str(age_min)+" "+str(age_max)
+                "(6.0 to 11.1 inclusive)"+str(log_age_min)+" "+str(log_age_max)
 
         # Now that we have time limits we calculate what bins they correspond to.
-        bin_min, bin_max = int(np.round(10*(age_min-6))), int(np.round(10*(age_max-6)))
+        bin_min, bin_max = int(np.round(10*(log_age_min-6))), int(np.round(10*(log_age_max-6)))
 
         # And now we slice!
         for hrd1, hrd2, hrd3 in zip(self.high_H[bin_min:bin_max],
@@ -94,6 +174,9 @@ class HRDiagram(object):
             self.low_H_stacked += hrd3
 
         self.all_stacked = self.high_H_stacked+self.medium_H_stacked+self.low_H_stacked
+        print("The following attributes were updated: .all_stacked, .high_H_stacked, "
+              ".medium_H_stacked, .low_H_stacked.")
+        return
 
     def at_log_age(self, log_age):
         """
@@ -128,13 +211,30 @@ class HRDiagram(object):
 
         Parameters
         ----------
-        log_age
-        age_range
-        abundances
-        kwargs
+        log_age : int or float, optional
+            Log(age) at which to plot the HRdiagram.
+
+        age_range : tuple or list of 2 ints or floats, optional
+            Age range within which you want to plot the HR diagram
+
+        abundances : tuple or list of 3 ints, zeros or ones, optional
+            This turns on or off the inclusion of the abundances. The corresponding abundances are:
+            (X > 0.4, E-3 < X < 0.4, E-3>X). A 1 means a particular abundance should be included,
+            a 0 means it will be ignored. Default is (1,1,1), meaning all abundances are plotted.
+            Note that (0,0,0) is not valid and will return and assertion error.
+
+        **kwargs : matplotlib keyword arguments, optional
+
+        Notes
+        -----
+        If you give both an age and an age range, the age range will take precedent and be plotted.
+        You will get a warning if that happens though.
 
         Returns
         -------
+        matplotlib.axes._subplots.AxesSubplot :
+            The plot created is returned, so you can add stuff to it, like text or extra data.
+
 
         """
         assert abundances != (0, 0, 0), "abundances cannot be (0, 0, 0) - You're plotting nothing."
@@ -187,7 +287,7 @@ class HRDiagram(object):
                                                  self.medium_H_stacked, self.low_H_stacked
 
         elif age_range and log_age:
-            print("\nWARNING: you provided an age range as well as an age. The latter takes "
+            print("\nWARNING: you provided an age range as well as an age. The former takes "
                   "precedent. If you wanted to plot a single age, this will be WRONG.")
 
         if abundances == (1, 1, 1):
@@ -241,23 +341,35 @@ class HRDiagram(object):
 #      return int(np.round((log_L-self.logL_bins[0])/0.1))
 
 
-def plot_hrdiagram(single_hr_grid, kind='TL', levels=10,loc=111, cmap='RdGy', **kwargs):
+def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='RdGy', **kwargs):
     """
+    Plots an HR diagram with a contour plot
 
     Parameters
     ----------
-    single_hr_grid
-    kind
-    levels
-    loc
-    cmap
-    kwargs
+    single_hr_grid : np.ndarray (100x100)
+        One HR diagram grid.
+
+    kind : str, optional
+        Type of HR diagram: 'TL', 'Tg', or 'TTG'. Default is 'TL'.
+
+    levels : int, optional
+        Number of contours to plot. Default is 10.
+
+    loc : int - 3 digits, optional
+        Location to parse plt.subplot(). The Default is 111, to make only one plot.
+
+    cmap : str, optional
+        The matplotlib colour map to use. Default is 'RdGy'.
+
+    kwargs : matplotlib key word arguments to parse
 
     Returns
     -------
+    matplotlib.axes._subplots.AxesSubplot :
+        The plot created is returned, so you can add stuff to it, like text or extra data.
 
     """
-    #TODO: Write this docstring!
 
     assert kind == 'TL' or kind == 'Tg' or kind == 'TTG', "Need to write an error message for this"
     if kind == 'TL':
