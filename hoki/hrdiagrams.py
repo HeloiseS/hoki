@@ -5,6 +5,8 @@ This module implements the HR diagram infrastructure.
 import numpy as np
 import matplotlib.pyplot as plt
 from hoki.constants import *
+from matplotlib import ticker
+
 
 
 class HRDiagram(object):
@@ -338,7 +340,7 @@ class HRDiagram(object):
 #      return int(np.round((log_L-self.logL_bins[0])/0.1))
 
 
-def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='RdGy', **kwargs):
+def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='Greys', **kwargs):
     """
     Plots an HR diagram with a contour plot
 
@@ -377,7 +379,24 @@ def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='RdGy', *
         X, Y = np.meshgrid(np.arange(-2.9, 7.1, 0.1), np.arange(-2.9, 7.1, 0.1))
 
     hr_diagram = plt.subplot(loc)
-    hr_diagram.contour(X, Y, single_hr_grid.T, levels, cmap=cmap, **kwargs)
+
+    # MAKING CONTOUR PLOT IN LOG SPACE!
+    # This requires some attention: I need to log10 my array, so zero values will be undefined
+    # this messed with the contour and contourf matplotlib functions.
+    # The work around is to replace the 0 values in the grid by the lowest, non-zero value in the
+    # grid. I also chose a default colour map where low values are white, so it doesn't look
+    # like I populated the grid.
+
+    # Take the grid and replace zeros
+    single_hr_grid[single_hr_grid == 0] = min(single_hr_grid[single_hr_grid != 0])
+
+    # I then log the grid and transpose the array directly in the plotting function
+    # The transpose is required so that my HR diagram is the right way around.
+    hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), levels,
+                         cmap=cmap, **kwargs)
+
+    # Temperature should be inverted
+    hr_diagram.invert_xaxis()
 
     return hr_diagram
 
