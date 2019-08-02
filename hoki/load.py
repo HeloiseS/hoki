@@ -5,7 +5,7 @@ This module implements the tools to easily load BPASS data.
 import pandas as pd
 import numpy as np
 import hoki.hrdiagrams as hr
-
+from hoki.constants import *
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
@@ -56,7 +56,8 @@ def population_output(path, hr_type=None):
     else:
         print("Could not load the Stellar Population output. "
               "Trouble shooting:\n1) Is the filename correct?"
-              "\n2) Trying to load an HR diagram? Make sure hr_type is set!")
+              "\n2) Trying to load an HR diagram? "
+              "Make sure hr_type is set! Available options are: 'TL', 'Tg', 'TTG'. ")
 
 
 def _sn_rates(path):

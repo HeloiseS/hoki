@@ -10,6 +10,7 @@ from ._astropy_init import *   # noqa
 # This is the same check as the one at the top of setup.py
 import sys
 from distutils.version import LooseVersion
+from hoki.constants import *
 
 __minimum_python_version__ = "3.5"
 
