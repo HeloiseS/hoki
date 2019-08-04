@@ -64,7 +64,7 @@ def _sn_rates(path):
     """
     Loads One Supernova rate file into a dataframe
     """
-    data = pd.read_csv(path, sep=r"\s*",
+    data = pd.read_csv(path, sep=r"\s+",
                        names=['age_log', 'Ia', 'IIP', 'II', 'Ib', 'Ic', 'LGRB', 'PISNe', 'low_mass',
                        'e_Ia', 'e_IIP', 'e_II', 'e_Ib', 'e_Ic', 'e_LGRB', 'e_PISNe', 'e_low_mass',
                        'age_yrs'], engine='python')

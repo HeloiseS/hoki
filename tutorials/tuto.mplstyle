@@ -1,0 +1,60 @@
+# To check more avaialble options see:
+# https://matplotlib.org/tutorials/introductory/customizing.html
+
+text.color : (0.3,0.3,0.3)
+
+axes.titlesize : 16
+axes.labelsize : 14
+axes.edgecolor : (0.3,0.3,0.3)
+axes.labelcolor : (0.3,0.3,0.3)
+axes.linewidth : 1
+axes.spines.top : False
+axes.spines.right : False
+axes.spines.bottom : True
+axes.spines.left : True
+
+
+axes.prop_cycle : cycler('color', [ 'CB4035', '966ebb', '4683DE', '4BC55A', 'FBA11B','2F2F2F'])
+
+axes.grid : True
+grid.alpha : 0.7
+grid.linestyle : --
+grid.linewidth : 0.6
+
+# LINES
+lines.linewidth : 1.5
+lines.markeredgewidth : 0.0
+lines.markersize : 5
+
+lines.solid_joinstyle : round
+lines.solid_capstyle : round
+
+# DASHES
+lines.dash_capstyle : round
+lines.dash_joinstyle : round
+
+lines.dashed_pattern : 3.7, 3.5
+lines.dashdot_pattern : 6.4, 3, 1, 3
+lines.dotted_pattern : 1, 2.8
+
+
+xtick.labelsize : 13
+xtick.color : (0.3,0.3,0.3)
+xtick.direction : in
+ytick.labelsize : 13
+ytick.color : (0.3,0.3,0.3)
+ytick.direction : in
+
+
+figure.figsize  : 7, 5
+figure.dpi : 150
+
+scatter.marker : .
+
+savefig.dpi : 200
+#savefig.transparent : True
+savefig.format : svg
+
+# DARK THEME
+# axes.facecolor : black
+# figure.facecolor : black
