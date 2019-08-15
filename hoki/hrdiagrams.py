@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from hoki.constants import *
 from matplotlib import ticker
+import matplotlib.cm as cm
 
 
 
@@ -340,7 +341,7 @@ class HRDiagram(object):
 #      return int(np.round((log_L-self.logL_bins[0])/0.1))
 
 
-def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='Greys', **kwargs):
+def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
     """
     Plots an HR diagram with a contour plot
 
@@ -352,9 +353,6 @@ def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='Greys', 
     kind : str, optional
         Type of HR diagram: 'TL', 'Tg', or 'TTG'. Default is 'TL'.
 
-    levels : int, optional
-        Number of contours to plot. Default is 10.
-
     loc : int - 3 digits, optional
         Location to parse plt.subplot(). The Default is 111, to make only one plot.
 
@@ -362,6 +360,15 @@ def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='Greys', 
         The matplotlib colour map to use. Default is 'RdGy'.
 
     kwargs : matplotlib key word arguments to parse
+
+
+    Note
+    -----
+    The default levels are defined such that they show the maximum value, then a 10th, then a 100th,
+    etc... down to the minimum level. You can also use the "levels" keyword of the contour function
+    to choose the number of levels you want (but them matplotlib will arbitrarily define where the
+    levels fall).
+
 
     Returns
     -------
@@ -376,7 +383,7 @@ def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='Greys', 
     elif kind == 'Tg':
         X, Y = np.meshgrid(np.arange(-2.9, 7.1, 0.1), np.arange(-2.9, 7.1, 0.1))
     elif kind == 'TTG':
-        X, Y = np.meshgrid(np.arange(-2.9, 7.1, 0.1), np.arange(-2.9, 7.1, 0.1))
+        X, Y = np.meshgrid(np.arange(0.1, 10.1, 0.1), np.arange(-2.9, 7.1, 0.1))
 
     hr_diagram = plt.subplot(loc)
 
@@ -387,12 +394,36 @@ def plot_hrdiagram(single_hr_grid, kind='TL', levels=10, loc=111, cmap='Greys', 
     # grid. I also chose a default colour map where low values are white, so it doesn't look
     # like I populated the grid.
 
-    # Take the grid and replace zeros
-    single_hr_grid[single_hr_grid == 0] = min(single_hr_grid[single_hr_grid != 0])
+    # Now we define our default levels
+    top_level = single_hr_grid.max()
+    min_level = single_hr_grid[single_hr_grid > 1].min()
+
+    # we want our levels to be fractions of 10 of our maximum value
+    # and yes it didn't need to be written this way, but isn't it gorgeous?
+    possible_levels = [top_level*0.00000001,
+                       top_level*0.0000001,
+                       top_level*0.000001,
+                       top_level*0.00001,
+                       top_level*0.0001,
+                       top_level*0.001,
+                       top_level*0.01,
+                       top_level*0.1,
+                       top_level]
+
+    # to make sure the colourmap is sensible we want to ensure the minimum level == minimum value
+    levels = [min_level] + [level for level in possible_levels if level > min_level]
+
+    colMap = cm.get_cmap(cmap)
+
+    colMap.set_under(color='white')
+
+    # Take the grid and replace zeros by something non-zero but still smaller than lowest value
+    single_hr_grid[single_hr_grid == 0] = min(single_hr_grid[single_hr_grid != 0])-\
+                                          0.1*min(single_hr_grid[single_hr_grid != 0])
 
     # I then log the grid and transpose the array directly in the plotting function
     # The transpose is required so that my HR diagram is the right way around.
-    hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), levels,
+    hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), np.log10(levels).tolist(),
                          cmap=cmap, **kwargs)
 
     # Temperature should be inverted

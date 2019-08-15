@@ -15,8 +15,9 @@
    :Caption: Introduction
 
 .. toctree::
-   plot_hrdiagrams
-   :maxdepth: 2
+   Transient_rates
+   HR_diagrams
+   :maxdepth: 3
    :caption: Cook Book
 
 
@@ -25,6 +26,8 @@
    hrdiagrams
    :maxdepth: 3
    :caption: Package Documentation
+
+
 
 
 Indices and tables

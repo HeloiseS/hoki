@@ -9,16 +9,21 @@ yields_file = data_path+'/yields-bin-imf_chab100.z001.dat'
 masses_file_sin = data_path+'/starmass-sin-imf_chab100.z006.dat'
 masses_file_bin = data_path+'/starmass-bin-imf_chab100.z014.dat'
 hr_file = data_path+'/hrs-sin-imf_chab100.zem4.dat'
+sed_file = data_path+'/spectra-bin-imf135_300.z002.dat'
+ion_file = data_path+'/ionizing-bin-imf135_300.z002.dat'
+colour_file = data_path+'/colours-bin-imf135_300.z002.dat'
 
-
-def test_population_output():
-    data = load.population_output(sn_file)
-    data = load.population_output(nmbr_file)
-    data = load.population_output(yields_file)
-    data = load.population_output(masses_file_bin)
-    data = load.population_output(hr_file, hr_type='TL')
-    data = load.population_output(hr_file, hr_type='Tg')
-    data = load.population_output(hr_file, hr_type='TTG')
+def test_model_output():
+    data = load.model_output(sn_file)
+    data = load.model_output(nmbr_file)
+    data = load.model_output(yields_file)
+    data = load.model_output(masses_file_bin)
+    data = load.model_output(sed_file)
+    data = load.model_output(ion_file)
+    data = load.model_output(hr_file, hr_type='TL')
+    data = load.model_output(hr_file, hr_type='Tg')
+    data = load.model_output(hr_file, hr_type='TTG')
+    del data
 
 
 def test_load_sn_rates():
@@ -71,3 +76,20 @@ def test_load_hrTTG():
     assert data.medium_H.shape == (51, 100, 100), "Attribute medium_H has the wrong shape"
     assert data.low_H.shape == (51, 100, 100), "Attribute low_H has the wrong shape"
 
+
+def test_sed():
+    data = load._sed(sed_file)
+    assert data.shape[0] > 0, "the dataframe is empty"
+    assert data.shape[1] == 52, "there should be 52 columns, instead there are "+str(data.shape[1])
+
+
+def test_ion():
+    data = load._ionizing_flux(ion_file)
+    assert data.shape[0] > 0, "the dataframe is empty"
+    assert data.shape[1] == 5, "there should be 5 columns, instead there are "+str(data.shape[1])
+
+
+def test_colours():
+    data = load._colours(colour_file)
+    assert data.shape[0] > 0, "the dataframe is empty"
+    assert data.shape[1] == 26, "there should be 26 columns, instead there are "+str(data.shape[1])

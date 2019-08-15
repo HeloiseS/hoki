@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx_rtd_theme',
     'sphinxcontrib.napoleon',
+    'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -113,6 +114,7 @@ html_favicon = "./favicon.png"
 # so a file named "default.css" will overwrite the builtin "default.css".
 
 html_static_path = ['_static']
+
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
