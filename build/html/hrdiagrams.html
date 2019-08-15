@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>hrdiagrams &mdash; hoki 0.1.dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'0.1.dev',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="load" href="load.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Cook Book</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Package Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="load.html"><strong>load</strong></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>hrdiagrams</strong></a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li><strong>hrdiagrams</strong></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/hrdiagrams.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+      
+        <a href="load.html" class="btn btn-neutral float-left" title="load" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-hoki.hrdiagrams">
+<span id="hrdiagrams"></span><h1><strong>hrdiagrams</strong><a class="headerlink" href="#module-hoki.hrdiagrams" title="Permalink to this headline">¶</a></h1>
+<p>This module implements the HR diagram infrastructure.</p>
+<dl class="class">
+<dt id="hoki.hrdiagrams.HRDiagram">
+<em class="property">class </em><code class="descclassname">hoki.hrdiagrams.</code><code class="descname">HRDiagram</code><span class="sig-paren">(</span><em>high_H_input</em>, <em>medium_H_input</em>, <em>low_H_input</em>, <em>hr_type</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>A class containing the HR diagram data produced by BPASS.</strong></p>
+<p>This class is called by the functions hrTL(), hrTg() and hrTTG() in hoki.load and users should
+not need to create an HRDiagram object themselves.</p>
+<p>For more details on the BPASS outputs - and therefore why the data structure is as it is -
+please refer to the manual:
+<a class="reference external" href="https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf">https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf</a></p>
+<p class="rubric">Notes</p>
+<p><strong>HRDiagram supports indexing.</strong> The indexed array is a 51x100x100 np.array that stacked the time
+weighted arrays corresponding to the 3 different abundances.</p>
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.high_H">
+<code class="descclassname">self.</code><code class="descname">high_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &gt; 0.4. Time weighted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.medium_H">
+<code class="descclassname">self.</code><code class="descname">medium_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.medium_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance E-3 &lt; X &lt; 0.4. Time weighted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.low_H">
+<code class="descclassname">self.</code><code class="descname">low_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.low_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &lt; E-3. Time weighted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.type">
+<code class="descclassname">self.</code><code class="descname">type</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of HR diagram: TL, Tg or TTG</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.high_H_not_weighted">
+<code class="descclassname">self.</code><code class="descname">high_H_not_weighted</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H_not_weighted" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &gt; 0.4.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.medium_H_not_weighted">
+<code class="descclassname">self.</code><code class="descname">medium_H_not_weighted</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.medium_H_not_weighted" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance E-3 &lt; X &lt; 0.4.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.low_H_not_weighted">
+<code class="descclassname">self.</code><code class="descname">low_H_not_weighted</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.low_H_not_weighted" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &lt; E-3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self._all_H">
+<code class="descclassname">self.</code><code class="descname">_all_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self._all_H" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagrams for 51 time bins - all hydrogen abundances stacked. This attribute is private
+because it can simply be called using the indexing capabilities of the class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.high_H_stacked">
+<code class="descclassname">self.</code><code class="descname">high_H_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H_stacked" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagram stacked for a given age range - hydrogen abundance X &gt; 0.4. None before calling
+self.stack()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.medium_H_stacked">
+<code class="descclassname">self.</code><code class="descname">medium_H_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.medium_H_stacked" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagram stacked for a given age range - hydrogen abundance E-3 &lt; X &lt; 0.4. None before
+calling self.stack()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.low_H_stacked">
+<code class="descclassname">self.</code><code class="descname">low_H_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.low_H_stacked" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagram stacked for a given age range - hydrogen abundance E-3 &gt; X. None before calling
+self.stack()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.all_stacked">
+<code class="descclassname">self.</code><code class="descname">all_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.all_stacked" title="Permalink to this definition">¶</a></dt>
+<dd><p>HR diagram stacked for a given age range - all abundances added up. None before calling
+self.stack()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray (51x100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.t">
+<code class="descclassname">self.</code><code class="descname">t</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.t" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Class attribute</strong> - The time bins in BPASS - note they are in LOG SPACE</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray 1D</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hoki.hrdiagrams.HRDiagram.self.dt">
+<code class="descclassname">self.</code><code class="descname">dt</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.dt" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Class attribute</strong> - Time intervals between bins NOT in log space</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">np.ndarray 1D</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hoki.hrdiagrams.HRDiagram.at_log_age">
+<code class="descname">at_log_age</code><span class="sig-paren">(</span><em>log_age</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.at_log_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the HR diagrams at a specific age.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em>) – The log(age) of choice.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>[0] : Stack of all the abundances</li>
+<li>[1] : High hydrogen abundance X&gt;0.4</li>
+<li>[2] : Medium hydrogen abundance (E-3 &lt; X &lt; 0.4)</li>
+<li>[3] : Low hydrogen abundance (X &lt; E-3)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Tuple of 4 np.ndarrays (100x100)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hoki.hrdiagrams.HRDiagram.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>log_age=None</em>, <em>age_range=None</em>, <em>abundances=(1</em>, <em>1</em>, <em>1)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the HR Diagram - calls hoki.hrdiagrams.plot_hrdiagram()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Log(age) at which to plot the HRdiagram.</li>
+<li><strong>age_range</strong> (<em>tuple</em><em> or </em><em>list of 2 ints</em><em> or </em><em>floats</em><em>, </em><em>optional</em>) – Age range within which you want to plot the HR diagram</li>
+<li><strong>abundances</strong> (<em>tuple</em><em> or </em><em>list of 3 ints</em><em>, </em><em>zeros</em><em> or </em><em>ones</em><em>, </em><em>optional</em>) – This turns on or off the inclusion of the abundances. The corresponding abundances are:
+(X &gt; 0.4, E-3 &lt; X &lt; 0.4, E-3&gt;X). A 1 means a particular abundance should be included,
+a 0 means it will be ignored. Default is (1,1,1), meaning all abundances are plotted.
+Note that (0,0,0) is not valid and will return and assertion error.</li>
+<li><strong>**kwargs</strong> (<em>matplotlib keyword arguments</em><em>, </em><em>optional</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If you give both an age and an age range, the age range will take precedent and be plotted.
+You will get a warning if that happens though.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The plot created is returned, so you can add stuff to it, like text or extra data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">matplotlib.axes._subplots.AxesSubplot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hoki.hrdiagrams.HRDiagram.stack">
+<code class="descname">stack</code><span class="sig-paren">(</span><em>log_age_min=None</em>, <em>log_age_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a stack of HR diagrams within a range of ages</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>log_age_min</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Minimum log(age) to stack</li>
+<li><strong>log_age_max</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Maximum log(age) to stack</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">This method stores the stacked values in the class attributes self.high_H_stacked,
+self.medium_H_stacked, self.low_H_stacked and self.all_stacked.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.hrdiagrams.plot_hrdiagram">
+<code class="descclassname">hoki.hrdiagrams.</code><code class="descname">plot_hrdiagram</code><span class="sig-paren">(</span><em>single_hr_grid</em>, <em>kind='TL'</em>, <em>loc=111</em>, <em>cmap='Greys'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.plot_hrdiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots an HR diagram with a contour plot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>single_hr_grid</strong> (<em>np.ndarray</em><em> (</em><em>100x100</em><em>)</em>) – One HR diagram grid.</li>
+<li><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of HR diagram: ‘TL’, ‘Tg’, or ‘TTG’. Default is ‘TL’.</li>
+<li><strong>loc</strong> (<em>int - 3 digits</em><em>, </em><em>optional</em>) – Location to parse plt.subplot(). The Default is 111, to make only one plot.</li>
+<li><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – The matplotlib colour map to use. Default is ‘RdGy’.</li>
+<li><strong>kwargs</strong> (<em>matplotlib key word arguments to parse</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The default levels are defined such that they show the maximum value, then a 10th, then a 100th,
+etc… down to the minimum level. You can also use the “levels” keyword of the contour function
+to choose the number of levels you want (but them matplotlib will arbitrarily define where the
+levels fall).</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The plot created is returned, so you can add stuff to it, like text or extra data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">matplotlib.axes._subplots.AxesSubplot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
