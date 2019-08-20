@@ -4,13 +4,123 @@ This module implements the tools to easily load BPASS data.
 
 import pandas as pd
 #from specutils import Spectrum1D
-#import numpy as np
+import numpy as np
 import hoki.hrdiagrams as hr
 from hoki.constants import *
 import os
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
+
+
+def model_input(path):
+    """
+    Loads inputs from one file and put them in a dataframe
+
+    Parameters
+    ----------
+    path : str
+        Path to the file containing the input data.
+
+    Returns
+    -------
+
+    """
+    lines = open(path).read().split("\n")
+
+    # rows [a,b,c,d] in the BPASS manual
+    row = [1, 0, 0, 0]
+
+    # All potential input parameters and filename
+    # If there is no corresponding value for a particular model, will append a NaN
+    filenames = []
+    modelimfs = []
+    modeltypes = []
+    mixedimf = []
+    mixedage = []
+    initialBH = []
+    initialP = []
+
+    # This goes through the file line by line. Using .split is not possible/convenient
+    # The vector will tell use what we should do with this line.
+    for l in lines[1:]:
+
+        # This line contains the filename.
+        if row[0]:
+            filenames.append(l)
+            # The next line will contain the imf probability and the type - we reset the vector..
+            row = [0, 1, 0, 0]
+            # ... and we skip the rest to read in the next line.
+            continue
+
+        # This line contains the imf probability and the type
+        elif row[1]:
+            elements = l.split() # we split the line into the 2 values
+            modelimfs.append(elements[0]) # and append them
+            modeltypes.append(elements[1])
+
+            # The next step is decided according to the value of type
+            # To know what each value means, consult the BPASS manual
+            if int(elements[1]) < 2:
+                # In this case all the other potential inputs are NaNs and we go back to the
+                # beginning to read a new file name
+                row = [1, 0, 0, 0]
+                mixedimf.append(np.nan)
+                mixedage.append(np.nan)
+                initialBH.append(np.nan)
+                initialP.append(np.nan)
+                continue
+
+            elif int(elements[1]) != 4:
+                # If type is 2 or 3, we know the initial BH and initial P will be NaN
+                # but we also need to read the next line so we set the vector accordingly.
+                row = [0, 0, 1, 0]
+                initialBH.append(np.nan)
+                initialP.append(np.nan)
+                continue
+
+            elif int(elements[1]) == 4:
+                # If the type is 4 we need all the other outputs, so we need the next 2 lines.
+                # We set the vector accordingly.
+                row = [0, 0, 1, 1]
+                continue
+
+        elif row[2]:
+            # Splitting the two values and putting them in their respective lists
+            elements = l.split()
+            mixedimf.append(elements[0])
+            mixedage.append(elements[1])
+
+            # Then depending on whether we need the next line for more inputs
+            # we set the vector to either go back to reading a filename or to probe those inputs.
+            if not row[3]:
+                row = [1, 0, 0, 0]
+            if row[3]:
+                row[2] = 0
+
+            continue
+
+        elif row[3]:
+            # This reads the last possible pair of inputs and puts them in their rightful lists.
+            elements = l.split()
+            initialBH.append(elements[0])
+            initialP.append(elements[0])
+            # We then reset the vector to be reading in filenames because no more inputs are coming
+            row = [1, 0, 0, 0]
+
+    # Once we've goe through the whole file and filled our lists, we can put them in a dataframe
+    # with some named columns and set the datatypes to strings and numbers.
+    input_df = pd.DataFrame.from_dict({'filenames': filenames[:-1], 'imfs_proba': modelimfs,
+                                       'types': modeltypes, 'mixed_imf': mixedimf,
+                                       'mixed_age': mixedage, 'initial_BH': initialBH,
+                                       'initial_P': initialP}).astype({'filenames': str,
+                                                                       'imfs_proba': float,
+                                                                       'types': int,
+                                                                       'mixed_imf': float,
+                                                                       'mixed_age': float,
+                                                                       'initial_BH': float,
+                                                                       'initial_P': float})
+    return input_df
 
 
 def model_output(path, hr_type=None):
