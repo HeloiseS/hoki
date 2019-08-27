@@ -199,9 +199,9 @@ def _stellar_numbers(path):
     """
     return pd.read_csv(path, sep=r"\s*",
                        names=['log_age', 'O_hL', 'Of_hL', 'B_hL', 'A_hL', 'YSG_hL',
-                              'K', 'M_hL', 'WNH_hL', 'WN_hL', 'WC_hL',
+                              'K_hL', 'M_hL', 'WNH_hL', 'WN_hL', 'WC_hL',
                               'O_lL', 'Of_lL', 'B_lL', 'A_lL', 'YSG_lL',
-                              'K', 'M_lL', 'WNH_lL', 'WN_lL', 'WC_lL',], engine='python')
+                              'K_lL', 'M_lL', 'WNH_lL', 'WN_lL', 'WC_lL'], engine='python')
 
 
 def _yields(path):

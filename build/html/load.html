@@ -22,20 +22,13 @@
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.1.dev',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -209,27 +202,34 @@
 <span id="load"></span><h1><strong>load</strong><a class="headerlink" href="#module-hoki.load" title="Permalink to this headline">¶</a></h1>
 <p>This module implements the tools to easily load BPASS data.</p>
 <dl class="function">
+<dt id="hoki.load.model_input">
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_input</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads inputs from one file and put them in a dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the file containing the input data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="hoki.load.model_output">
-<code class="descclassname">hoki.load.</code><code class="descname">model_output</code><span class="sig-paren">(</span><em>path</em>, <em>hr_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_output" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_output</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">hr_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a BPASS output file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> (<em>str</em>) – Path to the file containing the target data.</li>
-<li><strong>hr_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of HR diagram to load: ‘TL’, ‘Tg’ or ‘TTG’.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to the file containing the target data.</p></li>
+<li><p><strong>hr_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of HR diagram to load: ‘TL’, ‘Tg’ or ‘TTG’.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Output Data</strong></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">pandas.DataFrame or hoki.hrdiagrams.HRDiagrams object</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Output Data</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame or hoki.hrdiagrams.HRDiagrams object</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

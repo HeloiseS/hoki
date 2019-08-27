@@ -22,20 +22,13 @@
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.1.dev',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -773,8 +766,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>In the case of the NGC 6067 we want to make a spectroscopic HR diagram. That means that the y axis will be  – this quatity is refered to as TG or log(TG). The trick is, we need to make sure we are using the right units when we do the calculations.</p>
-<p>We want everything to be with respect to solar units, so we’ll have to divide by solar surface temperature (5778K) and surface gravity (274 m/s or a log g = 2.4377). We also nee to convert to SI from cgs, so there is a factor of  in the g, i.e a <code class="docutils literal notranslate"><span class="pre">-2</span></code> in the log g exponent, that needs to be taken into account.</p>
+<p>In the case of the NGC 6067 we want to make a spectroscopic HR diagram. That means that the y axis will be <span class="math notranslate nohighlight">\(\log(T^4/g)\)</span> – this quatity is refered to as TG or log(TG). The trick is, we need to make sure we are using the right units when we do the calculations.</p>
+<p>We want everything to be with respect to solar units, so we’ll have to divide by solar surface temperature (5778K) and surface gravity (274 m/s or a log g = 2.4377). We also nee to convert to SI from cgs, so there is a factor of <span class="math notranslate nohighlight">\(10^{-2}\)</span> in the g, i.e a <code class="docutils literal notranslate"><span class="pre">-2</span></code> in the log g exponent, that needs to be taken into account.</p>
 <p>We also need to propagate errors. Since it’s a mess of logs I’ll just use bootstrapping for that.</p>
 <p><em>Boostrapping: In this particular case I sample each of my values/data points according to a normal distribution where the mean is the value of that data point and the standard deviation is the error. I do this 1000 times, calculate the corresponding TG, and take the mean and standard deviation of these 1000 TG values.</em></p>
 <div class="nbinput nblast docutils container">

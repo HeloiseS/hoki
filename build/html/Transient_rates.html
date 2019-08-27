@@ -22,20 +22,13 @@
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.1.dev',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -115,11 +108,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#2.1-Initial-imports">2.1 Initial imports</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#2.2-Loading-in-the-data">2.2 Loading in the data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#2.3-Plotting-HR-diagrams">2.3 Plotting HR diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#2.4-Customizing-your-plots-with-matplotlib-key-word-arguments">2.4 Customizing your plots with matplotlib key word arguments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#2.5-Creating-a-publication-ready-figure">2.5 Creating a publication-ready figure</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Documentation</span></p>
 <ul>
@@ -444,11 +432,11 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="In-this-tutorial-you-will:">
 <h3>In this tutorial you will:<a class="headerlink" href="#In-this-tutorial-you-will:" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Load BPASS transient rates from hoki</li>
-<li>Combine single and binary population transient rates</li>
-<li>Calculate total Core Collapse Supernovae rates</li>
-<li>Make sure the rates are in the right units</li>
-<li>Plot the rates of Type Ia SNe, CCSNe, LGRBs, and PISNe together.</li>
+<li><p>Load BPASS transient rates from hoki</p></li>
+<li><p>Combine single and binary population transient rates</p></li>
+<li><p>Calculate total Core Collapse Supernovae rates</p></li>
+<li><p>Make sure the rates are in the right units</p></li>
+<li><p>Plot the rates of Type Ia SNe, CCSNe, LGRBs, and PISNe together.</p></li>
 </ul>
 </div>
 </div>
@@ -634,7 +622,7 @@ div.rendered_html tbody tr:hover {
 </table>
 </div></div>
 </div>
-<p>Most column names are pretty self-explanatory, appart from <code class="docutils literal notranslate"><span class="pre">low_mass</span></code>, which just detones the rate of low-mass supernovae (&lt; 2M). The <code class="docutils literal notranslate"><span class="pre">age_yrs</span></code> bin is th size of each time bin in years; indeed since BPASS works in log(time) space, each time bin has a different width in years.</p>
+<p>Most column names are pretty self-explanatory, appart from <code class="docutils literal notranslate"><span class="pre">low_mass</span></code>, which just detones the rate of low-mass supernovae (&lt; 2M<span class="math notranslate nohighlight">\(_{\odot}\)</span>). The <code class="docutils literal notranslate"><span class="pre">age_yrs</span></code> bin is th size of each time bin in years; indeed since BPASS works in log(time) space, each time bin has a different width in years.</p>
 <p>If you need more detail on each of these rates, you should have a look at the <a class="reference external" href="https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf">BPASS user manual</a>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -674,7 +662,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Getting-the-Units-right">
 <h2>Getting the Units right<a class="headerlink" href="#Getting-the-Units-right" title="Permalink to this headline">¶</a></h2>
 <p>We want to plot our rates as <strong>events/M:math:`_{odot}`/year</strong>, this means we need to normalise by the total mass and the number of years in each time bin.</p>
-<p>BPASS calulates stellar populations with 10 M and we’ve already put the bin size in years in a convenient variable called <code class="docutils literal notranslate"><span class="pre">bin_size</span></code>.</p>
+<p>BPASS calulates stellar populations with 10<span class="math notranslate nohighlight">\(^6\)</span> M<span class="math notranslate nohighlight">\(_{\odot}\)</span> and we’ve already put the bin size in years in a convenient variable called <code class="docutils literal notranslate"><span class="pre">bin_size</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
