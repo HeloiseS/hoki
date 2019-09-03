@@ -17,6 +17,9 @@ hoki is a python package designed to interface with BPASS outputs to make them e
 Installing hoki
 ---------------
 
+.. code-block:: none
+
+   pip3 install --user hoki`
 
 
 
