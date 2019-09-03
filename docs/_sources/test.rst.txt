@@ -1,0 +1,11 @@
+#####
+test
+####
+
+
+.. toctree::
+   load
+   hrdiagrams
+   :maxdepth: 3
+
+   
