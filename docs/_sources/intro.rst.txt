@@ -30,9 +30,9 @@ The varsatility of **Hoki** allows you to focus on the science, and worry less a
 Built with data analysis in mind
 *********************************
 
-Our vision for `hoki` is to provide tools that can be integrated in your everyday workflow and make your life extra simple! Do you want to spend ages figuring out 5 by 100 by 100 by 3 by 3 data object contained in a single ASCII file? Great news, you don't need to! 
+Our vision for ``hoki`` is to provide **tools that can be integrated in your everyday workflow** and make your life extra simple! Do you want to spend ages figuring out 5 by 100 by 100 by 3 by 3 data object contained in a single ASCII file? Great news, you don't need to! 
 
-We leverage the powerful capabilites of ubiquitous packages such as `numpy`, `pandas` and `matplotlib` in order to make the outputs of BPASS easily accessible and usable for scientific data analysis. This way you get to spend more time looking at data and less time looking at code. 
+We leverage the powerful capabilites of ubiquitous packages such as ``numpy``, ``pandas`` and ``matplotlib`` in order to make the outputs of BPASS easily accessible and usable for scientific data analysis. This way you get to spend more time looking at data and less time looking at code. 
 
 
 

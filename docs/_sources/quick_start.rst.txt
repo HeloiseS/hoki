@@ -49,36 +49,40 @@ BPASS models can be downloaded from the BPASS:
      - --
      - --
 
-.. note::
-   
-   ``hoki`` is dedicated to being an interface with the BPASS models, but given the substancial size of the entire set of models, they are not downloaded upon installation of ``hoki``, and you should download the models you want to work on.
+``hoki`` is dedicated to being an interface with the BPASS models, but given the substancial size of the entire set of models, they are not downloaded upon installation of ``hoki``, and you should download the models you want to work on.
 
 
 ***************
 Loading in Data
 ***************
+.. tip::
+  More details on the outputs mentioned below can be found in the `BPASS manual <https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf>`__. 
 
 Stellar Model Outputs
 ^^^^^^^^^^^^^^^^^^^^^^
-W.I.P
+*The current version does not interface with the stellar model outputs. To be continued...*
+
+The stellar model outputs are:
+
+   * The binary stellar models 
+
+   * New OB stars atmospheric models
+
 
 Stellar Population Outputs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A stellar output file can be loaded in using the ``population_output()`` function in the ``load`` module. 
+A stellar output file can be loaded in using the ``model_output()`` function in the ``load`` module. 
 
 .. code-block:: python
    :linenos:
    
    from hoki import load
    
-   output = load.population_output('path')
+   output = load.model_output('path')
    
 
 The function will figure out based on the file name what data is being loaded in and will return the appropriate data format: ``pandas.DataFrames`` in most cases, apart from HR diagrams, which have their own ``HRDiagrams`` class -- because they're quite a complex data structure. 
-
-.. tip::
-  The full details of the he stellar population outputs can be found in the `BPASS manual <https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf>`__. 
 
 Here we summarise the shape of the outputs (51 time bins) for a given metalicity and IMF. 
 
@@ -103,13 +107,31 @@ Here we summarise the shape of the outputs (51 time bins) for a given metalicity
    * - HR diagrams
      - hrs
      - 51 x 100 x 100 x 3 x 3
-     
-.. note:: These models are calculated for 9 IMFs and 13 metalicities. 
 
 
 Spectral Synthesis Outputs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+The spectral synthesis output files can be also loaded in using the ``model_output()`` function in the ``load`` module. 
+All outputs are returned as ``pandas.DataFrames`` with sensible column names. 
+
+.. list-table::
+   :header-rows: 1
+   
+   * - Output
+     - File Name Root
+     - Shape
+   * - Spectra (SEDs)
+     - spectra
+     - 52x10E5
+   * - Ionizing flux predictions
+     - ionizing
+     - 51x5
+   * - Colours (broad-band)
+     - colours
+     - 51x26
+
+The full suite of stellar models is also available from the BPASS website (careful, the file is big ~50GB), and they are required to make colour magnitude diagram (CMD) such as in Figure 24 of `BPASSv2.1 <https://bpass.auckland.ac.nz/8.html>`__. Creating these CMD and exploring these files is very tricky - in a future release ``hoki`` will offer features to make this straight forward. 
 
 -----------------------------
 
