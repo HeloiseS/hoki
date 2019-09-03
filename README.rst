@@ -1,6 +1,12 @@
-
 .. image:: ./images/hoki.png
     :height: 50px
+
+
+.. image:: https://badge.fury.io/py/hoki.svg
+    :target: https://badge.fury.io/py/hoki
+.. image:: https://zenodo.org/badge/197853216.svg
+   :target: https://zenodo.org/badge/latestdoi/197853216
+
     
 .. image:: http://img.shields.io/badge/pcowered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
@@ -10,8 +16,9 @@
     :target: https://hfstevance.com
     :lt: developed by HFS badge
     
-.. image:: https://zenodo.org/badge/197853216.svg
-   :target: https://zenodo.org/badge/latestdoi/197853216
+
+   
+
 
 hoki is a python package designed to interface with BPASS outputs to make them easy to use with standard python packages such as pandas, numpy and astropy. 
 
