@@ -20,6 +20,9 @@ MANIFEST
 # Sphinx
 docs/api
 docs/_build
+docs_astropy_version/
+build/
+source/
 
 # Eclipse editor project files
 .project

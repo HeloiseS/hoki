@@ -1,6 +1,0 @@
-do_primes
-=========
-
-.. currentmodule:: hoki
-
-.. autofunction:: do_primes
