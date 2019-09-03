@@ -2,10 +2,14 @@
 What is Hoki?
 #############
 
+.. note:: 
+
+   This project remains an alpha release with limited functionalities whilst we are developing further tools. If you have any suggestions to make about the existing package or would like to request specific features, feel free to create an issue on the `GitHub <https://github.com/HeloiseS/hoki>`__!
 
 *************************************************
 Bridging the gap between theory and observations 
 *************************************************
+
 
 .. sidebar:: What is BPASS?
 
@@ -18,26 +22,19 @@ In order to facilitate the application of BPASS to a wide range of scientific in
 
     | **Hoki is a dedicated python package designed to provide a user friendly interface to the BPASS models in order to bridge the gap between theory and observations.**
 
-The varsatility of **Hoki** allows *[and then list all the fancy stuff it can do!]* 
+The varsatility of **Hoki** allows you to focus on the science, and worry less about the technical nitty gritty that comes with using the varied outputs of a theoretical code.  
 
 
 
 *********************************
-Built with Data Analysis in mind
+Built with data analysis in mind
 *********************************
-MABE I NEED TO DO SOMETHING HERE 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Our vision for `hoki` is to provide tools that can be integrated in your everyday workflow and make your life extra simple! Do you want to spend ages figuring out 5 by 100 by 100 by 3 by 3 data object contained in a single ASCII file? Great news, you don't need to! 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+We leverage the powerful capabilites of ubiquitous packages such as `numpy`, `pandas` and `matplotlib` in order to make the outputs of BPASS easily accessible and usable for scientific data analysis. This way you get to spend more time looking at data and less time looking at code. 
 
 
-************************
-Sell that ish honey
-************************
 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

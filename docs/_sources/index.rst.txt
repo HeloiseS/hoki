@@ -11,20 +11,20 @@
 .. toctree::
    intro
    quick_start
-   :maxdepth: 3
+   :maxdepth: 1
    :Caption: Introduction
 
 .. toctree::
    Transient_rates
    HR_diagrams
-   :maxdepth: 3
+   :maxdepth: 1
    :caption: Cook Book
 
 
 .. toctree::
    load
    hrdiagrams
-   :maxdepth: 3
+   :maxdepth: 1
    :caption: Package Documentation
 
 
