@@ -14,7 +14,7 @@ To install the most recent stable release of hoki you can use:
 
 .. code-block:: none
 
-   sudo pip3 install --user hoki
+   sudo pip3 install --user hoki 
    
 If you are feeling adventurous and want the most recent (in development) version of hoki, you can clone our `GitHub repository <https://github.com/HeloiseS/hoki>`__
    

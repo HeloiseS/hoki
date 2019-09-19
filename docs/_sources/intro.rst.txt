@@ -22,7 +22,7 @@ In order to facilitate the application of BPASS to a wide range of scientific in
 
     | **Hoki is a dedicated python package designed to provide a user friendly interface to the BPASS models in order to bridge the gap between theory and observations.**
 
-The varsatility of **Hoki** allows you to focus on the science, and worry less about the technical nitty gritty that comes with using the varied outputs of a theoretical code.  
+The varsatility of **Hoki** allows you to focus on the science, and worry less about the technical nitty gritty that comes with using the varied outputs of a theoretical code.   
 
 
 
