@@ -17,6 +17,7 @@
 .. toctree::
    Transient_rates
    HR_diagrams
+   Spectra
    :maxdepth: 1
    :caption: Cook Book
 
