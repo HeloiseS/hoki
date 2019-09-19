@@ -12,6 +12,7 @@ import os
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
 
+__all__ = ['model_input', 'model_output']
 
 def model_input(path):
     """
@@ -258,11 +259,11 @@ def _sed(path):
     """
     return pd.read_csv(path, sep=r"\s+", engine='python',
                        names=['WL', '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', '6.7', '6.8',
-                              '6.9', '7', '7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7', '7.8',
+                              '6.9', '7.0', '7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7', '7.8',
                               '7.9', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8',
                               '8.9', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8',
                               '9.9', '10.0', '10.1', '10.2', '10.3', '10.4', '10.5', '10.6', '10.7',
-                              '10.8', '10.9', '11'])
+                              '10.8', '10.9', '11.0'])
 
 
 def _ionizing_flux(path):
