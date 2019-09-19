@@ -96,7 +96,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">HR diagrams</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Initial-imports">Initial imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Initial-imports">Initial imports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#In-this-tutorial-you-will:">In this tutorial you will:</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#Loading-in-the-data">Loading in the data</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#About-the-tools-you're-about-to-use.">About the tools you’re about to use.</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Loading-the-HR-diagrams">Loading the HR diagrams</a></li>
@@ -415,6 +418,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="HR-diagrams">
 <h1>HR diagrams<a class="headerlink" href="#HR-diagrams" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
 <div class="section" id="Initial-imports">
 <h2>Initial imports<a class="headerlink" href="#Initial-imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
@@ -430,6 +434,15 @@ div.rendered_html tbody tr:hover {
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="In-this-tutorial-you-will:">
+<h3>In this tutorial you will:<a class="headerlink" href="#In-this-tutorial-you-will:" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Learn about the HR-diagram data structure of BPASS</p></li>
+<li><p>Learn how to load them in using hoki</p></li>
+<li><p>Use the tools in <code class="docutils literal notranslate"><span class="pre">hoki</span></code> to explore your HR diagram data and make science plots</p></li>
+<li><p>Learn to customise the <code class="docutils literal notranslate"><span class="pre">hoki</span></code> plots</p></li>
+</ul>
 </div>
 </div>
 <div class="section" id="Loading-in-the-data">
@@ -450,8 +463,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Loading the HR diagrams for signle stars and binary star populations</span>
-<span class="n">sin_hr_diagram</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;hrs-sin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span> <span class="o">=</span> <span class="s1">&#39;TL&#39;</span><span class="p">)</span>
-<span class="n">bin_hr_diagram</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;hrs-bin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span> <span class="o">=</span> <span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+<span class="n">sin_hr_diagram</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-sin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span> <span class="o">=</span> <span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+<span class="n">bin_hr_diagram</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span> <span class="o">=</span> <span class="s1">&#39;TL&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -465,7 +478,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Loading the observational data of Upper Scorpio</span>
-<span class="n">usco</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;USco.dat&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;Luminosity&#39;</span><span class="p">])</span>
+<span class="n">usco</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./data/USco.dat&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;Luminosity&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -507,27 +520,27 @@ div.rendered_html tbody tr:hover {
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>3.756</td>
       <td>0.38</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>3.742</td>
       <td>0.34</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>3.742</td>
       <td>0.36</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>3.750</td>
       <td>0.08</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>3.728</td>
       <td>0.27</td>
     </tr>
@@ -620,7 +633,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f2f172bec50&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7f0927b30278&gt;
 </pre></div>
 </div>
 </div>
@@ -663,7 +676,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f2f170b5fd0&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7f0927d1de10&gt;
 </pre></div>
 </div>
 </div>
@@ -713,7 +726,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f2f1754f208&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7f092baa3208&gt;
 </pre></div>
 </div>
 </div>
@@ -737,11 +750,11 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="c1"># renaming our already laoded HR diagram just for readability</span>
 <span class="n">hr_usco_sin</span><span class="p">,</span> <span class="n">hr_usco_bin</span> <span class="o">=</span> <span class="n">sin_hr_diagram</span><span class="p">,</span> <span class="n">bin_hr_diagram</span>
 
-<span class="n">hr_census_bin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;hrs-bin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TL&#39;</span><span class="p">)</span>
-<span class="n">hr_census_sin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;hrs-sin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+<span class="n">hr_census_bin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+<span class="n">hr_census_sin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-sin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TL&#39;</span><span class="p">)</span>
 
-<span class="n">hr_6067_bin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;hrs-bin-imf135_300.z030.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TTG&#39;</span><span class="p">)</span>
-<span class="n">hr_6067_sin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;hrs-sin-imf135_300.z030.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TTG&#39;</span><span class="p">)</span>
+<span class="n">hr_6067_bin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z030.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TTG&#39;</span><span class="p">)</span>
+<span class="n">hr_6067_sin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-sin-imf135_300.z030.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TTG&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -754,7 +767,7 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># If you do, you won&#39;t be able to call it as mydataframe.T, because .T will default to</span>
 <span class="c1"># returning the transpose.</span>
 
-<span class="n">cyg_L</span><span class="p">,</span> <span class="n">cyg_L_e</span><span class="p">,</span> <span class="n">cyg_T</span><span class="p">,</span> <span class="n">cyg_T_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s1">&#39;census.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span>
+<span class="n">cyg_L</span><span class="p">,</span> <span class="n">cyg_L_e</span><span class="p">,</span> <span class="n">cyg_T</span><span class="p">,</span> <span class="n">cyg_T_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s1">&#39;./data/census.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -763,7 +776,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">ngc_T</span><span class="p">,</span> <span class="n">ngc_T_e</span><span class="p">,</span> <span class="n">ngc_logg</span><span class="p">,</span> <span class="n">ngc_logg_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;ngc6067hr.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span></span><span class="n">ngc_T</span><span class="p">,</span> <span class="n">ngc_T_e</span><span class="p">,</span> <span class="n">ngc_logg</span><span class="p">,</span> <span class="n">ngc_logg_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;./data/ngc6067hr.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -859,15 +872,6 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <img alt="_images/HR_diagrams_27_0.png" src="_images/HR_diagrams_27_0.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
 </div>
 </div>
 </div>

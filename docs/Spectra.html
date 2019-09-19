@@ -415,6 +415,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Spectra">
 <h1>Spectra<a class="headerlink" href="#Spectra" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
 <div class="section" id="Initial-Imports">
 <h2>Initial Imports<a class="headerlink" href="#Initial-Imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
@@ -451,7 +452,7 @@ div.rendered_html tbody tr:hover {
 <p>The synthetic spectra returned by BPASS are given in ASCII files, grouped by metallicity (<code class="docutils literal notranslate"><span class="pre">zXXX</span></code>) and whether the population is made up of just single stars (<code class="docutils literal notranslate"><span class="pre">-sin-</span></code>) or also contains binary stars (<code class="docutils literal notranslate"><span class="pre">-bin</span></code>). Each file contains the wavelenght bin in its first column and the following 51 columns are the synthetic spectra of the population at each BPASS time bins. The wavelength ranges from 1 to 100,000 Angstrom.</p>
 <p>We can load each file into a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> using the <code class="docutils literal notranslate"><span class="pre">hoki.load.model_output()</span></code> function. <strong>This may take a few seconds.</strong> For the purposes of this tutorial we are only going to load two sets of synthetic spectra: solar metallicity and a tenth solar - both including binary stars.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -461,7 +462,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -470,7 +471,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -644,7 +645,7 @@ div.rendered_html tbody tr:hover {
 <p>Additionally, we’re going to be working with optical data, so let’s crop our spectra.</p>
 <p>Because we are using <code class="docutils literal notranslate"><span class="pre">pandas</span></code>, we don’t have to individually crope each spectrum, we can easily take care of the whole DataFrames.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -659,7 +660,7 @@ div.rendered_html tbody tr:hover {
 <p>Now that we have loaded our spectra we can plot them!</p>
 <p><strong>At different metallicities</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -676,11 +677,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1daef3de10&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0d8047ac8&gt;
 </pre></div>
 </div>
 </div>
@@ -693,7 +694,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p><strong>At different ages</strong></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -712,11 +713,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1daf545588&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0d5883b70&gt;
 </pre></div>
 </div>
 </div>
@@ -729,7 +730,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>The vast difference in scales makes it tough to see the older spectra (and their forests of lines) so let’s <strong>normalise</strong> everything. We could write a little function but why re-invent the wheel? <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> has some great statistical tools including a variety of normalising methods. Let’s use <code class="docutils literal notranslate"><span class="pre">MinMaxScaler()</span></code>, which simply makes sure the top values == 1 and lowest value == 0.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -751,7 +752,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -770,11 +771,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1d8cf7e748&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0ef858a90&gt;
 </pre></div>
 </div>
 </div>
@@ -786,7 +787,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -805,7 +806,7 @@ div.rendered_html tbody tr:hover {
 <h3>NGC 4993<a class="headerlink" href="#NGC-4993" title="Permalink to this headline">¶</a></h3>
 <p>First, let’s put it in a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> and see what we’ve got.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -825,7 +826,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -835,7 +836,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -892,7 +893,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -906,7 +907,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
@@ -923,7 +924,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>This spectrum is in counts and obviously the amplitude is not going to match that of our synthetic spectra. So let’s normalise this too!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -934,7 +935,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Another thing to remember is that a real spectrum will be redshifted. <strong>There is a basic doppler correction within ``hoki``</strong> which you can use to take care of that. Note it will return the doppler corrected dataframe but <strong>not change the originial one</strong>, so make sure you store the result.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -944,7 +945,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>For our purposes it’s probably more convenient to have the scaled dataframe contain the doppler corrected wavelengths so let’s update it:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -957,7 +958,7 @@ div.rendered_html tbody tr:hover {
 <h3>Finding the best match<a class="headerlink" href="#Finding-the-best-match" title="Permalink to this headline">¶</a></h3>
 <p>The goal here is to find the best synthetic spectrum corresponding to our observed spectrum. In this tutorial we will do this visually. Let’s plot a range of ages and see what we get.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -983,11 +984,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1db2c00908&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0e0ca0898&gt;
 </pre></div>
 </div>
 </div>
@@ -1001,7 +1002,7 @@ div.rendered_html tbody tr:hover {
 <p>There is an obvious drop in the flux in the red part of our NGC 4993 spectrum. That’s not the galaxy - it could be something to do with the filter used or another observational reason, so let’s focus on the short wavelengths.</p>
 <p>It looks like older ages are a better match. Here is the one I thought fitted best, but feel free to make your own plots and see if you can get a better result!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1019,11 +1020,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1daf449860&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0ecb58a90&gt;
 </pre></div>
 </div>
 </div>
@@ -1040,7 +1041,7 @@ div.rendered_html tbody tr:hover {
 <p>Now let’s take a look at some SDSS templates. In the folder <code class="docutils literal notranslate"><span class="pre">./data/spectra</span></code> you should have two fits files corresponding to an early-type galaxy and an indescriminate galaxy template (<code class="docutils literal notranslate"><span class="pre">spDR2-023.fit</span></code> and <code class="docutils literal notranslate"><span class="pre">spDR2-024.fit</span></code>, respectively).</p>
 <p>Note that these spectra are given as fits files and it’s beyond the scope of this tutorial to walk you through turning them into a pythonic data structure, so I’ve made the <code class="docutils literal notranslate"><span class="pre">extract_sdss_spectrum()</span></code> function which you can simply run to turn these spectra into a simple and convenient DataFrame.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1071,7 +1072,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Let’s get our SDSS spectra and take a look at them.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1081,7 +1082,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1099,11 +1100,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1daf5e2b70&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0ec22cc50&gt;
 </pre></div>
 </div>
 </div>
@@ -1117,7 +1118,7 @@ div.rendered_html tbody tr:hover {
 <p>Note a very interesting effect here in our Random Galaxy template: the large nebular line is messing with our scaler and when we want to fit it we’re probably going to have to go and add a scale factor by hand so that the other features are of the same kind of amplitude as those in our synthetic spectra!</p>
 <p>Anyway, for now we’re going to focus on the Early Type Galaxy and see if we can find a template that matches. Again, let’s just do it by eye.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1160,7 +1161,7 @@ div.rendered_html tbody tr:hover {
 <p>Within the <code class="docutils literal notranslate"><span class="pre">pandas</span></code> framework it is trivial to add spectra and perform mathematical operations on them.</p>
 <p>As an example, let’s add together an old and a very young stellar population. Arbitrarily I’ve picked a log(age) of 6.2 and 10.5, but feel free to play around with it yourself!</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1169,7 +1170,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1205,7 +1206,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>You can also add spectra in <strong>different proportions</strong> by simply adding <strong>scale factors</strong>. Multiplications, divisions and most daily mathematical operations are easily done:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1228,11 +1229,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f1daf14ea58&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff0ebfd9ef0&gt;
 </pre></div>
 </div>
 </div>
@@ -1250,15 +1251,6 @@ div.rendered_html tbody tr:hover {
 <p>Let’s go back to it!</p>
 <p><strong>You now know how to select different synthetic spectra and how to scale them, now go ahead and find the best synthetic spectrum and scale factor combination!</strong></p>
 <p><em>(You cam just assume a stellar population with a single age, but feel free to have fun and combine stuff if you feel like it)</em></p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 </div>
 

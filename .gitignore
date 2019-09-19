@@ -23,6 +23,7 @@ docs/_build
 docs_astropy_version/
 build/
 source/
+build/
 
 # Eclipse editor project files
 .project

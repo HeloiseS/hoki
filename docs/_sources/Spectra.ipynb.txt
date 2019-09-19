@@ -5,7 +5,9 @@
    "metadata": {},
    "source": [
     "Spectra\n",
-    "---"
+    "---\n",
+    "\n",
+    "Download all the Jupyter notebooks from: https://github.com/HeloiseS/hoki/tree/master/tutorials"
    ]
   },
   {
@@ -62,7 +64,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 33,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -72,7 +74,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [
     {
@@ -277,7 +279,7 @@
        "[5 rows x 52 columns]"
       ]
      },
-     "execution_count": 34,
+     "execution_count": 3,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -297,7 +299,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 37,
+   "execution_count": 4,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -318,16 +320,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 38,
+   "execution_count": 5,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1daef3de10>"
+       "<matplotlib.legend.Legend at 0x7ff0d8047ac8>"
       ]
      },
-     "execution_count": 38,
+     "execution_count": 5,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -363,7 +365,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 39,
+   "execution_count": 6,
    "metadata": {
     "scrolled": false
    },
@@ -371,10 +373,10 @@
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1daf545588>"
+       "<matplotlib.legend.Legend at 0x7ff0d5883b70>"
       ]
      },
-     "execution_count": 39,
+     "execution_count": 6,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -412,7 +414,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 40,
+   "execution_count": 7,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -434,16 +436,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 41,
+   "execution_count": 8,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1d8cf7e748>"
+       "<matplotlib.legend.Legend at 0x7ff0ef858a90>"
       ]
      },
-     "execution_count": 41,
+     "execution_count": 8,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -474,7 +476,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 42,
+   "execution_count": 9,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -498,7 +500,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 10,
    "metadata": {},
    "outputs": [
     {
@@ -518,7 +520,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 43,
+   "execution_count": 11,
    "metadata": {},
    "outputs": [
     {
@@ -585,7 +587,7 @@
        "4  4042.99  5761.701"
       ]
      },
-     "execution_count": 43,
+     "execution_count": 11,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -597,7 +599,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 12,
    "metadata": {},
    "outputs": [
     {
@@ -606,7 +608,7 @@
        "Text(0.5, 1.0, 'NGC 4993')"
       ]
      },
-     "execution_count": 11,
+     "execution_count": 12,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -639,7 +641,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 13,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -656,7 +658,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": 14,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -672,7 +674,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": 15,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -690,16 +692,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 15,
+   "execution_count": 16,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1db2c00908>"
+       "<matplotlib.legend.Legend at 0x7ff0e0ca0898>"
       ]
      },
-     "execution_count": 15,
+     "execution_count": 16,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -746,16 +748,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 44,
+   "execution_count": 17,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1daf449860>"
+       "<matplotlib.legend.Legend at 0x7ff0ecb58a90>"
       ]
      },
-     "execution_count": 44,
+     "execution_count": 17,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -796,7 +798,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 17,
+   "execution_count": 18,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -833,7 +835,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 18,
+   "execution_count": 19,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -843,16 +845,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 20,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1daf5e2b70>"
+       "<matplotlib.legend.Legend at 0x7ff0ec22cc50>"
       ]
      },
-     "execution_count": 19,
+     "execution_count": 20,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -891,7 +893,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 31,
+   "execution_count": 21,
    "metadata": {},
    "outputs": [
     {
@@ -948,7 +950,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 45,
+   "execution_count": 22,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -957,7 +959,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 46,
+   "execution_count": 23,
    "metadata": {},
    "outputs": [
     {
@@ -1002,16 +1004,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 47,
+   "execution_count": 24,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<matplotlib.legend.Legend at 0x7f1daf14ea58>"
+       "<matplotlib.legend.Legend at 0x7ff0ebfd9ef0>"
       ]
      },
-     "execution_count": 47,
+     "execution_count": 24,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -1058,13 +1060,6 @@
     "\n",
     "*(You cam just assume a stellar population with a single age, but feel free to have fun and combine stuff if you feel like it)*"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {

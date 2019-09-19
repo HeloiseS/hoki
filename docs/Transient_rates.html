@@ -411,6 +411,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Transient-rates">
 <h1>Transient rates<a class="headerlink" href="#Transient-rates" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
 <div class="section" id="Initial-imports">
 <h2>Initial imports<a class="headerlink" href="#Initial-imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
@@ -429,7 +430,6 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<hr class="docutils" />
 <div class="section" id="In-this-tutorial-you-will:">
 <h3>In this tutorial you will:<a class="headerlink" href="#In-this-tutorial-you-will:" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -441,7 +441,6 @@ div.rendered_html tbody tr:hover {
 </ul>
 </div>
 </div>
-<hr class="docutils" />
 <div class="section" id="Loading-in-the-data-and-initial-set-up">
 <h2>Loading in the data and initial set-up<a class="headerlink" href="#Loading-in-the-data-and-initial-set-up" title="Permalink to this headline">¶</a></h2>
 <p>Transient rates in BPASS are one of the several types of stellar population outputs. We can simply use the <code class="docutils literal notranslate"><span class="pre">hoki.load.population_ouput()</span></code> function to laod the data. The function will automatically know what type of data it is loading from the file name and create an appropriate data frame to put it in.</p>
@@ -456,7 +455,7 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># Note we chose this particular IMF and metallicity in order to reproduce the plot</span>
 <span class="c1"># shown on the left hand sife of Figure 1 in Eldridge et al. 2018</span>
 
-<span class="n">bin_rates</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;supernova-bin-imf135_300.z002.dat&#39;</span><span class="p">)</span>
+<span class="n">bin_rates</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/supernova-bin-imf135_300.z002.dat&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -515,7 +514,7 @@ div.rendered_html tbody tr:hover {
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
+      <td>0</td>
       <td>6.0</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -536,7 +535,7 @@ div.rendered_html tbody tr:hover {
       <td>1122019.00</td>
     </tr>
     <tr>
-      <th>1</th>
+      <td>1</td>
       <td>6.1</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -557,7 +556,7 @@ div.rendered_html tbody tr:hover {
       <td>290520.12</td>
     </tr>
     <tr>
-      <th>2</th>
+      <td>2</td>
       <td>6.2</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -578,7 +577,7 @@ div.rendered_html tbody tr:hover {
       <td>365743.12</td>
     </tr>
     <tr>
-      <th>3</th>
+      <td>3</td>
       <td>6.3</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -599,7 +598,7 @@ div.rendered_html tbody tr:hover {
       <td>460443.62</td>
     </tr>
     <tr>
-      <th>4</th>
+      <td>4</td>
       <td>6.4</td>
       <td>0.0</td>
       <td>0.0</td>
@@ -707,7 +706,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>&lt;matplotlib.legend.Legend at 0x7f08c940f2e8&gt;
+<span></span>&lt;matplotlib.legend.Legend at 0x7fb3712a7748&gt;
 </pre></div>
 </div>
 </div>
