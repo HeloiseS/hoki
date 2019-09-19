@@ -4,6 +4,10 @@
 
 .. image:: https://badge.fury.io/py/hoki.svg
     :target: https://badge.fury.io/py/hoki
+
+.. image:: https://travis-ci.org/HeloiseS/hoki.svg?branch=master
+    :target: https://travis-ci.org/HeloiseS/hoki
+    
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
 
