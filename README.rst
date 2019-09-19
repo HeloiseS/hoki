@@ -22,7 +22,7 @@
 
 hoki is a python package designed to interface with BPASS outputs to make them easy to use with standard python packages such as pandas, numpy and astropy. 
 
-.. Caution:: 
+.. note:: 
    
    ``hoki`` is still in pre-release.
    
