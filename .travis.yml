@@ -120,16 +120,16 @@ matrix:
           env: NUMPY_VERSION=1.15
 
         # Do a PEP8 test with flake8
-        - os: linux
-          stage: Initial tests
-          env: MAIN_CMD='flake8 hoki --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
+        #- os: linux
+        #  stage: Initial tests
+        #  env: MAIN_CMD='flake8 hoki --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
     allow_failures:
         # Do a PEP8 test with flake8
         # (do allow to fail unless your code completely compliant)
-        # - os: linux
-        #   stage: Initial tests
-        #   env: MAIN_CMD='flake8 hoki --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
+        - os: linux
+          stage: Initial tests
+          env: MAIN_CMD='flake8 hoki --count --show-source --statistics $FLAKE8_OPT' SETUP_CMD=''
 
 install:
 
