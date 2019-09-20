@@ -19,13 +19,13 @@
 
 
 Bridging the gap between observation and theory
----
+---------------
 
 
 **NOTE:** ``hoki`` is still in pre-release
    
 Installing hoki
----------------
+^^^^^^^^^^^
 
 You can pip install hoki, note it has note yet been tested for python3.7 and up, or python 3.4 and down. 
 
@@ -34,13 +34,13 @@ You can pip install hoki, note it has note yet been tested for python3.7 and up,
    pip3 install --user hoki
 
 Read the docs!
---------------
+^^^^^^^^^^^
 
 **Here is some documentation: https://heloises.github.io/hoki/intro.html**
 
 
 License
--------
+^^^^^^^^^^^
 
 This project is Copyright (c) H. F. Stevance and licensed under
 the terms of the BSD 3-Clause license. This package is based upon
@@ -50,7 +50,7 @@ more information.
 
 
 Contributing
-------------
+^^^^^^^^^^^
 
 If ANYTHING comes to mind, whether it be something in the tutorials, features you would like us to consider, BUGS, etc.. 
 **Please just drop it in an issue! Don't let your imposter syndrome talk you out of it ;)**
