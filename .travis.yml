@@ -49,7 +49,7 @@ env:
         
         # List other runtime dependencies for the package that are available as
         # pip packages here.
-        - PIP_DEPENDENCIES=''
+        - PIP_DEPENDENCIES='pandas matplotlib numpy'
 
         # Conda packages for affiliated packages are hosted in channel
         # "astropy" while builds for astropy LTS with recent numpy versions
@@ -90,9 +90,9 @@ matrix:
 
         # Check for sphinx doc build warnings - we do this first because it
         # may run for a long time
-        - os: linux
-          env: SETUP_CMD='build_docs -w'
-               CONDA_DEPENDENCIES=$CONDA_DEPENDENCIES_DOC
+        # - os: linux
+        #  env: SETUP_CMD='build_docs -w'
+        #       CONDA_DEPENDENCIES=$CONDA_DEPENDENCIES_DOC
 
         # Now try Astropy dev with the latest Python and LTS with and 3.x.
         - os: linux
