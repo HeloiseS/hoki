@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+#TODO: write the test!
 def dopcor(df, z):
     """
     Basis doppler correction for hoki's dataframes
