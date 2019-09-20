@@ -156,6 +156,7 @@ install:
     # well as at the start of the install section or in the before_install
     # section if they are needed before setting up conda) to install any
     # other dependencies.
+    - pip install codecov
 
 script:
    - $MAIN_CMD $SETUP_CMD
@@ -165,4 +166,5 @@ after_success:
     # The coveragerc file may be customized as needed for your package.
     # - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='hoki/tests/coveragerc'; fi
     #- codecov -t 724a343a-36d5-4289-9516-598c12d42409
-    - CODECOV_TOKEN="724a343a-36d5-4289-9516-598c12d42409"
+    #- CODECOV_TOKEN="724a343a-36d5-4289-9516-598c12d42409"
+    - codecov
