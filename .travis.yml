@@ -40,7 +40,7 @@ env:
         - MAIN_CMD='python setup.py'
         - SETUP_CMD='test'
         - EVENT_TYPE='pull_request push'
-        - CODECOV_TOKEN="724a343a-36d5-4289-9516-598c12d42409"
+        
 
         
         # List runtime dependencies for the package that are available as conda
@@ -164,4 +164,5 @@ after_success:
     # If coveralls.io is set up for this package, uncomment the line below.
     # The coveragerc file may be customized as needed for your package.
     # - if [[ $SETUP_CMD == *coverage* ]]; then coveralls --rcfile='hoki/tests/coveragerc'; fi
-    - codecov -t 724a343a-36d5-4289-9516-598c12d42409
+    #- codecov -t 724a343a-36d5-4289-9516-598c12d42409
+    - CODECOV_TOKEN="724a343a-36d5-4289-9516-598c12d42409"
