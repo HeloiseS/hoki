@@ -14,7 +14,7 @@
 .. image:: https://codecov.io/gh/HeloiseS/hoki/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/HeloiseS/hoki
     
-.. image:: http://img.shields.io/badge/pcowered%20by-AstroPy-orange.svg?style=flat
+.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
     
