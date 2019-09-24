@@ -14,6 +14,7 @@ import os
 
 __all__ = ['model_input', 'model_output']
 
+
 def model_input(path):
     """
     Loads inputs from one file and put them in a dataframe

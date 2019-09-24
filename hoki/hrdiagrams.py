@@ -9,7 +9,6 @@ from matplotlib import ticker
 import matplotlib.cm as cm
 
 
-
 class HRDiagram(object):
     """
     **A class containing the HR diagram data produced by BPASS.**
