@@ -1,6 +1,5 @@
 from hoki.cmd import CMD
 import pkg_resources
-# import pytest
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
