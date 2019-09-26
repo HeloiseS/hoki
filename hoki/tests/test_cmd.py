@@ -1,8 +1,10 @@
 from hoki.cmd import CMD
 import pkg_resources
+import os 
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
+print(os.listdir(data_path+'/sample_stellar_models/'))
 
 class TestCMD(object):
     cmd = CMD(data_path+'/input_bpass_z020_bin_imf135_300', path = data_path+'/sample_stellar_models/')
