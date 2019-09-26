@@ -5,6 +5,16 @@ from hoki.constants import *
 import numpy as np
 import matplotlib.cm as cm
 
+# TODO: 1) Review with JJ the probas imfs I'm putting into the grid
+# TODO: 2) I logged the colour map which looks alright - Do I need to choose specific levels like with hrdiagrams?
+# TODO: 3) Sometimes the stellar model files contain only one row - so only the first time step.
+#          This breaks the code and contains unphysical quantities - I have not taken these cases into account in CMDs
+# TODO: 4) Review with JJ the binning method - see page 62 in my log book
+# TODO: 5) Do I need to create a dedicated function feature that can plot stacked CMD ages or is that a rare occurance?
+
+
+# TODO: 6) Interpolation for time bins that are not given in stellar model files.
+
 
 class CMD(object):
     # NOTE: dummy is the name of the big array returned by the BPASS models
