@@ -55,7 +55,7 @@ A peer-reviewed journal article about `hoki` will appear in due time but for now
      year = {2019}
      } 
      
-**Please if you use `hoki` for your science, do include us in your publications!** As you can imagine developing a tool and maintaining it fro the community is very time consuming, and unfortunatly citations. 
+**Please if you use `hoki` for your science, do include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
 License
 ^^^^^^^^^^^
