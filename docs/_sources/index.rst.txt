@@ -11,6 +11,7 @@
 .. toctree::
    intro
    quick_start
+   citation
    :maxdepth: 1
    :Caption: Introduction
 

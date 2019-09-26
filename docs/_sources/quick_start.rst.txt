@@ -133,6 +133,25 @@ All outputs are returned as ``pandas.DataFrames`` with sensible column names.
 
 The full suite of stellar models is also available from the BPASS website (careful, the file is big ~50GB), and they are required to make colour magnitude diagram (CMD) such as in Figure 24 of `BPASSv2.1 <https://bpass.auckland.ac.nz/8.html>`__. Creating these CMD and exploring these files is very tricky - in a future release ``hoki`` will offer features to make this straight forward. 
 
+
+***************
+Citing Hoki
+***************
+A peer-reviewed journal article about `hoki` will appear in due time but for now you can use the following bibtex entry:
+
+.. code-block:: none
+
+   @Misc{hoki_citation,
+     author =   {Heloise Stevance},
+     title =    {Hoki},
+     howpublished = {\url{https://github.com/HeloiseS/hoki}},
+     doi = {10.5281/zenodo.3445659},
+     year = {2019}
+     } 
+
+
+**Please if you use `hoki` for your science, do include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
+
 -----------------------------
 
 .. seealso:: 
