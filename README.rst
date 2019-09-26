@@ -48,14 +48,13 @@ A peer-reviewed journal article about `hoki` will appear in due time but for now
 .. code-block:: none
 
    @Misc{hoki_citation,
-   author =   {Heloise Stevance},
-   title =    {Hoki},
-   howpublished = {\url{https://github.com/HeloiseS/hoki}},
-   doi = {10.5281/zenodo.3445659},
-   year = {2019}
-   } 
-
-
+     author =   {Heloise Stevance},
+     title =    {Hoki},
+     howpublished = {\url{https://github.com/HeloiseS/hoki}},
+     doi = {10.5281/zenodo.3445659},
+     year = {2019}
+     } 
+     
 **Please if you use `hoki` for your science, do include us in your publications!** As you can imagine developing a tool and maintaining it fro the community is very time consuming, and unfortunatly citations. 
 
 License
