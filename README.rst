@@ -41,6 +41,9 @@ Read the docs!
 
 **Here is some documentation: https://heloises.github.io/hoki/intro.html**
 
+Citation
+^^^^^^^^^
+If you use `hoki` for your science, please include a mention of `hoki` inyour paper along with its DOI: 10.5281/zenodo.3445659 and -if can- a link to the GitHub.
 
 License
 ^^^^^^^^^^^
