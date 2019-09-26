@@ -15,11 +15,11 @@ class TestCMD(object):
         assert sum(self.cmd.grid.flatten()) == 0, "CMD Grid should be empty"
 
     def test_make(self):
-        #print(os.listdir(data_path))
+        print(os.listdir(data_path))
         self.cmd.make(filter1='B', filter2='V')
-       # assert sum(self.cmd.grid.flatten()) == 0, 'CMD grid is not empty'
-        assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
+        assert sum(self.cmd.grid.flatten()) == 0, 'CMD grid is not empty'
+        #assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
 
     def test_plot(self):
-        #print(os.listdir(data_path))
+        print(os.listdir(data_path))
         myplot = self.cmd.plot(log_age=7)
