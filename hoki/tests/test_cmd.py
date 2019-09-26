@@ -3,7 +3,7 @@ import pkg_resources
 import os 
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
-print(os.listdir(path))
+print(os.listdir(data_path))
 #print(os.listdir(data_path+'/sample_stellar_models/'))
 
 class TestCMD(object):
