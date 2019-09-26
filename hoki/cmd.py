@@ -17,9 +17,10 @@ class CMD(object):
     dt = BPASS_TIME_INTERVALS
 
     def __init__(self, file,
-                 col_lim = [-3, 7],
-                 mag_lim = [-14, 10],
-                 res_el = 0.05):
+                 col_lim=[-3, 7],
+                 mag_lim=[-14, 10],
+                 res_el=0.1,
+                 path=MODELS_PATH):
 
         self.bpass_input = load.model_input(file)
 
@@ -31,6 +32,7 @@ class CMD(object):
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
         self.mag_range = np.arange(mag_lim[0], mag_lim[1], res_el)
         self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
+        self.path = path
 
     def make(self, filter1, filter2):
 
@@ -52,13 +54,13 @@ class CMD(object):
 
             # Loading the file and making sure it exists - If not keep the name in a list
             try:
-                my_data = np.loadtxt(MODELS_PATH + filename, unpack=True, usecols=cols)
+                my_data = np.loadtxt(self.path + filename, unpack=True, usecols=cols)
             except (FileNotFoundError, OSError):
                 self.file_does_not_exist.append(filename)
                 continue
 
             # Sometimes there is only one row - i.e. the star did not evolve.
-            # Then the zip will fail - I skip it because I don't care about stars that do nothing
+            # Then the zip will fail - I skip it because I don't care about stars that do nothing?
             try:
                 colours = [filt1 - filt2 for filt1, filt2 in zip(my_data[2], my_data[3])]
             except TypeError:
