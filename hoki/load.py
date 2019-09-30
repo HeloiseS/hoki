@@ -8,11 +8,42 @@ import numpy as np
 import hoki.hrdiagrams as hr
 from hoki.constants import *
 import os
+import yaml
+import io
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
 
-__all__ = ['model_input', 'model_output']
+__all__ = ['model_input', 'model_output', 'set_models_path']
+
+
+def set_models_path(path):
+    """
+    Changes the path to the stellar models in hoki's settings
+
+    Parameters
+    ----------
+    path : str,
+        Absolute path to the top level of the stellar models this could be a directory named something like
+        bpass-v2.2-newmodels and the next level down should contain 'NEWBINMODS' and 'NEWSINMODS'.
+
+
+    Notes
+    -----
+    You are going to have to reload hoki for your new path to take effect.
+
+    """
+
+    assert os.path.isdir(path), 'The path provided does not correspond to a valid directory'
+
+    import hoki
+    path_to_settings = hoki.__file__[:-11]+'settings.yaml'
+    with open(path_to_settings, 'r') as stream:
+        settings = yaml.safe_load(stream)
+
+    settings['models_path'] = path
+    with io.open(path_to_settings, 'w', encoding='utf8') as outfile:
+        yaml.dump(settings, outfile, default_flow_style=False, allow_unicode=True)
 
 
 def model_input(path):

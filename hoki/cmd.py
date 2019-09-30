@@ -5,6 +5,7 @@ from hoki.constants import *
 import numpy as np
 import matplotlib.cm as cm
 
+
 # TODO: 1) Review with JJ the probas imfs I'm putting into the grid
 # TODO: 2) I logged the colour map which looks alright - Do I need to choose specific levels like with hrdiagrams?
 # TODO: 3) Sometimes the stellar model files contain only one row - so only the first time step.
@@ -13,7 +14,8 @@ import matplotlib.cm as cm
 # TODO: 5) Do I need to create a dedicated function feature that can plot stacked CMD ages or is that a rare occurance?
 
 
-# TODO: 6) Interpolation for time bins that are not given in stellar model files.
+# TODO: 6) REVIEW WITH JJ - Interpolation for time bins that are not given in stellar model files.
+
 
 
 class CMD(object):
@@ -31,7 +33,23 @@ class CMD(object):
                  mag_lim=[-14, 10],
                  res_el=0.1,
                  path=MODELS_PATH):
+        """
+         Initialisation of the Colour Magnitude Diagram object
 
+         Parameters
+         ----------
+         file : str
+             Location of the file containing the model inputs
+         col_lim : list of 2 integers (positive or negative), optional
+             Limits on the colour range of the CMD grid, Default is [-3,7].
+         mag_lim : list of 2 integers (positive or negative), optional
+             Limits on the magnitude range of the CMD grid. Default is [-14,10].
+         res_el : float or int, optional
+             Resolution element of the CMD grid. The resolution element is the same for colour and magnitude.
+             Default is 0.1.
+         path : str, optional
+             Path to the stellar models. Default is MODEL_PATH with is defined in the constants module.
+         """
         self.bpass_input = load.model_input(file)
 
         # self.mask = [False]*self.dummy_col_number
@@ -45,6 +63,25 @@ class CMD(object):
         self.path = path
 
     def make(self, filter1, filter2):
+        """
+        Make the CMD - a.k.a fill the grid
+
+        Notes
+        ------
+            - This may take a few seconds to a minute to run.
+            - The colour will be filter1 - filter2
+
+        Parameters
+        ----------
+        filter1 : str
+            First filter
+        filter2 : str
+            Seconds filter
+
+        Returns
+        -------
+        None
+        """
 
         col_keys = ['timestep', 'age', str(filter1), str(filter2)]
 
@@ -85,13 +122,15 @@ class CMD(object):
 
             # we turn the ages (given in years) into log_ages to compare to the BPASS_TIME_BINS
             log_ages = np.log10(my_data[1])
-            log_ages[0] = 6.0  # because log10(0) fails
+            log_ages = [age if age >= 6.0 else 6.0 for age in log_ages]
+            # for all intended pruposes this is the age bing that lower ages will end up in
 
             # List comprehension hell to figure out the indices of the bins I need to fill
             time_index = [np.abs((BPASS_TIME_BINS - log_age)).argmin()
                           if BPASS_TIME_BINS[np.abs((BPASS_TIME_BINS - log_age)).argmin()] <= log_age
                           else np.abs((BPASS_TIME_BINS - log_age)).argmin() - 1
                           for log_age in log_ages]
+
 
             col_index = [np.abs((self.col_range - c)).argmin()
                          if self.col_range[np.abs((self.col_range - c)).argmin()] <= c
@@ -107,7 +146,61 @@ class CMD(object):
             for mag_i, col_i, t_i in zip(mag_index, col_index, time_index):
                 self.grid[t_i, mag_i, col_i] += imf
 
+
+            # Now some age bins (range form 0 to 51) are not populated - we have to do this to
+            # 1) we find the empty time bins, and while we're at it the non-empty ones
+            empty_time_bins = np.array([i for i in range(0,51) if i not in time_index])
+            not_empty_time_bins = np.array([i for i in range(0,51) if i in time_index])
+
+
+            # Then for each empty time bin we find the nearest non-empty one
+            nearest_not_empty_bins = [np.abs(not_empty_time_bins - t).argmin()
+                                      for t in empty_time_bins]
+
+            # Then for each empty time bin and corresponding nearest time bin
+            # we find the position of the LAST value in the time_index that == nearest time bin
+            # this position is also the position of the indices in col_index and mag_index
+            # that we are going to use to population the grid, alongside the empty_time_bin
+            # (the missing time index).
+            # My brain is metling out of my ears.
+
+            # """
+
+            for empty, nearest in zip(empty_time_bins, nearest_not_empty_bins):
+                index_all_bins_at_nearest_age = np.where((time_index - nearest) == 0)[0]
+
+                try:
+                    # this break if there is only one value
+                    index_last_bin_at_nearest_age = index_all_bins_at_nearest_age[-1]
+                except IndexError:
+                    self.grid[empty, mag_index[nearest], col_index[nearest]] += imf
+                    #print(empty, nearest, time_index[nearest])
+                    continue
+
+                i = index_last_bin_at_nearest_age
+                self.grid[empty, mag_index[i], col_index[i]] += imf
+            # """
+
     def plot(self, log_age=6.8, loc=111, cmap='Greys', **kwargs):
+        """
+        Plots the CMD grid at a particular age
+
+        Parameters
+        ----------
+        log_age : float
+            Must be a valid BPASS time bin
+        loc : 3 integers, optional
+            Location of the subplot. Default is 111.
+        cmap : str, optional
+            Colour map for the contours. Default is 'Greys'
+         **kwargs : matplotlib keyword arguments, optional
+
+        Returns
+        -------
+        matplotlib.axes._subplots.AxesSubplot :
+            The plot created is returned, so you can add stuff to it, like text or extra data.
+
+        """
         cm_diagram = plt.subplot(loc)
 
         colMap = cm.get_cmap(cmap)
@@ -127,3 +220,5 @@ class CMD(object):
         cm_diagram.invert_yaxis()
 
         return cm_diagram
+
+
