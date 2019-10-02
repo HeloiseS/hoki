@@ -50,7 +50,7 @@ env:
         
         # List other runtime dependencies for the package that are available as
         # pip packages here.
-        - PIP_DEPENDENCIES='pandas matplotlib numpy'
+        - PIP_DEPENDENCIES='pandas matplotlib numpy pyyaml'
 
         # Conda packages for affiliated packages are hosted in channel
         # "astropy" while builds for astropy LTS with recent numpy versions
