@@ -1,10 +1,8 @@
 from hoki import load
-import pandas as pd
 import matplotlib.pyplot as plt
 from hoki.constants import *
 import numpy as np
 import matplotlib.cm as cm
-
 
 # TODO: 1) Review with JJ the probas imfs I'm putting into the grid
 # TODO: 2) I logged the colour map which looks alright - Do I need to choose specific levels like with hrdiagrams?
@@ -15,7 +13,6 @@ import matplotlib.cm as cm
 
 
 # TODO: 6) REVIEW WITH JJ - Interpolation for time bins that are not given in stellar model files.
-
 
 
 class CMD(object):

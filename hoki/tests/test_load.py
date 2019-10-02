@@ -12,6 +12,13 @@ hr_file = data_path+'/hrs-sin-imf_chab100.zem4.dat'
 sed_file = data_path+'/spectra-bin-imf135_300.z002.dat'
 ion_file = data_path+'/ionizing-bin-imf135_300.z002.dat'
 colour_file = data_path+'/colours-bin-imf135_300.z002.dat'
+cmd_path = data_path+'/cmd_bv_z002_bin_imf135_300'
+
+
+def test_unpickle():
+    cmd = load.unpickle(cmd_path)
+    assert cmd is not None, 'Unpickle returned None'
+
 
 def test_model_output():
     data = load.model_output(sn_file)

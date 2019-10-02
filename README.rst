@@ -24,7 +24,6 @@
 Bridging the gap between observation and theory
 ---------------
 
-
 **NOTE:** ``hoki`` is still in pre-release
    
 Installing hoki

@@ -1,8 +1,11 @@
 import numpy as np
 import yaml
+import hoki
+
+path_to_settings = hoki.__file__[:-11]+'settings.yaml'
 
 #MODELS_PATH='/home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/'
-with open("/home/fste075/hoki/hoki/settings.yaml", 'r') as stream:
+with open(path_to_settings, 'r') as stream:
     settings = yaml.safe_load(stream)
 
 MODELS_PATH = settings['models_path']

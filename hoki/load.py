@@ -10,11 +10,18 @@ from hoki.constants import *
 import os
 import yaml
 import io
+import pickle
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
 
-__all__ = ['model_input', 'model_output', 'set_models_path']
+__all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
+
+
+def unpickle(path):
+    """Extract pickle files"""
+    assert os.path.isfile(path), 'File not found.'
+    return pickle.load(open(path, 'rb'))
 
 
 def set_models_path(path):
@@ -44,6 +51,9 @@ def set_models_path(path):
     settings['models_path'] = path
     with io.open(path_to_settings, 'w', encoding='utf8') as outfile:
         yaml.dump(settings, outfile, default_flow_style=False, allow_unicode=True)
+
+    print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
+          '\n'+path_to_settings)
 
 
 def model_input(path):
