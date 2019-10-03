@@ -1,6 +1,15 @@
 .. image:: black_text.png
     :height: 40px
 
+
+    
+
+
+Bridging the gap between observation and theory
+---------------
+
+**NOTE:** ``hoki`` is still in pre-release
+
     
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
@@ -18,13 +27,6 @@
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
     
-    
-
-
-Bridging the gap between observation and theory
----------------
-
-**NOTE:** ``hoki`` is still in pre-release
    
 Installing hoki
 ^^^^^^^^^^^
