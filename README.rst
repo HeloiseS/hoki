@@ -1,4 +1,4 @@
-.. image:: ./images/hoki.png
+.. image:: black_text.png
     :height: 40px
 
     
