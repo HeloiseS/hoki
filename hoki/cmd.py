@@ -6,13 +6,7 @@ import matplotlib.cm as cm
 
 # TODO: 1) Review with JJ the probas imfs I'm putting into the grid
 # TODO: 2) I logged the colour map which looks alright - Do I need to choose specific levels like with hrdiagrams?
-# TODO: 3) Sometimes the stellar model files contain only one row - so only the first time step.
-#          This breaks the code and contains unphysical quantities - I have not taken these cases into account in CMDs
 # TODO: 4) Review with JJ the binning method - see page 62 in my log book
-# TODO: 5) Do I need to create a dedicated function feature that can plot stacked CMD ages or is that a rare occurance?
-
-
-# TODO: 6) REVIEW WITH JJ - Interpolation for time bins that are not given in stellar model files.
 
 
 class CMD(object):
@@ -123,11 +117,12 @@ class CMD(object):
             # for all intended pruposes this is the age bing that lower ages will end up in
 
             # List comprehension hell to figure out the indices of the bins I need to fill
-            time_index = [np.abs((BPASS_TIME_BINS - log_age)).argmin()
-                          if BPASS_TIME_BINS[np.abs((BPASS_TIME_BINS - log_age)).argmin()] <= log_age
-                          else np.abs((BPASS_TIME_BINS - log_age)).argmin() - 1
-                          for log_age in log_ages]
+            #time_index = [np.abs((BPASS_TIME_BINS - log_age)).argmin()
+            #              if BPASS_TIME_BINS[np.abs((BPASS_TIME_BINS - log_age)).argmin()] <= log_age
+            #              else np.abs((BPASS_TIME_BINS - log_age)).argmin() - 1
+            #              for log_age in log_ages]
 
+            time_index = [np.abs(BPASS_TIME_BINS - log_age).argmin() for log_age in log_ages]
 
             col_index = [np.abs((self.col_range - c)).argmin()
                          if self.col_range[np.abs((self.col_range - c)).argmin()] <= c
@@ -200,22 +195,47 @@ class CMD(object):
         """
         cm_diagram = plt.subplot(loc)
 
+        #  THIS IS VERY SIMILAR TO THE PLOTTING FUNCTION IN HOKI.HRDIAGRAMS.
+
+        #  Now we define our default levels
+        index = np.where(np.round(BPASS_TIME_BINS,1) == log_age)[0]
+
+        assert 6.0 <= log_age < 11.1,"FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+
+        single_cmd_grid = self.grid[int(index)]
+        single_cmd_grid[single_cmd_grid == 0] = min(single_cmd_grid[single_cmd_grid != 0]) - \
+                                                0.1*min(single_cmd_grid[single_cmd_grid != 0])
+
+        top_level = single_cmd_grid.max()
+        min_level = single_cmd_grid.min()
+
+        # we want our levels to be fractions of 10 of our maximum value
+        # and yes it didn't need to be written this way, but isn't it gorgeous?
+        possible_levels = [top_level*0.00000001,
+                           top_level*0.0000001,
+                           top_level*0.000001,
+                           top_level*0.00001,
+                           top_level*0.0001,
+                           top_level*0.001,
+                           top_level*0.01,
+                           top_level*0.1,
+                           top_level]
+
+        # to make sure the colourmap is sensible we want to ensure the minimum level == minimum value
+        levels = [min_level] + [level for level in possible_levels if level > min_level]
+
         colMap = cm.get_cmap(cmap)
 
         colMap.set_under(color='white')
 
-        index = np.where(np.round(BPASS_TIME_BINS,1) == log_age)[0]
-
-        assert 6.0 <= log_age <= 11.1, \
-            "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
-
-        toplot = self.grid[int(index)]
-        toplot[toplot == 0] = min(toplot[toplot != 0])- 0.1*min(toplot[toplot != 0])
-
-        cm_diagram.contourf(self.col_range, self.mag_range, np.log10(toplot), cmap=cmap, **kwargs)
+        cm_diagram.contourf(self.col_range, self.mag_range, np.log10(single_cmd_grid), np.log10(levels).tolist(),
+                            cmap=cmap, **kwargs)
 
         cm_diagram.invert_yaxis()
 
         return cm_diagram
+
+
+
 
 

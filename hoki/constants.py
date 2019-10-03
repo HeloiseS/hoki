@@ -1,16 +1,20 @@
 import numpy as np
 import yaml
 import hoki
+import os
 
-path_to_settings = hoki.__file__[:-11]+'settings.yaml'
+a= hoki.__file__[:-11]
+path_to_settings = os.path.dirname(os.path.abspath(__file__))+'/settings.yaml'
 
 #MODELS_PATH='/home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/'
-with open(path_to_settings, 'r') as stream:
+#os.system('cat '+path_to_settings)
+
+with open(path_to_settings, 'rb') as stream:
     settings = yaml.safe_load(stream)
 
 MODELS_PATH = settings['models_path']
 
-BPASS_TIME_BINS = np.arange(6, 11.1, 0.1)
+BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
 BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
 BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
 
