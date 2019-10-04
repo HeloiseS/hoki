@@ -85,10 +85,14 @@ class CMD(object):
                   'Here is a list of valid filters - input them as string:\n'+str(list(dummy_dict.keys())[49:-23]))
             return
 
-        for filename, modeltype, model_imf, mixed_imf in zip(self.bpass_input.filenames,
-                                                             self.bpass_input.types,
-                                                             self.bpass_input.imfs_proba,
-                                                             self.bpass_input.mixed_imf):
+        for filename, modeltype, model_imf, mixed_imf, mixed_age in zip(self.bpass_input.filenames,
+                                                                        self.bpass_input.types,
+                                                                        self.bpass_input.imfs_proba,
+                                                                        self.bpass_input.mixed_imf,
+                                                                        self.bpass_input.mixed_age):
+            ###################################
+            # LOADING DATA AND MAKING COLOURS #
+            ###################################
 
             # Loading the file and making sure it exists - If not keep the name in a list
             try:
@@ -104,12 +108,9 @@ class CMD(object):
             except TypeError:
                 continue
 
-            # Once we know the file exists and there is data to use, we check the model type
-            # This tells us what imf probas to put in our grid.
-            if modeltype < 2:
-                imf = model_imf
-            else:
-                imf = model_imf + mixed_imf
+            ############################################
+            # FINDING THE LOCATION TO FILL ON THE GRID #
+            ############################################
 
             # we turn the ages (given in years) into log_ages to compare to the BPASS_TIME_BINS
             log_ages = np.log10(my_data[1])
@@ -117,7 +118,7 @@ class CMD(object):
             # for all intended pruposes this is the age bing that lower ages will end up in
 
             # List comprehension hell to figure out the indices of the bins I need to fill
-            #time_index = [np.abs((BPASS_TIME_BINS - log_age)).argmin()
+            # time_index = [np.abs((BPASS_TIME_BINS - log_age)).argmin()
             #              if BPASS_TIME_BINS[np.abs((BPASS_TIME_BINS - log_age)).argmin()] <= log_age
             #              else np.abs((BPASS_TIME_BINS - log_age)).argmin() - 1
             #              for log_age in log_ages]
@@ -134,16 +135,43 @@ class CMD(object):
                          else np.abs((self.mag_range - mag)).argmin() - 1
                          for mag in my_data[3]]
 
-            # And now I fill the right grid bin with the imf proba we calculated earlier
-            for mag_i, col_i, t_i in zip(mag_index, col_index, time_index):
-                self.grid[t_i, mag_i, col_i] += imf
+            ####################
+            # FILLING THE GRID #
+            ####################
 
+            if np.isnan(mixed_age) or float(mixed_age) == 0.0:
+                imf = model_imf
+                for mag_i, col_i, t_i in zip(mag_index, col_index, time_index):
+                    self.grid[t_i, mag_i, col_i] += imf
+
+            else:
+                mixed_age_bin = np.abs(BPASS_TIME_BINS - np.log10(mixed_age)).argmin()
+
+                for mag_i, col_i, t_i in zip(mag_index, col_index, time_index):
+
+                    if np.isclose(model_imf,mixed_imf):
+
+                        if t_i < mixed_age_bin:
+                            imf = 0
+                        else:
+                            imf = mixed_imf
+
+                    else:
+                        if t_i < mixed_age_bin:
+                            imf = model_imf - mixed_imf
+                        else:
+                            imf = model_imf # check this imf is right.
+
+                    self.grid[t_i, mag_i, col_i] += imf
+
+            ######################
+            # TIME INTERPOLATION #
+            ######################
 
             # Now some age bins (range form 0 to 51) are not populated - we have to do this to
             # 1) we find the empty time bins, and while we're at it the non-empty ones
             empty_time_bins = np.array([i for i in range(0,51) if i not in time_index])
             not_empty_time_bins = np.array([i for i in range(0,51) if i in time_index])
-
 
             # Then for each empty time bin we find the nearest non-empty one
             nearest_not_empty_bins = [np.abs(not_empty_time_bins - t).argmin()
@@ -155,8 +183,6 @@ class CMD(object):
             # that we are going to use to population the grid, alongside the empty_time_bin
             # (the missing time index).
             # My brain is metling out of my ears.
-
-            # """
 
             for empty, nearest in zip(empty_time_bins, nearest_not_empty_bins):
                 index_all_bins_at_nearest_age = np.where((time_index - nearest) == 0)[0]
@@ -171,7 +197,6 @@ class CMD(object):
 
                 i = index_last_bin_at_nearest_age
                 self.grid[empty, mag_index[i], col_index[i]] += imf
-            # """
 
     def plot(self, log_age=6.8, loc=111, cmap='Greys', **kwargs):
         """
