@@ -9,8 +9,7 @@ Bridging the gap between observation and theory
 ---------------
 
 **NOTE:** ``hoki`` is still in pre-release
-**NOTE:** ``hoki`` is not broken
-    
+
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
 
