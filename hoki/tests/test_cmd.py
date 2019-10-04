@@ -26,7 +26,7 @@ class TestCMD(object):
     #    assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
 
     def test_plot(self):
-        self.cmd.plot()
+        #self.cmd.plot()
 
         cmd = unpickle(cmd_path)
         myplot = cmd.plot(log_age=7)
