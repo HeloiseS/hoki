@@ -1,6 +1,7 @@
 import numpy as np
 import yaml
 import pkg_resources
+import os
 
 path_to_settings = pkg_resources.resource_filename('hoki', 'settings.yaml')
 #MODELS_PATH='/home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/'
