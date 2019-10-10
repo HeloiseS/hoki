@@ -4,10 +4,6 @@ from hoki.constants import *
 import numpy as np
 import matplotlib.cm as cm
 
-# TODO: 1) Review with JJ the probas imfs I'm putting into the grid
-# TODO: 2) I logged the colour map which looks alright - Do I need to choose specific levels like with hrdiagrams?
-# TODO: 4) Review with JJ the binning method - see page 62 in my log book
-
 
 class CMD(object):
     # NOTE: dummy is the name of the big array returned by the BPASS models
@@ -42,16 +38,18 @@ class CMD(object):
              Path to the stellar models. Default is MODEL_PATH with is defined in the constants module.
          """
         self.bpass_input = load.model_input(file)
-
-        # self.mask = [False]*self.dummy_col_number
-
-        self.file_does_not_exist = []
+        self._file_does_not_exist = []
 
         # Setting up the grid's resolution
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
         self.mag_range = np.arange(mag_lim[0], mag_lim[1], res_el)
         self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
         self.path = path
+        self._col_bins = None
+        self._mag_bins = None
+        self._time_bins = None
+        self._log_ages = None
+        self._ages = None
 
     def make(self, filter1, filter2):
         """
@@ -74,6 +72,8 @@ class CMD(object):
         None
         """
 
+        # FIND THE KEYS TO THE COLUMNS OF INTEREST IN DUMMY
+
         col_keys = ['timestep', 'age', str(filter1), str(filter2)]
 
         try:
@@ -85,118 +85,104 @@ class CMD(object):
                   'Here is a list of valid filters - input them as string:\n'+str(list(dummy_dict.keys())[49:-23]))
             return
 
-        for filename, modeltype, model_imf, mixed_imf, mixed_age in zip(self.bpass_input.filenames,
-                                                                        self.bpass_input.types,
-                                                                        self.bpass_input.imfs_proba,
-                                                                        self.bpass_input.mixed_imf,
-                                                                        self.bpass_input.mixed_age):
-            ###################################
-            # LOADING DATA AND MAKING COLOURS #
-            ###################################
+        # LOOPING OVER EACH LINE IN THE INPUT FILE
+        for filename,  model_imf, mixed_imf, mixed_age in zip(self.bpass_input.filenames,
+                                                              self.bpass_input.model_imf,
+                                                              self.bpass_input.mixed_imf,
+                                                              self.bpass_input.mixed_age):
 
-            # Loading the file and making sure it exists - If not keep the name in a list
+            # LOADING THE DATA FILE
+            # Making sure it exists - If not keep the name in a list
             try:
                 my_data = np.loadtxt(self.path + filename, unpack=True, usecols=cols)
             except (FileNotFoundError, OSError):
-                self.file_does_not_exist.append(filename)
+                self._file_does_not_exist.append(filename)
                 continue
 
-            # Sometimes there is only one row - i.e. the star did not evolve.
-            # Then the zip will fail - I skip it because I don't care about stars that do nothing?
+            # MAKING THE COLOUR
             try:
                 colours = [filt1 - filt2 for filt1, filt2 in zip(my_data[2], my_data[3])]
             except TypeError:
+                # Sometimes there is only one row - i.e. the star did not evolve.
+                # Then the zip will fail - These are stars that have not evolved and there is
+                # very few of them so we are skipping them for now.
                 continue
 
-            ############################################
-            # FINDING THE LOCATION TO FILL ON THE GRID #
-            ############################################
+            # LIST WHICH BINS IN THE GRID EACH COLOUR AND MAGNITUDE BELONGS TO
+            self._col_bins = [np.abs((self.col_range - c)).argmin()
+                              if self.col_range[np.abs((self.col_range - c)).argmin()] <= c
+                              else np.abs((self.col_range - c)).argmin() - 1
+                              for c in colours]
 
-            # we turn the ages (given in years) into log_ages to compare to the BPASS_TIME_BINS
-            log_ages = np.log10(my_data[1])
-            log_ages = [age if age >= 6.0 else 6.0 for age in log_ages]
-            # for all intended pruposes this is the age bing that lower ages will end up in
+            self._mag_bins = [np.abs((self.mag_range - mag)).argmin()
+                              if self.mag_range[np.abs((self.mag_range - mag)).argmin()] <= mag
+                              else np.abs((self.mag_range - mag)).argmin() - 1
+                              for mag in my_data[3]]
 
-            # List comprehension hell to figure out the indices of the bins I need to fill
-            # time_index = [np.abs((BPASS_TIME_BINS - log_age)).argmin()
-            #              if BPASS_TIME_BINS[np.abs((BPASS_TIME_BINS - log_age)).argmin()] <= log_age
-            #              else np.abs((BPASS_TIME_BINS - log_age)).argmin() - 1
-            #              for log_age in log_ages]
-
-            time_index = [np.abs(BPASS_TIME_BINS - log_age).argmin() for log_age in log_ages]
-
-            col_index = [np.abs((self.col_range - c)).argmin()
-                         if self.col_range[np.abs((self.col_range - c)).argmin()] <= c
-                         else np.abs((self.col_range - c)).argmin() - 1
-                         for c in colours]
-
-            mag_index = [np.abs((self.mag_range - mag)).argmin()
-                         if self.mag_range[np.abs((self.mag_range - mag)).argmin()] <= mag
-                         else np.abs((self.mag_range - mag)).argmin() - 1
-                         for mag in my_data[3]]
-
-            ####################
-            # FILLING THE GRID #
-            ####################
-
+            # MIXED AGE = 0.0 OR NAN CASE (i.e. no rejuvination)
             if np.isnan(mixed_age) or float(mixed_age) == 0.0:
-                imf = model_imf
-                for mag_i, col_i, t_i in zip(mag_index, col_index, time_index):
-                    self.grid[t_i, mag_i, col_i] += imf
+                self._ages = my_data[1]
+                self._log_ages = np.log10(my_data[1])
+                self._log_ages = [age if age >= 6.0 else 6.0 for age in self._log_ages]
+                self._fill_grid_with(model_imf)
 
+            # MIXED AGE NON ZERO CASE (i.e. rejuvination has occured)
             else:
-                mixed_age_bin = np.abs(BPASS_TIME_BINS - np.log10(mixed_age)).argmin()
+                # MODEL IMF = MIXED IMF (These models only occur after rejuvination)
+                if np.isclose(model_imf,mixed_imf):
+                    self._ages = my_data[1]+mixed_age
+                    self._log_ages = np.log10(my_data[1]+mixed_age)
+                    self._fill_grid_with(mixed_imf)
 
-                for mag_i, col_i, t_i in zip(mag_index, col_index, time_index):
+                #  MODEL INF != MIXED IMF (These can occur with or without rejuvination)
+                else:
+                    # NON REJUVINATED MODELS
+                    self._ages = my_data[1]
+                    self._log_ages = np.log10(my_data[1])
+                    self._log_ages = [age if age >= 6.0 else 6.0 for age in self._log_ages]
+                    self._fill_grid_with(model_imf-mixed_imf)
 
-                    if np.isclose(model_imf,mixed_imf):
+                    # REJUVINATED MODELS
+                    self._ages = my_data[1]+mixed_age
+                    self._log_ages = np.log10(my_data[1]+mixed_age)
+                    self._fill_grid_with(mixed_imf)
 
-                        if t_i < mixed_age_bin:
-                            imf = 0
-                        else:
-                            imf = mixed_imf
+    def _fill_grid_with(self, imf):
 
-                    else:
-                        if t_i < mixed_age_bin:
-                            imf = model_imf - mixed_imf
-                        else:
-                            imf = model_imf # check this imf is right.
+        for i in range(len(self._ages)):
+            # NEED SPECIAL CASES FOR i = 0
+            if i == 0:
+                self.grid[0, self._mag_bins[0], self._col_bins[0]] += imf * self._ages[0]
+                continue
 
-                    self.grid[t_i, mag_i, col_i] += imf
+            try:
+                N_i_m1 = np.abs(BPASS_TIME_BINS - self._log_ages[i-1]).argmin()
+                N_i = np.abs(BPASS_TIME_BINS - self._log_ages[i]).argmin()
+            except IndexError:
+                print("This should not happen")
 
-            ######################
-            # TIME INTERPOLATION #
-            ######################
+            # If the time step within one time bin
+            if N_i_m1 == N_i:
+                dt_i = self._ages[i] - self._ages[i-1]
+                self.grid[N_i, self._mag_bins[i], self._col_bins[i]] += imf * dt_i
 
-            # Now some age bins (range form 0 to 51) are not populated - we have to do this to
-            # 1) we find the empty time bins, and while we're at it the non-empty ones
-            empty_time_bins = np.array([i for i in range(0,51) if i not in time_index])
-            not_empty_time_bins = np.array([i for i in range(0,51) if i in time_index])
+            # If the time step spans multiple time bins
+            else:
+                N_list = np.arange(N_i_m1, N_i+1)
 
-            # Then for each empty time bin we find the nearest non-empty one
-            nearest_not_empty_bins = [np.abs(not_empty_time_bins - t).argmin()
-                                      for t in empty_time_bins]
+                # First bin
+                weight = 10**(BPASS_TIME_BINS[N_list[0]]+0.05) - self._ages[i-1]
+                self.grid[N_list[0], self._mag_bins[i], self._col_bins[i]] += imf * weight
 
-            # Then for each empty time bin and corresponding nearest time bin
-            # we find the position of the LAST value in the time_index that == nearest time bin
-            # this position is also the position of the indices in col_index and mag_index
-            # that we are going to use to population the grid, alongside the empty_time_bin
-            # (the missing time index).
-            # My brain is metling out of my ears.
+                # Last bin
+                weight = self._ages[i] - 10**(BPASS_TIME_BINS[N_list[-1]]-0.05)
+                self.grid[N_list[-1], self._mag_bins[i], self._col_bins[i]] += imf * weight
 
-            for empty, nearest in zip(empty_time_bins, nearest_not_empty_bins):
-                index_all_bins_at_nearest_age = np.where((time_index - nearest) == 0)[0]
-
-                try:
-                    # this break if there is only one value
-                    index_last_bin_at_nearest_age = index_all_bins_at_nearest_age[-1]
-                except IndexError:
-                    self.grid[empty, mag_index[nearest], col_index[nearest]] += imf
-                    #print(empty, nearest, time_index[nearest])
-                    continue
-
-                i = index_last_bin_at_nearest_age
-                self.grid[empty, mag_index[i], col_index[i]] += imf
+                # Bins in between, if any
+                if len(N_list)>2:
+                    for N in N_list[1:-1]:
+                        weight = BPASS_TIME_INTERVALS[N]
+                        self.grid[N, self._mag_bins[i], self._col_bins[i]] += imf * weight
 
     def plot(self, log_age=6.8, loc=111, cmap='Greys', **kwargs):
         """
@@ -236,7 +222,12 @@ class CMD(object):
 
         # we want our levels to be fractions of 10 of our maximum value
         # and yes it didn't need to be written this way, but isn't it gorgeous?
-        possible_levels = [top_level*0.00000001,
+        possible_levels = [# top_level*0.0000000000001,
+                           top_level*0.000000000001,
+                           top_level*0.00000000001,
+                           top_level*0.0000000001,
+                           top_level*0.000000001,
+                           top_level*0.00000001,
                            top_level*0.0000001,
                            top_level*0.000001,
                            top_level*0.00001,
@@ -259,8 +250,4 @@ class CMD(object):
         cm_diagram.invert_yaxis()
 
         return cm_diagram
-
-
-
-
 
