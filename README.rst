@@ -39,7 +39,7 @@ You can pip install hoki, note it has note yet been tested for python3.7 and up,
 Read the docs!
 ^^^^^^^^^^^
 
-`Here is some documentation: <https://heloises.github.io/hoki/intro.html>`_
+`**Click Here! Click Here! Click Here!** <https://heloises.github.io/hoki/intro.html>`_
 
 Citation
 ^^^^^^^^^
