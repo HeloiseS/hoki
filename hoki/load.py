@@ -244,7 +244,7 @@ def _stellar_numbers(path):
     """
     Load One stellar type number file into a dataframe
     """
-    return pd.read_csv(path, sep=r"\s*",
+    return pd.read_csv(path, sep=r"\s+",
                        names=['log_age', 'O_hL', 'Of_hL', 'B_hL', 'A_hL', 'YSG_hL',
                               'K_hL', 'M_hL', 'WNH_hL', 'WN_hL', 'WC_hL',
                               'O_lL', 'Of_lL', 'B_lL', 'A_lL', 'YSG_lL',
@@ -255,7 +255,7 @@ def _yields(path):
     """
     Load One yields file into a dataframe
     """
-    return pd.read_csv(path, sep=r"\s*",
+    return pd.read_csv(path, sep=r"\s+",
                        names=['log_age', 'H_wind', 'He_wind', 'Z_wind', 'E_wind',
                               'E_sn', 'H_sn', 'He_sn', 'Z_sn'], engine='python')
 
@@ -264,7 +264,7 @@ def _stellar_masses(path):
     """
     Load One stellar masses file into a dataframe
     """
-    return pd.read_csv(path, sep=r"\s*",
+    return pd.read_csv(path, sep=r"\s+",
                        names=['log_age', 'stellar_mass', 'remnant_mass'], engine='python')
 
 
