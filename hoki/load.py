@@ -11,11 +11,14 @@ import os
 import yaml
 import io
 import pickle
+import pkg_resources
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
 
 __all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
+
+data_path = pkg_resources.resource_filename('hoki', 'data')
 
 
 def unpickle(path):
@@ -40,11 +43,9 @@ def set_models_path(path):
     You are going to have to reload hoki for your new path to take effect.
 
     """
-
     assert os.path.isdir(path), 'The path provided does not correspond to a valid directory'
 
-    import hoki
-    path_to_settings = hoki.__file__[:-11]+'settings.yaml'
+    path_to_settings = data_path+'/settings.yaml'
     with open(path_to_settings, 'r') as stream:
         settings = yaml.safe_load(stream)
 
@@ -244,7 +245,7 @@ def _stellar_numbers(path):
     """
     Load One stellar type number file into a dataframe
     """
-    return pd.read_csv(path, sep=r"\s*",
+    return pd.read_csv(path, sep=r"\s+",
                        names=['log_age', 'O_hL', 'Of_hL', 'B_hL', 'A_hL', 'YSG_hL',
                               'K_hL', 'M_hL', 'WNH_hL', 'WN_hL', 'WC_hL',
                               'O_lL', 'Of_lL', 'B_lL', 'A_lL', 'YSG_lL',
@@ -255,7 +256,7 @@ def _yields(path):
     """
     Load One yields file into a dataframe
     """
-    return pd.read_csv(path, sep=r"\s*",
+    return pd.read_csv(path, sep=r"\s+",
                        names=['log_age', 'H_wind', 'He_wind', 'Z_wind', 'E_wind',
                               'E_sn', 'H_sn', 'He_sn', 'Z_sn'], engine='python')
 
@@ -264,7 +265,7 @@ def _stellar_masses(path):
     """
     Load One stellar masses file into a dataframe
     """
-    return pd.read_csv(path, sep=r"\s*",
+    return pd.read_csv(path, sep=r"\s+",
                        names=['log_age', 'stellar_mass', 'remnant_mass'], engine='python')
 
 

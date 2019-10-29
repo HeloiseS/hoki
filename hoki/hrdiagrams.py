@@ -20,12 +20,26 @@ class HRDiagram(object):
     please refer to the manual:
     https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf
 
-
     Notes
     -----
-    **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time
-    weighted arrays corresponding to the 3 different abundances.
+    - **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.
 
+    - Initialisation from a text file is done through the hoki.load functions
+
+    Parameters
+    ----------
+    high_H_input : np.ndarray with shape (51x100x100)
+        This inputs the HR diagrams corresponding to a hydrogen abundance X > 0.4.
+
+    medium_H_input : np.ndarray with shape (51x100x100)
+        This inputs the HR diagrams corresponding to a hydrogen abundance E-3 < X < 0.4.
+
+    low_H_input : np.ndarray with shape (51x100x100)
+        This inputs the HR diagrams corresponding to a hydrogen abundance X < E-3.
+
+    hr_type : str - Valid options are 'TL' , 'Tg', 'TTG'
+        This tells the class what type of HR diagrams are being given. For more details on what
+        the 3 options mean, consult the BPASS manual section on HR diagram isocontours.
 
     Attributes
     ----------

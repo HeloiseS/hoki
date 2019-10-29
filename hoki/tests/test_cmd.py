@@ -17,15 +17,20 @@ class TestCMD(object):
         #print(os.listdir(data_path))
         assert self.cmd is not None, "object not instanciated"
         assert sum(self.cmd.grid.flatten()) == 0, "CMD Grid should be empty"
-
-    #def test_make(self):
-    #    print(os.listdir(data_path))
-    #    self.cmd.make(filter1='B', filter2='V')
-    #    assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
+    """
+    def test_make(self):
+        print(os.listdir(data_path))
+        self.cmd.make(filter1='B', filter2='V')
+        assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
 
     def test_plot(self):
-        #self.cmd.plot()
+        self.cmd.plot()
 
+    def test_plot_bin0(self):
+        self.cmd.plot(log_age=6.0)
+    """
+
+    def test_plot_pickle(self):
         cmd = unpickle(cmd_path)
         myplot = cmd.plot(log_age=7)
         myplot.set_xlabel('bla')
