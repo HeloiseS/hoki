@@ -125,6 +125,17 @@ class CMD(object):
                                                                           self.bpass_input.mixed_age,
                                                                           self.bpass_input.types):
 
+            # PRE PROCESSING THE MODEL INPUTS
+
+            # The model_img and mixed_img have different precisions because of the FORTRAN code
+            # model_imf is double precision but mixed_imf is double precision. We round to take care of that.
+            model_imf = round(model_imf, 6)
+            mixed_imf = round(mixed_imf, 6)
+
+            # some mixed ages come out negative - it should be taken into account by setting them to 0
+            if mixed_age == np.inf:
+                mixed_age = 0
+
             # LOADING THE DATA FILE
             # Making sure it exists - If not keep the name in a list
             try:
@@ -164,7 +175,7 @@ class CMD(object):
             # MIXED AGE NON ZERO CASE (i.e. rejuvination has occured)
             else:
                 # MODEL IMF = MIXED IMF (These models only occur after rejuvination)
-                if np.isclose(model_imf,mixed_imf):
+                if np.isclose(model_imf,mixed_imf, atol=1e-05):
                     self._ages = self._my_data[1] + mixed_age
                     self._log_ages = np.log10(self._my_data[1] + mixed_age)
                     self._fill_grid_with(mixed_imf, model_type)
@@ -185,10 +196,12 @@ class CMD(object):
     def _fill_grid_with(self, imf, model_type):
 
         for i, M, R, L in zip(range(len(self._ages)), self._my_data[4], self._my_data[5], self._my_data[6]):
-
+            # Weird stuff happens to the primary models when they because WD and they can get counted twice
+            # Here we helpout BPASS a tad by checking when a primary (type 1) has got the gravity, mass and luminosity
+            # of a WD and we jsut remove it from this round so they don't linger on the MS.
             if round(model_type, 1) == 1:
                 log_g = np.log10( (6.67259*10**(-8)) * (1.989*10**33) * M /
-                                  (((10**R) *6.9598*10**10)**2) )
+                                  (((10**R) *6.9598*(10**10))**2) )
 
                 try:
                     if log_g > 6.9 and L < -1 and M < 1.5:
@@ -214,6 +227,7 @@ class CMD(object):
             # If the time step within one time bin
             if N_i_m1 == N_i:
                 dt_i = self._ages[i] - self._ages[i-1]
+                # Some time bins can be negative in BPASS and should be ignored
                 if dt_i <0: continue
 
                 self.grid[N_i, self._mag_bins[i], self._col_bins[i]] += imf * dt_i
@@ -224,11 +238,13 @@ class CMD(object):
 
                 # First bin
                 weight = 10**(BPASS_TIME_BINS[N_list[0]]+0.05) - self._ages[i-1]
+                # Negative time bins should be ignored
                 if weight < 0: continue
                 self.grid[N_list[0], self._mag_bins[i], self._col_bins[i]] += imf * weight
 
                 # Last bin
                 weight = self._ages[i] - 10**(BPASS_TIME_BINS[N_list[-1]]-0.05)
+                # Negative time bins should be ignored.
                 if weight <0: continue
                 self.grid[N_list[-1], self._mag_bins[i], self._col_bins[i]] += imf * weight
 
@@ -269,6 +285,7 @@ class CMD(object):
 
         single_cmd_grid = self.grid[int(index)]
 
+        # This step has been approved by JJ :o)
         infinities = np.where(single_cmd_grid == np.inf)
         for i in infinities: single_cmd_grid[i] = 0.0
 

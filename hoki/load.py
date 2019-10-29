@@ -113,8 +113,8 @@ def model_input(path):
                 # In this case all the other potential inputs are NaNs and we go back to the
                 # beginning to read a new file name
                 row = [1, 0, 0, 0]
-                mixedimf.append(np.nan)
-                mixedage.append(np.nan)
+                mixedimf.append(0.0)
+                mixedage.append(0.0)
                 initialBH.append(np.nan)
                 initialP.append(np.nan)
                 continue
