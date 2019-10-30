@@ -15,6 +15,9 @@ Bridging the gap between observation and theory
 
 .. image:: https://travis-ci.org/HeloiseS/hoki.svg?branch=master
     :target: https://travis-ci.org/HeloiseS/hoki
+
+.. image:: https://badge.fury.io/py/hoki.svg
+    :target: https://badge.fury.io/py/hoki
     
 .. image:: https://codecov.io/gh/HeloiseS/hoki/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/HeloiseS/hoki
