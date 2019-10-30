@@ -8,8 +8,6 @@
 Bridging the gap between observation and theory
 ---------------
 
-**NOTE:** ``hoki`` is still in pre-release
-
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
 
 .. image:: https://zenodo.org/badge/197853216.svg
