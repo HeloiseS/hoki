@@ -41,7 +41,7 @@ Read the docs
 
 Download Tutorials
 ^^^^^^^^^^^^^^^
-Check out these Jupyter notebooks I made - you can find them on this `repo!<https://github.com/HeloiseS/hoki_tutorials>`__
+Check out these Jupyter notebooks I made - you can find them on this `repo! <https://github.com/HeloiseS/hoki_tutorials>`__
 
 Citation
 ^^^^^^^^^
