@@ -2,12 +2,6 @@
     :height: 35px
 
 
-    
-
-
-Bridging the gap between observation and theory
-------------------------------------------------
-
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
@@ -22,6 +16,13 @@ Bridging the gap between observation and theory
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
     
+Bridging the gap between observation and theory
+------------------------------------------------
+
+In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
+
+Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing! **Spend less time on coding and more time on the science!**
+
    
 Installing hoki
 ^^^^^^^^^^^
