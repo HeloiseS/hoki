@@ -8,9 +8,9 @@
 Bridging the gap between observation and theory
 ---------------
 
-.. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
+.. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
 
 .. image:: https://travis-ci.org/HeloiseS/hoki.svg?branch=master
     :target: https://travis-ci.org/HeloiseS/hoki
