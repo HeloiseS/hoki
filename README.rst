@@ -6,7 +6,7 @@
 
 
 Bridging the gap between observation and theory
----------------
+-----
 
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
