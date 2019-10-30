@@ -448,7 +448,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Getting-the-Stellar-models">
 <h3>Getting the Stellar models<a class="headerlink" href="#Getting-the-Stellar-models" title="Permalink to this headline">¶</a></h3>
 <p>Colour Magnitude Diagrams (CMDs) are created by reading in the <a class="reference external" href="https://bpass.auckland.ac.nz/9.html">BPASS</a> stellar models listed in the <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files that can be found in the BPASS output folders (e.g. <em>bpass_v2.2.1_imf135_300</em>). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.</p>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>NOTE: You will be able to run the cells in the section “Loading a pickled CMD file” even if you can’t download the full set of stellar models **</p>
+<p><strong>NOTE: You will be able to run the cells in the section “Loading a pickled CMD file” even if you can’t download the full set of stellar models</strong></p>
 <p>The stellar models can be downloaded from <a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">the google drive</a> (<em>bpass-v2.2-newmodels</em>). Then you will have to change the path to the models in the <code class="docutils literal notranslate"><span class="pre">settings.yaml</span></code> file – this can be done using the <code class="docutils literal notranslate"><span class="pre">set_models_path</span></code> function contained in the <code class="docutils literal notranslate"><span class="pre">hoki.load</span></code> module:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -511,7 +511,7 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div></div>
 </div>
 <p>Below is a summary illustration of what the synthetic CMDs are and what a <code class="docutils literal notranslate"><span class="pre">CMD()</span></code> instance is.</p>
-<p><img alt="mynewimage" src="_images/CMDs.png" /></p>
+<p><img alt="acmdimage" src="_images/cmds.png" /></p>
 <p>You can easily access the grid by simply calling the attribute <code class="docutils literal notranslate"><span class="pre">CMD.grid</span></code></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:

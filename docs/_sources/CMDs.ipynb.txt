@@ -43,7 +43,7 @@
     "\n",
     "Colour Magnitude Diagrams (CMDs) are created by reading in the [BPASS](https://bpass.auckland.ac.nz/9.html) stellar models listed in the `model_input` files that can be found in the BPASS output folders (e.g. *bpass_v2.2.1_imf135_300*). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.\n",
     "\n",
-    "**NOTE: You will be able to run the cells in the section \"Loading a pickled CMD file\" even if you can't download the full set of stellar models **\n",
+    "**NOTE: You will be able to run the cells in the section \"Loading a pickled CMD file\" even if you can't download the full set of stellar models**\n",
     "\n",
     "The stellar models can be downloaded from [the google drive](https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl) (*bpass-v2.2-newmodels*).\n",
     "Then you will have to change the path to the models in the `settings.yaml` file -- this can be done using the `set_models_path` function contained in the `hoki.load` module: "
@@ -138,7 +138,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "![mynewimage](CMDs.png)"
+    "![acmdimage](cmds.png)\n"
    ]
   },
   {
