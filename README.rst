@@ -26,7 +26,7 @@ Bridging the gap between observation and theory
 Installing hoki
 ^^^^^^^^^^^
 
-You can pip install hoki, note it has note yet been tested for python3.7 and up, or python 3.4 and down. 
+You can pip install the most recent stable release from pip:
 
 .. code-block:: none
 
