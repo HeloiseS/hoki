@@ -8,9 +8,9 @@
 Bridging the gap between observation and theory
 ---------------
 
-.. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
+.. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
 
 .. image:: https://travis-ci.org/HeloiseS/hoki.svg?branch=master
     :target: https://travis-ci.org/HeloiseS/hoki
@@ -26,7 +26,7 @@ Bridging the gap between observation and theory
 Installing hoki
 ^^^^^^^^^^^
 
-You can pip install hoki, note it has note yet been tested for python3.7 and up, or python 3.4 and down. 
+You can pip install the most recent stable release from pip:
 
 .. code-block:: none
 
