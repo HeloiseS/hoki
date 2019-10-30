@@ -34,10 +34,14 @@ You can pip install the most recent stable release from pip:
 
    pip3 install --user hoki
 
-Read the docs!
+Read the docs
 ^^^^^^^^^^^
 
 `Click Here! Click Here! Click Here! <https://heloises.github.io/hoki/intro.html>`_
+
+Download Tutorials
+^^^^^^^^^^^^^^^
+Check out these Jupyter notebooks I made - you can find them on this `repo!<https://github.com/HeloiseS/hoki_tutorials>`__
 
 Citation
 ^^^^^^^^^
