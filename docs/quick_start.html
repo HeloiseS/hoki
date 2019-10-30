@@ -97,9 +97,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#loading-in-data">Loading in Data</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#stellar-model-outputs">Stellar Model Outputs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#stellar-population-outputs">Stellar Population Outputs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#spectral-synthesis-outputs">Spectral Synthesis Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stellar-models">Stellar Models</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#citing-hoki">Citing Hoki</a></li>
@@ -107,16 +107,24 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Hoki</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Cook Book</span></p>
+<p class="caption"><span class="caption-text">Recipes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Package Documentation</span></p>
+<p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="load.html"><strong>load</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="hrdiagrams.html"><strong>hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html"><strong>cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html"><strong>constants</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
 </ul>
 
             
@@ -244,23 +252,23 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://bpass.auckland.ac.nz/9.html">BPASSv2.2</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">BPASSv2.2</a></p></td>
 <td><p>Yes</p></td>
 <td><p>July 2018</p></td>
 <td><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2018MNRAS.479...75S/abstract">Stanway &amp; Eldridge (2018)</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://bpass.auckland.ac.nz/8.html">BPASSv2.1</a></p></td>
-<td><p>?</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/0B7vqPPPgOdtIdjdyV3JwODZ3TlU">BPASSv2.1</a></p></td>
+<td><p>untested</p></td>
 <td><p>October 2017</p></td>
 <td><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2017PASA...34...58E/abstract">Eldridge, Stanway, Xiao, et al. (2017)</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://bpass.auckland.ac.nz/2.html">BPASSv2.0</a></p></td>
-<td><p>?</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/0B7vqPPPgOdtIfjUtb3RsV2JUOTFFX29WV1FZNURPMHAxTEtZQjhJOGtyNXZUTTNVSzFZazQ">BPASSv2.0</a></p></td>
+<td><p>untested</p></td>
 <td><p>–</p></td>
 <td><p>–</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://bpass.auckland.ac.nz/1.html">BPASSv1</a></p></td>
-<td><p>?</p></td>
+<td><p>untested</p></td>
 <td><p>–</p></td>
 <td><p>–</p></td>
 </tr>
@@ -275,17 +283,6 @@
 <p class="admonition-title">Tip</p>
 <p>More details on the outputs mentioned below can be found in the <a class="reference external" href="https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf">BPASS manual</a>.</p>
 </div>
-<div class="section" id="stellar-model-outputs">
-<h3>Stellar Model Outputs<a class="headerlink" href="#stellar-model-outputs" title="Permalink to this headline">¶</a></h3>
-<p><em>The current version does not interface with the stellar model outputs. To be continued…</em></p>
-<p>The stellar model outputs are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>The binary stellar models</p></li>
-<li><p>New OB stars atmospheric models</p></li>
-</ul>
-</div></blockquote>
-</div>
 <div class="section" id="stellar-population-outputs">
 <h3>Stellar Population Outputs<a class="headerlink" href="#stellar-population-outputs" title="Permalink to this headline">¶</a></h3>
 <p>A stellar output file can be loaded in using the <code class="docutils literal notranslate"><span class="pre">model_output()</span></code> function in the <code class="docutils literal notranslate"><span class="pre">load</span></code> module.</p>
@@ -293,7 +290,7 @@
 2
 3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
 
-<span class="n">output</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;path_to_output&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 <p>The function will figure out based on the file name what data is being loaded in and will return the appropriate data format: <code class="docutils literal notranslate"><span class="pre">pandas.DataFrames</span></code> in most cases, apart from HR diagrams, which have their own <code class="docutils literal notranslate"><span class="pre">HRDiagrams</span></code> class – because they’re quite a complex data structure.</p>
@@ -338,6 +335,13 @@
 <h3>Spectral Synthesis Outputs<a class="headerlink" href="#spectral-synthesis-outputs" title="Permalink to this headline">¶</a></h3>
 <p>The spectral synthesis output files can be also loaded in using the <code class="docutils literal notranslate"><span class="pre">model_output()</span></code> function in the <code class="docutils literal notranslate"><span class="pre">load</span></code> module.
 All outputs are returned as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrames</span></code> with sensible column names.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;path_to_output&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 33%" />
@@ -367,10 +371,23 @@ All outputs are returned as <code class="docutils literal notranslate"><span cla
 </table>
 <p>The full suite of stellar models is also available from the BPASS website (careful, the file is big ~50GB), and they are required to make colour magnitude diagram (CMD) such as in Figure 24 of <a class="reference external" href="https://bpass.auckland.ac.nz/8.html">BPASSv2.1</a>. Creating these CMD and exploring these files is very tricky - in a future release <code class="docutils literal notranslate"><span class="pre">hoki</span></code> will offer features to make this straight forward.</p>
 </div>
+<div class="section" id="stellar-models">
+<h3>Stellar Models<a class="headerlink" href="#stellar-models" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the population and spectral synthesis outputs, the stellar models are also available as a BPASS data product. They can be downloaded from the <a class="reference external" href="ttps://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">google drive</a>: the name of the folder containing the most recent models is <strong>bpass-v2.2-newmodels</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These folder is ~50 GB. Make sure you have a good internet connection and sufficient space.</p>
+</div>
+<p>The stellar models are required to make Colour-Magnitude Diagrams (see RECIPES) and other deeper searches within the models that are not summarised in the population or spectral synthesis outputs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is where the files names <code class="docutils literal notranslate"><span class="pre">model_input</span></code> become necesary. They are not human readable but are used within <code class="docutils literal notranslate"><span class="pre">hoki</span></code> to apply the correct algorithm to the stellar models in order to collate them correctly. (So don’t panic if you open them and wonder what is going on).</p>
+</div>
+</div>
 </div>
 <div class="section" id="citing-hoki">
 <h2>Citing Hoki<a class="headerlink" href="#citing-hoki" title="Permalink to this headline">¶</a></h2>
-<p>A peer-reviewed journal article about <cite>hoki</cite> will appear in due time but for now you can use the following bibtex entry:</p>
+<p>A peer-reviewed journal article about <code class="docutils literal notranslate"><span class="pre">hoki</span></code> will appear in due time but for now you can use the following bibtex entry:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@Misc{hoki_citation,
   author =   {Heloise Stevance},
   title =    {Hoki},
@@ -384,7 +401,7 @@ All outputs are returned as <code class="docutils literal notranslate"><span cla
 <hr class="docutils" />
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>For dedicated tutorials about specific aspecs of hoki and BPASS, check our Cook Book section in the side bar!</p>
+<p>For dedicated tutorials about specific aspecs of hoki and BPASS, check our RECIPES section in the side bar!</p>
 </div>
 </div>
 </div>

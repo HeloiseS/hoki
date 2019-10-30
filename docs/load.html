@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="hrdiagrams" href="hrdiagrams.html" />
-    <link rel="prev" title="Spectra" href="Spectra.html" /> 
+    <link rel="prev" title="Colour Magnitude Diagrams" href="CMDs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,16 +93,24 @@
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Hoki</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Cook Book</span></p>
+<p class="caption"><span class="caption-text">Recipes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Package Documentation</span></p>
+<p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>load</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="hrdiagrams.html"><strong>hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html"><strong>cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html"><strong>constants</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
 </ul>
 
             
@@ -167,7 +175,7 @@
         <a href="hrdiagrams.html" class="btn btn-neutral float-right" title="hrdiagrams" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Spectra.html" class="btn btn-neutral float-left" title="Spectra" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="CMDs.html" class="btn btn-neutral float-left" title="Colour Magnitude Diagrams" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
   </div>
   
@@ -232,6 +240,26 @@
 <dd class="field-odd"><p>pandas.DataFrame or hoki.hrdiagrams.HRDiagrams object</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.load.set_models_path">
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">set_models_path</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.set_models_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>,</em>) – Absolute path to the top level of the stellar models this could be a directory named something like
+bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and ‘NEWSINMODS’.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>You are going to have to reload hoki for your new path to take effect.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.load.unpickle">
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">unpickle</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.unpickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract pickle files</p>
 </dd></dl>
 
 </div>

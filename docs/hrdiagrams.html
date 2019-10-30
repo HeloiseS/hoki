@@ -39,6 +39,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cmd" href="cmd.html" />
     <link rel="prev" title="load" href="load.html" /> 
 </head>
 
@@ -92,16 +93,24 @@
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Hoki</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Cook Book</span></p>
+<p class="caption"><span class="caption-text">Recipes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Package Documentation</span></p>
+<p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="load.html"><strong>load</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="cmd.html"><strong>cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html"><strong>constants</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
 </ul>
 
             
@@ -163,6 +172,8 @@
   
   <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
       
+        <a href="cmd.html" class="btn btn-neutral float-right" title="cmd" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
       
         <a href="load.html" class="btn btn-neutral float-left" title="load" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
@@ -210,8 +221,21 @@ not need to create an HRDiagram object themselves.</p>
 please refer to the manual:
 <a class="reference external" href="https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf">https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf</a></p>
 <p class="rubric">Notes</p>
-<p><strong>HRDiagram supports indexing.</strong> The indexed array is a 51x100x100 np.array that stacked the time
-weighted arrays corresponding to the 3 different abundances.</p>
+<ul class="simple">
+<li><p><strong>HRDiagram supports indexing.</strong> The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.</p></li>
+<li><p>Initialisation from a text file is done through the hoki.load functions</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>high_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance X &gt; 0.4.</p></li>
+<li><p><strong>medium_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance E-3 &lt; X &lt; 0.4.</p></li>
+<li><p><strong>low_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance X &lt; E-3.</p></li>
+<li><p><strong>hr_type</strong> (<em>str - Valid options are 'TL'</em><em> , </em><em>'Tg'</em><em>, </em><em>'TTG'</em>) – This tells the class what type of HR diagrams are being given. For more details on what
+the 3 options mean, consult the BPASS manual section on HR diagram isocontours.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.high_H">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">high_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H" title="Permalink to this definition">¶</a></dt>

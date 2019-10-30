@@ -19,18 +19,24 @@
    Transient_rates
    HR_diagrams
    Spectra
+   CMDs
    :maxdepth: 1
-   :caption: Cook Book
+   :caption: Recipes
 
 
 .. toctree::
    load
    hrdiagrams
+   cmd
+   constants
    :maxdepth: 1
-   :caption: Package Documentation
+   :caption: Documentation
 
 
-
+.. toctree::
+   Hoki <https://github.com/HeloiseS/hoki>
+   Notebooks <https://github.com/HeloiseS/hoki_tutorials>
+   :caption: GITHUB LINKS
 
 Indices and tables
 ==================

@@ -1,0 +1,8 @@
+################
+**constants**
+################
+
+
+.. automodule:: hoki.constants
+    :members:
+
