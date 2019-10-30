@@ -138,7 +138,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "<img src=\"CMDs.png\" alt=\"Drawing\" style=\"width: 600px;\"/>"
+    "![mynewimage](CMDs.png)"
    ]
   },
   {
