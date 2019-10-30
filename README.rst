@@ -1,5 +1,5 @@
 .. image:: black_text.png
-    :height: 40px
+    :height: 35px
 
 
     
