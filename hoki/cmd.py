@@ -82,6 +82,8 @@ class CMD(object):
         self._time_bins = None
         self._log_ages = None
         self._ages = None
+        self.filter1 = None
+        self.filter2 = None
 
     def make(self, filter1, filter2):
         """
@@ -105,9 +107,12 @@ class CMD(object):
         None
         """
 
+        self.filter1 = str(filter1)
+        self.filter2 = str(filter2)
+
         # FIND THE KEYS TO THE COLUMNS OF INTEREST IN DUMMY
 
-        col_keys = ['timestep', 'age', str(filter1), str(filter2), 'M1', 'log(R1)', 'log(L1)']
+        col_keys = ['timestep', 'age', self.filter1, self.filter2, 'M1', 'log(R1)', 'log(L1)']
 
         try:
             cols = tuple([dummy_dict[key] for key in col_keys])
@@ -325,6 +330,9 @@ class CMD(object):
                             cmap=cmap, **kwargs)
 
         cm_diagram.invert_yaxis()
+
+        cm_diagram.set_ylabel(self.filter1)
+        cm_diagram.set_xlabel(self.filter1+"-"+self.filter2)
 
         return cm_diagram
 
