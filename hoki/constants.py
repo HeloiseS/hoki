@@ -1,3 +1,6 @@
+"""
+Just BPASS things
+"""
 import numpy as np
 import yaml
 import pkg_resources

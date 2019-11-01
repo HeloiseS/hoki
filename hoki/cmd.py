@@ -1,3 +1,7 @@
+"""
+This module implements the CMD infrastructure
+"""
+
 from hoki import load
 import matplotlib.pyplot as plt
 from hoki.constants import *

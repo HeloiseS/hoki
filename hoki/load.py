@@ -329,3 +329,6 @@ def _colours(path):
                        names=['log_age', 'V-I', 'U', 'B', 'V', 'R', 'I', 'J', 'H', 'K', 'u',
                               'g', 'r', 'i', 'z', 'f300w', 'f336w', 'f435w', 'f450w', 'f555w',
                               'f606w', 'f814w', 'prod_rate', 'halpha', 'FUV', 'NUV'])
+
+
+# make an easter egg that rick rolls people

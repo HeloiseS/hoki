@@ -93,10 +93,16 @@ class HRDiagram(object):
 
 
     """
-
+    # Just some BPASS things
     t = BPASS_TIME_BINS
     dt = BPASS_TIME_INTERVALS
     _time_weights = BPASS_TIME_WEIGHT_GRID
+
+    # HRD coordinates
+    T_coord = np.arange(0.1, 10.1, 0.1)
+    L_coord = np.arange(-2.9, 7.1, 0.1)
+    G_coord = np.arange(-2.9, 7.1, 0.1)
+    TG_coord = np.arange(0.1, 10.1, 0.1)
 
     def __init__(self, high_H_input, medium_H_input, low_H_input, hr_type):
         """
