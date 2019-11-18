@@ -130,7 +130,7 @@ class HRDiagram(object):
         """
 
         # Initialise core attributes
-        self.type = hr_type
+        self.type = str(hr_type)
         self.high_H_not_weighted = high_H_input
         self.medium_H_not_weighted = medium_H_input
         self.low_H_not_weighted = low_H_input
@@ -257,6 +257,9 @@ class HRDiagram(object):
 
         """
         assert abundances != (0, 0, 0), "abundances cannot be (0, 0, 0) - You're plotting nothing."
+        assert isinstance(abundances, tuple), "abundances should be a tuple of 3 integers - consult the docstrings " \
+                                              "for further details "
+
         hr_plot = None
 
         # Case were no age or age range are given

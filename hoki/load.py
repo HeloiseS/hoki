@@ -27,6 +27,7 @@ def unpickle(path):
     return pickle.load(open(path, 'rb'))
 
 
+# TODO: Make this a general function to change any setting of the yaml file?
 def set_models_path(path):
     """
     Changes the path to the stellar models in hoki's settings
