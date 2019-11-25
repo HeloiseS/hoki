@@ -13,6 +13,9 @@ sed_file = data_path+'/spectra-bin-imf135_300.z002.dat'
 ion_file = data_path+'/ionizing-bin-imf135_300.z002.dat'
 colour_file = data_path+'/colours-bin-imf135_300.z002.dat'
 cmd_path = data_path+'/cmd_bv_z002_bin_imf135_300'
+optical_em_lines_path = data_path+'/Optical_data_bin_z006.dat'
+UV_em_lines_path = data_path+'/UV_data_bin_z006.dat'
+
 
 def test_unpickle():
     cmd = load.unpickle(cmd_path)
@@ -99,3 +102,10 @@ def test_colours():
     data = load._colours(colour_file)
     assert data.shape[0] > 0, "the dataframe is empty"
     assert data.shape[1] == 26, "there should be 26 columns, instead there are "+str(data.shape[1])
+
+
+def test_nebular_emission_lines():
+    data = load.nebular_lines(optical_em_lines_path)
+    assert data.shape == (3087,24), "The DataFrame doesn't have the right shape something happened"
+    data = load.nebular_lines(UV_em_lines_path)
+    assert data.shape == (3087, 26)

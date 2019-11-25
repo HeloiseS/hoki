@@ -20,6 +20,10 @@ __all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
+########################
+# GENERAL LOAD HELPERS #
+########################
+
 
 def unpickle(path):
     """Extract pickle files"""
@@ -57,6 +61,10 @@ def set_models_path(path):
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
 
+
+#########################
+# MODEL INPUT FUNCTIONS #
+#########################
 
 def model_input(path):
     """
@@ -171,6 +179,10 @@ def model_input(path):
                                                                        'initial_P': float})
     return input_df
 
+
+##########################
+# MODEL OUTPUT FUNCTIONS #
+##########################
 
 def model_output(path, hr_type=None):
     """
@@ -332,4 +344,49 @@ def _colours(path):
                               'f606w', 'f814w', 'prod_rate', 'halpha', 'FUV', 'NUV'])
 
 
-# make an easter egg that rick rolls people
+##########################
+# NEBULAR EMISSION LINES #
+##########################
+
+
+def nebular_lines(path):
+    assert isinstance(path, str), "The location of the file is expected to be a string."
+    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
+
+    if 'UV' in path:
+        return _UV_nebular_lines(path)
+    elif 'Optical' in path:
+        return _optical_nebular_lines(path)
+
+
+def _optical_nebular_lines(path):
+    column_opt_em_lines=['model_num', 'logU', 'log_nH', 'log_age',
+                         'NII6548_F', 'NII6548_EW', 'NII6584_F', 'NII6584_EW',
+                         'SII6716_F', 'SII6716_EW', 'SII6731_F', 'SII6731_EW',
+                         'OI6300_F', 'OI6300_EW',
+                         'OIII4959_F','OIII4959_EW','OIII5007_F','OIII5007_EW',
+                         'Halpha_F', 'Halpha_EW', 'Hbeta_F', 'Hbeta_EW',
+                         'HeI4686_F', 'HeI4686_EW']
+
+    return pd.read_csv(path, skiprows=1, sep=r'\s*', engine='python', names=column_opt_em_lines)
+
+
+def _UV_nebular_lines(path):
+    column_UV_em_lines = ['model_num', 'logU', 'log_nH', 'log_age',
+                      'HeII1640_F', 'HeII1640_EW',
+                      'CIII1907_F', 'CIII1907_EW', 'CIII1910_F', 'CIII1910_EW',
+                      'CIV1548_F', 'CIV1548_EW', 'CIV1551_F', 'CIV1551_EW',
+                      'OI1357_F', 'OI1357_EW',
+                      'OIII1661_F', 'OIII1661_EW',  'OIII1666_F', 'OIII1666_EW',
+                      'SiII1263_F', 'SiII1263_EW', 'SiIII1308_F', 'SiIII1308_EW', 'SiII1531_F', 'SiII1531_EW']
+
+    return pd.read_csv(path, skiprows=1, sep=r'\s*', engine='python', names=column_UV_em_lines)
+
+#################
+#               #
+#################
+
+def _do_not_use():
+    import webbrowser
+    url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    webbrowser.open_new_tab(url)
