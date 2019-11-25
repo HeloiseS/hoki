@@ -362,13 +362,13 @@ def nebular_lines(path):
 def _optical_nebular_lines(path):
     column_opt_em_lines=['model_num', 'logU', 'log_nH', 'log_age',
                          'NII6548_F', 'NII6548_EW', 'NII6584_F', 'NII6584_EW',
-                         'SII6716_F', 'SII6716_EW', 'SII6731_F', 'SII6731_EW',
+                         'SiII6716_F', 'SiII6716_EW', 'SiII6731_F', 'SiII6731_EW',
                          'OI6300_F', 'OI6300_EW',
                          'OIII4959_F','OIII4959_EW','OIII5007_F','OIII5007_EW',
                          'Halpha_F', 'Halpha_EW', 'Hbeta_F', 'Hbeta_EW',
                          'HeI4686_F', 'HeI4686_EW']
 
-    return pd.read_csv(path, skiprows=1, sep=r'\s*', engine='python', names=column_opt_em_lines)
+    return pd.read_csv(path, skiprows=1, sep=r'\s+', engine='python', names=column_opt_em_lines)
 
 
 def _UV_nebular_lines(path):
@@ -380,7 +380,7 @@ def _UV_nebular_lines(path):
                       'OIII1661_F', 'OIII1661_EW',  'OIII1666_F', 'OIII1666_EW',
                       'SiII1263_F', 'SiII1263_EW', 'SiIII1308_F', 'SiIII1308_EW', 'SiII1531_F', 'SiII1531_EW']
 
-    return pd.read_csv(path, skiprows=1, sep=r'\s*', engine='python', names=column_UV_em_lines)
+    return pd.read_csv(path, skiprows=1, sep=r'\s+', engine='python', names=column_UV_em_lines)
 
 #################
 #               #
