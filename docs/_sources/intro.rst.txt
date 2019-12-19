@@ -2,9 +2,8 @@
 What is Hoki?
 #############
 
-.. note:: 
-
-   This project remains an alpha release with limited functionalities whilst we are developing further tools. If you have any suggestions to make about the existing package or would like to request specific features, feel free to create an issue on the `GitHub <https://github.com/HeloiseS/hoki>`__!
+.. version:: 
+   `v1.2.0-b0 <https://github.com/HeloiseS/hoki>`__!
 
 *************************************************
 Bridging the gap between theory and observations 

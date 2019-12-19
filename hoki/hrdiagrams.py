@@ -347,22 +347,6 @@ class HRDiagram(object):
         return self._all_H[item]
 
 
-#  # The following functions find the index of the bin corresponding to a log value
-#  def _T_index(self, log_T):
-#      return int(np.round((log_T-self.logT_bins[0])/0.1))
-#
-# def _g_index(self, log_g):
-#      return int(np.round((log_g-self.logg_bins[0])/0.1))
-#
-#  def _TG_index(self, log_TG):
-#      return int(np.round((log_TG-self.logTG_bins[0])/0.1))
-#  def _T_index(self, log_T):
-#      return int(np.round((log_T-self.logT_bins[0])/0.1))
-#
-#  def _L_index(self, log_L):
-#      return int(np.round((log_L-self.logL_bins[0])/0.1))
-
-
 def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
     """
     Plots an HR diagram with a contour plot

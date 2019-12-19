@@ -1,12 +1,8 @@
 from hoki.cmd import CMD
 from hoki.load import unpickle
 import pkg_resources
-import os 
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
-
-#print(os.listdir(data_path+'/sample_stellar_models/'))
-
 cmd_path = data_path+'/cmd_bv_z002_bin_imf135_300'
 
 
@@ -18,6 +14,8 @@ class TestCMD(object):
         assert self.cmd is not None, "object not instanciated"
         assert sum(self.cmd.grid.flatten()) == 0, "CMD Grid should be empty"
     """
+    # NOTE: These tests are to do locally in dev - they require 50GB of full model data to test
+    # they cannot easily be implemented into Travis CI.
     def test_make(self):
         print(os.listdir(data_path))
         self.cmd.make(filter1='B', filter2='V')

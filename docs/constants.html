@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>constants &mdash; hoki 0.1.dev documentation</title>
+  <title>constants &mdash; hoki beta documentation</title>
   
 
   
@@ -38,8 +38,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="cmd" href="cmd.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -99,12 +98,14 @@
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="load.html"><strong>load</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="hrdiagrams.html"><strong>hrdiagrams</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="cmd.html"><strong>cmd</strong></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>constants</strong></a></li>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-spec"><strong>hoki.spec</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -169,13 +170,6 @@
   </ul>
 
   
-  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
-      
-      
-        <a href="cmd.html" class="btn btn-neutral float-left" title="cmd" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-  </div>
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
@@ -205,8 +199,24 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="module-hoki.constants">
-<span id="constants"></span><h1><strong>constants</strong><a class="headerlink" href="#module-hoki.constants" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="constants">
+<h1><strong>constants</strong><a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h1>
+<p>This module just contains BPASS constants and defines variables used in hoki.</p>
+<span class="target" id="module-hoki.constants"></span><p>Just BPASS things</p>
+<dl class="simple">
+<dt>path_to_settings</dt><dd><p>path to the <cite>settings.yaml</cite> file located in the package resources</p>
+</dd>
+<dt>MODELS_PATH</dt><dd><p>Path to the BPASS models as defined in the settings file. If you have not downloaded the models and updated this path with <cite>load.set_models_path()</cite>, it will not correspond to a valid path on your machine. This is not going to cause issues unless you’re using functionalities that require the full set of BPASS models (like making CMDs)</p>
+</dd>
+<dt>BPASS_TIME_BINS</dt><dd><p>1D array containing the 51 BPASS time bins (from log(age) = 6.0 to 11.0)</p>
+</dd>
+<dt>BPASS_TIME_INTERVALS</dt><dd><p>Time interval between BPASS time bins in years</p>
+</dd>
+<dt>BPASS_TIME_WEIGHT_GRID</dt><dd><p>Grid of weights to apply to HR Diagrams based on BPASS definitions</p>
+</dd>
+<dt>dummy_dict</dt><dd><p>Dictionary linking column number to column name for the large BPASS array traditionally called dummy. See the BPASS manual for a text version of the numner/name correspondance.</p>
+</dd>
+</dl>
 </div>
 
 

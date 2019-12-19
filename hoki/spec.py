@@ -1,7 +1,11 @@
+"""
+Module to hold functions and utilities to be applied to spectra, especially BPASS synthetic spectra
+"""
+
 import numpy as np
 import pandas as pd
 
-#TODO: write the test!
+
 def dopcor(df, z, wl_col_index=0):
     """
     Basis doppler correction for hoki's dataframes

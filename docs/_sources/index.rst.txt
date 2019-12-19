@@ -25,12 +25,9 @@
 
 
 .. toctree::
-   load
-   hrdiagrams
-   cmd
-   constants
+   manual
    :maxdepth: 1
-   :caption: Documentation
+   :caption: Full Documentation
 
 
 .. toctree::
