@@ -22,6 +22,7 @@ Bridging the gap between observation and theory
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
 
 Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing!
+
 **Spend less time on coding and more time on the science!**
 
    
@@ -57,7 +58,7 @@ A peer-reviewed journal article about `hoki` will appear in due time but for now
      year = {2019}
      } 
      
-**Please if you use `hoki` for your science, do include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
+**Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
 License
 ^^^^^^^^^^^
