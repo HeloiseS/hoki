@@ -1,6 +1,7 @@
 from hoki.cmd import CMD
 from hoki.load import unpickle
 import pkg_resources
+import os
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 cmd_path = data_path+'/cmd_bv_z002_bin_imf135_300'
@@ -22,6 +23,7 @@ class TestCMD(object):
         assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
 
     def test_plot(self):
+        assert sum(self.cmd.grid.flatten()) != 0, 'CMD grid is still empty'
         self.cmd.plot()
 
     def test_plot_bin0(self):
