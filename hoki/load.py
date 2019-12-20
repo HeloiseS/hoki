@@ -350,6 +350,16 @@ def _colours(path):
 
 
 def nebular_lines(path):
+    """
+    Load the nebular line output information
+    Parameters
+    ----------
+    path
+
+    Returns
+    -------
+
+    """
     assert isinstance(path, str), "The location of the file is expected to be a string."
     assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
 
@@ -373,12 +383,12 @@ def _optical_nebular_lines(path):
 
 def _UV_nebular_lines(path):
     column_UV_em_lines = ['model_num', 'logU', 'log_nH', 'log_age',
-                      'HeII1640_F', 'HeII1640_EW',
-                      'CIII1907_F', 'CIII1907_EW', 'CIII1910_F', 'CIII1910_EW',
-                      'CIV1548_F', 'CIV1548_EW', 'CIV1551_F', 'CIV1551_EW',
-                      'OI1357_F', 'OI1357_EW',
-                      'OIII1661_F', 'OIII1661_EW',  'OIII1666_F', 'OIII1666_EW',
-                      'SiII1263_F', 'SiII1263_EW', 'SiIII1308_F', 'SiIII1308_EW', 'SiII1531_F', 'SiII1531_EW']
+                          'HeII1640_F', 'HeII1640_EW',
+                          'CIII1907_F', 'CIII1907_EW', 'CIII1910_F', 'CIII1910_EW',
+                          'CIV1548_F', 'CIV1548_EW', 'CIV1551_F', 'CIV1551_EW',
+                          'OI1357_F', 'OI1357_EW',
+                          'OIII1661_F', 'OIII1661_EW', 'OIII1666_F', 'OIII1666_EW',
+                          'SiII1263_F', 'SiII1263_EW', 'SiIII1308_F', 'SiIII1308_EW', 'SiII1531_F', 'SiII1531_EW']
 
     return pd.read_csv(path, skiprows=1, sep=r'\s+', engine='python', names=column_UV_em_lines)
 

@@ -20,7 +20,7 @@ class HRDiagram(object):
     please refer to the manual:
     https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf
 
-    Notes
+    Note
     -----
     - **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.
 
