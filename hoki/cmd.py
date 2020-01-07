@@ -340,6 +340,28 @@ class CMD(object):
 
         return cm_diagram
 
+    def at_log_age(self, log_age):
+        """
+        Returns the HR diagrams at a specific age.
 
+        Parameters
+        ----------
+        log_age : int or float
+            The log(age) of choice.
+
+        Returns
+        -------
+        The CMD grid : np.ndarray 240x100
+
+        """
+
+        assert log_age >= 6.0 and log_age <= 11.1, \
+            "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+
+        bin_i = int(np.round(10*(log_age-6)))
+        return self.grid[bin_i]
+
+    def __getitem__(self, item):
+        return self.grid[item]
 
 
