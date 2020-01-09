@@ -73,6 +73,6 @@ Contributing
 ^^^^^^^^^^^
 
 If ANYTHING comes to mind, whether it be something in the tutorials, features you would like us to consider, BUGS, etc.. 
-**Please just drop it in an issue! Don't let your imposter syndrome talk you out of it ;) !**
+**Please just drop it in an issue! Don't let your imposter syndrome talk you out of it ;)**
 
 
