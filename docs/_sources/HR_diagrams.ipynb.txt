@@ -12,7 +12,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Download all the Jupyter notebooks from: https://github.com/HeloiseS/hoki/tree/master/tutorials\n",
+    "Download all the Jupyter notebooks from: https://github.com/HeloiseS/hoki_tutorials\n",
     "\n",
     "#  Initial imports"
    ]

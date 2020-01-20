@@ -285,11 +285,13 @@ not need to create an HRDiagram object themselves.</p>
 <p>For more details on the BPASS outputs - and therefore why the data structure is as it is -
 please refer to the manual:
 <a class="reference external" href="https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf">https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf</a></p>
-<p class="rubric">Notes</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p><strong>HRDiagram supports indexing.</strong> The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.</p></li>
 <li><p>Initialisation from a text file is done through the hoki.load functions</p></li>
 </ul>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -661,6 +663,23 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray 1D</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hoki.cmd.CMD.at_log_age">
+<code class="sig-name descname">at_log_age</code><span class="sig-paren">(</span><em class="sig-param">log_age</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.at_log_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the HR diagrams at a specific age.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em>) – The log(age) of choice.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>The CMD grid</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray 240x100</p>
 </dd>
 </dl>
 </dd></dl>

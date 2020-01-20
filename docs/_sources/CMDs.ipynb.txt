@@ -7,7 +7,7 @@
     "Colour Magnitude Diagrams\n",
     "---\n",
     "\n",
-    "Download all the Jupyter notebooks from: https://github.com/HeloiseS/hoki/tree/master/tutorials"
+    "Download all the Jupyter notebooks from: https://github.com/HeloiseS/hoki_tutorials"
    ]
   },
   {
