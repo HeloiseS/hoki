@@ -42,7 +42,7 @@ BPASS is a very powerful theoretical code which, given an Initial Mass Function 
 These data products are crucial to interpreting astronomical observations; for example they have been used to better understand the rate of supernovae and their progenitors [@eldridge13] as well as predicting the rate of black-hole mergers [@eldridge16].
 Although the BPASS outputs are available online, they can be challenging to use, due to the level of expertise required to perform the pre-processing necessary to allow optimal comparison to observational data. 
 For example, creating synthetic Colour-Magnitude Diagrams (CMDs) requires searching through >100,000 models to create a 4-dimensional histogram by using a highly specialised algorithm to weight and bin the data appropriately. 
-Before `hoki`, the only way to perform this fundamental task was to employ a code written in IDL (Interactive Data Language).
+Before `hoki`, the only way to perform this fundamental task was to employ a code written in IDL (Interactive Data Language) and released alongside the data (see BPASS [User Manual](https://bpass.auckland.ac.nz/9.html)).
 For astronomers who do not own an IDL license, or for the large fraction of people who use Python, there was no alternative. 
 Other complex data structures, such as Hertzsprung-Russel (HR) Diagrams, have no supporting utility code even in IDL.
 This situation has led to a duplication of efforts and a reproducibility concern. 
@@ -68,8 +68,8 @@ In addition to the package, we have created comprehensive documentation and Jupy
 # Research
 
 `hoki` is being developed as part of a three-year project on gravitational wave counterparts and their host galaxies. 
-Although gravitational waves are the focus of the grant funding the development of `hoki`, its use is asbolutely not limited to these systems.
-It is designed to be versatile and usable in all applications that BPASS may be invovled with.
+Although gravitational waves are the focus of the grant funding the development of `hoki`, its use is absolutely not limited to these systems.
+It is designed to be versatile and usable in all applications that BPASS may be involved with.
 Our study of the ages and masses of the HII regions in NGC 300 relies on the use of `hoki`.
 In addition to streamlining the analysis, our package also allows for a transparent workflow which is easily incorporated into Jupyter notebooks that can be released alongside the peer-reviewed publication.
 This increases the reproducibility and accessibility of our results to the rest of the community.
