@@ -35,7 +35,7 @@ env:
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
         - PYTHON_VERSION=3.7
-        - NUMPY_VERSION=stable
+        - NUMPY_VERSION=1.17
         - ASTROPY_VERSION=stable
         - MAIN_CMD='python setup.py'
         - SETUP_CMD='test'
@@ -109,9 +109,9 @@ matrix:
         # time.
 
         - os: linux
-          env: PYTHON_VERSION=3.6 NUMPY_VERSION=1.15
-        - os: linux
-          env: NUMPY_VERSION=1.16
+          env: PYTHON_VERSION=3.6 NUMPY_VERSION=1.16
+        #- os: linux
+        #  env: PYTHON_VERSION=3.5 NUMPY_VERSION=1.16
 
         # Do a PEP8 test with flake8
         #- os: linux
