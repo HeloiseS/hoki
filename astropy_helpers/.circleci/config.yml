@@ -1,0 +1,39 @@
+version: 2
+
+jobs:
+  html-docs:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run:
+          name: Install Python dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install .[docs]
+      - run:
+          name: Build Documentation
+          command: |
+            . venv/bin/activate
+            cd docs
+            make html
+            make linkcheck
+
+      - store_artifacts:
+          path: docs/_build/html
+
+      - run:
+          name: "Built documentation is available at:"
+          command: DOCS_URL="${CIRCLE_BUILD_URL}/artifacts/${CIRCLE_NODE_INDEX}/${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}/docs/_build/html/index.html"; echo $DOCS_URL
+
+
+workflows:
+  version: 2
+  tests_and_docs:
+    jobs:
+      - html-docs
+
+notify:
+  webhooks:
+    - url: https://giles.cadair.com/circleci

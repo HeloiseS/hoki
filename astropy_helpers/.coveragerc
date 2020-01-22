@@ -1,0 +1,32 @@
+[run]
+
+source = astropy_helpers
+
+omit =
+   astropy_helpers/*/setup_package.py
+   astropy_helpers/tests/*
+   astropy_helpers/conftest.py
+
+[report]
+
+omit =
+   astropy_helpers/*/setup_package.py
+   astropy_helpers/tests/*
+   astropy_helpers/conftest.py
+
+exclude_lines =
+   # Have to re-enable the standard pragma
+   pragma: no cover
+
+   # Don't complain about packages we have installed
+   except ImportError
+
+   # Don't complain if tests don't hit assertions
+   raise AssertionError
+   raise NotImplementedError
+
+   # Don't complain about script hooks
+   def main\(.*\):
+
+   # Ignore branches that don't pertain to this version of Python
+   pragma: py{ignore_python_version}
