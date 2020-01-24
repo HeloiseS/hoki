@@ -18,6 +18,7 @@
     
 Bridging the Gap Between Observation and Theory
 ==============================================
+***
 
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
 
