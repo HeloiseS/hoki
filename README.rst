@@ -16,7 +16,7 @@
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
     
-Bridging the gap between observation and theory
+BRIDGING THE GAP BETWEEN OBSERVATION AND THEORY
 ------------------------------------------------
 
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
@@ -26,7 +26,7 @@ Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing
 **Spend less time on coding and more time on the science!**
 
 What is BPASS?
------
+^^^^^^^^^^
 
 *The Binary Populations And Spectral Synthesis (BPASS) code simulates stellar populations and follows their evolution until death. Including binary evolution is crucial to correctly interpreting astronomical observations. The detailed follow-up of the stellar evolution within the code allows the retreival of important information such as supernova and gravitational wave event rates, giving us the ability to understand the properties of the stellar populations that are the precursors of these events.*
 
