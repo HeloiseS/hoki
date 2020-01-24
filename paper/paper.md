@@ -39,7 +39,8 @@ This allows BPASS results to be used naturally within the pre-existing workflow 
 # Motivation
 
 BPASS is a very powerful theoretical code which, given an Initial Mass Function (IMF), metallicity (*Z*) and age, can predict the Spectral Energy Distirbution (SED), transient rates, stellar numbers, yields and ionizing photon rates of a stellar population containing realistic fractions of binary stars [@eldridge17; @stanway18]. 
-These data products are crucial to interpreting astronomical observations; for example they have been used to better understand the rate of supernovae and their progenitors [@eldridge13] as well as predicting the rate of black-hole mergers [@eldridge16].
+These data products are made available to the community through the [BPASS website](https://bpass.auckland.ac.nz/) and they are crucial to interpreting some astronomical observations.
+For example they have been used to better understand the rate of supernovae and their progenitors [@eldridge13] as well as predicting the rate of black-hole mergers [@eldridge16].
 Although the BPASS outputs are available online, they can be challenging to use, due to the level of expertise required to perform the pre-processing necessary to allow optimal comparison to observational data. 
 For example, creating synthetic Colour-Magnitude Diagrams (CMDs) requires searching through >100,000 models to create a 4-dimensional histogram by using a highly specialised algorithm to weight and bin the data appropriately. 
 Before `hoki`, the only way to perform this fundamental task was to employ a code written in IDL (Interactive Data Language) and released alongside the data (see BPASS [User Manual](https://bpass.auckland.ac.nz/9.html)).

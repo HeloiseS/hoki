@@ -17,7 +17,10 @@ To install the most recent stable release of hoki you can use:
    sudo pip3 install --user hoki 
    
 If you are feeling adventurous and want the most recent (in development) version of hoki, you can clone our `GitHub repository <https://github.com/HeloiseS/hoki>`__
-   
+
+Download the tutorials
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+They can be found in the side-bar to read, but you can dowload the `jupyter notebooks <https://github.com/HeloiseS/hoki_tutorials>`__ so you can play with them later. 
 
 Download the BPASS models
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
