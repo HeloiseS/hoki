@@ -29,13 +29,13 @@ Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing
 Installing hoki
 ^^^^^^^^^^^
 
-You can pip install the most recent stable release from pip:
+You can pip install the **most recent stable release** from pip:
 
 .. code-block:: none
 
    pip3 install --user hoki
    
-You can also download the github version with the following command:
+You can also download the **github dev version** with the following command:
 
 .. code-block:: none
 
