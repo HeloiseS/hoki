@@ -41,7 +41,7 @@ You can also download the github version with the following command:\
 
    pip3 install . git+https://github.com/HeloiseS/hoki
 
-**If you install the development version of hoki from github, we recommend you do so in a _`conda environment <https://www.anaconda.com/>`_.**
+**If you install the development version of hoki from github, we recommend you do so in a `conda environment <https://www.anaconda.com/>`_.**
 To check that hoki is up and running you can run the unit tests in the test folder. I like using `pytest` (which you'll have to download) and run 
 
 .. code-block:: none
