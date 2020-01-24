@@ -18,7 +18,7 @@
     
 Bridging the Gap Between Observation and Theory
 ==============================================
-----
+
 
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
 
@@ -55,14 +55,20 @@ To check that hoki is up and running you can run the unit tests in the test fold
 
 This way it'll show you each test as they pass or FAIL. In the pip and github version, they should all pass on your machine as data is provided within the package to test the functionalities.
 
+----
+
 Read the docs
 ^^^^^^^^^^^
 
 `Click Here! Click Here! Click Here! <https://heloises.github.io/hoki/intro.html>`_
 
+----
+
 Download Tutorials
 ^^^^^^^^^^^^^^^
 Check out these Jupyter notebooks I made - you can find them on `this repo! <https://github.com/HeloiseS/hoki_tutorials>`__
+
+---- 
 
 Citation
 ^^^^^^^^^
@@ -80,6 +86,8 @@ A peer-reviewed journal article about `hoki` will appear in due time but for now
      
 **Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
+---- 
+
 License
 ^^^^^^^^^^^
 
@@ -88,6 +96,7 @@ the terms of the BSD 3-Clause license. This package is based upon
 the `Astropy package template <https://github.com/astropy/package-template>`_
 which is licensed under the BSD 3-clause licence. 
 
+----
 
 Contributing
 ^^^^^^^^^^^
