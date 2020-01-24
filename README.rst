@@ -55,6 +55,15 @@ To check that hoki is up and running you can run the unit tests in the test fold
 
 This way it'll show you each test as they pass or FAIL. In the pip and github version, they should all pass on your machine as data is provided within the package to test the functionalities.
 
+
+**Requirements**
+The following packages are required by `hoki`. If you pip install the stable version from pypi it will all be done automatically.
+
+`astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`
+
+**Note**
+Python 2 is not supported
+
 ----
 
 Read the docs
