@@ -34,6 +34,21 @@ You can pip install the most recent stable release from pip:
 .. code-block:: none
 
    pip3 install --user hoki
+   
+You can also download the github version with the following command:\
+
+.. code-block:: none
+
+   pip3 install . git+https://github.com/HeloiseS/hoki
+
+**If you install the development version of hoki from github, we recommend you do so in a [conda environment](https://www.anaconda.com/).**
+To check that hoki is up and running you can run the unit tests in the test folder. I like using `pytest` (which you'll have to download) and run 
+
+.. code-block:: none
+
+   pytest --verbose
+
+This way it'll show you each test as they pass or FAIL. In the pip and github version, they should all pass on your machine as data is provided within the package to test the functionalities.
 
 Read the docs
 ^^^^^^^^^^^
