@@ -60,7 +60,7 @@ The main features of the package include:
 
   - Specialised data visualisation tools to quickly create and customize publication-ready figures. 
 
-  - Standard BPASS constants.
+  - Standard BPASS constants, for internal `hoki` usage and advanced BPASS users.
 
 `hoki` will remain in active development to incorporate new features as users request them. Furthermore, long term goals have been set for the implementation of more specialised functionalities, in particular SED fitting procedures to find matching BPASS models to a set of photometric, spectroscopic, or integral field unit observations. These additions will not impact the core functionalities of `hoki` described here.
 
