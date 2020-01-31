@@ -16,6 +16,7 @@
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
     
+    
 Bridging the Gap Between Observation and Theory
 ==============================================
 
@@ -82,17 +83,12 @@ Check out these Jupyter notebooks I made - you can find them on `this repo! <htt
 
 Citation
 ^^^^^^^^^
-A peer-reviewed journal article about `hoki` will appear in due time but for now you can use the following bibtex entry:
+We have a paper!
 
-.. code-block:: none
+.. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
+   :target: https://doi.org/10.21105/joss.01987
 
-   @Misc{hoki_citation,
-     author =   {Heloise Stevance},
-     title =    {Hoki},
-     howpublished = {\url{https://github.com/HeloiseS/hoki}},
-     doi = {10.5281/zenodo.3445659},
-     year = {2019}
-     } 
+ArXiv submition coming in the next day!
      
 **Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
