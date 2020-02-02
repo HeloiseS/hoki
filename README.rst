@@ -81,7 +81,7 @@ Check out these Jupyter notebooks I made - you can find them on `this repo! <htt
 
 ---- 
 
-Citation
+Peer-reviewed Paper
 ^^^^^^^^^
 .. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
    :target: https://doi.org/10.21105/joss.01987
