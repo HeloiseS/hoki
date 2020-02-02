@@ -90,21 +90,22 @@ We have a paper!
 
 .. code-block::
    @ARTICLE{stevance20,
-       author = {{Stevance}, Heloise F. and {Eldridge}, J.~J. and {Stanway}, Elizabeth},
-        title = "{Hoki: Making BPASS accessible through Python}",
-         journal = {arXiv e-prints},
-     keywords = {Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
-         year = "2020",
-        month = "Jan",
-          eid = {arXiv:2001.11069},
-        pages = {arXiv:2001.11069},
-    archivePrefix = {arXiv},
-       eprint = {2001.11069},
-     primaryClass = {astro-ph.SR},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200111069S},
+      author = {{Stevance}, Heloise F. and {Eldridge}, J.~J. and {Stanway}, Elizabeth},
+      title = "{Hoki: Making BPASS accessible through Python}",
+      journal = {arXiv e-prints},
+      keywords = {Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
+      year = "2020",
+      month = "Jan",
+      eid = {arXiv:2001.11069},
+      pages = {arXiv:2001.11069},
+      archivePrefix = {arXiv},
+      eprint = {2001.11069},
+      primaryClass = {astro-ph.SR},
+      adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200111069S},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
     }
      
+
 **Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
 ---- 
