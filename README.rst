@@ -83,10 +83,17 @@ Check out these Jupyter notebooks I made - you can find them on `this repo! <htt
 
 Citation
 ^^^^^^^^^
-We have a paper!
-
 .. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
    :target: https://doi.org/10.21105/joss.01987
+   
+Our paper *Hoki: Making BPASS Accessible Through Python* has now been published in the Journal of Open Source Software (JOSS). (See DOI above)
+
+The paper is `available on ArXiv <https://arxiv.org/abs/2001.11069>`_ as published by JOSS
+
+**Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
+
+
+**BIBTEX**
 
 .. code-block::
 
@@ -107,7 +114,6 @@ We have a paper!
     }
      
 
-**Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
 ---- 
 
