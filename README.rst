@@ -89,6 +89,7 @@ We have a paper!
    :target: https://doi.org/10.21105/joss.01987
 
 .. code-block::
+
    @ARTICLE{stevance20,
       author = {{Stevance}, Heloise F. and {Eldridge}, J.~J. and {Stanway}, Elizabeth},
       title = "{Hoki: Making BPASS accessible through Python}",
