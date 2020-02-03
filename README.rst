@@ -97,21 +97,24 @@ The paper is `available on ArXiv <https://arxiv.org/abs/2001.11069>`_ as publish
 
 .. code-block::
 
-   @ARTICLE{stevance20,
-      author = {{Stevance}, Heloise F. and {Eldridge}, J.~J. and {Stanway}, Elizabeth},
-      title = "{Hoki: Making BPASS accessible through Python}",
-      journal = {arXiv e-prints},
-      keywords = {Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
-      year = "2020",
-      month = "Jan",
-      eid = {arXiv:2001.11069},
-      pages = {arXiv:2001.11069},
-      archivePrefix = {arXiv},
-      eprint = {2001.11069},
-      primaryClass = {astro-ph.SR},
-      adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200111069S},
+   @ARTICLE{2020JOSS....5.1987S,
+       author = {{Stevance}, Heloise and {Eldridge}, J. and {Stanway}, Elizabeth},
+        title = "{Hoki: Making BPASS accessible through Python}",
+      journal = {The Journal of Open Source Software},
+     keywords = {Python, galaxies, Batchfile, SED, astronomy, binary stars, Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
+         year = "2020",
+        month = "Jan",
+       volume = {5},
+       number = {45},
+          eid = {1987},
+        pages = {1987},
+          doi = {10.21105/joss.01987},
+archivePrefix = {arXiv},
+       eprint = {2001.11069},
+ primaryClass = {astro-ph.SR},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020JOSS....5.1987S},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-    }
+   }
      
 
 
