@@ -109,12 +109,12 @@ The paper is `available on ArXiv <https://arxiv.org/abs/2001.11069>`_ as publish
           eid = {1987},
         pages = {1987},
           doi = {10.21105/joss.01987},
-archivePrefix = {arXiv},
+     archivePrefix = {arXiv},
        eprint = {2001.11069},
- primaryClass = {astro-ph.SR},
+     primaryClass = {astro-ph.SR},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2020JOSS....5.1987S},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-   }
+    }
      
 
 
