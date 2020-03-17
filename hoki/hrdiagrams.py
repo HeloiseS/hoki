@@ -406,7 +406,10 @@ def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
 
     # we want our levels to be fractions of 10 of our maximum value
     # and yes it didn't need to be written this way, but isn't it gorgeous?
-    possible_levels = [top_level*0.00000001,
+    possible_levels = [#top_level*0.00000000001,
+                       #top_level*0.0000000001,
+                       #top_level*0.000000001,
+                       top_level*0.00000001, #
                        top_level*0.0000001,
                        top_level*0.000001,
                        top_level*0.00001,
@@ -429,11 +432,14 @@ def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
 
     # I then log the grid and transpose the array directly in the plotting function
     # The transpose is required so that my HR diagram is the right way around.
-    hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), np.log10(levels).tolist(),
+    CS = hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), np.log10(levels).tolist(),
                          cmap=cmap, **kwargs)
 
     # Temperature should be inverted
     hr_diagram.invert_xaxis()
+
+
+    #plt.colorbar(CS)
 
     return hr_diagram
 
