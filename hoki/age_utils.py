@@ -72,3 +72,19 @@ def calculate_pdfs(obs_df, myhrd):
     pdf_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
 
     return pdf_df
+
+
+def combine_pdfs(pdf_df):
+    assert isinstance(pdf_df, pd.DataFrame)
+
+    combined_pdf = [0] * pdf_df.shape[0]
+
+    columns = [col for col in pdf_df.columns if "time_bins" not in col]
+
+    for col in columns:  # pdf_df.columns[:-1]:
+        combined_pdf += pdf_df[col].values
+
+    combined_df = pd.DataFrame(normalise_1d(combined_pdf))
+    combined_df.columns = ['pdf']
+
+    return combined_df

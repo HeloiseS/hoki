@@ -58,3 +58,11 @@ class TestCalculatePDFs(object):
         pdf_df = au.calculate_pdfs(bad_input2, myhrd)
         assert not np.isnan(sum(pdf_df.s0)), "somwthing went wrong"
         assert np.isnan(sum(pdf_df.s1)), "somwthing went wrong"
+
+
+class TestCombinePDFs(object):
+    def test_basic(self):
+        pdfs_good = au.calculate_pdfs(fake_input, myhrd)
+        combined = au.combine_pdfs(pdfs_good)
+        assert np.isclose(combined.pdf[0], 0.009917654988906047), "combined PDF not right"
+
