@@ -66,3 +66,12 @@ class TestCombinePDFs(object):
         combined = au.combine_pdfs(pdfs_good)
         assert np.isclose(combined.pdf[0], 0.009917654988906047), "combined PDF not right"
 
+    def test_drop_bad(self):
+        pdfs_good = au.calculate_pdfs(fake_input, myhrd)
+        combined = au.combine_pdfs(pdfs_good, not_you=[3])
+        assert np.isclose(combined.pdf[0], 0.009917654988906047), "combined PDF not right"
+
+    def test_drop_good(self):
+        pdfs_good = au.calculate_pdfs(fake_input, myhrd)
+        combined = au.combine_pdfs(pdfs_good, not_you=['star1'])
+        assert np.isclose(combined.pdf[9], 0.723153), "combined PDF not right"

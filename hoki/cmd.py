@@ -121,8 +121,8 @@ class CMD(object):
         try:
             cols = tuple([dummy_dict[key] for key in col_keys])
         except KeyError as e:
-            print('Received the following error -- KeyError:', e,
-                  '\n----- TROUBLESHOOTING ----- '
+            print('HOKI ERROR -- KeyError:', e,
+                  '\nDEBUGGING ASSISTANT:'
                   '\nOne or both of the chosen filters do not correspond to a valid filter key. '
                   'Here is a list of valid filters - input them as string:\n'+str(list(dummy_dict.keys())[49:-23]))
             return
@@ -290,7 +290,7 @@ class CMD(object):
         #  Now we define our default levels
         index = np.where(np.round(BPASS_TIME_BINS,1) == log_age)[0]
 
-        assert 6.0 <= log_age < 11.1, "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+        assert 6.0 <= log_age < 11.1, "HOKI ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
 
         single_cmd_grid = self.grid[int(index)]
 
@@ -356,7 +356,7 @@ class CMD(object):
         """
 
         assert log_age >= 6.0 and log_age <= 11.1, \
-            "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+            "HOKI ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
 
         bin_i = int(np.round(10*(log_age-6)))
         return self.grid[bin_i]

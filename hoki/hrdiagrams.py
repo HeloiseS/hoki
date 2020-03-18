@@ -167,17 +167,17 @@ class HRDiagram(object):
 
         if log_age_min is None and log_age_max is not None:
             log_age_min = self.t[0]
-            assert log_age_max <= self.t[-1], "FATAL ERROR: age_max too large. Give the log age."
+            assert log_age_max <= self.t[-1], "HOKI ERROR: age_max too large. Give the log age."
 
         if log_age_max is None and log_age_min is not None:
             log_age_max = self.t[-1]
-            assert log_age_min >= self.t[0], "FATAL: age_min too low"
+            assert log_age_min >= self.t[0], "HOKI ERROR: age_min too low"
 
         if log_age_min is not None and log_age_max is not None:
             assert log_age_min < log_age_max, "FATAL ERROR: age_max should be greater than age_min"
 
             assert log_age_min >= self.t[0] and log_age_max <= self.t[-1], \
-                "FATAL ERROR: The age range requested is outside the valid range " \
+                "HOKI ERROR: The age range requested is outside the valid range " \
                 "(6.0 to 11.1 inclusive)"+str(log_age_min)+" "+str(log_age_max)
 
         # Now that we have time limits we calculate what bins they correspond to.
@@ -217,7 +217,7 @@ class HRDiagram(object):
         """
 
         assert log_age >= 6.0 and log_age <= 11.1, \
-            "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+            "HOKI ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
 
         bin_i = int(np.round(10*(log_age-6)))
 
@@ -256,9 +256,9 @@ class HRDiagram(object):
 
 
         """
-        assert abundances != (0, 0, 0), "abundances cannot be (0, 0, 0) - You're plotting nothing."
-        assert isinstance(abundances, tuple), "abundances should be a tuple of 3 integers - consult the docstrings " \
-                                              "for further details "
+        assert abundances != (0, 0, 0), "HOKI ERROR: abundances cannot be (0, 0, 0) - You're plotting nothing."
+        assert isinstance(abundances, tuple), "HOKI ERROR: abundances should be a tuple of 3 integers - " \
+                                              "consult the docstrings for further details "
 
         hr_plot = None
 
@@ -309,7 +309,7 @@ class HRDiagram(object):
                                                  self.medium_H_stacked, self.low_H_stacked
 
         elif age_range and log_age:
-            print("\nWARNING: you provided an age range as well as an age. The former takes "
+            print("\nHOKI WARNING: you provided an age range as well as an age. The former takes "
                   "precedent. If you wanted to plot a single age, this will be WRONG.")
 
         if abundances == (1, 1, 1):

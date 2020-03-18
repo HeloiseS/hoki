@@ -4,9 +4,10 @@ import hoki.hrdiagrams
 import hoki.load as load
 
 
-def find_hrd_coordinates(obs_df, myhrd, stfu=False):
-    assert isinstance(obs_df, pd.DataFrame), "obs_df should be a pandas.DataFrame"
-    assert isinstance(myhrd, hoki.hrdiagrams.HRDiagram), "myhrd should be an instance of hoki.hrdiagrams.HRDiagrams"
+def find_hrd_coordinates(obs_df, myhrd):
+    assert isinstance(obs_df, pd.DataFrame), "HOKI ERROR -- obs_df should be a pandas.DataFrame"
+    assert isinstance(myhrd, hoki.hrdiagrams.HRDiagram), "HOKI ERROR -- myhrd should be an instance of " \
+                                                         "hoki.hrdiagrams.HRDiagrams"
 
     # List if indeces that located the HRD location that most closely matches observations
     L_i = []
@@ -24,14 +25,14 @@ def find_hrd_coordinates(obs_df, myhrd, stfu=False):
             T=float(T)
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
         except ValueError:
-            print("T="+str(T)+" cannot be converted to a float")
+            print("HOKI WARNING -- T="+str(T)+" cannot be converted to a float")
             T_i.append(np.nan)
 
         try:
             L=float(L)
             L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0]))
         except ValueError:
-            print("L="+str(L)+" cannot be converted to a float")
+            print("HOKI WARNING -- L="+str(L)+" cannot be converted to a float")
             L_i.append(np.nan)
 
     return T_i, L_i
@@ -48,7 +49,7 @@ def calculate_pdfs(obs_df, myhrd):
     try:
         source_names = obs_df.name
     except AttributeError:
-        print("No source names given so I'll make my own")
+        print("HOKI WARNING:No source names given so I'll make my own")
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     pdfs = []
@@ -57,7 +58,7 @@ def calculate_pdfs(obs_df, myhrd):
         Ti, Li = T_coord[i], L_coord[i]
 
         if np.isnan(Ti) or np.isnan(Li):
-            print("ERROR: NaN Value encountered in (T,L) coordinates for source: " + name)
+            print("HOKI ERROR: NaN Value encountered in (T,L) coordinates for source: " + name)
             pdfs.append([np.nan] * 51)
             continue
 
@@ -74,10 +75,19 @@ def calculate_pdfs(obs_df, myhrd):
     return pdf_df
 
 
-def combine_pdfs(pdf_df):
+def combine_pdfs(pdf_df, not_you=None):
     assert isinstance(pdf_df, pd.DataFrame)
 
     combined_pdf = [0] * pdf_df.shape[0]
+    if not_you:
+        try:
+            pdf_df.drop(labels=not_you, axis=1, inplace=True)
+            print('Labels: '+str(not_you)+' succesfully excluded.')
+        except KeyError as e:
+            print('HOKI WARNING -- FEATURE DISABLED')
+            print('KeyError',e)
+            print('HOKI DIALOGUE: Your labels could not be dropped -- all pdfs will be combined')
+            print('DEBUGGING ASSISTANT: Make sure the labels your listed are spelled correctly :)')
 
     columns = [col for col in pdf_df.columns if "time_bins" not in col]
 
