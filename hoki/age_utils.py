@@ -1,9 +1,13 @@
 import pandas as pd
 import numpy as np
+import hoki.hrdiagrams
 import hoki.load as load
 
 
 def find_hrd_coordinates(obs_df, myhrd, stfu=False):
+    assert isinstance(obs_df, pd.DataFrame), "obs_df should be a pandas.DataFrame"
+    assert isinstance(myhrd, hoki.hrdiagrams.HRDiagram), "myhrd should be an instance of hoki.hrdiagrams.HRDiagrams"
+
     # List if indeces that located the HRD location that most closely matches observations
     L_i = []
     T_i = []
@@ -23,7 +27,6 @@ def find_hrd_coordinates(obs_df, myhrd, stfu=False):
             print("T="+str(T)+" cannot be converted to a float")
             T_i.append(np.nan)
 
-
         try:
             L=float(L)
             L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0]))
@@ -31,8 +34,41 @@ def find_hrd_coordinates(obs_df, myhrd, stfu=False):
             print("L="+str(L)+" cannot be converted to a float")
             L_i.append(np.nan)
 
-
-
-
-
     return T_i, L_i
+
+
+def normalise_1d(distribution):
+    area = np.sum([bin_t for bin_t in distribution])
+    return distribution/area
+
+
+def calculate_pdfs(obs_df, myhrd):
+    T_coord, L_coord = find_hrd_coordinates(obs_df, myhrd)
+
+    try:
+        source_names = obs_df.name
+    except AttributeError:
+        print("No source names given so I'll make my own")
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
+
+    pdfs = []
+
+    for i, name in zip(range(obs_df.shape[0]), source_names):
+        Ti, Li = T_coord[i], L_coord[i]
+
+        if np.isnan(Ti) or np.isnan(Li):
+            print("ERROR: NaN Value encountered in (T,L) coordinates for source: " + name)
+            pdfs.append([np.nan] * 51)
+            continue
+
+        distrib_i = []
+        for hrd in myhrd:
+            distrib_i.append(hrd[Ti, Li])
+
+        pdf_i = normalise_1d(distrib_i)
+        pdfs.append(pdf_i.tolist())
+
+    pdf_df = pd.DataFrame((np.array(pdfs)).T, columns=source_names)
+    pdf_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
+
+    return pdf_df
