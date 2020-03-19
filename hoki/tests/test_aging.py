@@ -3,12 +3,16 @@ import hoki.load as load
 import pkg_resources
 import numpy as np
 import pandas as pd
+import pytest
+
+# Loading Data
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
-
 hr_file = data_path+'/hrs-sin-imf_chab100.zem4.dat'
-
 myhrd = load.model_output(hr_file, hr_type='TL')
+
+# Creating Test Inputs
+
 fake_input = pd.DataFrame.from_dict({'name': ['star1', 'star2', 'star3'],
                                      'logT': np.array([4.58, 4.48, 4.14]),
                                      'logL': np.array([4.83, 5.07, 5.40])})
@@ -21,6 +25,46 @@ no_name_input = pd.DataFrame.from_dict({'logT': np.array([4.58, 4.48, 4.14]),
 
 bad_input2 = pd.DataFrame.from_dict({'logT': np.array([4.58, 'bla']),
                                      'logL': np.array([4.83, 2.0])})
+
+
+# Testing Suite
+
+class TestAgeWizard(object):
+    def test_init_basic(self):
+        assert au.AgeWizard(obs_df=fake_input, model=hr_file), "Loading from file path failed"
+        assert au.AgeWizard(obs_df=fake_input, model=myhrd), "Loading with hoki.hrdiagrams.HRDiagram failed"
+
+    def test_init_exception(self):
+        with pytest.raises(TypeError):
+            au.AgeWizard(obs_df=fake_input, model=3)
+
+    def test_combine_pdfs_not_you(self):
+        wiz = au.AgeWizard(fake_input, myhrd)
+        wiz.combine_pdfs(not_you=['star1'])
+        cpdf = wiz.combined_pdf.pdf
+        assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0, 0.723153]))==2, "combined pdf is not right"
+
+    def test_most_likely_age(self):
+        wiz = au.AgeWizard(obs_df=fake_input, model=hr_file)
+        assert np.isclose(wiz.most_likely_age[0],6.9), "Most likely age wrong"
+
+    def test_most_likely_ages(self):
+        wiz = au.AgeWizard(obs_df=fake_input, model=hr_file)
+        a =  wiz.most_likely_ages
+        assert np.sum(np.isclose([a[0], a[1], a[2]], [6.9, 6.9, 6.9]))==3, "Most likely ages not right"
+
+    def test_combine_pdfs(self):
+        wiz = au.AgeWizard(fake_input, myhrd)
+        wiz.combine_pdfs()
+        assert np.isclose(wiz.combined_pdf.pdf[0], 0.009917654988906047), "Something is wrong with the combined_Age PDF"
+
+    def test_calculate_p_given_age_range(self):
+        wiz = au.AgeWizard(fake_input, myhrd)
+        probas = wiz.calculate_p_given_age_range([6.7, 6.9])
+        assert np.sum(np.isclose([probas[0], probas[1], probas[2]],
+                                 [0.515233714952414, 0.7920611550946726, 0.6542441096583737]))==3, \
+            "probability given age range is messed up"
+
 
 class TestFindHRDCoordinates(object):
     def test_fake_input(self):

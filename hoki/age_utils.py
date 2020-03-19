@@ -2,6 +2,71 @@ import pandas as pd
 import numpy as np
 import hoki.hrdiagrams
 import hoki.load as load
+from hoki.constants import *
+import warnings
+
+
+class AgeWizard(object):
+#TODO: documentation giiirl!
+
+    def __init__(self, obs_df, model):
+        # Checking what format they giving for the model:
+        if isinstance(model, hoki.hrdiagrams.HRDiagram):
+            self.myhrd = model
+        elif isinstance(model, str):
+            self.myhrd = load.model_output(model, hr_type='TL')
+        else:
+            print('-----------------')
+            print('HOKI DEBUGGER:\nThe model param should be a path to \na BPASS HRDiagram output file or\n',
+                  'a hoki.hrdiagrams.HRDiagram')
+            print('-----------------')
+            raise TypeError('model is ' + str(type(model)))
+
+        # Making sure the osbervational properties are given in a format we can use.
+        assert isinstance(obs_df, pd.DataFrame), "HOKI ERROR -- observations should be stored in a Data Frame"
+
+        # This will need to be re-asessed when I put in a feature for colour magnitude diagrams.
+        assert 'logL' in obs_df.columns and 'logT' in obs_df.columns, "HOKI ERROR -- obs_df needs to contain a logL and a logT column"
+
+        self.obs_df = obs_df
+        self.hrd_coordinates = find_hrd_coordinates(self.obs_df, self.myhrd)
+
+        self.pdfs = calculate_pdfs(self.obs_df, self.myhrd)
+
+        self.combined_pdf = None
+        self._most_likely_age = None
+        self._most_likely_ages = None
+
+    def combine_pdfs(self, **kwargs):
+        # if self.pdfs is None:
+        #    raise AttributeError('self.pdfs is not yet defined -- have you run AgeWizard.calculate_pdfs()?')
+        # warnings.warn('self.pdfs not yet defined -- running AgeWizard.calc_pdfs()', UserWarning)
+        # self.calc_pdfs()
+
+        self.combined_pdf = combine_pdfs(self.pdfs, **kwargs)
+
+    @property
+    def most_likely_age(self):
+        if self._most_likely_age is not None: return self._most_likely_age
+        if self.combined_pdf is None:
+            warnings.warn('self.combined_pdf is not yet defined -- running AgeWizard.combined_pdfs()', UserWarning)
+            self.combine_pdfs()
+
+        index = self.combined_pdf.index[self.combined_pdf.pdf == max(self.combined_pdf.pdf)].tolist()
+        return BPASS_TIME_BINS[index]
+
+    @property
+    def most_likely_ages(self):
+        if self._most_likely_ages is not None:
+            return self._most_likely_ages
+
+        index = self.pdfs.drop('time_bins', axis=1).idxmax(axis=0).tolist()
+        return BPASS_TIME_BINS[index]
+
+    def calculate_p_given_age_range(self, age_range=None):
+        probability = self.pdfs.drop('time_bins', axis=1)[
+            (round(self.pdfs.time_bins, 2) >= min(age_range)) & (round(self.pdfs.time_bins, 2) <= max(age_range))].sum()
+        return probability
 
 
 def find_hrd_coordinates(obs_df, myhrd):
@@ -9,7 +74,7 @@ def find_hrd_coordinates(obs_df, myhrd):
     assert isinstance(myhrd, hoki.hrdiagrams.HRDiagram), "HOKI ERROR -- myhrd should be an instance of " \
                                                          "hoki.hrdiagrams.HRDiagrams"
 
-    # List if indeces that located the HRD location that most closely matches observations
+    # List if indices that located the HRD location that most closely matches observations
     L_i = []
     T_i = []
 
@@ -84,7 +149,7 @@ def combine_pdfs(pdf_df, not_you=None):
             pdf_df.drop(labels=not_you, axis=1, inplace=True)
             print('Labels: '+str(not_you)+' succesfully excluded.')
         except KeyError as e:
-            print('HOKI WARNING -- FEATURE DISABLED')
+            print('HOKI ERROR -- FEATURE DISABLED')
             print('KeyError',e)
             print('HOKI DIALOGUE: Your labels could not be dropped -- all pdfs will be combined')
             print('DEBUGGING ASSISTANT: Make sure the labels your listed are spelled correctly :)')
