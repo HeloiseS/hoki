@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from hoki.constants import *
 import numpy as np
 import matplotlib.cm as cm
-
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 
 class CMD(object):
     """
@@ -121,11 +121,12 @@ class CMD(object):
         try:
             cols = tuple([dummy_dict[key] for key in col_keys])
         except KeyError as e:
-            print('HOKI ERROR -- KeyError:', e,
-                  '\nDEBUGGING ASSISTANT:'
-                  '\nOne or both of the chosen filters do not correspond to a valid filter key. '
-                  'Here is a list of valid filters - input them as string:\n'+str(list(dummy_dict.keys())[49:-23]))
-            return
+
+            err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: \nOne or both of the chosen filters do not correspond ' \
+                                         'to a valid filter key. Here is a list of valid filters - ' \
+                                         'input them as string:\n'+str(list(dummy_dict.keys())[49:-23])
+            raise HokiKeyError(err_m)
+
 
         # LOOPING OVER EACH LINE IN THE INPUT FILE
         for filename,  model_imf, mixed_imf, mixed_age, model_type in zip(self.bpass_input.filenames,
@@ -290,7 +291,8 @@ class CMD(object):
         #  Now we define our default levels
         index = np.where(np.round(BPASS_TIME_BINS,1) == log_age)[0]
 
-        assert 6.0 <= log_age < 11.1, "HOKI ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+        if log_age < 6.0 or log_age > 11.0:
+            raise HokiFatalError("Valid values of log age should be between 6.0 and 11.1 (inclusive)")
 
         single_cmd_grid = self.grid[int(index)]
 
@@ -355,8 +357,8 @@ class CMD(object):
 
         """
 
-        assert log_age >= 6.0 and log_age <= 11.1, \
-            "HOKI ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+        if log_age < 6.0 or log_age > 11.0:
+            raise HokiFatalError("Valid values of log age should be between 6.0 and 11.1 (inclusive)")
 
         bin_i = int(np.round(10*(log_age-6)))
         return self.grid[bin_i]

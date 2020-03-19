@@ -4,6 +4,7 @@ import hoki.hrdiagrams
 import hoki.load as load
 from hoki.constants import *
 import warnings
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 
 
 class AgeWizard(object):
@@ -23,10 +24,12 @@ class AgeWizard(object):
             raise TypeError('model is ' + str(type(model)))
 
         # Making sure the osbervational properties are given in a format we can use.
-        assert isinstance(obs_df, pd.DataFrame), "HOKI ERROR -- observations should be stored in a Data Frame"
+        if not isinstance(obs_df, pd.DataFrame):
+            raise HokiFormatError("Observations should be stored in a Data Frame")
 
         # This will need to be re-asessed when I put in a feature for colour magnitude diagrams.
-        assert 'logL' in obs_df.columns and 'logT' in obs_df.columns, "HOKI ERROR -- obs_df needs to contain a logL and a logT column"
+        if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
+            raise HokiFormatError("obs_df needs to contain a logL and a logT column")
 
         self.obs_df = obs_df
         self.hrd_coordinates = find_hrd_coordinates(self.obs_df, self.myhrd)
@@ -49,7 +52,7 @@ class AgeWizard(object):
     def most_likely_age(self):
         if self._most_likely_age is not None: return self._most_likely_age
         if self.combined_pdf is None:
-            warnings.warn('self.combined_pdf is not yet defined -- running AgeWizard.combined_pdfs()', UserWarning)
+            warnings.warn('self.combined_pdf is not yet defined -- running AgeWizard.combined_pdfs()', HokiUserWarning)
             self.combine_pdfs()
 
         index = self.combined_pdf.index[self.combined_pdf.pdf == max(self.combined_pdf.pdf)].tolist()
@@ -70,9 +73,10 @@ class AgeWizard(object):
 
 
 def find_hrd_coordinates(obs_df, myhrd):
-    assert isinstance(obs_df, pd.DataFrame), "HOKI ERROR -- obs_df should be a pandas.DataFrame"
-    assert isinstance(myhrd, hoki.hrdiagrams.HRDiagram), "HOKI ERROR -- myhrd should be an instance of " \
-                                                         "hoki.hrdiagrams.HRDiagrams"
+    if not isinstance(obs_df, pd.DataFrame):
+        raise HokiFormatError("obs_df should be a pandas.DataFrame")
+    if not isinstance(myhrd, hoki.hrdiagrams.HRDiagram):
+        raise HokiFormatError("myhrd should be an instance of hoki.hrdiagrams.HRDiagrams")
 
     # List if indices that located the HRD location that most closely matches observations
     L_i = []
@@ -90,14 +94,14 @@ def find_hrd_coordinates(obs_df, myhrd):
             T=float(T)
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
         except ValueError:
-            print("HOKI WARNING -- T="+str(T)+" cannot be converted to a float")
+            warnings.warn("T="+str(T)+" cannot be converted to a float", HokiUserWarning)
             T_i.append(np.nan)
 
         try:
             L=float(L)
             L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0]))
         except ValueError:
-            print("HOKI WARNING -- L="+str(L)+" cannot be converted to a float")
+            warnings.warn("L="+str(L)+" cannot be converted to a float", HokiUserWarning)
             L_i.append(np.nan)
 
     return T_i, L_i
@@ -114,7 +118,7 @@ def calculate_pdfs(obs_df, myhrd):
     try:
         source_names = obs_df.name
     except AttributeError:
-        print("HOKI WARNING:No source names given so I'll make my own")
+        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     pdfs = []
@@ -123,7 +127,7 @@ def calculate_pdfs(obs_df, myhrd):
         Ti, Li = T_coord[i], L_coord[i]
 
         if np.isnan(Ti) or np.isnan(Li):
-            print("HOKI ERROR: NaN Value encountered in (T,L) coordinates for source: " + name)
+            warnings.warn("NaN Value encountered in (T,L) coordinates for source: " + name, HokiUserWarning)
             pdfs.append([np.nan] * 51)
             continue
 
@@ -149,10 +153,10 @@ def combine_pdfs(pdf_df, not_you=None):
             pdf_df.drop(labels=not_you, axis=1, inplace=True)
             print('Labels: '+str(not_you)+' succesfully excluded.')
         except KeyError as e:
-            print('HOKI ERROR -- FEATURE DISABLED')
-            print('KeyError',e)
-            print('HOKI DIALOGUE: Your labels could not be dropped -- all pdfs will be combined')
-            print('DEBUGGING ASSISTANT: Make sure the labels your listed are spelled correctly :)')
+            message = 'FEATURE DISABLED'+'\nKeyError'+str(e)+'\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
+                                                              'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
+                                                              'Make sure the labels your listed are spelled correctly:)'
+            warnings.warn(message, HokiUserWarning)
 
     columns = [col for col in pdf_df.columns if "time_bins" not in col]
 
