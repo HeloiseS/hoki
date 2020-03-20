@@ -42,7 +42,7 @@ class TestAgeWizard(object):
         wiz = au.AgeWizard(fake_input, myhrd)
         wiz.combine_pdfs(not_you=['star1'])
         cpdf = wiz.combined_pdf.pdf
-        assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0, 0.723153]))==2, "combined pdf is not right"
+        assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0, 0.878162355350702]))==2, "combined pdf is not right"
 
     def test_most_likely_age(self):
         wiz = au.AgeWizard(obs_df=fake_input, model=hr_file)
@@ -56,7 +56,7 @@ class TestAgeWizard(object):
     def test_combine_pdfs(self):
         wiz = au.AgeWizard(fake_input, myhrd)
         wiz.combine_pdfs()
-        assert np.isclose(wiz.combined_pdf.pdf[0], 0.009917654988906047), "Something is wrong with the combined_Age PDF"
+        assert np.isclose(wiz.combined_pdf.pdf[9], 0.9837195045903536), "Something is wrong with the combined_Age PDF"
 
     def test_calculate_p_given_age_range(self):
         wiz = au.AgeWizard(fake_input, myhrd)
@@ -108,14 +108,14 @@ class TestCombinePDFs(object):
     def test_basic(self):
         pdfs_good = au.calculate_pdfs(fake_input, myhrd)
         combined = au.combine_pdfs(pdfs_good)
-        assert np.isclose(combined.pdf[0], 0.009917654988906047), "combined PDF not right"
+        assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
 
     def test_drop_bad(self):
         pdfs_good = au.calculate_pdfs(fake_input, myhrd)
         combined = au.combine_pdfs(pdfs_good, not_you=[3])
-        assert np.isclose(combined.pdf[0], 0.009917654988906047), "combined PDF not right"
+        assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
 
     def test_drop_good(self):
         pdfs_good = au.calculate_pdfs(fake_input, myhrd)
         combined = au.combine_pdfs(pdfs_good, not_you=['star1'])
-        assert np.isclose(combined.pdf[9], 0.723153), "combined PDF not right"
+        assert np.isclose(combined.pdf[9], 0.878162355350702), "combined PDF not right"

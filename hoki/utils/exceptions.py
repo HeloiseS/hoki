@@ -6,7 +6,6 @@ Custom Exception Handling for Hoki - based off astropy.utils.exceptions (thanks!
 # Basics
 
 
-
 class HokiWarning(Warning):
     """
     The base warning class from which all Hoki warnings should inherit.
@@ -23,8 +22,6 @@ class HokiDeprecationWarning(HokiWarning):
     """
     A warning class to indicate a deprecated feature.
     """
-
-
 
 # Formatting
 

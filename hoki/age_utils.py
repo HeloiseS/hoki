@@ -31,22 +31,28 @@ class AgeWizard(object):
         if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
             raise HokiFormatError("obs_df needs to contain a logL and a logT column")
 
+        if 'name' not in obs_df.columns:
+            warnings.warn("We expect the name of sources to be given in the 'name' column. "
+                          "If I can't find names I'll make my own ;)", HokiFormatWarning)
+
         self.obs_df = obs_df
         self.hrd_coordinates = find_hrd_coordinates(self.obs_df, self.myhrd)
 
         self.pdfs = calculate_pdfs(self.obs_df, self.myhrd)
-
+        self.sources = self.pdfs.columns[:-1].to_list()
         self.combined_pdf = None
         self._most_likely_age = None
         self._most_likely_ages = None
 
-    def combine_pdfs(self, **kwargs):
+    def combine_pdfs(self, not_you=None, return_df=False):
         # if self.pdfs is None:
         #    raise AttributeError('self.pdfs is not yet defined -- have you run AgeWizard.calculate_pdfs()?')
         # warnings.warn('self.pdfs not yet defined -- running AgeWizard.calc_pdfs()', UserWarning)
         # self.calc_pdfs()
 
-        self.combined_pdf = combine_pdfs(self.pdfs, **kwargs)
+        self.combined_pdf = combine_pdfs(self.pdfs, not_you)
+
+        if return_df: return self.combined_pdf
 
     @property
     def most_likely_age(self):
@@ -69,7 +75,7 @@ class AgeWizard(object):
     def calculate_p_given_age_range(self, age_range=None):
         probability = self.pdfs.drop('time_bins', axis=1)[
             (round(self.pdfs.time_bins, 2) >= min(age_range)) & (round(self.pdfs.time_bins, 2) <= max(age_range))].sum()
-        return probability
+        return probability.values
 
 
 def find_hrd_coordinates(obs_df, myhrd):
@@ -147,11 +153,11 @@ def calculate_pdfs(obs_df, myhrd):
 def combine_pdfs(pdf_df, not_you=None):
     assert isinstance(pdf_df, pd.DataFrame)
 
-    combined_pdf = [0] * pdf_df.shape[0]
+    combined_pdf = [1] * pdf_df.shape[0]
     if not_you:
         try:
-            pdf_df.drop(labels=not_you, axis=1, inplace=True)
-            print('Labels: '+str(not_you)+' succesfully excluded.')
+            pdf_df = pdf_df.drop(labels=not_you, axis=1)
+            #print('Labels: '+str(not_you)+' succesfully excluded.')
         except KeyError as e:
             message = 'FEATURE DISABLED'+'\nKeyError'+str(e)+'\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
                                                               'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
@@ -161,7 +167,7 @@ def combine_pdfs(pdf_df, not_you=None):
     columns = [col for col in pdf_df.columns if "time_bins" not in col]
 
     for col in columns:  # pdf_df.columns[:-1]:
-        combined_pdf += pdf_df[col].values
+        combined_pdf *= pdf_df[col].values
 
     combined_df = pd.DataFrame(normalise_1d(combined_pdf))
     combined_df.columns = ['pdf']
