@@ -8,9 +8,23 @@ from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatErr
 
 
 class AgeWizard(object):
+    """
+
+    """
 #TODO: documentation giiirl!
 
     def __init__(self, obs_df, model):
+        """
+        Initialisation of the AgeWizard object
+
+        Parameters
+        ----------
+        obs_df: pandas.DataFrame
+            Observational data. MUST contain a logT and logL column.
+        model: str or hoki.hrdiagrams.HRDiagrams()
+            Location of the modeled HRD of interest: this can be a PATH (in a string) to the file containing the
+            HRD of choice or an already loaded HRDiagram object.
+        """
         # Checking what format they giving for the model:
         if isinstance(model, hoki.hrdiagrams.HRDiagram):
             self.myhrd = model
@@ -40,32 +54,54 @@ class AgeWizard(object):
 
         self.pdfs = calculate_pdfs(self.obs_df, self.myhrd)
         self.sources = self.pdfs.columns[:-1].to_list()
-        self.combined_pdf = None
+        self.multiplied_pdf = None
         self._most_likely_age = None
         self._most_likely_ages = None
 
-    def combine_pdfs(self, not_you=None, return_df=False):
+    def multiply_pdfs(self, not_you=None, return_df=False):
+        """
+        Calls the multiply_pdfs function
+
+        Parameters
+        ----------
+        not_you: list, optional
+            List of the column names to ignore. Default is None so all the pdfs are multiplied
+        return_df: bool, optional
+            Whether or not the resulting DataFrame should be returned (it is automatically stored in the
+            attribute multiplied_pdf). Default is False.
+
+        Returns
+        -------
+            None or pandas.DataFrame containing the multiplied pdf.
+
+        """
         # if self.pdfs is None:
         #    raise AttributeError('self.pdfs is not yet defined -- have you run AgeWizard.calculate_pdfs()?')
         # warnings.warn('self.pdfs not yet defined -- running AgeWizard.calc_pdfs()', UserWarning)
         # self.calc_pdfs()
 
-        self.combined_pdf = combine_pdfs(self.pdfs, not_you)
+        self.multiplied_pdf = multiply_pdfs(self.pdfs, not_you)
 
-        if return_df: return self.combined_pdf
+        if return_df: return self.multiplied_pdf
 
     @property
     def most_likely_age(self):
+        """
+        Finds  the most likely age by finding the max value in self.multiplied_pdf
+        """
         if self._most_likely_age is not None: return self._most_likely_age
-        if self.combined_pdf is None:
-            warnings.warn('self.combined_pdf is not yet defined -- running AgeWizard.combined_pdfs()', HokiUserWarning)
-            self.combine_pdfs()
+        if self.multiplied_pdf is None:
+            warnings.warn('self.multiplied_pdf is not yet defined -- running AgeWizard.combined_pdfs()', HokiUserWarning)
+            self.multiply_pdfs()
 
-        index = self.combined_pdf.index[self.combined_pdf.pdf == max(self.combined_pdf.pdf)].tolist()
+        index = self.multiplied_pdf.index[self.multiplied_pdf.pdf == max(self.multiplied_pdf.pdf)].tolist()
         return BPASS_TIME_BINS[index]
 
     @property
     def most_likely_ages(self):
+        """
+        Finds the most likely ages for all the sources given in the obs_df DataFrame.
+        """
         if self._most_likely_ages is not None:
             return self._most_likely_ages
 
@@ -73,12 +109,39 @@ class AgeWizard(object):
         return BPASS_TIME_BINS[index]
 
     def calculate_p_given_age_range(self, age_range=None):
+        """
+        Calculates the probability that each source has age within age_range
+
+        Parameters
+        ----------
+        age_range: list or tuple of 2 values
+            Minimum and Maximum age to consider (inclusive).
+
+        Returns
+        -------
+        numpy.array containing the probabilities.
+
+        """
         probability = self.pdfs.drop('time_bins', axis=1)[
             (round(self.pdfs.time_bins, 2) >= min(age_range)) & (round(self.pdfs.time_bins, 2) <= max(age_range))].sum()
         return probability.values
 
 
 def find_hrd_coordinates(obs_df, myhrd):
+    """
+    Find the BPASS HRD coordinates that match the given observations
+
+    Parameters
+    ----------
+    obs_df: pandas.DataFrame
+        Observational data. MUST contain a logT and logL column.
+    myhrd: hoki.hrdiagrams.HRDiagrams
+        BPASS HRDiagram
+
+    Returns
+    -------
+    Tuple of lists:(logT coordinates, logL coordinates)
+    """
     if not isinstance(obs_df, pd.DataFrame):
         raise HokiFormatError("obs_df should be a pandas.DataFrame")
     if not isinstance(myhrd, hoki.hrdiagrams.HRDiagram):
@@ -114,11 +177,29 @@ def find_hrd_coordinates(obs_df, myhrd):
 
 
 def normalise_1d(distribution):
+    """
+    Simple function that devides by the sum of the 1D array or DataFrame given.
+    """
     area = np.sum([bin_t for bin_t in distribution])
     return distribution/area
 
 
 def calculate_pdfs(obs_df, myhrd):
+    """
+    Given observations and an HR Diagram, calculates the age probability distribution functions.
+
+    Parameters
+    ----------
+    obs_df: pandas.DataFrame
+        Observational data. MUST contain a logT and logL column.
+    myhrd: hoki.hrdiagrams.HRDiagrams
+        BPASS HRDiagram
+
+    Returns
+    -------
+    Age Probability Distribution Functions in a pandas.DataFrame.
+
+    """
     T_coord, L_coord = find_hrd_coordinates(obs_df, myhrd)
 
     try:
@@ -150,7 +231,21 @@ def calculate_pdfs(obs_df, myhrd):
     return pdf_df
 
 
-def combine_pdfs(pdf_df, not_you=None):
+def multiply_pdfs(pdf_df, not_you=None):
+    """
+    Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
+
+    Parameters
+    ----------
+    pdf_df: pandas.DataFrame
+        DataFrame containing probability distribution functions
+    not_you: list, optional
+        List of the column names to ignore. Default is None so all the pdfs are multiplied
+
+    Returns
+    -------
+    Combined Probability Distribution Function in a pandas.DataFrame.
+    """
     assert isinstance(pdf_df, pd.DataFrame)
 
     combined_pdf = [1] * pdf_df.shape[0]

@@ -40,8 +40,8 @@ class TestAgeWizard(object):
 
     def test_combine_pdfs_not_you(self):
         wiz = au.AgeWizard(fake_input, myhrd)
-        wiz.combine_pdfs(not_you=['star1'])
-        cpdf = wiz.combined_pdf.pdf
+        wiz.multiply_pdfs(not_you=['star1'])
+        cpdf = wiz.multiplied_pdf.pdf
         assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0, 0.878162355350702]))==2, "combined pdf is not right"
 
     def test_most_likely_age(self):
@@ -55,8 +55,8 @@ class TestAgeWizard(object):
 
     def test_combine_pdfs(self):
         wiz = au.AgeWizard(fake_input, myhrd)
-        wiz.combine_pdfs()
-        assert np.isclose(wiz.combined_pdf.pdf[9], 0.9837195045903536), "Something is wrong with the combined_Age PDF"
+        wiz.multiply_pdfs()
+        assert np.isclose(wiz.multiplied_pdf.pdf[9], 0.9837195045903536), "Something is wrong with the combined_Age PDF"
 
     def test_calculate_p_given_age_range(self):
         wiz = au.AgeWizard(fake_input, myhrd)
@@ -104,18 +104,18 @@ class TestCalculatePDFs(object):
         assert np.isnan(sum(pdf_df.s1)), "somwthing went wrong"
 
 
-class TestCombinePDFs(object):
+class TestMultiplyPDFs(object):
     def test_basic(self):
         pdfs_good = au.calculate_pdfs(fake_input, myhrd)
-        combined = au.combine_pdfs(pdfs_good)
+        combined = au.multiply_pdfs(pdfs_good)
         assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
 
     def test_drop_bad(self):
         pdfs_good = au.calculate_pdfs(fake_input, myhrd)
-        combined = au.combine_pdfs(pdfs_good, not_you=[3])
+        combined = au.multiply_pdfs(pdfs_good, not_you=[3])
         assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
 
     def test_drop_good(self):
         pdfs_good = au.calculate_pdfs(fake_input, myhrd)
-        combined = au.combine_pdfs(pdfs_good, not_you=['star1'])
+        combined = au.multiply_pdfs(pdfs_good, not_you=['star1'])
         assert np.isclose(combined.pdf[9], 0.878162355350702), "combined PDF not right"

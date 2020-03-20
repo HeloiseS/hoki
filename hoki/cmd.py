@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.cm as cm
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 
+
 class CMD(object):
     """
     **Colour Magnitude Diagram Object**
