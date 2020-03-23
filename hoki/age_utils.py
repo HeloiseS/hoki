@@ -21,19 +21,18 @@ class AgeWizard(object):
         ----------
         obs_df: pandas.DataFrame
             Observational data. MUST contain a logT and logL column.
-        model: str or hoki.hrdiagrams.HRDiagrams()
-            Location of the modeled HRD of interest: this can be a PATH (in a string) to the file containing the
-            HRD of choice or an already loaded HRDiagram object.
+        model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
+            Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
+            path to an HR Diagram file or a pickled CMD.
         """
-
 
         # Making sure the osbervational properties are given in a format we can use.
         if not isinstance(obs_df, pd.DataFrame):
             raise HokiFormatError("Observations should be stored in a Data Frame")
 
         # This will need to be re-asessed when I put in a feature for colour magnitude diagrams.
-        #if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
-        #    raise HokiFormatError("obs_df needs to contain a logL and a logT column")
+        # if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
+        # raise HokiFormatError("obs_df needs to contain a logL and a logT column")
 
         if 'name' not in obs_df.columns:
             warnings.warn("We expect the name of sources to be given in the 'name' column. "
@@ -44,14 +43,26 @@ class AgeWizard(object):
             self.model = model
         elif isinstance(model, hoki.cmd.CMD):
             self.model = model
-        elif isinstance(model, str):
+        elif isinstance(model, str) and 'hrs' in model:
             self.model = load.model_output(model, hr_type='TL')
+        elif isinstance(model, str):
+            try:
+                self.model = load.unpickle(path=model)
+            except AssertionError:
+                print('-----------------')
+                print(
+                    'HOKI DEBUGGER:\nThe model param should be a path to \na BPASS HRDiagram output file or pickled CMD,'
+                    'or\na hoki.hrdiagrams.HRDiagram or a hoki.cmd.CMD')
+                print('-----------------')
+                raise HokiFatalError('model is ' + str(type(model)))
+
+
         else:
             print('-----------------')
-            print('HOKI DEBUGGER:\nThe model param should be a path to \na BPASS HRDiagram output file or\n',
-                  'a hoki.hrdiagrams.HRDiagram or a hoki.cmd.CMD')
+            print('HOKI DEBUGGER:\nThe model param should be a path to \na BPASS HRDiagram output file or pickled CMD,'
+                  'or\na hoki.hrdiagrams.HRDiagram or a hoki.cmd.CMD')
             print('-----------------')
-            raise TypeError('model is ' + str(type(model)))
+            raise HokiFatalError('model is ' + str(type(model)))
 
         self.obs_df = obs_df
         self.coordinates = find_coordinates(self.obs_df, self.model)
