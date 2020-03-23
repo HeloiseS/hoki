@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import hoki.hrdiagrams
+import hoki.cmd
 import hoki.load as load
 from hoki.constants import *
 import warnings
@@ -9,9 +10,8 @@ from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatErr
 
 class AgeWizard(object):
     """
-
+    AgeWizard object
     """
-#TODO: documentation giiirl!
 
     def __init__(self, obs_df, model):
         """
@@ -25,34 +25,38 @@ class AgeWizard(object):
             Location of the modeled HRD of interest: this can be a PATH (in a string) to the file containing the
             HRD of choice or an already loaded HRDiagram object.
         """
-        # Checking what format they giving for the model:
-        if isinstance(model, hoki.hrdiagrams.HRDiagram):
-            self.myhrd = model
-        elif isinstance(model, str):
-            self.myhrd = load.model_output(model, hr_type='TL')
-        else:
-            print('-----------------')
-            print('HOKI DEBUGGER:\nThe model param should be a path to \na BPASS HRDiagram output file or\n',
-                  'a hoki.hrdiagrams.HRDiagram')
-            print('-----------------')
-            raise TypeError('model is ' + str(type(model)))
+
 
         # Making sure the osbervational properties are given in a format we can use.
         if not isinstance(obs_df, pd.DataFrame):
             raise HokiFormatError("Observations should be stored in a Data Frame")
 
         # This will need to be re-asessed when I put in a feature for colour magnitude diagrams.
-        if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
-            raise HokiFormatError("obs_df needs to contain a logL and a logT column")
+        #if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
+        #    raise HokiFormatError("obs_df needs to contain a logL and a logT column")
 
         if 'name' not in obs_df.columns:
             warnings.warn("We expect the name of sources to be given in the 'name' column. "
                           "If I can't find names I'll make my own ;)", HokiFormatWarning)
 
-        self.obs_df = obs_df
-        self.hrd_coordinates = find_hrd_coordinates(self.obs_df, self.myhrd)
+        # Checking what format they giving for the model:
+        if isinstance(model, hoki.hrdiagrams.HRDiagram):
+            self.model = model
+        elif isinstance(model, hoki.cmd.CMD):
+            self.model = model
+        elif isinstance(model, str):
+            self.model = load.model_output(model, hr_type='TL')
+        else:
+            print('-----------------')
+            print('HOKI DEBUGGER:\nThe model param should be a path to \na BPASS HRDiagram output file or\n',
+                  'a hoki.hrdiagrams.HRDiagram or a hoki.cmd.CMD')
+            print('-----------------')
+            raise TypeError('model is ' + str(type(model)))
 
-        self.pdfs = calculate_pdfs(self.obs_df, self.myhrd)
+        self.obs_df = obs_df
+        self.coordinates = find_coordinates(self.obs_df, self.model)
+
+        self.pdfs = calculate_pdfs(self.obs_df, self.model)
         self.sources = self.pdfs.columns[:-1].to_list()
         self.multiplied_pdf = None
         self._most_likely_age = None
@@ -127,7 +131,31 @@ class AgeWizard(object):
         return probability.values
 
 
-def find_hrd_coordinates(obs_df, myhrd):
+def find_coordinates(obs_df, model):
+    """
+
+    Parameters
+    ----------
+    obs_df:
+
+    model:
+
+    Returns
+    -------
+
+    """
+
+    if isinstance(model, hoki.hrdiagrams.HRDiagram):
+        return _find_hrd_coordinates(obs_df, model)
+
+    elif isinstance(model, hoki.cmd.CMD):
+        return _find_cmd_coordinates(obs_df, model)
+
+    else:
+        raise HokiFormatError("The model should be an instance of hoki.hrdiagrams.HRDiagrams or hoki.cmd.CMD")
+
+
+def _find_hrd_coordinates(obs_df, myhrd):
     """
     Find the BPASS HRD coordinates that match the given observations
 
@@ -145,19 +173,24 @@ def find_hrd_coordinates(obs_df, myhrd):
     if not isinstance(obs_df, pd.DataFrame):
         raise HokiFormatError("obs_df should be a pandas.DataFrame")
     if not isinstance(myhrd, hoki.hrdiagrams.HRDiagram):
-        raise HokiFormatError("myhrd should be an instance of hoki.hrdiagrams.HRDiagrams")
+        raise HokiFormatError("model should be an instance of hoki.hrdiagrams.HRDiagrams")
 
     # List if indices that located the HRD location that most closely matches observations
     L_i = []
     T_i = []
 
+    try:
+        logT, logL = obs_df.logT, obs_df.logL
+    except AttributeError:
+        raise HokiFormatError("obs_df should have a logT and a logL column")
+
     # How this works:
-    # abs(myhrd.L_coord-L)==abs(myhrd.L_coord-L).min() *finds* the HRD location that most closely corresponds to obs.
+    # abs(model.L_coord-L)==abs(model.L_coord-L).min() *finds* the HRD location that most closely corresponds to obs.
     # np.where(....)[0] *finds* the index of that location (which was originally in L or T space)
     # int( ....) is juuust to make sure we get an integer because Python is a motherfucker and adds s.f. for no reason
     # Then we append that index to our list.
 
-    for T, L in zip(obs_df.logT, obs_df.logL):
+    for T, L in zip(logT, logL ):
 
         try:
             T=float(T)
@@ -176,6 +209,61 @@ def find_hrd_coordinates(obs_df, myhrd):
     return T_i, L_i
 
 
+def _find_cmd_coordinates(obs_df, mycmd):
+    """
+    Find the BPASS HRD coordinates that match the given observations
+
+    Parameters
+    ----------
+    obs_df: pandas.DataFrame
+        Observational data. MUST contain a logT and logL column.
+    mycmd: hoki.cmd.CMD
+        BPASS CMD
+
+    Returns
+    -------
+    Tuple of lists:(colour coordinates, magnitude coordinates)
+    """
+    if not isinstance(obs_df, pd.DataFrame):
+        raise HokiFormatError("obs_df should be a pandas.DataFrame")
+    if not isinstance(mycmd, hoki.cmd.CMD):
+        raise HokiFormatError("cmd should be an instance of hoki.cmd.CMD")
+
+    # List if indices that located the HRD location that most closely matches observations
+    col_i = []
+    mag_i = []
+
+    try:
+        colours, magnitudes = obs_df.col, obs_df.mag
+    except AttributeError:
+        raise HokiFormatError("obs_df should have a logT and a logL column")
+
+    # How this works:
+    # abs(model.L_coord-L)==abs(model.L_coord-L).min() *finds* the HRD location that most closely corresponds to obs.
+    # np.where(....)[0] *finds* the index
+    # of that location (which was originally in L or T space)
+    # int( ....) is juuust to make sure we get an integer because Python is a motherfucker and adds s.f. for no reason
+    # Then we append that index to our list.
+
+    for col, mag in zip(colours, magnitudes):
+
+        try:
+            col=float(col)
+            col_i.append(int((np.where(abs(mycmd.col_range - col) == abs(mycmd.col_range - col).min()))[0]))
+        except ValueError:
+            warnings.warn("Colour="+str(col)+" cannot be converted to a float", HokiUserWarning)
+            col_i.append(np.nan)
+
+        try:
+            mag=float(mag)
+            mag_i.append(int((np.where(abs(mycmd.mag_range - mag) == abs(mycmd.mag_range - mag).min()))[0]))
+        except ValueError:
+            warnings.warn("Magnitude="+str(mag)+" cannot be converted to a float", HokiUserWarning)
+            mag_i.append(np.nan)
+
+    return col_i, mag_i
+
+
 def normalise_1d(distribution):
     """
     Simple function that devides by the sum of the 1D array or DataFrame given.
@@ -184,7 +272,7 @@ def normalise_1d(distribution):
     return distribution/area
 
 
-def calculate_pdfs(obs_df, myhrd):
+def calculate_pdfs(obs_df, model):
     """
     Given observations and an HR Diagram, calculates the age probability distribution functions.
 
@@ -192,15 +280,18 @@ def calculate_pdfs(obs_df, myhrd):
     ----------
     obs_df: pandas.DataFrame
         Observational data. MUST contain a logT and logL column.
-    myhrd: hoki.hrdiagrams.HRDiagrams
-        BPASS HRDiagram
+    model: hoki.hrdiagrams.HRDiagrams or hoki.cmd.CMD
+        BPASS HRDiagram or CMD
 
     Returns
     -------
     Age Probability Distribution Functions in a pandas.DataFrame.
 
     """
-    T_coord, L_coord = find_hrd_coordinates(obs_df, myhrd)
+    if isinstance(model, hoki.hrdiagrams.HRDiagram):
+        x_coord, y_coord = find_coordinates(obs_df, model)
+    if isinstance(model, hoki.cmd.CMD):
+        y_coord, x_coord = find_coordinates(obs_df, model)
 
     try:
         source_names = obs_df.name
@@ -211,16 +302,16 @@ def calculate_pdfs(obs_df, myhrd):
     pdfs = []
 
     for i, name in zip(range(obs_df.shape[0]), source_names):
-        Ti, Li = T_coord[i], L_coord[i]
+        xi, yi = x_coord[i], y_coord[i]
 
-        if np.isnan(Ti) or np.isnan(Li):
+        if np.isnan(xi) or np.isnan(yi):
             warnings.warn("NaN Value encountered in (T,L) coordinates for source: " + name, HokiUserWarning)
             pdfs.append([np.nan] * 51)
             continue
 
         distrib_i = []
-        for hrd in myhrd:
-            distrib_i.append(hrd[Ti, Li])
+        for model_i in model:
+            distrib_i.append(model_i[xi, yi])
 
         pdf_i = normalise_1d(distrib_i)
         pdfs.append(pdf_i.tolist())
