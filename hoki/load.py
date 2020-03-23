@@ -48,7 +48,7 @@ def set_models_path(path):
     You are going to have to reload hoki for your new path to take effect.
 
     """
-    assert os.path.isdir(path), 'The path provided does not correspond to a valid directory'
+    assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
     path_to_settings = data_path+'/settings.yaml'
     with open(path_to_settings, 'r') as stream:
@@ -202,9 +202,9 @@ def model_output(path, hr_type=None):
 
     """
 
-    assert isinstance(path, str), "The location of the file is expected to be a string."
-    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
-    assert hr_type in [None,'TL', 'Tg', 'TTG'], "The HR diagram type is invalid. " \
+    assert isinstance(path, str), "HOKI ERROR: The location of the file is expected to be a string."
+    assert os.path.isfile(path), "HOKI ERROR: This file does not exist, or its path is incorrect."
+    assert hr_type in [None,'TL', 'Tg', 'TTG'], "HOKI ERROR: The HR diagram type is invalid. " \
                                                 "Available options are: 'TL', 'Tg', 'TTG'. "
 
     if "supernova" in path:
@@ -238,8 +238,8 @@ def model_output(path, hr_type=None):
         return _hrTTG(path)
 
     else:
-        print("Could not load the Stellar Population output. "
-              "Trouble shooting:\n1) Is the filename correct?"
+        print("HOKI ERROR -- Could not load the Stellar Population output. "
+              "\nDEBUGGING ASSISTANT:\n1) Is the filename correct?"
               "\n2) Trying to load an HR diagram? "
               "Make sure hr_type is set! Available options are: 'TL', 'Tg', 'TTG'. ")
 
@@ -360,8 +360,8 @@ def nebular_lines(path):
     -------
 
     """
-    assert isinstance(path, str), "The location of the file is expected to be a string."
-    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
+    assert isinstance(path, str), "HOKI ERROR: The location of the file is expected to be a string."
+    assert os.path.isfile(path), "HOKI: ERROR This file does not exist, or its path is incorrect."
 
     if 'UV' in path:
         return _UV_nebular_lines(path)

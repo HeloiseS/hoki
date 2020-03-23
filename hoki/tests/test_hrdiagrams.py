@@ -2,6 +2,8 @@ import numpy as np
 import hoki.hrdiagrams as hr
 import hoki.load as load
 import pkg_resources
+from hoki.utils.exceptions import HokiFatalError
+import pytest
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
@@ -11,6 +13,9 @@ hrtl = load._hrTL(hr_file)
 hrtg = load._hrTg(hr_file)
 hrttg = load._hrTTG(hr_file)
 
+def test_error():
+    with pytest.raises(HokiFatalError):
+        test_plot = hrtl.plot(abundances=(0,0,0))
 
 # I cant' test whether matplotlib is doing the right thing but I can check it runs.
 def test_stack():

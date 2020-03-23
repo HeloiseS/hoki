@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from hoki.constants import *
 from matplotlib import ticker
 import matplotlib.cm as cm
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
+import warnings
 
 
 class HRDiagram(object):
@@ -167,18 +169,21 @@ class HRDiagram(object):
 
         if log_age_min is None and log_age_max is not None:
             log_age_min = self.t[0]
-            assert log_age_max <= self.t[-1], "FATAL ERROR: age_max too large. Give the log age."
+            if log_age_max > self.t[-1]:
+                raise HokiFatalError("Age_max too large. Give the log age.")
 
         if log_age_max is None and log_age_min is not None:
             log_age_max = self.t[-1]
-            assert log_age_min >= self.t[0], "FATAL: age_min too low"
+            if log_age_min < self.t[0]:
+                raise HokiFatalError("Age_min too low")
 
         if log_age_min is not None and log_age_max is not None:
-            assert log_age_min < log_age_max, "FATAL ERROR: age_max should be greater than age_min"
+            if log_age_min > log_age_max:
+                raise HokiFatalError("Age_max should be greater than age_min")
 
-            assert log_age_min >= self.t[0] and log_age_max <= self.t[-1], \
-                "FATAL ERROR: The age range requested is outside the valid range " \
-                "(6.0 to 11.1 inclusive)"+str(log_age_min)+" "+str(log_age_max)
+            if log_age_min < self.t[0] or log_age_max > self.t[-1]:
+                raise HokiFatalError("The age range requested is outside the valid range"
+                                     "(6.0 to 11.1 inclusive)"+str(log_age_min)+" "+str(log_age_max))
 
         # Now that we have time limits we calculate what bins they correspond to.
         bin_min, bin_max = int(np.round(10*(log_age_min-6))), int(np.round(10*(log_age_max-6)))
@@ -216,8 +221,8 @@ class HRDiagram(object):
 
         """
 
-        assert log_age >= 6.0 and log_age <= 11.1, \
-            "FATAL ERROR: Valid values of log age should be between 6.0 and 11.1 (inclusive)"
+        if log_age < 6.0 or log_age >= 11.1:
+            raise HokiFatalError("Valid values of log age should be between 6.0 and 11.1 (inclusive)")
 
         bin_i = int(np.round(10*(log_age-6)))
 
@@ -256,9 +261,13 @@ class HRDiagram(object):
 
 
         """
-        assert abundances != (0, 0, 0), "abundances cannot be (0, 0, 0) - You're plotting nothing."
-        assert isinstance(abundances, tuple), "abundances should be a tuple of 3 integers - consult the docstrings " \
-                                              "for further details "
+        #assert abundances != (0, 0, 0), "HOKI ERROR: abundances cannot be (0, 0, 0) - You're plotting nothing."
+        if abundances == (0, 0, 0):
+            raise HokiFatalError("Abundances cannot be (0, 0, 0) - You're plotting nothing.")
+
+        if not isinstance(abundances, tuple):
+            error_message="abundances should be a tuple of 3 integers - consult the docstrings for further details "
+            raise HokiFormatError(error_message)
 
         hr_plot = None
 
@@ -295,22 +304,23 @@ class HRDiagram(object):
         # Case where an age or age_range is given
 
         if log_age:
-            assert isinstance(log_age, int) or isinstance(log_age, float), \
-                "Age should be an int or float"
+            if not isinstance(log_age, int) and not isinstance(log_age, float):
+                raise HokiFormatError("Age should be an int or float")
 
             all_hr, high_hr, medium_hr, low_hr = self.at_log_age(log_age)
 
         elif age_range:
-            assert isinstance(age_range, list) or isinstance(age_range, tuple), \
-                "Age range should be a list or a tuple"
+            if not isinstance(age_range, list) and not isinstance(age_range, tuple):
+                raise HokiFormatError("Age range should be a list or a tuple")
 
             self.stack(age_range[0], age_range[1])
             all_hr, high_hr, medium_hr, low_hr = self.all_stacked, self.high_H_stacked, \
                                                  self.medium_H_stacked, self.low_H_stacked
 
         elif age_range and log_age:
-            print("\nWARNING: you provided an age range as well as an age. The former takes "
-                  "precedent. If you wanted to plot a single age, this will be WRONG.")
+            error_message = "You provided an age range as well as an age. The former takes "\
+                            "precedent. If you wanted to plot a single age, this will be WRONG."
+            warnings.warn(error_message, HokiUserWarning)
 
         if abundances == (1, 1, 1):
             hr_plot = plot_hrdiagram(all_hr, kind=self.type, **kwargs)
@@ -406,7 +416,10 @@ def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
 
     # we want our levels to be fractions of 10 of our maximum value
     # and yes it didn't need to be written this way, but isn't it gorgeous?
-    possible_levels = [top_level*0.00000001,
+    possible_levels = [#top_level*0.00000000001,
+                       #top_level*0.0000000001,
+                       #top_level*0.000000001,
+                       top_level*0.00000001, #
                        top_level*0.0000001,
                        top_level*0.000001,
                        top_level*0.00001,
@@ -429,11 +442,14 @@ def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
 
     # I then log the grid and transpose the array directly in the plotting function
     # The transpose is required so that my HR diagram is the right way around.
-    hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), np.log10(levels).tolist(),
+    CS = hr_diagram.contourf(X, Y, np.log10(single_hr_grid.T), np.log10(levels).tolist(),
                          cmap=cmap, **kwargs)
 
     # Temperature should be inverted
     hr_diagram.invert_xaxis()
+
+
+    #plt.colorbar(CS)
 
     return hr_diagram
 
