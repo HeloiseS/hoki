@@ -366,7 +366,7 @@ def multiply_pdfs(pdf_df, not_you=None, smart=True):
     if smart:
         columns = [col for col in columns if round(sum(pdf_df[col]), 2) != 0.0]
         # smart mode automatically doesn't take into account the columsn that add up to a proba of 0
-        # this happens when matching coordinates can't be found for an observation. 
+        # this happens when matching coordinates can't be found for an observation.
 
     for col in columns:  # pdf_df.columns[:-1]:
         combined_pdf *= pdf_df[col].values
