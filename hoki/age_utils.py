@@ -5,7 +5,7 @@ import hoki.cmd
 import hoki.load as load
 from hoki.constants import *
 import warnings
-from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning
 
 
 class AgeWizard(object):
@@ -67,13 +67,13 @@ class AgeWizard(object):
         self.obs_df = obs_df
         self.coordinates = find_coordinates(self.obs_df, self.model)
 
-        self.pdfs = calculate_pdfs(self.obs_df, self.model)
+        self.pdfs = calculate_pdfs(self.obs_df, self.model).fillna(0)
         self.sources = self.pdfs.columns[:-1].to_list()
         self.multiplied_pdf = None
         self._most_likely_age = None
         self._most_likely_ages = None
 
-    def multiply_pdfs(self, not_you=None, return_df=False):
+    def multiply_pdfs(self, not_you=None, return_df=False, smart=True):
         """
         Calls the multiply_pdfs function
 
@@ -95,7 +95,7 @@ class AgeWizard(object):
         # warnings.warn('self.pdfs not yet defined -- running AgeWizard.calc_pdfs()', UserWarning)
         # self.calc_pdfs()
 
-        self.multiplied_pdf = multiply_pdfs(self.pdfs, not_you)
+        self.multiplied_pdf = multiply_pdfs(self.pdfs, not_you, smart=smart)
 
         if return_df: return self.multiplied_pdf
 
@@ -317,7 +317,7 @@ def calculate_pdfs(obs_df, model):
 
         if np.isnan(xi) or np.isnan(yi):
             warnings.warn("NaN Value encountered in (T,L) coordinates for source: " + name, HokiUserWarning)
-            pdfs.append([np.nan] * 51)
+            pdfs.append([0] * 51)
             continue
 
         distrib_i = []
@@ -333,7 +333,7 @@ def calculate_pdfs(obs_df, model):
     return pdf_df
 
 
-def multiply_pdfs(pdf_df, not_you=None):
+def multiply_pdfs(pdf_df, not_you=None, smart=True):
     """
     Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
 
@@ -362,6 +362,9 @@ def multiply_pdfs(pdf_df, not_you=None):
             warnings.warn(message, HokiUserWarning)
 
     columns = [col for col in pdf_df.columns if "time_bins" not in col]
+
+    if smart:
+        columns = [col for col in columns if round(sum(pdf_df[col]), 2) != 0.0]
 
     for col in columns:  # pdf_df.columns[:-1]:
         combined_pdf *= pdf_df[col].values
