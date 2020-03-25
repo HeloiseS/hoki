@@ -113,11 +113,17 @@ class CMD(object):
         """
         self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
 
+
         self.mag_filter = str(mag_filter)
         # self.filter2 = str(filter2)
 
         # check list and that list is len(2)
-        self.col_filter1, self.col_filter2 = str(col_filters[0]), str(col_filters[1])
+        try:
+            self.col_filter1, self.col_filter2 = str(col_filters[0]), str(col_filters[1])
+        except TypeError as e:
+            err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: col_filter must be a list or tuple of 2 strings'
+            raise HokiFormatError(err_m)
+
 
         # FIND THE KEYS TO THE COLUMNS OF INTEREST IN DUMMY
 
@@ -126,7 +132,6 @@ class CMD(object):
         try:
             cols = tuple([dummy_dict[key] for key in col_keys])
         except KeyError as e:
-
             err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: \nOne or both of the chosen filters do not correspond ' \
                                          'to a valid filter key. Here is a list of valid filters - ' \
                                          'input them as string:\n'+str(list(dummy_dict.keys())[49:-23])
