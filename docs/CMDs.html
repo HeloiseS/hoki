@@ -505,9 +505,9 @@ Looks like everything went well! You can check the path was correctly updated by
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/fste075/hoki/hoki/cmd.py:186: RuntimeWarning: divide by zero encountered in log10
+/home/fste075/hoki/hoki/cmd.py:191: RuntimeWarning: divide by zero encountered in log10
   self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))
-/home/fste075/hoki/hoki/cmd.py:202: RuntimeWarning: divide by zero encountered in log10
+/home/fste075/hoki/hoki/cmd.py:207: RuntimeWarning: divide by zero encountered in log10
   self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))
 </pre></div></div>
 </div>
@@ -597,13 +597,80 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
+<p>But <code class="docutils literal notranslate"><span class="pre">CMD</span></code> objects are also indexable!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       ...,
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>(240, 100)
+</pre></div>
+</div>
+</div>
+<p>This would give you the grid for log(age/years)=6.0, but it can get tricky to find the right age CMD grid just based on indices, so for that purpose you can use <code class="docutils literal notranslate"><span class="pre">CMD.at_log_age()</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="o">.</span><span class="n">at_log_age</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       ...,
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]])
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="Changing-the-resolution-of-the-CMD-grids">
 <h3>Changing the resolution of the CMD grids<a class="headerlink" href="#Changing-the-resolution-of-the-CMD-grids" title="Permalink to this headline">¶</a></h3>
 <p>As we can see we have 51 time bins, 240 magnitude intervals and 100 colour intervals.</p>
 <p>The number of time bins is fixed by BPASS but you can chose the size of your colour-magnitude grid and its resolution when you instanciate a <code class="docutils literal notranslate"><span class="pre">CMD</span></code> object.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -612,25 +679,14 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/fste075/hoki/hoki/cmd.py:186: RuntimeWarning: divide by zero encountered in log10
-  self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))
-/home/fste075/hoki/hoki/cmd.py:202: RuntimeWarning: divide by zero encountered in log10
-  self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))
-</pre></div></div>
-</div>
 </div>
 </div>
 <div class="section" id="Plotting-the-CMDs">
 <h2>Plotting the CMDs<a class="headerlink" href="#Plotting-the-CMDs" title="Permalink to this headline">¶</a></h2>
 <p>Like I said above, once the grid is made and filled, plotting is quick and straight forward. As in other <code class="docutils literal notranslate"><span class="pre">hoki</span></code> tools the plotting function returns the plot, which you can store in a variable to add your own labels and customize limits.</p>
 <p>Similarly to the <code class="docutils literal notranslate"><span class="pre">hoki.HRDiagrams</span></code> plots, the contours are on a log scale.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -642,25 +698,9 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>(2, -10)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/CMDs_17_1.png" src="_images/CMDs_17_1.png" />
-</div>
-</div>
 <p>As with the HRDiagrams, you can also tell the plotting function where your want it to plot your data!</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -678,22 +718,6 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Text(0.5, 1.0, &#39;Low resolution&#39;)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/CMDs_19_1.png" src="_images/CMDs_19_1.png" />
-</div>
-</div>
 </div>
 <div class="section" id="Pickle-CMDs---don't-make-them-twice!">
 <h2>Pickle CMDs - don’t make them twice!<a class="headerlink" href="#Pickle-CMDs---don't-make-them-twice!" title="Permalink to this headline">¶</a></h2>
@@ -702,7 +726,7 @@ Looks like everything went well! You can check the path was correctly updated by
 <h3>Loading a pickled CMD file<a class="headerlink" href="#Loading-a-pickled-CMD-file" title="Permalink to this headline">¶</a></h3>
 <p>We’ve provided a couple of pickled CMD files in the <code class="docutils literal notranslate"><span class="pre">./data/cmds/</span></code> directory for you to try even if you couldn’t download the full sets of stellar models.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -710,8 +734,8 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -723,29 +747,13 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>(2, -10)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/CMDs_22_1.png" src="_images/CMDs_22_1.png" />
-</div>
-</div>
 </div>
 <div class="section" id="Pickling-a-CMD-file">
 <h3>Pickling a CMD file<a class="headerlink" href="#Pickling-a-CMD-file" title="Permalink to this headline">¶</a></h3>
 <p>Now let’s make your own pickle file! If you have the stellar models and made the CMD in the previous sections of this tutorial, you can now save your work!</p>
 <p>All you need is the following code (feel free to change the output file name).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -758,8 +766,8 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -773,22 +781,6 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>(2, -10)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/CMDs_25_1.png" src="_images/CMDs_25_1.png" />
-</div>
-</div>
 </div>
 </div>
 <div class="section" id="Creating-a-publication-ready-figure">
@@ -797,7 +789,7 @@ Looks like everything went well! You can check the path was correctly updated by
 <p>Let’s make a plot comparing the CMDs for Cygnus OB2 and Upper Sco in B-V and U-V plots.</p>
 <p>First we need to load our data (which is provided in the ./data/cmds/ repository) - we also need to make sure our observational data is in <strong>absolute</strong> magnitude, because that’s what our synthetic CMDs provide. If <strong>extinction</strong> is important in your osbervational data, you also need to take that into account.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -824,7 +816,7 @@ Looks like everything went well! You can check the path was correctly updated by
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -844,7 +836,7 @@ Looks like everything went well! You can check the path was correctly updated by
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -855,8 +847,8 @@ Looks like everything went well! You can check the path was correctly updated by
 </div>
 </div>
 <p><strong>Now let’s plot the data!</strong></p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -893,22 +885,6 @@ Looks like everything went well! You can check the path was correctly updated by
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;USco</span><span class="se">\n</span><span class="s1">Z=0.020</span><span class="se">\n</span><span class="s1">log(age)=6.8 yrs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;USco</span><span class="se">\n</span><span class="s1">Z=0.020</span><span class="se">\n</span><span class="s1">log(age)=6.8 yrs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
-<span></span>Text(0.5, 0, &#39;USco\nZ=0.020\nlog(age)=6.8 yrs&#39;)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/CMDs_32_1.png" src="_images/CMDs_32_1.png" />
 </div>
 </div>
 <hr class="docutils" />
