@@ -79,7 +79,7 @@ class CMD(object):
         # Setting up the grid's resolution
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
         self.mag_range = np.arange(mag_lim[0], mag_lim[1], res_el)
-        self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
+        self.grid = None
         self.path = MODELS_PATH
         self._my_data = None
         self._col_bins = None
@@ -87,42 +87,51 @@ class CMD(object):
         self._time_bins = None
         self._log_ages = None
         self._ages = None
-        self.filter1 = None
+        self.mag_filter = None
         self.filter2 = None
 
-    def make(self, filter1, filter2):
+    def make(self, mag_filter, col_filters):
         """
         Make the CMD - a.k.a fill the grid
 
         Notes
         ------
             - This may take a few seconds to a minute to run.
-            - The colour will be filter1 - filter2
-            - If you later call CMD.plot() you will obtain a contour plot of filter1 against filter1-filter2
+            - The colour will be mag_filter - filter2
+            - If you later call CMD.plot() you will obtain a contour plot of mag_filter against mag_filter-filter2
 
         Parameters
         ----------
-        filter1 : str
-            First filter
-        filter2 : str
-            Seconds filter
+        mag_filter : str
+            Magnitude Axis Filter
+        col_filters : list of 2 str
+            The two filters for the colour. The colours will be col_filter[0]-col_filter[1].
 
         Returns
         -------
         None
         """
+        self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
 
-        self.filter1 = str(filter1)
-        self.filter2 = str(filter2)
+
+        self.mag_filter = str(mag_filter)
+        # self.filter2 = str(filter2)
+
+        # check list and that list is len(2)
+        try:
+            self.col_filter1, self.col_filter2 = str(col_filters[0]), str(col_filters[1])
+        except TypeError as e:
+            err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: col_filter must be a list or tuple of 2 strings'
+            raise HokiFormatError(err_m)
+
 
         # FIND THE KEYS TO THE COLUMNS OF INTEREST IN DUMMY
 
-        col_keys = ['timestep', 'age', self.filter1, self.filter2, 'M1', 'log(R1)', 'log(L1)']
+        col_keys = ['timestep', 'age', self.col_filter1, self.col_filter2, 'M1', 'log(R1)', 'log(L1)']
 
         try:
             cols = tuple([dummy_dict[key] for key in col_keys])
         except KeyError as e:
-
             err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: \nOne or both of the chosen filters do not correspond ' \
                                          'to a valid filter key. Here is a list of valid filters - ' \
                                          'input them as string:\n'+str(list(dummy_dict.keys())[49:-23])
@@ -338,8 +347,8 @@ class CMD(object):
 
         cm_diagram.invert_yaxis()
 
-        cm_diagram.set_ylabel(self.filter1)
-        cm_diagram.set_xlabel(self.filter1+"-"+self.filter2)
+        cm_diagram.set_ylabel(self.mag_filter)
+        cm_diagram.set_xlabel(self.col_filter1+ "-" + self.col_filter2)
 
         return cm_diagram
 
