@@ -687,19 +687,19 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 
 <dl class="method">
 <dt id="hoki.cmd.CMD.make">
-<code class="sig-name descname">make</code><span class="sig-paren">(</span><em class="sig-param">filter1</em>, <em class="sig-param">filter2</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.make" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">make</code><span class="sig-paren">(</span><em class="sig-param">mag_filter</em>, <em class="sig-param">col_filters</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.make" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the CMD - a.k.a fill the grid</p>
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><p>This may take a few seconds to a minute to run.</p></li>
-<li><p>The colour will be filter1 - filter2</p></li>
-<li><p>If you later call CMD.plot() you will obtain a contour plot of filter1 against filter1-filter2</p></li>
+<li><p>The colour will be mag_filter - filter2</p></li>
+<li><p>If you later call CMD.plot() you will obtain a contour plot of mag_filter against mag_filter-filter2</p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filter1</strong> (<em>str</em>) – First filter</p></li>
-<li><p><strong>filter2</strong> (<em>str</em>) – Seconds filter</p></li>
+<li><p><strong>mag_filter</strong> (<em>str</em>) – Magnitude Axis Filter</p></li>
+<li><p><strong>col_filters</strong> (<em>list of 2 str</em>) – The two filters for the colour. The colours will be col_filter[0]-col_filter[1].</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
