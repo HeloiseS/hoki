@@ -20,7 +20,8 @@ class AgeWizard(object):
         Parameters
         ----------
         obs_df: pandas.DataFrame
-            Observational data. MUST contain a logT and logL column.
+            Observational data. MUST contain a logT and logL column (for HRD comparison) or a col and mag column
+            (for CMD comparison)
         model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
             Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
             path to an HR Diagram file or a pickled CMD.
@@ -29,10 +30,6 @@ class AgeWizard(object):
         # Making sure the osbervational properties are given in a format we can use.
         if not isinstance(obs_df, pd.DataFrame):
             raise HokiFormatError("Observations should be stored in a Data Frame")
-
-        # This will need to be re-asessed when I put in a feature for colour magnitude diagrams.
-        # if 'logL' not in obs_df.columns or 'logT' not in obs_df.columns:
-        # raise HokiFormatError("obs_df needs to contain a logL and a logT column")
 
         if 'name' not in obs_df.columns:
             warnings.warn("We expect the name of sources to be given in the 'name' column. "
@@ -90,10 +87,6 @@ class AgeWizard(object):
             None or pandas.DataFrame containing the multiplied pdf.
 
         """
-        # if self.pdfs is None:
-        #    raise AttributeError('self.pdfs is not yet defined -- have you run AgeWizard.calculate_pdfs()?')
-        # warnings.warn('self.pdfs not yet defined -- running AgeWizard.calc_pdfs()', UserWarning)
-        # self.calc_pdfs()
 
         self.multiplied_pdf = multiply_pdfs(self.pdfs, not_you, smart=smart)
 
@@ -137,19 +130,29 @@ class AgeWizard(object):
         numpy.array containing the probabilities.
 
         """
+        # Selects only the rows corresponding to the range age_range[0] to age_range[1] (inclusive)
+        # and then we sum the probabilities up for each column.
         probability = self.pdfs.drop('time_bins', axis=1)[
             (round(self.pdfs.time_bins, 2) >= min(age_range)) & (round(self.pdfs.time_bins, 2) <= max(age_range))].sum()
+
+        # A Series is returned but I prefer giving the np.array....
+        # TODO: I'm rethinking this -- maybe I should give the series.
         return probability.values
 
 
 def find_coordinates(obs_df, model):
     """
+    Finds the coordinates on a BPASS CMD or HRD that correspond to the given observations
 
     Parameters
     ----------
-    obs_df:
+    obs_df: pandas.DataFrame
+        Observational data. MUST contain a logT and logL column (for HRD comparison) or a col and mag column
+        (for CMD comparison)
 
-    model:
+    model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
+        Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
+        path to an HR Diagram file or a pickled CMD.
 
     Returns
     -------
@@ -205,6 +208,7 @@ def _find_hrd_coordinates(obs_df, myhrd):
 
         try:
             T=float(T)
+            # Finds the index that is at the minimum distance in Temperature space and adds it to the list
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
         except ValueError:
             warnings.warn("T="+str(T)+" cannot be converted to a float", HokiUserWarning)
@@ -212,6 +216,7 @@ def _find_hrd_coordinates(obs_df, myhrd):
 
         try:
             L=float(L)
+            # Finds the index that is at the minimum distance in Luminosity space and adds it to the list
             L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0]))
         except ValueError:
             warnings.warn("L="+str(L)+" cannot be converted to a float", HokiUserWarning)
@@ -227,7 +232,7 @@ def _find_cmd_coordinates(obs_df, mycmd):
     Parameters
     ----------
     obs_df: pandas.DataFrame
-        Observational data. MUST contain a logT and logL column.
+        Observational data. MUST contain a col and mag column.
     mycmd: hoki.cmd.CMD
         BPASS CMD
 
@@ -260,6 +265,7 @@ def _find_cmd_coordinates(obs_df, mycmd):
 
         try:
             col=float(col)
+            # Finds the index that is at the minimum distance in Colour space and adds it to the list
             col_i.append(int((np.where(abs(mycmd.col_range - col) == abs(mycmd.col_range - col).min()))[0]))
         except ValueError:
             warnings.warn("Colour="+str(col)+" cannot be converted to a float", HokiUserWarning)
@@ -267,6 +273,7 @@ def _find_cmd_coordinates(obs_df, mycmd):
 
         try:
             mag=float(mag)
+            # Finds the index that is at the minimum distance in Magnitude space and adds it to the list
             mag_i.append(int((np.where(abs(mycmd.mag_range - mag) == abs(mycmd.mag_range - mag).min()))[0]))
         except ValueError:
             warnings.warn("Magnitude="+str(mag)+" cannot be converted to a float", HokiUserWarning)
@@ -299,11 +306,13 @@ def calculate_pdfs(obs_df, model):
     Age Probability Distribution Functions in a pandas.DataFrame.
 
     """
+    # Checking whether it;s HRD or CMD
     if isinstance(model, hoki.hrdiagrams.HRDiagram):
         x_coord, y_coord = find_coordinates(obs_df, model)
     if isinstance(model, hoki.cmd.CMD):
-        y_coord, x_coord = find_coordinates(obs_df, model)
+        y_coord, x_coord = find_coordinates(obs_df, model) # yeah it's reversed... -_-
 
+    # If source names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
@@ -312,22 +321,32 @@ def calculate_pdfs(obs_df, model):
 
     pdfs = []
 
+    # Time to calcualte the pdfs
     for i, name in zip(range(obs_df.shape[0]), source_names):
-        xi, yi = x_coord[i], y_coord[i]
+        xi, yi = x_coord[i], y_coord[i] # just saving space
 
+        # Here we take care of the possibility that a coordinate is a NaN
         if np.isnan(xi) or np.isnan(yi):
-            warnings.warn("NaN Value encountered in (T,L) coordinates for source: " + name, HokiUserWarning)
-            pdfs.append([0] * 51)
+            warnings.warn("NaN Value encountered in coordinates for source: " + name, HokiUserWarning)
+            pdfs.append([0] * 51) # Probability is then 0 at all times - That star doesn't exist in our models
             continue
 
+        # Here we fill our not-yet-nromalised distribution
         distrib_i = []
         for model_i in model:
+            # For each time step i, we retrieve the proba in CMD_i or HRD_i and fill our distribution element distrib_i
+            # with it. At the end of the for loop we have iterated over all 51 time bins
             distrib_i.append(model_i[xi, yi])
 
+        # Then we normalise, so that we have proper probability distributions
         pdf_i = normalise_1d(distrib_i)
+
+        # finally our pdf is added to the list
         pdfs.append(pdf_i.tolist())
 
+    # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
     pdf_df = pd.DataFrame((np.array(pdfs)).T, columns=source_names)
+    # We add the time bins in there because it can make plotting extra convenient.
     pdf_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
 
     return pdf_df
@@ -350,22 +369,27 @@ def multiply_pdfs(pdf_df, not_you=None, smart=True):
     """
     assert isinstance(pdf_df, pd.DataFrame)
 
+    # We start our combined pdf with a list of 1s. We'll the multiply each pdf in sequence.
+
     combined_pdf = [1] * pdf_df.shape[0]
+
+    # We want to allow the user to exclude certain columns -- we drop them here.
     if not_you:
         try:
             pdf_df = pdf_df.drop(labels=not_you, axis=1)
-            #print('Labels: '+str(not_you)+' succesfully excluded.')
         except KeyError as e:
             message = 'FEATURE DISABLED'+'\nKeyError'+str(e)+'\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
                                                               'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
                                                               'Make sure the labels your listed are spelled correctly:)'
             warnings.warn(message, HokiUserWarning)
 
+    # We also must be careful not to multiply the time bin column in there so we have a list of the column names
+    # that remain after the "not_you" exclusion minus the time_bins column.
     columns = [col for col in pdf_df.columns if "time_bins" not in col]
 
     if smart:
         columns = [col for col in columns if round(sum(pdf_df[col]), 2) != 0.0]
-        # smart mode automatically doesn't take into account the columsn that add up to a proba of 0
+        # smart mode automatically doesn't take into account the columnd that add up to a proba of 0
         # this happens when matching coordinates can't be found for an observation.
 
     for col in columns:  # pdf_df.columns[:-1]:
