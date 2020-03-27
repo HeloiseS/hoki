@@ -9,9 +9,10 @@ from matplotlib import ticker
 import matplotlib.cm as cm
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 import warnings
+from hoki.utils.hoki_object import HokiObject
 
 
-class HRDiagram(object):
+class HRDiagram(HokiObject):
     """
     **A class containing the HR diagram data produced by BPASS.**
 
@@ -95,10 +96,6 @@ class HRDiagram(object):
 
 
     """
-    # Just some BPASS things
-    t = BPASS_TIME_BINS
-    dt = BPASS_TIME_INTERVALS
-    _time_weights = BPASS_TIME_WEIGHT_GRID
 
     # HRD coordinates
     T_coord = np.arange(0.1, 10.1, 0.1)
@@ -348,9 +345,9 @@ class HRDiagram(object):
     def _apply_time_weighting(self):
         """ Weighs all 51 grids by the number of years in each bin."""
 
-        self.high_H = self.high_H_not_weighted*self._time_weights
-        self.medium_H = self.medium_H_not_weighted*self._time_weights
-        self.low_H = self.low_H_not_weighted*self._time_weights
+        self.high_H = self.high_H_not_weighted*self.time_weight_grid
+        self.medium_H = self.medium_H_not_weighted*self.time_weight_grid
+        self.low_H = self.low_H_not_weighted*self.time_weight_grid
 
     # Now we can index HR diagrams!
     def __getitem__(self, item):
