@@ -55,8 +55,8 @@ class TestAgeWizard(object):
 
     def test_combine_pdfs_not_you(self):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
-        wiz.aggregate_pdfs(not_you=['star1'])
-        cpdf = wiz.aggregate_pdf.pdf
+        wiz.calculate_sample_pdf(not_you=['star1'])
+        cpdf = wiz.sample_pdf.pdf
         assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0, 0.774602971512809])) == 2, "combined pdf is not right"
 
     def test_most_likely_age(self):
@@ -70,8 +70,8 @@ class TestAgeWizard(object):
 
     def test_combine_pdfs(self):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
-        wiz.aggregate_pdfs()
-        assert np.isclose(wiz.aggregate_pdf.pdf[9], 0.2715379752638662), "Something is wrong with the combined_Age PDF"
+        wiz.calculate_sample_pdf()
+        assert np.isclose(wiz.sample_pdf.pdf[9], 0.2715379752638662), "Something is wrong with the combined_Age PDF"
 
     def test_calculate_p_given_age_range(self):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
@@ -145,34 +145,34 @@ class TestNormalise1D(object):
 
 class TestCalculatePDFs(object):
     def test_fake_input(self):
-        pdf_df = au.calculate_pdfs(fake_hrd_input, myhrd)
+        pdf_df = au.calculate_individual_pdfs(fake_hrd_input, myhrd)
         assert 'star1' in pdf_df.columns, "Column name issue"
         assert int(sum(pdf_df.star1)) == 1, "PDF not calculated correctly"
 
     def test_input_without_name(self):
-        pdf_df = au.calculate_pdfs(no_name_input, myhrd)
+        pdf_df = au.calculate_individual_pdfs(no_name_input, myhrd)
         assert 's1' in pdf_df.columns, "Column names not created right"
 
     def test_bad_input(self):
-        pdf_df = au.calculate_pdfs(bad_hrd_input2, myhrd)
+        pdf_df = au.calculate_individual_pdfs(bad_hrd_input2, myhrd)
         assert not np.isnan(sum(pdf_df.s0)), "somwthing went wrong"
-        #assert np.isnan(sum(distribution_df.s1)), "somwthing went wrong"
+        #assert np.isnan(sum(distributions_df.s1)), "somwthing went wrong"
 
 
-class TestAggregatePDFs(object):
+class TestCalculateSamplePDF(object):
     def test_basic(self):
         distributions = au.calculate_distributions(fake_hrd_input, myhrd)
-        combined = au.calculate_aggregate_pdf(distributions)
+        combined = au.calculate_sample_pdf(distributions)
         assert np.isclose(combined.pdf[9], 0.2715379752638662), "combined PDF not right"
 
     def test_drop_bad(self):
         distributions = au.calculate_distributions(fake_hrd_input, myhrd)
-        combined = au.calculate_aggregate_pdf(distributions, not_you=[3])
+        combined = au.calculate_sample_pdf(distributions, not_you=[3])
         assert np.isclose(combined.pdf[9], 0.2715379752638662), "combined PDF not right"
 
     def test_drop_good(self):
         distributions = au.calculate_distributions(fake_hrd_input, myhrd)
-        combined = au.calculate_aggregate_pdf(distributions, not_you=['star1'])
+        combined = au.calculate_sample_pdf(distributions, not_you=['star1'])
         assert np.isclose(combined.pdf[9], 0.774602971512809), "combined PDF not right"
 
 
