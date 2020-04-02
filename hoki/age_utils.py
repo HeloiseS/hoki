@@ -95,7 +95,7 @@ class AgeWizard(HokiObject):
         index = self.pdfs.idxmax(axis=0).tolist()
         return self.t[index]
 
-    def calculate_p_given_age_range(self, age_range=None):
+    def calculate_p_given_age_range(self, age_range):
         """
         Calculates the probability that each source has age within age_range
 
@@ -111,8 +111,7 @@ class AgeWizard(HokiObject):
         """
         # Selects only the rows corresponding to the range age_range[0] to age_range[1] (inclusive)
         # and then we sum the probabilities up for each column.
-        probability = self.pdfs[(np.round(self.t, 2) >= min(age_range))
-                                & (np.round(self.t, 2) <= max(age_range))].sum()
+        probability = calculate_p_given_age_range(self.pdfs, age_range)
 
         return probability
 
@@ -382,53 +381,25 @@ def calculate_sample_pdf(distributions_df, not_you=None):
     return combined_df
 
 
-"""
-def multiply_pdfs(distributions_df, not_you=None, smart=True):
-
-    Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
+def calculate_p_given_age_range(pdfs, age_range=None):
+    """
+    Calculates the probability that each source has age within age_range
 
     Parameters
     ----------
-    distributions_df: pandas.DataFrame
-        DataFrame containing probability distribution functions
-    not_you: list, optional
-        List of the column names to ignore. Default is None so all the pdfs are multiplied
+    pdfs: pandas.DataFrame
+        Age Probability Distributions Functions
+    age_range: list or tuple of 2 values
+        Minimum and Maximum age to consider (inclusive).
 
     Returns
     -------
-    Combined Probability Distribution Function in a pandas.DataFrame.
+    numpy.array containing the probabilities.
 
-    assert isinstance(distributions_df, pd.DataFrame)
+    """
+    # Selects only the rows corresponding to the range age_range[0] to age_range[1] (inclusive)
+    # and then we sum the probabilities up for each column.
+    probability = pdfs[(np.round(BPASS_TIME_BINS, 2) >= min(age_range))
+                            & (np.round(BPASS_TIME_BINS, 2) <= max(age_range))].sum()
 
-    # We start our combined pdf with a list of 1s. We'll the multiply each pdf in sequence.
-
-    combined_pdf = [1] * distributions_df.shape[0]
-
-    # We want to allow the user to exclude certain columns -- we drop them here.
-    if not_you:
-        try:
-            distributions_df = distributions_df.drop(labels=not_you, axis=1)
-        except KeyError as e:
-            message = 'FEATURE DISABLED'+'\nKeyError'+str(e)+'\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
-                                                              'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
-                                                              'Make sure the labels your listed are spelled correctly:)'
-            warnings.warn(message, HokiUserWarning)
-
-    # We also must be careful not to multiply the time bin column in there so we have a list of the column names
-    # that remain after the "not_you" exclusion minus the time_bins column.
-    columns = [col for col in distributions_df.columns if "time_bins" not in col]
-
-    if smart:
-        columns = [col for col in columns if round(sum(distributions_df[col]), 2) != 0.0]
-        # smart mode automatically doesn't take into account the columnd that add up to a proba of 0
-        # this happens when matching coordinates can't be found for an observation.
-
-    for col in columns:  # distributions_df.columns[:-1]:
-        combined_pdf *= distributions_df[col].values
-
-    combined_df = pd.DataFrame(normalise_1d(combined_pdf))
-    combined_df.columns = ['pdf']
-
-    return combined_df
-
-"""
+    return probability
