@@ -10,22 +10,6 @@ Here is a list of dependencies for `hoki`. If you choose to `pip` install it, th
 - matplotlib
 - pyyaml
 
-##########
-**hoki.load**
-##########
-
-
-.. automodule:: hoki.load
-    :members:
-
-################
-**hoki.hrdiagrams**
-################
-
-
-.. automodule:: hoki.hrdiagrams
-    :members:
-
 
 ################
 **hoki.cmd**
@@ -62,6 +46,25 @@ BPASS_TIME_WEIGHT_GRID
 
 dummy_dict
    Dictionary linking column number to column name for the large BPASS array traditionally called dummy. See the BPASS manual for a text version of the numner/name correspondance. 
+
+
+################
+**hoki.hrdiagrams**
+################
+
+
+.. automodule:: hoki.hrdiagrams
+    :members:
+
+
+##########
+**hoki.load**
+##########
+
+
+.. automodule:: hoki.load
+    :members:
+
 
 ##########
 **hoki.spec**

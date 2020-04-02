@@ -3,7 +3,10 @@ What is Hoki?
 #############
 
 .. version:: 
-   `v1.2.0-b0 <https://github.com/HeloiseS/hoki>`__!
+   `v1.50 <https://github.com/HeloiseS/hoki>`__!
+
+.. note:: 
+   NEW FEATURES: Check out AgeWizard - A pipeline to systematically age any resolved stellar population!
 
 *************************************************
 Bridging the gap between theory and observations 
