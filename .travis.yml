@@ -69,7 +69,7 @@ env:
 
         # PySynPhot testing options
         # The PYSYB_CDBS variable has to be set to a location with test files
-        - PYSYN_CDBS='${TRAVIS_BUILD_DIR}/hoki/hoki/data/cdbs'
+        - PYSYN_CDBS=${TRAVIS_BUILD_DIR}/hoki/hoki/data/cdbs
 
 matrix:
 
