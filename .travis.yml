@@ -40,14 +40,13 @@ env:
         - MAIN_CMD='python setup.py'
         - SETUP_CMD='test'
         - EVENT_TYPE='pull_request push'
-        
 
-        
+
         # List runtime dependencies for the package that are available as conda
         # packages here.
         - CONDA_DEPENDENCIES=''
         - CONDA_DEPENDENCIES_DOC='sphinx-astropy'
-        
+
         # List other runtime dependencies for the package that are available as
         # pip packages here.
         - PIP_DEPENDENCIES='pandas matplotlib numpy pyyaml'
@@ -67,6 +66,10 @@ env:
         # in FLAKE8_OPT, for example:
         # - FLAKE8_OPT='--ignore=E501'
         - FLAKE8_OPT=''
+
+        # PySynPhot testing options
+        # The PYSYB_CDBS variable has to be set to a location with test files
+        - PYSYN_CDBS='hoki/data/cdbs'
 
 matrix:
 
