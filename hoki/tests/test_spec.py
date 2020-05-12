@@ -1,6 +1,5 @@
 import pandas as pd
-from hoki import spec
-from hoki import load
+from hoki import spec, load
 import numpy as np
 import os
 import pkg_resources
@@ -65,7 +64,8 @@ class TestLoadBandpass():
 
     def test_custom_filter(self):
         bp = spec.load_bandpass(f"{data_path}/LICK.LICK.U.xml")
-        assert type(bp) == psp.spectrum.ArraySpectralElement
+        assert type(bp) == psp.spectrum.ArraySpectralElement,\
+               "Wrong output type for custom filter"
 
     def test_file_not_found(self):
         with pytest.raises(FileNotFoundError):
@@ -105,22 +105,22 @@ class TestBPASStoPSPSpectrum():
     def test_input_pandas(self):
         sp = spec.bpass_to_psp_spectrum(data.WL,data["6.0"])
         assert type(sp) == psp.spectrum.ArraySourceSpectrum,\
-            "A panda.Series is not taken as an input"
+            "A panda.Series is not recognised as a valid input"
 
     def test_input_numpy(self):
         sp = spec.bpass_to_psp_spectrum(data.WL.values, data["6.0"])
         assert type(sp) == psp.spectrum.ArraySourceSpectrum,\
-            "A numpy.array is not taken as an input"
+            "A numpy.array is not recognised as a valid input"
 
     sp = spec.bpass_to_psp_spectrum(data.WL.values, data["6.0"])
 
     def test_wave_output(self):
         assert np.isclose(self.sp.wave, data.WL.values).all(),\
-            "The outputted wavelength bins are incorrect"
+            "The output wavelength bins are incorrect"
 
     def test_flux_output(self):
         assert np.isclose(self.sp.flux, data["6.0"].values*3.846e33).all(),\
-            "The outputted flux is incorrecly transformed"
+            "The output flux is incorrecly transformed"
 
     def test_units_output(self):
         assert type(self.sp.fluxunits) == psp.units.Flam,\

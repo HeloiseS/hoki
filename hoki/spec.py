@@ -43,7 +43,7 @@ def load_bandpass(string, verbose=False):
         The name of a built-in pysynphot filter or the path to a custom filter
         file.
     verbose : boolean
-        If True print output is shown. Default=False
+        Print logging output messages if True. Default=False.
 
     Returns
     -------
