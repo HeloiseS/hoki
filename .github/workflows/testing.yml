@@ -30,11 +30,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        pip install pytest-cov
-        pytest --verbose
+    - name: Run Tox
+      run: tox -e py
+        
+    #- name: Test with pytest
+    #  run: |
+    #    pip install wheel
+    #    pip install pytest
+    #    pip install pytest-cov
+    #    pytest 
       #pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
         
     # Runs a single command using the runners shell
