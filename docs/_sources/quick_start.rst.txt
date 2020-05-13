@@ -1,0 +1,187 @@
+#############
+Quick Start
+#############
+
+
+**************
+Set-up
+**************
+
+Install Hoki
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To install the most recent stable release of hoki you can use:
+
+.. code-block:: none
+
+   sudo pip3 install --user hoki 
+   
+If you are feeling adventurous and want the most recent (in development) version of hoki, you can clone our `GitHub repository <https://github.com/HeloiseS/hoki>`__
+
+Download the tutorials
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+They can be found in the side-bar to read, but you can dowload the `jupyter notebooks <https://github.com/HeloiseS/hoki_tutorials>`__ so you can play with them later. 
+
+Download the BPASS models
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+BPASS models can be downloaded from the BPASS:
+
+.. list-table::
+   :widths: 20 5 20 50
+   :header-rows: 1
+   
+   * - Download
+     - Hoki Compatible
+     - Release Date
+     - Reference
+   * - `BPASSv2.2 <https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl>`__
+     - Yes
+     - July 2018
+     - `Stanway & Eldridge (2018) <https://ui.adsabs.harvard.edu/abs/2018MNRAS.479...75S/abstract>`__
+   * - `BPASSv2.1 <https://drive.google.com/drive/folders/0B7vqPPPgOdtIdjdyV3JwODZ3TlU>`__
+     - untested
+     - October 2017
+     - `Eldridge, Stanway, Xiao, et al. (2017) <https://ui.adsabs.harvard.edu/abs/2017PASA...34...58E/abstract>`__
+   * - `BPASSv2.0 <https://drive.google.com/drive/folders/0B7vqPPPgOdtIfjUtb3RsV2JUOTFFX29WV1FZNURPMHAxTEtZQjhJOGtyNXZUTTNVSzFZazQ>`__
+     - untested
+     - --
+     - -- 
+   * - `BPASSv1 <https://bpass.auckland.ac.nz/1.html>`__
+     - untested
+     - --
+     - --
+
+``hoki`` is dedicated to being an interface with the BPASS models, but given the substancial size of the entire set of models, they are not downloaded upon installation of ``hoki``, and you should download the models you want to work on.
+
+
+***************
+Loading in Data
+***************
+.. tip::
+  More details on the outputs mentioned below can be found in the `BPASS manual <https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf>`__. 
+
+
+Stellar Population Outputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A stellar output file can be loaded in using the ``model_output()`` function in the ``load`` module. 
+
+.. code-block:: python
+   :linenos:
+   
+   from hoki import load
+   
+   output = load.model_output('path_to_output')
+   
+
+The function will figure out based on the file name what data is being loaded in and will return the appropriate data format: ``pandas.DataFrames`` in most cases, apart from HR diagrams, which have their own ``HRDiagrams`` class -- because they're quite a complex data structure. 
+
+Here we summarise the shape of the outputs (51 time bins) for a given metalicity and IMF. 
+
+.. list-table::
+   :header-rows: 1
+   
+   * - Output
+     - File Name Root
+     - Shape
+   * - Massive star type numbers
+     - numbers
+     - 51 x 21
+   * - Supernova Rates
+     - supernova
+     - 51 x 18
+   * - Energy and elemental yields
+     - yields
+     - 51 x 9
+   * - Stellar mass remaining at the end
+     - starmass
+     - 51 x 3
+   * - HR diagrams
+     - hrs
+     - 51 x 100 x 100 x 3 x 3
+
+
+Spectral Synthesis Outputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The spectral synthesis output files can be also loaded in using the ``model_output()`` function in the ``load`` module. 
+All outputs are returned as ``pandas.DataFrames`` with sensible column names. 
+
+.. code-block:: python
+   :linenos:
+   
+   from hoki import load
+   
+   output = load.model_output('path_to_output')
+   
+
+.. list-table::
+   :header-rows: 1
+   
+   * - Output
+     - File Name Root
+     - Shape
+   * - Spectra (SEDs)
+     - spectra
+     - 52x10E5
+   * - Ionizing flux predictions
+     - ionizing
+     - 51x5
+   * - Colours (broad-band)
+     - colours
+     - 51x26
+
+The full suite of stellar models is also available from the BPASS website (careful, the file is big ~50GB), and they are required to make colour magnitude diagram (CMD) such as in Figure 24 of `BPASSv2.1 <https://bpass.auckland.ac.nz/8.html>`__. Creating these CMD and exploring these files is very tricky - in a future release ``hoki`` will offer features to make this straight forward. 
+
+Stellar Models
+^^^^^^^^^^^^^^^^
+In addition to the population and spectral synthesis outputs, the stellar models are also available as a BPASS data product. They can be downloaded from the `google drive <ttps://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl>`__: the name of the folder containing the most recent models is **bpass-v2.2-newmodels**.
+
+.. warning:: These folder is ~50 GB. Make sure you have a good internet connection and sufficient space. 
+
+The stellar models are required to make Colour-Magnitude Diagrams (see RECIPES) and other deeper searches within the models that are not summarised in the population or spectral synthesis outputs. 
+
+.. note:: 
+   This is where the files names ``model_input`` become necesary. They are not human readable but are used within ``hoki`` to apply the correct algorithm to the stellar models in order to collate them correctly. (So don't panic if you open them and wonder what is going on). 
+
+
+***************
+Citing Hoki
+***************
+
+Hoki has been reviewed and published by the Journal Of Open Source Software! Click the button below to access the online publication. 
+
+.. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
+   :target: https://doi.org/10.21105/joss.01987
+
+If you use `hoki` for your science, please include the following reference in your paper:
+
+.. code-block:: none
+
+   @ARTICLE{2020JOSS....5.1987S,
+       author = {{Stevance}, Heloise and {Eldridge}, J. and {Stanway}, Elizabeth},
+       title = "{Hoki: Making BPASS accessible through Python}",
+       journal = {The Journal of Open Source Software},
+     keywords = {Python, galaxies, Batchfile, SED, astronomy, binary stars, Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
+        year = "2020",
+        month = "Jan",
+        volume = {5},
+        number = {45},
+        eid = {1987},
+        pages = {1987},
+        doi = {10.21105/joss.01987},
+        archivePrefix = {arXiv},
+        eprint = {2001.11069},
+        primaryClass = {astro-ph.SR},
+        adsurl = {https://ui.adsabs.harvard.edu/abs/2020JOSS....5.1987S},
+       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+    }
+
+
+-----------------------------
+
+.. seealso:: 
+   For dedicated tutorials about specific aspecs of hoki and BPASS, check our RECIPES section in the side bar!
+
+

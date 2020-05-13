@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>What is Hoki? &mdash; hoki beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start" href="quick_start.html" />
+    <link rel="prev" title="Welcome to Hoki!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is Hoki?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bridging-the-gap-between-theory-and-observations">Bridging the gap between theory and observations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#built-with-data-analysis-in-mind">Built with data analysis in mind</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>What is Hoki?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="quick_start.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Hoki!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="what-is-hoki">
+<h1>What is Hoki?<a class="headerlink" href="#what-is-hoki" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>NEW FEATURES: Check out AgeWizard - A pipeline to systematically age any resolved stellar population!</p>
+</div>
+<div class="section" id="bridging-the-gap-between-theory-and-observations">
+<h2>Bridging the gap between theory and observations<a class="headerlink" href="#bridging-the-gap-between-theory-and-observations" title="Permalink to this headline">¶</a></h2>
+<div class="sidebar">
+<p class="sidebar-title">What is BPASS?</p>
+<p>The <strong>Binary Populations And Spectral Synthesis (BPASS)</strong> code simulates stellar populations and follows their evolution until death. Including binary evolution is <strong>crucial to correctly interpreting</strong> astronomical observations. The detailed follow-up of the stellar evolution within the code allows the retreival of important information such as supernova and gravitational wave event rates, giving us the ability to understand the properties of the stellar populations that are the precursors of these events.</p>
+</div>
+<p>Historically, theoretical models have been released to the community with the expectation that users would create their own data handling scripts as they perform the analysis. This was in line with a research culture where most people had their own code, resulting in a duplication of effort and creating the potential for a reproducibility crisis, as most personal scripts are not shared with the community.</p>
+<p>In order to facilitate the application of BPASS to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in a stream-lined, intuitive manner.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><strong>Hoki is a dedicated python package designed to provide a user friendly interface to the BPASS models in order to bridge the gap between theory and observations.</strong></div>
+</div>
+</div></blockquote>
+<p>The varsatility of <strong>Hoki</strong> allows you to focus on the science, and worry less about the technical nitty gritty that comes with using the varied outputs of a theoretical code.</p>
+</div>
+<div class="section" id="built-with-data-analysis-in-mind">
+<h2>Built with data analysis in mind<a class="headerlink" href="#built-with-data-analysis-in-mind" title="Permalink to this headline">¶</a></h2>
+<p>Our vision for <code class="docutils literal notranslate"><span class="pre">hoki</span></code> is to provide <strong>tools that can be integrated in your everyday workflow</strong> and make your life extra simple! Do you want to spend ages figuring out 5 by 100 by 100 by 3 by 3 data object contained in a single ASCII file? Great news, you don’t need to!</p>
+<p>We leverage the powerful capabilites of ubiquitous packages such as <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> in order to make the outputs of BPASS easily accessible and usable for scientific data analysis. This way you get to spend more time looking at data and less time looking at code.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

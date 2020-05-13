@@ -1,0 +1,42 @@
+#############
+What is Hoki?
+#############
+
+.. version:: 
+   `v1.50 <https://github.com/HeloiseS/hoki>`__!
+
+.. note:: 
+   NEW FEATURES: Check out AgeWizard - A pipeline to systematically age any resolved stellar population!
+
+*************************************************
+Bridging the gap between theory and observations 
+*************************************************
+
+
+.. sidebar:: What is BPASS?
+
+   The **Binary Populations And Spectral Synthesis (BPASS)** code simulates stellar populations and follows their evolution until death. Including binary evolution is **crucial to correctly interpreting** astronomical observations. The detailed follow-up of the stellar evolution within the code allows the retreival of important information such as supernova and gravitational wave event rates, giving us the ability to understand the properties of the stellar populations that are the precursors of these events. 
+
+
+Historically, theoretical models have been released to the community with the expectation that users would create their own data handling scripts as they perform the analysis. This was in line with a research culture where most people had their own code, resulting in a duplication of effort and creating the potential for a reproducibility crisis, as most personal scripts are not shared with the community.  
+
+In order to facilitate the application of BPASS to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in a stream-lined, intuitive manner. 
+
+    | **Hoki is a dedicated python package designed to provide a user friendly interface to the BPASS models in order to bridge the gap between theory and observations.**
+
+The varsatility of **Hoki** allows you to focus on the science, and worry less about the technical nitty gritty that comes with using the varied outputs of a theoretical code.   
+
+
+
+*********************************
+Built with data analysis in mind
+*********************************
+
+Our vision for ``hoki`` is to provide **tools that can be integrated in your everyday workflow** and make your life extra simple! Do you want to spend ages figuring out 5 by 100 by 100 by 3 by 3 data object contained in a single ASCII file? Great news, you don't need to! 
+
+We leverage the powerful capabilites of ubiquitous packages such as ``numpy``, ``pandas`` and ``matplotlib`` in order to make the outputs of BPASS easily accessible and usable for scientific data analysis. This way you get to spend more time looking at data and less time looking at code. 
+
+
+
+
+

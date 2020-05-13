@@ -1,0 +1,632 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Colour Magnitude Diagrams\n",
+    "---\n",
+    "\n",
+    "Download all the Jupyter notebooks from: https://github.com/HeloiseS/hoki/tree/master/tutorials"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Initial Imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "from hoki.cmd import CMD\n",
+    "from hoki.load import set_models_path, unpickle\n",
+    "import pickle\n",
+    "import numpy as np\n",
+    "\n",
+    "%matplotlib inline\n",
+    "plt.style.use('tuto.mplstyle')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Getting the Stellar models and input files\n",
+    "\n",
+    "Colour Magnitude Diagrams (CMDs) are created by reading in the [BPASS](https://bpass.auckland.ac.nz/9.html) stellar models listed in the `model_input` files that can be found in the BPASS output folders (e.g. *bpass_v2.2.1_imf135_300*). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.\n",
+    "\n",
+    "**NOTE: You will be able to run the cells in the section \"Loading a pickled CMD file\" even if you can't download the full set of stellar models **\n",
+    "\n",
+    "The stellar models and input files can be downloaded from [the google drive](https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl) (*bpass-v2.2-newmodels* for the models and e.g. *bpass_v2.2.1_imf135_300* to get the required `model_input` files).\n",
+    "Then you will have to change the path to the models in the `settings.yaml` file -- this can be done using the `set_models_path` function contained in the `hoki.load` module: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Looks like everything went well! You can check the path was correctly updated by looking at this file:\n",
+      "/home/fste075/hoki/hoki/data/settings.yaml\n"
+     ]
+    }
+   ],
+   "source": [
+    "# The following path is valid on my machine - make sure you put the right ABSOLUTE path for your system\n",
+    "set_models_path(path='/home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**NOTE: You'll probably have to reload hoki or restart the kernel at this point if you've jsut updated the yaml file :)**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# CMD objects\n",
+    "\n",
+    "### Making the CMDs\n",
+    "\n",
+    "To create a synthetic CMD, `hoki` creates a grid in colour-magnitude space and then consults the entire set of stellar models to fill that grid. It is basically a histogram - the value of each cell/bin increases according to the proportion of the stellar population that falls into that bin. You could just plot this grid with a colour-map like an image, but we traditionally create contour plots for visualisation. \n",
+    "\n",
+    "In `hoki` you will be creating a `CMD()` object instanciated with a model of your choosing (a particular IMF and metallicity)- for this you need to provide the **location of a BPASS input file**.\n",
+    "\n",
+    "To know WHAT to do with this information, we also need to give the **two broad-band filters** we are interested in to make the plot filter2 Vs filter1-filter2 (e.g. V Vs B-V). This is given in the `CMD.make()` method, which actually creates and fills the CMD grids. \n",
+    "\n",
+    "**NOTE: This step is the most time consuming because there are thousands and thousands of models to look at. For that reason it also take much longer for the binary stellar models than the single star models to make a CMD. In the next section we will show you how to avoid having to go repeat his step in the future**\n",
+    "\n",
+    "The good news is that **once you have instanciated and 'made' the CMD object, plotting it is VERY fast** and you have a CMD for **each time bin**, which are also trivial and quick to access. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/home/fste075/hoki/hoki/cmd.py:191: RuntimeWarning: divide by zero encountered in log10\n",
+      "  self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))\n",
+      "/home/fste075/hoki/hoki/cmd.py:207: RuntimeWarning: divide by zero encountered in log10\n",
+      "  self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ONLY RUN IF YOU HAVE THE MODELS IN YOUR MACHINE\n",
+    "\n",
+    "# Update this path if you want to run this cell\n",
+    "input_file = '/home/fste075/BPASS_hoki_dev/bpass_v2.2.1_imf135_300/input_bpass_z020_bin_imf135_300'\n",
+    "mycmd = CMD(input_file)\n",
+    "\n",
+    "# actually makes and fills the grids - this is the time and memory consuming step\n",
+    "mycmd.make(mag_filter='V', col_filters=['B', 'V'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Below is a summary illustration of what the synthetic CMDs are and what a `CMD()` instance is. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "<img src=\"CMDs.png\" alt=\"Drawing\" style=\"width: 600px;\"/>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can easily access the grid by simply calling the attribute `CMD.grid`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[[0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        ...,\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.]],\n",
+       "\n",
+       "       [[0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        ...,\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.]],\n",
+       "\n",
+       "       [[0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        ...,\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.]],\n",
+       "\n",
+       "       ...,\n",
+       "\n",
+       "       [[0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        ...,\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.]],\n",
+       "\n",
+       "       [[0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        ...,\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.]],\n",
+       "\n",
+       "       [[0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        ...,\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.],\n",
+       "        [0., 0., 0., ..., 0., 0., 0.]]])"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mycmd.grid"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(51, 240, 100)"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mycmd.grid.shape"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "But `CMD` objects are also indexable! "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       ...,\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.]])"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mycmd[0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(240, 100)"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mycmd[0].shape"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This would give you the grid for log(age/years)=6.0, but it can get tricky to find the right age CMD grid just based on indices, so for that purpose you can use `CMD.at_log_age()`:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       ...,\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.],\n",
+       "       [0., 0., 0., ..., 0., 0., 0.]])"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mycmd.at_log_age(log_age=6.0)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Changing the resolution of the CMD grids"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As we can see we have 51  time bins, 240 magnitude intervals and 100 colour intervals. \n",
+    "\n",
+    "The number of time bins is fixed by BPASS but you can chose the size of your colour-magnitude grid and its resolution when you instanciate a `CMD` object."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "blurry_cmd = CMD(input_file, col_lim=[-3, 7], mag_lim=[-14, 10], res_el=0.75)\n",
+    "blurry_cmd.make(mag_filter='V', col_filters=['B', 'V'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Plotting the CMDs\n",
+    "\n",
+    "Like I said above, once the grid is made and filled, plotting is quick and straight forward. As in other `hoki` tools the plotting function returns the plot, which you can store in a variable to add your own labels and customize limits. \n",
+    "\n",
+    "Similarly to the `hoki.HRDiagrams` plots, the contours are on a log scale. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.figure(figsize=(8,6))\n",
+    "\n",
+    "myplot = mycmd.plot(log_age=6.8) # Here you can chose the time bin you want to plot.\n",
+    "myplot.set_xlim([-1,2.0])\n",
+    "myplot.set_ylim([2,-10])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As with the HRDiagrams, you can also tell the plotting function where your want it to plot your data!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, ax = plt.subplots(1,2, figsize=(15,5))\n",
+    "\n",
+    "mycmd.plot(log_age=6.8, loc=ax[0]) # Here you can chose the time bin you want to plot.\n",
+    "ax[0].set_xlim([-3,3.0])\n",
+    "ax[0].set_ylim([2,-10])\n",
+    "ax[0].set_title('High resolution')\n",
+    "\n",
+    "blurry_cmd.plot(log_age=6.8, loc=ax[1]) # Here you can chose the time bin you want to plot.\n",
+    "ax[1].set_xlim([-3,3.0])\n",
+    "ax[1].set_ylim([2,-10])\n",
+    "ax[1].set_title('Low resolution')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#  Pickle CMDs  - don't make them twice!\n",
+    "\n",
+    "Because it is a little time consuming to create the synthetic CMDs, we actually recommend you [pickle](https://www.datacamp.com/community/tutorials/pickle-python-tutorial) your CMD objects. This will allow you to re-use them in the future and plot them virtually instantly, by-passing the `CMD.make()` step. \n",
+    "\n",
+    "### Loading a pickled CMD file\n",
+    "\n",
+    "We've provided a couple of pickled CMD files in the `./data/cmds/` directory for you to try even if you couldn't download the full sets of stellar models. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pickled_cmd = unpickle(path='./data/cmds/cmd_bv_z020_bin_imf135_300')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [],
+   "source": [
+    "plt.figure(figsize=(8,6))\n",
+    "\n",
+    "myplot = pickled_cmd.plot(log_age=6.8)\n",
+    "myplot.set_xlim([-1,2.0])\n",
+    "myplot.set_ylim([2,-10])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Pickling a CMD file\n",
+    "\n",
+    "Now let's make your own pickle file! If you have the stellar models and made the CMD in the previous sections of this tutorial, you can now save your work!\n",
+    "\n",
+    "All you need is the following code (feel free to change the output file name)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# First we open a file we can write into\n",
+    "outfile = open('./data/cmds/BV_CMD.pckl', 'wb')\n",
+    "# Then we call the 'dump' function from the pickle module to dump our cmd in our output file\n",
+    "pickle.dump(mycmd, outfile)\n",
+    "# And to avoid funny business we close our file. \n",
+    "outfile.close()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "new_pickled_cmd = unpickle(path='./data/cmds/BV_CMD.pckl')\n",
+    "\n",
+    "plt.figure(figsize=(8,6))\n",
+    "\n",
+    "myplot = new_pickled_cmd.plot(log_age=6.8)\n",
+    "myplot.set_xlim([-1,2.0])\n",
+    "myplot.set_ylim([2,-10])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Creating a publication-ready figure"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Just like with the HRDiagrams, the tool provided by `hoki` will allow you to make publication ready figures in not time!\n",
+    "\n",
+    "Let's make a plot comparing the CMDs for Cygnus OB2 and Upper Sco in B-V and U-V plots.\n",
+    "\n",
+    "First we need to load our data (which is provided in the ./data/cmds/ repository) - we also need to make sure our observational data is in **absolute** magnitude, because that's what our synthetic CMDs provide. If **extinction** is important in your osbervational data, you also need to take that into account. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Cygnus OB2 data\n",
+    "Av, cyg_U, cyg_B, cyg_V = np.genfromtxt('./data/cmds/cygnusob.dat', unpack=True, usecols=(7, 8, 9,10), skip_header=54)\n",
+    "\n",
+    "# Assumes Milky Way extinction\n",
+    "Ab = (1.324*Av)\n",
+    "Au = (1.531*Av)\n",
+    "\n",
+    "# Distance to Cyg OB2 and distance modulus\n",
+    "d_cygob2 = 1750 #pc\n",
+    "mu_cygob2 = 5*np.log10(d_cygob2)-5\n",
+    "\n",
+    "# Taking away the extinction and turning our mags into absolute mags\n",
+    "# Note it was derived from single star models so extinction may be a tad off\n",
+    "# for your science, feel free to do a better job of it ;)\n",
+    "cyg_U, cyg_B, cyg_V = cyg_U-Au-mu_cygob2 , cyg_B-Ab-mu_cygob2 , cyg_V-Av-mu_cygob2 \n",
+    "\n",
+    "# Now calculating colours\n",
+    "cyg_UV = cyg_U-cyg_V\n",
+    "cyg_BV = cyg_B-cyg_V"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Upper Sco data\n",
+    "p, usco_U, usco_B, usco_V = np.genfromtxt('./data/cmds/usco.dat', unpack=True, usecols=(1,2,3,4), skip_header=1)\n",
+    "\n",
+    "# Distance modulus - this time based on parallax.\n",
+    "# (Note I inverted parallax to make this tutorial quick - don't @ me.)\n",
+    "# Extinction is not a problem for this data set\n",
+    "mu = 5*np.log10(1/p)-5\n",
+    "usco_U, usco_B, usco_V = usco_U+mu, usco_B+mu, usco_V+mu\n",
+    "\n",
+    "# Calculating colours\n",
+    "usco_UV = usco_U-usco_V\n",
+    "usco_BV = usco_B-usco_V"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Unpickling our BV and UV cmds!\n",
+    "BV_cmd = unpickle(path='./data/cmds/cmd_bv_z020_bin_imf135_300')\n",
+    "UV_cmd = unpickle(path='./data/cmds/cmd_uv_z020_bin_imf135_300')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Now let's plot the data!**"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, ax = plt.subplots(2,2, figsize=(15,15))\n",
+    "\n",
+    "# This is a bit off on the colour axis which is probs just because of my conversion from Av to Ab and Au\n",
+    "UV_cmd.plot(log_age=6.8, loc=ax[0,0])\n",
+    "ax[0,0].scatter(cyg_UV, cyg_V, s=70, marker='x')\n",
+    "\n",
+    "BV_cmd.plot(log_age=6.8, loc=ax[0,1])\n",
+    "ax[0,1].scatter(cyg_BV, cyg_V, s=70, marker='x')\n",
+    "\n",
+    "myplot.set_xlim([-1,2.0])\n",
+    "\n",
+    "# this is not the same data as the paper\n",
+    "UV_cmd.plot(log_age=6.8, loc=ax[1,0])\n",
+    "ax[1,0].scatter(usco_UV, usco_V, s=100, marker='x')\n",
+    "\n",
+    "BV_cmd.plot(log_age=6.8, loc=ax[1,1])\n",
+    "ax[1,1].scatter(usco_BV, usco_V, s=100, marker='x')\n",
+    "\n",
+    "for axis in ax.reshape(4):\n",
+    "    axis.set_ylabel('V', fontsize=14)\n",
+    "    axis.set_ylim([2,-10])\n",
+    "\n",
+    "for i in [0,1]:\n",
+    "    ax[i,0].set_xlim([-2,4])\n",
+    "\n",
+    "    ax[i,1].set_xlim([-1,2])\n",
+    "\n",
+    "    \n",
+    "ax[0,0].text(1,0, 'Cygnus OB2\\nZ=0.020\\nlog(age)=6.8 yrs', fontsize=16)\n",
+    "ax[0,1].text(0.5,0, 'Cygnus OB2\\nZ=0.020\\nlog(age)=6.8 yrs', fontsize=16)\n",
+    "ax[1,0].text(1,0, 'USco\\nZ=0.020\\nlog(age)=6.8 yrs', fontsize=16)\n",
+    "ax[1,1].text(0.5,0, 'USco\\nZ=0.020\\nlog(age)=6.8 yrs', fontsize=16)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "\n",
+    "**YOU'RE ALL SET!**\n",
+    "\n",
+    "I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on `hoki` GitHub page [here](https://github.com/HeloiseS/hoki) or on the `hoki_tutorials` GitHub [there](https://github.com/HeloiseS/hoki_tutorials)."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

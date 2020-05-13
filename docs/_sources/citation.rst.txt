@@ -1,0 +1,32 @@
+################
+**Publication**
+################
+
+Hoki has been reviewed and published by the Journal Of Open Source Software! Click the button below to access the online publication. 
+
+.. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
+   :target: https://doi.org/10.21105/joss.01987
+
+If you use `hoki` for your science, please include the following reference in your paper:
+
+.. code-block:: none
+
+   @ARTICLE{2020JOSS....5.1987S,
+       author = {{Stevance}, Heloise and {Eldridge}, J. and {Stanway}, Elizabeth},
+       title = "{Hoki: Making BPASS accessible through Python}",
+       journal = {The Journal of Open Source Software},
+     keywords = {Python, galaxies, Batchfile, SED, astronomy, binary stars, Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
+        year = "2020",
+        month = "Jan",
+        volume = {5},
+        number = {45},
+        eid = {1987},
+        pages = {1987},
+        doi = {10.21105/joss.01987},
+        archivePrefix = {arXiv},
+        eprint = {2001.11069},
+        primaryClass = {astro-ph.SR},
+        adsurl = {https://ui.adsabs.harvard.edu/abs/2020JOSS....5.1987S},
+       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+    }
+

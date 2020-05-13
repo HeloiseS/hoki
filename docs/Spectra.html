@@ -1,0 +1,1302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Spectra &mdash; hoki beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Colour Magnitude Diagrams" href="CMDs.html" />
+    <link rel="prev" title="HR diagrams" href="HR_diagrams.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spectra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Initial-Imports">Initial Imports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#In-this-tutorial-you-will:">In this tutorial you will:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Loading-Spectra-in-hoki">Loading Spectra in <code class="docutils literal notranslate"><span class="pre">hoki</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Plotting-a-spectrum">Plotting a spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Comparing-to-some-real-data">Comparing to some real data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#NGC-4993">NGC 4993</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Finding-the-best-match">Finding the best match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#SDSS-data">SDSS data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Doing-operations-on-Spectra">Doing operations on Spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#It's-your-turn-now!">It’s your turn now!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Spectra</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Spectra.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="CMDs.html" class="btn btn-neutral float-right" title="Colour Magnitude Diagrams" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="HR_diagrams.html" class="btn btn-neutral float-left" title="HR diagrams" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Spectra">
+<h1>Spectra<a class="headerlink" href="#Spectra" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
+<div class="section" id="Initial-Imports">
+<h2>Initial Imports<a class="headerlink" href="#Initial-Imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="k">import</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">hoki.spec</span> <span class="k">import</span> <span class="n">dopcor</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="In-this-tutorial-you-will:">
+<h3>In this tutorial you will:<a class="headerlink" href="#In-this-tutorial-you-will:" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Load BPASS synthetic spectra through <code class="docutils literal notranslate"><span class="pre">hoki</span></code></p></li>
+<li><p>Manipulated an plot these synthetic spectra</p></li>
+<li><p>Compare them to observational data and find best matches.</p></li>
+<li><p>Get more familiar with <code class="docutils literal notranslate"><span class="pre">pandas</span></code> if you are not already.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="Loading-Spectra-in-hoki">
+<h2>Loading Spectra in <code class="docutils literal notranslate"><span class="pre">hoki</span></code><a class="headerlink" href="#Loading-Spectra-in-hoki" title="Permalink to this headline">¶</a></h2>
+<p>The synthetic spectra returned by BPASS are given in ASCII files, grouped by metallicity (<code class="docutils literal notranslate"><span class="pre">zXXX</span></code>) and whether the population is made up of just single stars (<code class="docutils literal notranslate"><span class="pre">-sin-</span></code>) or also contains binary stars (<code class="docutils literal notranslate"><span class="pre">-bin</span></code>). Each file contains the wavelenght bin in its first column and the following 51 columns are the synthetic spectra of the population at each BPASS time bins. The wavelength ranges from 1 to 100,000 Angstrom.</p>
+<p>We can load each file into a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> using the <code class="docutils literal notranslate"><span class="pre">hoki.load.model_output()</span></code> function. <strong>This may take a few seconds.</strong> For the purposes of this tutorial we are only going to load two sets of synthetic spectra: solar metallicity and a tenth solar - both including binary stars.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ss_z002</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/spectra/spectra-bin-imf135_300.z002.dat&#39;</span><span class="p">)</span>
+<span class="n">ss_z020</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/spectra/spectra-bin-imf135_300.z020.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ss_z002</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WL</th>
+      <th>6.0</th>
+      <th>6.1</th>
+      <th>6.2</th>
+      <th>6.3</th>
+      <th>6.4</th>
+      <th>6.5</th>
+      <th>6.6</th>
+      <th>6.7</th>
+      <th>6.8</th>
+      <th>...</th>
+      <th>10.1</th>
+      <th>10.2</th>
+      <th>10.3</th>
+      <th>10.4</th>
+      <th>10.5</th>
+      <th>10.6</th>
+      <th>10.7</th>
+      <th>10.8</th>
+      <th>10.9</th>
+      <th>11.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>2.745775e-40</td>
+      <td>2.702434e-40</td>
+      <td>3.047202e-40</td>
+      <td>4.195247e-38</td>
+      <td>7.912627e-38</td>
+      <td>2.884525e-38</td>
+      <td>9.237552e-39</td>
+      <td>1.976199e-38</td>
+      <td>5.478071e-38</td>
+      <td>...</td>
+      <td>3.143051e-40</td>
+      <td>4.732241e-40</td>
+      <td>2.407628e-40</td>
+      <td>1.854254e-40</td>
+      <td>1.770071e-40</td>
+      <td>3.505892e-40</td>
+      <td>1.656219e-40</td>
+      <td>1.040945e-40</td>
+      <td>2.193011e-40</td>
+      <td>3.402488e-41</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>2.745775e-40</td>
+      <td>2.702434e-40</td>
+      <td>3.047202e-40</td>
+      <td>4.195247e-38</td>
+      <td>7.912627e-38</td>
+      <td>2.884525e-38</td>
+      <td>9.237552e-39</td>
+      <td>1.976199e-38</td>
+      <td>5.478071e-38</td>
+      <td>...</td>
+      <td>3.143051e-40</td>
+      <td>4.732241e-40</td>
+      <td>2.407628e-40</td>
+      <td>1.854254e-40</td>
+      <td>1.770071e-40</td>
+      <td>3.505892e-40</td>
+      <td>1.656219e-40</td>
+      <td>1.040945e-40</td>
+      <td>2.193011e-40</td>
+      <td>3.402488e-41</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.0</td>
+      <td>2.745775e-40</td>
+      <td>2.702434e-40</td>
+      <td>3.047202e-40</td>
+      <td>4.195247e-38</td>
+      <td>7.912627e-38</td>
+      <td>2.884525e-38</td>
+      <td>9.237552e-39</td>
+      <td>1.976199e-38</td>
+      <td>5.478071e-38</td>
+      <td>...</td>
+      <td>3.143051e-40</td>
+      <td>4.732241e-40</td>
+      <td>2.407628e-40</td>
+      <td>1.854254e-40</td>
+      <td>1.770071e-40</td>
+      <td>3.505892e-40</td>
+      <td>1.656219e-40</td>
+      <td>1.040945e-40</td>
+      <td>2.193011e-40</td>
+      <td>3.402488e-41</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.0</td>
+      <td>2.745775e-40</td>
+      <td>2.702434e-40</td>
+      <td>3.047202e-40</td>
+      <td>4.195247e-38</td>
+      <td>7.912627e-38</td>
+      <td>2.884525e-38</td>
+      <td>9.237552e-39</td>
+      <td>1.976199e-38</td>
+      <td>5.478071e-38</td>
+      <td>...</td>
+      <td>3.143051e-40</td>
+      <td>4.732241e-40</td>
+      <td>2.407628e-40</td>
+      <td>1.854254e-40</td>
+      <td>1.770071e-40</td>
+      <td>3.505892e-40</td>
+      <td>1.656219e-40</td>
+      <td>1.040945e-40</td>
+      <td>2.193011e-40</td>
+      <td>3.402488e-41</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>2.745775e-40</td>
+      <td>2.702434e-40</td>
+      <td>3.047202e-40</td>
+      <td>4.195247e-38</td>
+      <td>7.912627e-38</td>
+      <td>2.884525e-38</td>
+      <td>9.237552e-39</td>
+      <td>1.976199e-38</td>
+      <td>5.478071e-38</td>
+      <td>...</td>
+      <td>3.143051e-40</td>
+      <td>4.732241e-40</td>
+      <td>2.407628e-40</td>
+      <td>1.854254e-40</td>
+      <td>1.770071e-40</td>
+      <td>3.505892e-40</td>
+      <td>1.656219e-40</td>
+      <td>1.040945e-40</td>
+      <td>2.193011e-40</td>
+      <td>3.402488e-41</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 52 columns</p>
+</div></div>
+</div>
+<p>Additionally, we’re going to be working with optical data, so let’s crop our spectra.</p>
+<p>Because we are using <code class="docutils literal notranslate"><span class="pre">pandas</span></code>, we don’t have to individually crope each spectrum, we can easily take care of the whole DataFrames.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ss_z002</span> <span class="o">=</span> <span class="n">ss_z002</span><span class="p">[(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="o">&gt;</span><span class="mi">4000</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="o">&lt;</span><span class="mi">9000</span><span class="p">)]</span>
+<span class="n">ss_z020</span> <span class="o">=</span> <span class="n">ss_z020</span><span class="p">[(</span><span class="n">ss_z020</span><span class="o">.</span><span class="n">WL</span><span class="o">&gt;</span><span class="mi">4000</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ss_z020</span><span class="o">.</span><span class="n">WL</span><span class="o">&lt;</span><span class="mi">9000</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Plotting-a-spectrum">
+<h2>Plotting a spectrum<a class="headerlink" href="#Plotting-a-spectrum" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have loaded our spectra we can plot them!</p>
+<p><strong>At different metallicities</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z002</span><span class="p">[</span><span class="s1">&#39;9.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Z=0.1 Z_sun&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020</span><span class="p">[</span><span class="s1">&#39;9.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Z=Z_sun&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Different Metallicities - log(Age)=9.0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Flux&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5920e3278&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_10_1.png" src="_images/Spectra_10_1.png" />
+</div>
+</div>
+<p><strong>At different ages</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020</span><span class="p">[</span><span class="s1">&#39;6.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1 Myr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020</span><span class="p">[</span><span class="s1">&#39;8.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 Myr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020</span><span class="p">[</span><span class="s1">&#39;9.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1 Gr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020</span><span class="p">[</span><span class="s1">&#39;10.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;10 Gyr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Different Ages - Z=Z_sun&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Flux&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5a99af390&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_12_1.png" src="_images/Spectra_12_1.png" />
+</div>
+</div>
+<p>The vast difference in scales makes it tough to see the older spectra (and their forests of lines) so let’s <strong>normalise</strong> everything. We could write a little function but why re-invent the wheel? <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> has some great statistical tools including a variety of normalising methods. Let’s use <code class="docutils literal notranslate"><span class="pre">MinMaxScaler()</span></code>, which simply makes sure the top values == 1 and lowest value == 0.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">WL</span> <span class="o">=</span> <span class="n">ss_z020</span><span class="o">.</span><span class="n">WL</span><span class="o">.</span><span class="n">values</span> <span class="c1"># Since all the wavelength ranges are the same let&#39;s give it a single name</span>
+
+
+<span class="c1"># The &#39;fit_transform()&#39; function might sound like a weird name but it makes sense when</span>
+<span class="c1"># you are familiar with the whole sklearn framework: it is consistent with all their other tools.</span>
+<span class="c1"># Also note that sklearn takes in numpy arrays and returns numpy arrays. That means we have to</span>
+<span class="c1"># input our dataframe with .values, and place the output back into a DataFrame (if that&#39;s the format we want).</span>
+
+<span class="n">ss_z020_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">ss_z020</span><span class="o">.</span><span class="n">values</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">:],</span> <span class="c1"># Not doing the wavelength column</span>
+                              <span class="n">columns</span> <span class="o">=</span> <span class="n">ss_z020</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="c1"># We also have to provide column names.</span>
+
+<span class="c1"># And now we do the same for a tenth solar!</span>
+<span class="n">ss_z002_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">ss_z002</span><span class="o">.</span><span class="n">values</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">:],</span>
+                              <span class="n">columns</span> <span class="o">=</span> <span class="n">ss_z002</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;6.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1 Myr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;8.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 Myr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;9.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;1 Gr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.0&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;10 Gyr&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Different Ages (Normalised)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Flux&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5a9999320&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_15_1.png" src="_images/Spectra_15_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Now you can try to make a similar plot for a tenth solar and a different range of ages!</span>
+
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Comparing-to-some-real-data">
+<h2>Comparing to some real data<a class="headerlink" href="#Comparing-to-some-real-data" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s play with some real data! We’re going to be looking at NGC 4993 (the host galaxy of GW1708017) and then at some SDSS templates.</p>
+<div class="section" id="NGC-4993">
+<h3>NGC 4993<a class="headerlink" href="#NGC-4993" title="Permalink to this headline">¶</a></h3>
+<p>First, let’s put it in a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> and see what we’ve got.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ngc4993</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./data/spectra/ngc4993.dat&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Just to see what the Data Frame looks like</span>
+<span class="n">ngc4993</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WL</th>
+      <th>Counts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4036.82</td>
+      <td>5437.012</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4038.36</td>
+      <td>5506.620</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4039.90</td>
+      <td>5747.366</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4041.44</td>
+      <td>5748.782</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4042.99</td>
+      <td>5761.701</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># and now we plot it</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ngc4993</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ngc4993</span><span class="o">.</span><span class="n">Counts</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Flux (Counts)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;NGC 4993&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Text(0.5, 1.0, &#39;NGC 4993&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_20_1.png" src="_images/Spectra_20_1.png" />
+</div>
+</div>
+<p>This spectrum is in counts and obviously the amplitude is not going to match that of our synthetic spectra. So let’s normalise this too!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ngc4993_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">ngc4993</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WL&#39;</span><span class="p">,</span> <span class="s1">&#39;Counts&#39;</span><span class="p">])</span>
+<span class="n">ngc4993_scaled</span><span class="p">[</span><span class="s1">&#39;WL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ngc4993</span><span class="p">[</span><span class="s1">&#39;WL&#39;</span><span class="p">]</span> <span class="c1"># Because with the operation above we also scaled the WL -- makes no sense.</span>
+</pre></div>
+</div>
+</div>
+<p>Another thing to remember is that a real spectrum will be redshifted. <strong>There is a basic doppler correction within ``hoki``</strong> which you can use to take care of that. Note it will <strong>change in place</strong>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">dopcor</span><span class="p">(</span><span class="n">ngc4993_scaled</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.009727</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Finding-the-best-match">
+<h3>Finding the best match<a class="headerlink" href="#Finding-the-best-match" title="Permalink to this headline">¶</a></h3>
+<p>The goal here is to find the best synthetic spectrum corresponding to our observed spectrum. In this tutorial we will do this visually. Let’s plot a range of ages and see what we get.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">WL</span> <span class="o">=</span> <span class="n">ss_z002</span><span class="o">.</span><span class="n">WL</span>
+<span class="c1"># The BPASS spectra</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;7.0&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=7.0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;8.0&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=8.0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;8.7&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=8.7&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;9.0&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=9.0&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.0&#39;</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=10.0&#39;</span><span class="p">)</span>
+
+<span class="c1"># The observational data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ngc4993_scaled</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ngc4993_scaled</span><span class="o">.</span><span class="n">Counts</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NGC4993&#39;</span><span class="p">)</span>
+
+<span class="c1"># Polishing the plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Normalised Flux&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">4000</span><span class="p">,</span><span class="mi">10500</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Synthetic Spectra and NGC 4993&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5a547eb38&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_26_1.png" src="_images/Spectra_26_1.png" />
+</div>
+</div>
+<p>There is an obvious drop in the flux in the red part of our NGC 4993 spectrum. That’s not the galaxy - it could be something to do with the filter used or another observational reason, so let’s focus on the short wavelengths.</p>
+<p>It looks like older ages are a better match. Here is the one I thought fitted best, but feel free to make your own plots and see if you can get a better result!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.4&#39;</span><span class="p">],</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=10.4&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ngc4993_scaled</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">ngc4993_scaled</span><span class="o">.</span><span class="n">Counts</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NGC4993&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Normalised Flux&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">4000</span><span class="p">,</span><span class="mi">10500</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Best (?) Synthetic Spectra and NGC 4993&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5a53d6cf8&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_28_1.png" src="_images/Spectra_28_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="SDSS-data">
+<h3>SDSS data<a class="headerlink" href="#SDSS-data" title="Permalink to this headline">¶</a></h3>
+<p>Now let’s take a look at some SDSS templates. In the folder <code class="docutils literal notranslate"><span class="pre">./data/spectra</span></code> you should have two fits files corresponding to an early-type galaxy and an indescriminate galaxy template (<code class="docutils literal notranslate"><span class="pre">spDR2-023.fit</span></code> and <code class="docutils literal notranslate"><span class="pre">spDR2-024.fit</span></code>, respectively).</p>
+<p>Note that these spectra are given as fits files and it’s beyond the scope of this tutorial to walk you through turning them into a pythonic data structure, so I’ve made the <code class="docutils literal notranslate"><span class="pre">extract_sdss_spectrum()</span></code> function which you can simply run to turn these spectra into a simple and convenient DataFrame.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">astropy.io</span> <span class="k">import</span> <span class="n">fits</span>
+
+<span class="k">def</span> <span class="nf">extract_sdss_spectrum</span><span class="p">(</span><span class="n">dataloc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Some Python magic to turn sdss fits files into dataframes ;)</span>
+
+<span class="sd">    You don&#39;t have to pay too much attention.</span>
+<span class="sd">    If you&#39;re curious read the comments or feel free to send me an email: hfstevance@gmail.com or DM me @sydonahi</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sdss_data</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">dataloc</span><span class="p">)</span>
+
+    <span class="c1"># Normalising with sklearn</span>
+    <span class="n">scaled_flux</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">sdss_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># A list comprehension incantation to make the wavelength appear **** wizard ****</span>
+    <span class="n">wl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">sdss_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;COEFF0&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">sdss_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;COEFF1&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sdss_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+    <span class="c1"># Making the dataframe</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">wl</span><span class="p">,</span><span class="n">scaled_flux</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sdss_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                      <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WL&#39;</span><span class="p">,</span> <span class="s1">&#39;Flux&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s get our SDSS spectra and take a look at them.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">early_type_gal</span> <span class="o">=</span> <span class="n">extract_sdss_spectrum</span><span class="p">(</span><span class="s1">&#39;./data/spectra/spDR2-023.fit&#39;</span><span class="p">)</span>
+<span class="n">gal</span> <span class="o">=</span> <span class="n">extract_sdss_spectrum</span><span class="p">(</span><span class="s1">&#39;./data/spectra/spDR2-024.fit&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">early_type_gal</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">early_type_gal</span><span class="o">.</span><span class="n">Flux</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Early Type Galaxy template&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gal</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">gal</span><span class="o">.</span><span class="n">Flux</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Galaxy template&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Normalised Flux&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">4000</span><span class="p">,</span><span class="mi">9000</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;SDSS templates&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5e2a37908&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_33_1.png" src="_images/Spectra_33_1.png" />
+</div>
+</div>
+<p>Note a very interesting effect here in our Random Galaxy template: the large nebular line is messing with our scaler and when we want to fit it we’re probably going to have to go and add a scale factor by hand so that the other features are of the same kind of amplitude as those in our synthetic spectra!</p>
+<p>Anyway, for now we’re going to focus on the Early Type Galaxy and see if we can find a template that matches. Again, let’s just do it by eye.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;9.0&#39;</span><span class="p">],</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=9.0&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;Too Young&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;11.0&#39;</span><span class="p">],</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=11.0&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;Too Old&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.4&#39;</span><span class="p">],</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;log(age)=10.4&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;Not Bad ;)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">early_type_gal</span><span class="o">.</span><span class="n">WL</span><span class="p">,</span> <span class="n">early_type_gal</span><span class="o">.</span><span class="n">Flux</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Early type galaxy&#39;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Norm. Flux&#39;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">4000</span><span class="p">,</span><span class="mi">9000</span><span class="p">])</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_35_0.png" src="_images/Spectra_35_0.png" />
+</div>
+</div>
+<p>Feel free to play around with other ages (or even metalicities!) but a log(age) = 10.4 is not unsurprising for an Early Type Galaxy which we expect to have a relatively old stellar population (and log(age)=11.0 is much older than the age of the Universe so that was never going to work haha).</p>
+</div>
+</div>
+<div class="section" id="Doing-operations-on-Spectra">
+<h2>Doing operations on Spectra<a class="headerlink" href="#Doing-operations-on-Spectra" title="Permalink to this headline">¶</a></h2>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">pandas</span></code> framework it is trivial to add spectra and perform mathematical operations on them.</p>
+<p>As an example, let’s add together an old and a very young stellar population. Arbitrarily I’ve picked a log(age) of 6.2 and 10.5, but feel free to play around with it yourself!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">old_and_young</span> <span class="o">=</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;6.2&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.5&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;6.2&#39;</span><span class="p">],</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s1">&#39;log(Age)=6.2&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.5&#39;</span><span class="p">],</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;log(Age)=10.5&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span> <span class="n">WL</span><span class="p">,</span> <span class="n">old_and_young</span><span class="p">,</span>
+         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">6000</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s1">&#39;log(Age)= 6.2 + 10.5&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Norm. Flux&#39;</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">4000</span><span class="p">,</span><span class="mi">9000</span><span class="p">])</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_39_0.png" src="_images/Spectra_39_0.png" />
+</div>
+</div>
+<p>You can also add spectra in <strong>different proportions</strong> by simply adding <strong>scale factors</strong>. Multiplications, divisions and most daily mathematical operations are easily done:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="p">(</span><span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;6.2&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.5&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+         <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Old*0.5 + Young&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="p">(</span><span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;6.2&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.5&#39;</span><span class="p">])</span><span class="o">+</span><span class="mf">0.3</span><span class="p">,</span>
+         <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Old + Young&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="p">(</span><span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;6.2&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">ss_z020_scaled</span><span class="p">[</span><span class="s1">&#39;10.5&#39;</span><span class="p">]),</span>
+         <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Old + Young * 0.5&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Normalised Flux + Offset&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">4000</span><span class="p">,</span><span class="mi">9000</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7ff5e27cf828&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Spectra_41_1.png" src="_images/Spectra_41_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="It's-your-turn-now!">
+<h2>It’s your turn now!<a class="headerlink" href="#It's-your-turn-now!" title="Permalink to this headline">¶</a></h2>
+<p>Remember the random galaxy with the naughty nebular line that messed with the effectivnes of our normalisation?</p>
+<p>Let’s go back to it!</p>
+<p><strong>You now know how to select different synthetic spectra and how to scale them, now go ahead and find the best synthetic spectrum and scale factor combination!</strong></p>
+<p><em>(You ca just assume a stellar population with a single age, but feel free to have fun and combine stuff if you feel like it)</em></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">### Your code here</span>
+
+
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>YOU’RE ALL SET!</strong></p>
+<p>I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on <code class="docutils literal notranslate"><span class="pre">hoki</span></code> GitHub page <a class="reference external" href="https://github.com/HeloiseS/hoki">here</a> or on the <code class="docutils literal notranslate"><span class="pre">hoki_tutorials</span></code> GitHub <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">there</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

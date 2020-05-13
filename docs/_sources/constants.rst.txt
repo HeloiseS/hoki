@@ -1,0 +1,26 @@
+################
+**constants**
+################
+
+This module just contains BPASS constants and defines variables used in hoki.
+
+.. automodule:: hoki.constants
+    :members:
+
+path_to_settings 
+   path to the `settings.yaml` file located in the package resources
+
+MODELS_PATH 
+   Path to the BPASS models as defined in the settings file. If you have not downloaded the models and updated this path with `load.set_models_path()`, it will not correspond to a valid path on your machine. This is not going to cause issues unless you're using functionalities that require the full set of BPASS models (like making CMDs)
+
+BPASS_TIME_BINS
+   1D array containing the 51 BPASS time bins (from log(age) = 6.0 to 11.0) 
+
+BPASS_TIME_INTERVALS 
+   Time interval between BPASS time bins in years
+
+BPASS_TIME_WEIGHT_GRID 
+   Grid of weights to apply to HR Diagrams based on BPASS definitions 
+
+dummy_dict
+   Dictionary linking column number to column name for the large BPASS array traditionally called dummy. See the BPASS manual for a text version of the numner/name correspondance. 

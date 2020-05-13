@@ -1,0 +1,1019 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>HR diagrams &mdash; hoki beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Spectra" href="Spectra.html" />
+    <link rel="prev" title="Transient rates" href="Transient_rates.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HR diagrams</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Initial-imports">Initial imports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#In-this-tutorial-you-will:">In this tutorial you will:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Loading-in-the-data">Loading in the data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#About-the-tools-you're-about-to-use.">About the tools you’re about to use.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Loading-the-HR-diagrams">Loading the HR diagrams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Loading-some-observational-data">Loading some observational data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Plotting-HR-diagrams">Plotting HR diagrams</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Making-a-single-plot">Making a single plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Multiple-plots">Multiple plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Customizing-your-plots-with-matplotlib-key-word-arguments">Customizing your plots with matplotlib key word arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Creating-a-publication-ready-figure">Creating a publication-ready figure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Stacking-a-range-of-Ages">Stacking a range of Ages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>HR diagrams</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/HR_diagrams.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="Spectra.html" class="btn btn-neutral float-right" title="Spectra" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Transient_rates.html" class="btn btn-neutral float-left" title="Transient rates" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="HR-diagrams">
+<h1>HR diagrams<a class="headerlink" href="#HR-diagrams" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
+<div class="section" id="Initial-imports">
+<h2>Initial imports<a class="headerlink" href="#Initial-imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="k">import</span> <span class="n">load</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="In-this-tutorial-you-will:">
+<h3>In this tutorial you will:<a class="headerlink" href="#In-this-tutorial-you-will:" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Learn about the HR-diagram data structure of BPASS</p></li>
+<li><p>Learn how to load them in using hoki</p></li>
+<li><p>Use the tools in <code class="docutils literal notranslate"><span class="pre">hoki</span></code> to explore your HR diagram data and make science plots</p></li>
+<li><p>Learn to customise the <code class="docutils literal notranslate"><span class="pre">hoki</span></code> plots</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="Loading-in-the-data">
+<h2>Loading in the data<a class="headerlink" href="#Loading-in-the-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="About-the-tools-you're-about-to-use.">
+<h3>About the tools you’re about to use.<a class="headerlink" href="#About-the-tools-you're-about-to-use." title="Permalink to this headline">¶</a></h3>
+<p>HR diagram data can be loaded using the <code class="docutils literal notranslate"><span class="pre">hoki.load.population_output()</span></code> function. This function will automatically know that you are trying to load an HR diagram from the name of the text file.</p>
+<p><strong>Important</strong>: You should note that when loading an HR diagram you need to specify what type of HR diagram you want to load form the file. The HR diagram files are large and quite complex - see left hand side of the diagam below - so we’ll be loading in one type of HR diagram at a time.</p>
+<p>You can choose from 3 options: - <code class="docutils literal notranslate"><span class="pre">'TL'</span></code>: For a temperature/Luminosity HR diagram - <code class="docutils literal notranslate"><span class="pre">'Tg'</span></code>: For a temperature/surface gravity HR diagram - <code class="docutils literal notranslate"><span class="pre">'TTG'</span></code>: For a temperature/(temperature**4/surface gravity) HR diagram</p>
+<p>These options are there for 2 reasons: * 1.They tell the object which segment of the text file to load in * 2.They tell the plotting function what grid to create in order to plot the contours (also picks the right axis labels).</p>
+<p><img alt="mynewimage" src="_images/HRD_data.png" /></p>
+</div>
+<div class="section" id="Loading-the-HR-diagrams">
+<h3>Loading the HR diagrams<a class="headerlink" href="#Loading-the-HR-diagrams" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Loading the HR diagrams for signle stars and binary star populations</span>
+<span class="n">sin_hr_diagram</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-sin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span> <span class="o">=</span> <span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+<span class="n">bin_hr_diagram</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span> <span class="o">=</span> <span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Loading-some-observational-data">
+<h3>Loading some observational data<a class="headerlink" href="#Loading-some-observational-data" title="Permalink to this headline">¶</a></h3>
+<p>We’re going to want to plot some observational data to compare to our models. A nice way to do that is to use <code class="docutils literal notranslate"><span class="pre">pandas</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Loading the observational data of Upper Scorpio</span>
+<span class="n">usco</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./data/USco.dat&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;Luminosity&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">usco</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Temperature</th>
+      <th>Luminosity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3.756</td>
+      <td>0.38</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.742</td>
+      <td>0.34</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.742</td>
+      <td>0.36</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.750</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3.728</td>
+      <td>0.27</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="Plotting-HR-diagrams">
+<h2>Plotting HR diagrams<a class="headerlink" href="#Plotting-HR-diagrams" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have loaded in our data, it’s time to create some visualisation. The advantage of using the <code class="docutils literal notranslate"><span class="pre">HRDiagrams</span></code> object is that it comes with an <strong>easy-to-use plotting method</strong> that is highly <strong>versatile</strong> and designed to create <strong>publication-ready figures</strong>.</p>
+<p>Let’s run through a couple of ways you can use this tool and make it your own.</p>
+<div class="section" id="Making-a-single-plot">
+<h3>Making a single plot<a class="headerlink" href="#Making-a-single-plot" title="Permalink to this headline">¶</a></h3>
+<p>First we are going to make just one HR diagram plot. The plotting method returns the plote object, which <strong>allows you to customize you plot</strong>.</p>
+<p>For example you can <strong>add observational data</strong>, some <strong>text</strong>, a <strong>title</strong>, a <strong>legend</strong> and redefine the axis <strong>limits</strong> to create a more effective visualisation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Just maing sure teh figure size is sensible</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Plotting the hr_diagram (all hydrogen abundances added up) at the 10 million year time bin</span>
+<span class="n">my_plot</span> <span class="o">=</span> <span class="n">sin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">7.0</span><span class="p">)</span>
+
+<span class="c1"># Addind the observational data of Upper Scorpio</span>
+<span class="n">my_plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Customizing the visualisation</span>
+<span class="n">my_plot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">my_plot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span> <span class="c1"># better limits</span>
+<span class="n">my_plot</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span> <span class="c1"># Informative text</span>
+<span class="n">my_plot</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> <span class="c1"># a legend</span>
+<span class="n">my_plot</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Single stars&#39;</span><span class="p">)</span> <span class="c1"># A title</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Text(0.5, 1.0, &#39;Single stars&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/HR_diagrams_11_1.png" src="_images/HR_diagrams_11_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Multiple-plots">
+<h3>Multiple plots<a class="headerlink" href="#Multiple-plots" title="Permalink to this headline">¶</a></h3>
+<p>There might be times you want to put multiple plots on the same figure. The good news is the <code class="docutils literal notranslate"><span class="pre">HRDiagrams.plot()</span></code> allows you to do that intuitively! There are actually more than one way to do it, depending on how you like making your subplots in Python, either with <code class="docutils literal notranslate"><span class="pre">add_subplot()</span></code> or <code class="docutils literal notranslate"><span class="pre">subplots()</span></code>.</p>
+<p>Here is the same HR diagram as presented above, but with the Single star population on the left and the Binary star population on the right.</p>
+<p><strong>a) Using ``subplots()`` syntax</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">sin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Single stars&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+<span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Binary stars&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7fc159d9beb8&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/HR_diagrams_13_1.png" src="_images/HR_diagrams_13_1.png" />
+</div>
+</div>
+<p><strong>b) Using ``add_subplot()`` syntax</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">sin_plot</span> <span class="o">=</span> <span class="n">sin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">sin_plot</span> <span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">sin_plot</span> <span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">sin_plot</span> <span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">sin_plot</span> <span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Single stars&#39;</span><span class="p">)</span>
+<span class="n">sin_plot</span> <span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">sin_plot</span> <span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+<span class="n">bin_plot</span> <span class="o">=</span> <span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">bin_plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">bin_plot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">bin_plot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">bin_plot</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Binary stars&#39;</span><span class="p">)</span>
+<span class="n">bin_plot</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">bin_plot</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7fc159ec4b38&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/HR_diagrams_15_1.png" src="_images/HR_diagrams_15_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Customizing-your-plots-with-matplotlib-key-word-arguments">
+<h2>Customizing your plots with matplotlib key word arguments<a class="headerlink" href="#Customizing-your-plots-with-matplotlib-key-word-arguments" title="Permalink to this headline">¶</a></h2>
+<p>Althought the default parameters for the HR diagram pltos were chosen to allow the creating of publication-ready plots with as few modifications as possible, the plotting function of <code class="docutils literal notranslate"><span class="pre">HRDiagrams</span></code> objects are designed to take any subplementary key word arguments and pass them on to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.contour</span></code>.</p>
+<p>This allows a much greater level of flexibility when making graphics. For example if you wish to cahnge the colormap you can do the following.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet_r&#39;</span><span class="p">)</span> <span class="c1"># levels adjusted for visualisation</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;A terrible colormap&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+<span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;magma_r&#39;</span><span class="p">)</span> <span class="c1"># levels adjusted for visualisation</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;A less terrible colormap&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7fc15dd46d68&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/HR_diagrams_17_1.png" src="_images/HR_diagrams_17_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Creating-a-publication-ready-figure">
+<h2>Creating a publication-ready figure<a class="headerlink" href="#Creating-a-publication-ready-figure" title="Permalink to this headline">¶</a></h2>
+<p>In this last section, we will reproduce with <code class="docutils literal notranslate"><span class="pre">hoki</span></code> Figure 23 of Eldirdge, Stanway et al. (2018). This will show you how you can create a publication ready figure just using <code class="docutils literal notranslate"><span class="pre">hoki</span></code> and other ubiquitous python packages.</p>
+<p><em>Note: This figure will look a little different frmo the published version as the latter was created in IDL</em></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># renaming our already laoded HR diagram just for readability</span>
+<span class="n">hr_usco_sin</span><span class="p">,</span> <span class="n">hr_usco_bin</span> <span class="o">=</span> <span class="n">sin_hr_diagram</span><span class="p">,</span> <span class="n">bin_hr_diagram</span>
+
+<span class="n">hr_census_bin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+<span class="n">hr_census_sin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-sin-imf135_300.z020.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TL&#39;</span><span class="p">)</span>
+
+<span class="n">hr_6067_bin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z030.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TTG&#39;</span><span class="p">)</span>
+<span class="n">hr_6067_sin</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;./data/hrs-sin-imf135_300.z030.dat&#39;</span><span class="p">,</span> <span class="n">hr_type</span><span class="o">=</span><span class="s1">&#39;TTG&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Note that it is not recommended to call a column &#39;T&#39; for a pandas data frame.</span>
+<span class="c1"># If you do, you won&#39;t be able to call it as mydataframe.T, because .T will default to</span>
+<span class="c1"># returning the transpose.</span>
+
+<span class="n">cyg_L</span><span class="p">,</span> <span class="n">cyg_L_e</span><span class="p">,</span> <span class="n">cyg_T</span><span class="p">,</span> <span class="n">cyg_T_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s1">&#39;./data/census.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ngc_T</span><span class="p">,</span> <span class="n">ngc_T_e</span><span class="p">,</span> <span class="n">ngc_logg</span><span class="p">,</span> <span class="n">ngc_logg_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;./data/ngc6067hr.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>In the case of the NGC 6067 we want to make a spectroscopic HR diagram. That means that the y axis will be <span class="math notranslate nohighlight">\(\log(T^4/g)\)</span> – this quatity is refered to as TG or log(TG). The trick is, we need to make sure we are using the right units when we do the calculations.</p>
+<p>We want everything to be with respect to solar units, so we’ll have to divide by solar surface temperature (5778K) and surface gravity (274 m/s or a log g = 2.4377). We also nee to convert to SI from cgs, so there is a factor of <span class="math notranslate nohighlight">\(10^{-2}\)</span> in the g, i.e a <code class="docutils literal notranslate"><span class="pre">-2</span></code> in the log g exponent, that needs to be taken into account.</p>
+<p>We also need to propagate errors. Since it’s a mess of logs I’ll just use bootstrapping for that.</p>
+<p><em>Boostrapping: In this particular case I sample each of my values/data points according to a normal distribution where the mean is the value of that data point and the standard deviation is the error. I do this 1000 times, calculate the corresponding TG, and take the mean and standard deviation of these 1000 TG values.</em></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">TG</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">TG_e</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">T_i</span><span class="p">,</span> <span class="n">T_e_i</span><span class="p">,</span> <span class="n">logg_i</span><span class="p">,</span> <span class="n">logg_e_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ngc_T</span><span class="p">,</span> <span class="n">ngc_T_e</span><span class="p">,</span> <span class="n">ngc_logg</span><span class="p">,</span> <span class="n">ngc_logg_e</span><span class="p">):</span>
+    <span class="n">TG</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">T_i</span><span class="p">,</span> <span class="n">T_e_i</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">5778</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span><span class="o">/</span>
+                                <span class="p">((</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">logg_i</span><span class="o">-</span><span class="mf">2.4377</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">logg_e_i</span><span class="p">),</span> <span class="mi">1000</span><span class="p">)</span> <span class="p">))))))</span>
+    <span class="n">TG_e</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">T_i</span><span class="p">,</span> <span class="n">T_e_i</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">5778</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span><span class="o">/</span>
+                                <span class="p">((</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">logg_i</span><span class="o">-</span><span class="mf">2.4377</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">logg_e_i</span><span class="p">),</span> <span class="mi">1000</span><span class="p">)</span> <span class="p">))))))</span>
+</pre></div>
+</div>
+</div>
+<p>We also need to make sure we get the log(T) errors (and no, you can’t just do <code class="docutils literal notranslate"><span class="pre">log(ngc_T_e)</span></code>). I’m using bootstrapping - because I can.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">T_e</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">T_i</span><span class="p">,</span> <span class="n">T_e_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ngc_T</span><span class="p">,</span> <span class="n">ngc_T_e</span><span class="p">):</span>
+    <span class="n">T_e</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">T_i</span><span class="p">,</span> <span class="n">T_e_i</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<p>And now it’s time to plot all of this!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">))</span>
+
+<span class="n">hr_census_sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">cyg_T</span><span class="p">,</span> <span class="n">cyg_L</span><span class="p">,</span> <span class="n">xerr</span> <span class="o">=</span> <span class="n">cyg_T_e</span><span class="p">,</span> <span class="n">yerr</span> <span class="o">=</span> <span class="n">cyg_L_e</span><span class="p">,</span>
+            <span class="n">ls</span> <span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Cygnus OB2&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mf">6.4</span><span class="p">])</span>
+
+
+<span class="n">hr_census_bin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">cyg_T</span><span class="p">,</span> <span class="n">cyg_L</span><span class="p">,</span> <span class="n">xerr</span> <span class="o">=</span> <span class="n">cyg_T_e</span><span class="p">,</span> <span class="n">yerr</span> <span class="o">=</span> <span class="n">cyg_L_e</span><span class="p">,</span>
+            <span class="n">ls</span> <span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Cygnus OB2&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mf">6.4</span><span class="p">])</span>
+
+
+<span class="n">hr_usco_sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># levels adjusted for visualisation</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
+
+
+<span class="n">hr_usco_bin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># levels adjusted for visualisation</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco</span><span class="o">.</span><span class="n">Temperature</span><span class="p">,</span> <span class="n">usco</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Usco&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.25</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=7.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
+
+<span class="n">hr_6067_sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ngc_T</span><span class="p">),</span> <span class="n">TG</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="n">T_e</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">TG_e</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NGC 6067&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
+                 <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">4.8</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">4.6</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=8.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
+<span class="n">hr_6067_bin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ngc_T</span><span class="p">),</span> <span class="n">TG</span><span class="p">,</span> <span class="n">xerr</span><span class="o">=</span><span class="n">T_e</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">TG_e</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NGC 6067&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
+                 <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">4.8</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mf">5.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">4.6</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=8.0&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/HR_diagrams_27_0.png" src="_images/HR_diagrams_27_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Stacking-a-range-of-Ages">
+<h2>Stacking a range of Ages<a class="headerlink" href="#Stacking-a-range-of-Ages" title="Permalink to this headline">¶</a></h2>
+<p>But what if you are interested in a stellar population that has a range of ages?</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">HRDiagram</span></code> class you can stack HR Diagrams of a range of ages across all three surface abundance categories in a single line!</p>
+<p>Let’s stack every age bin between 1 and 10 Myrs:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">log_age_min</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">log_age_max</span><span class="o">=</span><span class="mf">6.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_stacked, .low_H_stacked.
+</pre></div></div>
+</div>
+<p>This should return the following message:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">following</span> <span class="n">attributes</span> <span class="n">were</span> <span class="n">updated</span><span class="p">:</span> <span class="o">.</span><span class="n">all_stacked</span><span class="p">,</span> <span class="o">.</span><span class="n">high_H_stacked</span><span class="p">,</span> <span class="o">.</span><span class="n">medium_H_stacked</span><span class="p">,</span> <span class="o">.</span><span class="n">low_H_stacked</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>It indicates that the stacking was performed successfully, and four attributes of the <code class="docutils literal notranslate"><span class="pre">HRDiagram</span></code> class were update.</p>
+<p><code class="docutils literal notranslate"><span class="pre">HRDiagram.all_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H_stacked</span></code>, are the stacked equivalents to <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code>(see right panel of the Figure at the top of this tutorial).</p>
+<p>This means that the original <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code> attributes <strong>remain untouched</strong> when you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method - only the “stacked” attributes will be updated.</p>
+<p>Note, before you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method for the first time the “stacked” HRDs are just 100x100 numpy arrays filled with zeros.</p>
+</div>
+</div>
+<div class="section" id="Plotting-HRDs-of-stacked-ages">
+<h1>Plotting HRDs of stacked ages<a class="headerlink" href="#Plotting-HRDs-of-stacked-ages" title="Permalink to this headline">¶</a></h1>
+<p>Now, it’s possible you don’t actually need to do any opperations on the stacked HRDs, <strong>you just want to plot</strong> HRDs for a range of ages.</p>
+<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of ‘<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
+<p>Here is an example of an HRD at 10 Myrs Vs an aggregate of HRDs from 1 to 10 Myrs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#levels adjusted for visualisation</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Single Age: log(Age/yrs)=7.0&#39;</span><span class="p">)</span>
+
+
+<span class="n">bin_hr_diagram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">age_range</span><span class="o">=</span><span class="p">[</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># levels adjusted for visualisation</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">2.8</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stacked Age: log(Age/yrs)= 6.0 - 7.0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_stacked, .low_H_stacked.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>Text(0.5, 1.0, &#39;Stacked Age: log(Age/yrs)= 6.0 - 7.0&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/HR_diagrams_31_2.png" src="_images/HR_diagrams_31_2.png" />
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>YOU’RE ALL SET!</strong></p>
+<p>I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on <code class="docutils literal notranslate"><span class="pre">hoki</span></code> GitHub page <a class="reference external" href="https://github.com/HeloiseS/hoki">here</a> or on the <code class="docutils literal notranslate"><span class="pre">hoki_tutorials</span></code> GitHub <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">there</a>.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

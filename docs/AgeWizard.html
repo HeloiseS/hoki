@@ -1,0 +1,1657 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Age Wizard &mdash; hoki beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dependencies" href="manual.html" />
+    <link rel="prev" title="Colour Magnitude Diagrams" href="CMDs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Age Wizard</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Initial-imports">Initial imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#A-systematic-ageing-method">A systematic ageing method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Motivation">Motivation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#How-it-works">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Remember-to-exercise-caution-in-your-interpretation">Remember to exercise caution in your interpretation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Ages-from-Hertzsprung-Russell-Diagram">Ages from Hertzsprung-Russell Diagram</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Age-PDFs-at-z=0.006">Age PDFs at z=0.006</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Age-PDFs-at-z=0.008">Age PDFs at z=0.008</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Most-Likely-Ages">Most Likely Ages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#IMPORTANT">IMPORTANT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Plotting-Aggregate-Ages">Plotting Aggregate Ages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Probability-given-an-age-range">Probability given an age range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Ages-from-Colour-Magnitude-Diagram">Ages from Colour-Magnitude Diagram</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Age Wizard</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/AgeWizard.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="manual.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CMDs.html" class="btn btn-neutral float-left" title="Colour Magnitude Diagrams" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Age-Wizard">
+<h1>Age Wizard<a class="headerlink" href="#Age-Wizard" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
+<div class="section" id="Initial-imports">
+<h2>Initial imports<a class="headerlink" href="#Initial-imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">hoki.age_utils</span> <span class="k">import</span> <span class="n">AgeWizard</span>
+<span class="kn">import</span> <span class="nn">hoki</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="A-systematic-ageing-method">
+<h2>A systematic ageing method<a class="headerlink" href="#A-systematic-ageing-method" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Motivation">
+<h3>Motivation<a class="headerlink" href="#Motivation" title="Permalink to this headline">¶</a></h3>
+<p>One of the classic methods for ageing clusters is to fit isochrones to observational data in Colour-Magnitude Diagrams (CMDs) or in Hertzsprung-Russel Diagrams (HRDs).</p>
+<p>There are a number of issues with this ubiquitous technique though:</p>
+<ul class="simple">
+<li><p>Fitting is usually done by eye</p></li>
+<li><p>They only take into account single stars</p></li>
+<li><p>It cannot be used if your sample only contains a few sources</p></li>
+</ul>
+<p><strong>Our goal is to provide a method that answers all of the issues metioned above</strong></p>
+</div>
+<div class="section" id="How-it-works">
+<h3>How it works<a class="headerlink" href="#How-it-works" title="Permalink to this headline">¶</a></h3>
+<p>By matching the observed properties of your sources to the BPASS models you can find the <strong>most likely age</strong> of a <strong>location on the HRD/CMD</strong>.</p>
+<p>If all your sources belong to the same region, you can then combine the PDFs of your individual sources to find the age PDF of the whole cluster.</p>
+<p>All of this can be done step by step using the chain <code class="docutils literal notranslate"><span class="pre">find_coordinates()</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">calculate_pdfs</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">multiply_pdfs()</span></code>, or you could simply use <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> which handles this pipeline and facilitates loading in the models.</p>
+<p>Note: In this tutorial we will focus on <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code>.</p>
+</div>
+<div class="section" id="Remember-to-exercise-caution-in-your-interpretation">
+<h3>Remember to exercise caution in your interpretation<a class="headerlink" href="#Remember-to-exercise-caution-in-your-interpretation" title="Permalink to this headline">¶</a></h3>
+<p>This is true of all methods but it is worth repeating. This technique helps you get to the answer, but it doesn’t give you the answer.</p>
+<p>The <strong>most likely age</strong> of the <strong>matching location</strong> is not necessarily the age of your source - as we’ll see below Helium Stars created through binary interactions and envelope stripping are found at similar locations as WR stars but at different ages.</p>
+</div>
+</div>
+<div class="section" id="Ages-from-Hertzsprung-Russell-Diagram">
+<h2>Ages from Hertzsprung-Russell Diagram<a class="headerlink" href="#Ages-from-Hertzsprung-Russell-Diagram" title="Permalink to this headline">¶</a></h2>
+<p>First, we need some observational data to compare to our models.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> expects a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. If you want to use the HRD capabilities you will need to provide a <code class="docutils literal notranslate"><span class="pre">logT</span></code> and a <code class="docutils literal notranslate"><span class="pre">logL</span></code> column: * logT: log10 of the stellar effective temperature * logL: log10 of the stellar luminosity <strong>in units of Solar Luminosities</strong></p>
+<p>Additionally, your DataFrame will ideally contain a <code class="docutils literal notranslate"><span class="pre">name</span></code> column with the name of the sources you’re working on. If you don’t provide one, <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> will make it’s own sources names: source1, source2, etc…</p>
+<p><em>Data source: McLeod et al. 2019, Stevance et al. in prep.</em></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">stars</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;Star1&#39;</span><span class="p">,</span><span class="s1">&#39;Star2&#39;</span><span class="p">,</span><span class="s1">&#39;Star3&#39;</span><span class="p">,</span><span class="s1">&#39;Star4&#39;</span><span class="p">,</span>
+                                                 <span class="s1">&#39;Star5&#39;</span><span class="p">,</span><span class="s1">&#39;Star6&#39;</span><span class="p">,</span><span class="s1">&#39;Star7&#39;</span><span class="p">,</span><span class="s1">&#39;Star8&#39;</span><span class="p">,</span><span class="s1">&#39;Star9&#39;</span><span class="p">,</span>
+                                                 <span class="s1">&#39;Star10&#39;</span><span class="p">,</span><span class="s1">&#39;Star11&#39;</span><span class="p">,</span><span class="s1">&#39;Star12&#39;</span><span class="p">,</span><span class="s1">&#39;Star13&#39;</span><span class="p">,</span><span class="s1">&#39;Star14&#39;</span><span class="p">,</span>
+                                                 <span class="s1">&#39;WR1&#39;</span><span class="p">,</span> <span class="s1">&#39;WR2&#39;</span><span class="p">]),</span>
+                                <span class="s1">&#39;logL&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">,</span> <span class="mf">5.9</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.4</span><span class="p">,</span> <span class="mf">4.3</span><span class="p">,</span> <span class="mf">5.7</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span>
+                                                 <span class="mf">4.9</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">4.3</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.3</span><span class="p">,</span> <span class="mf">5.3</span><span class="p">]),</span>
+                                <span class="s1">&#39;logT&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.48</span><span class="p">,</span> <span class="mf">4.45</span><span class="p">,</span> <span class="mf">4.46</span><span class="p">,</span> <span class="mf">4.47</span><span class="p">,</span> <span class="mf">4.48</span><span class="p">,</span> <span class="mf">4.53</span><span class="p">,</span> <span class="mf">4.52</span><span class="p">,</span> <span class="mf">4.52</span><span class="p">,</span> <span class="mf">4.52</span><span class="p">,</span>
+                                                 <span class="mf">4.56</span><span class="p">,</span> <span class="mf">4.46</span><span class="p">,</span> <span class="mf">4.52</span><span class="p">,</span> <span class="mf">4.52</span><span class="p">,</span> <span class="mf">4.52</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">,</span> <span class="mf">4.65</span><span class="p">])})</span>
+</pre></div>
+</div>
+</div>
+<p>Now we initialise our <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code>. Each instance corresponds to one model and one model only: i.e. 1 IMF and 1 metalicity.</p>
+<p>If we want to have a look at 2 different metallicities for example, we can just instanciate <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code> twice:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz006</span> <span class="o">=</span> <span class="n">AgeWizard</span><span class="p">(</span><span class="n">obs_df</span><span class="o">=</span><span class="n">stars</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z006.dat&#39;</span><span class="p">)</span>
+<span class="n">agewiz008</span> <span class="o">=</span> <span class="n">AgeWizard</span><span class="p">(</span><span class="n">obs_df</span><span class="o">=</span><span class="n">stars</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z008.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>During instanciation, the observations and models are matched and the age PDFs are calculated. They are summarised in a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> that you can access as follows.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz006</span><span class="o">.</span><span class="n">pdfs</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>name</th>
+      <th>Star1</th>
+      <th>Star2</th>
+      <th>Star3</th>
+      <th>Star4</th>
+      <th>Star5</th>
+      <th>Star6</th>
+      <th>Star7</th>
+      <th>Star8</th>
+      <th>Star9</th>
+      <th>Star10</th>
+      <th>Star11</th>
+      <th>Star12</th>
+      <th>Star13</th>
+      <th>Star14</th>
+      <th>WR1</th>
+      <th>WR2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.298460e-11</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.025706</td>
+      <td>5.594794e-11</td>
+      <td>0.021803</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.021803</td>
+      <td>0.025706</td>
+      <td>0.021803</td>
+      <td>0.000000e+00</td>
+      <td>0.107142</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.036928</td>
+      <td>0.000000e+00</td>
+      <td>0.030149</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.030149</td>
+      <td>0.036928</td>
+      <td>0.030149</td>
+      <td>0.000000e+00</td>
+      <td>0.004603</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.046310</td>
+      <td>0.000000e+00</td>
+      <td>0.035243</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.035243</td>
+      <td>0.046310</td>
+      <td>0.035243</td>
+      <td>0.000000e+00</td>
+      <td>0.006676</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.058174</td>
+      <td>0.000000e+00</td>
+      <td>0.052005</td>
+      <td>7.820472e-08</td>
+      <td>0.000000</td>
+      <td>0.052005</td>
+      <td>0.058174</td>
+      <td>0.052005</td>
+      <td>0.000000e+00</td>
+      <td>0.012032</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000654</td>
+      <td>0.000000e+00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.081692</td>
+      <td>0.000000e+00</td>
+      <td>0.057408</td>
+      <td>1.012331e-04</td>
+      <td>0.000654</td>
+      <td>0.057408</td>
+      <td>0.081692</td>
+      <td>0.057408</td>
+      <td>0.000000e+00</td>
+      <td>0.003365</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.015330</td>
+      <td>7.629112e-01</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.063921</td>
+      <td>4.216232e-03</td>
+      <td>0.074740</td>
+      <td>9.941176e-07</td>
+      <td>0.015330</td>
+      <td>0.074740</td>
+      <td>0.063921</td>
+      <td>0.074740</td>
+      <td>4.525980e-08</td>
+      <td>0.009378</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.075321</td>
+      <td>0.011572</td>
+      <td>0.142812</td>
+      <td>1.100859e-01</td>
+      <td>0.075321</td>
+      <td>0.003387</td>
+      <td>0.078904</td>
+      <td>2.914504e-01</td>
+      <td>0.086366</td>
+      <td>1.476180e-04</td>
+      <td>0.142812</td>
+      <td>0.086366</td>
+      <td>0.078904</td>
+      <td>0.086366</td>
+      <td>0.000000e+00</td>
+      <td>0.000145</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.238335</td>
+      <td>0.430026</td>
+      <td>0.233166</td>
+      <td>8.879082e-02</td>
+      <td>0.238335</td>
+      <td>0.558455</td>
+      <td>0.135883</td>
+      <td>4.335802e-01</td>
+      <td>0.093930</td>
+      <td>1.763084e-03</td>
+      <td>0.233166</td>
+      <td>0.093930</td>
+      <td>0.135883</td>
+      <td>0.093930</td>
+      <td>2.155362e-14</td>
+      <td>0.015148</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.295138</td>
+      <td>0.348300</td>
+      <td>0.279178</td>
+      <td>2.892240e-02</td>
+      <td>0.295138</td>
+      <td>0.345761</td>
+      <td>0.187286</td>
+      <td>1.529185e-01</td>
+      <td>0.147844</td>
+      <td>4.403392e-03</td>
+      <td>0.279178</td>
+      <td>0.147844</td>
+      <td>0.187286</td>
+      <td>0.147844</td>
+      <td>3.207127e-01</td>
+      <td>0.023512</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.324156</td>
+      <td>0.153717</td>
+      <td>0.267386</td>
+      <td>9.289685e-03</td>
+      <td>0.324156</td>
+      <td>0.044554</td>
+      <td>0.176904</td>
+      <td>8.005393e-02</td>
+      <td>0.204892</td>
+      <td>1.732683e-02</td>
+      <td>0.267386</td>
+      <td>0.204892</td>
+      <td>0.176904</td>
+      <td>0.204892</td>
+      <td>5.301331e-01</td>
+      <td>0.745544</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.023544</td>
+      <td>0.025031</td>
+      <td>0.023663</td>
+      <td>0.000000e+00</td>
+      <td>0.023544</td>
+      <td>0.032551</td>
+      <td>0.072708</td>
+      <td>3.722405e-02</td>
+      <td>0.165809</td>
+      <td>1.310383e-02</td>
+      <td>0.023663</td>
+      <td>0.165809</td>
+      <td>0.072708</td>
+      <td>0.165809</td>
+      <td>2.254815e-02</td>
+      <td>0.060667</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.016194</td>
+      <td>0.017432</td>
+      <td>0.015374</td>
+      <td>0.000000e+00</td>
+      <td>0.016194</td>
+      <td>0.011823</td>
+      <td>0.004711</td>
+      <td>5.566887e-04</td>
+      <td>0.006944</td>
+      <td>6.358691e-03</td>
+      <td>0.015374</td>
+      <td>0.006944</td>
+      <td>0.004711</td>
+      <td>0.006944</td>
+      <td>9.453766e-03</td>
+      <td>0.002344</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.017234</td>
+      <td>0.011523</td>
+      <td>0.014033</td>
+      <td>0.000000e+00</td>
+      <td>0.017234</td>
+      <td>0.003118</td>
+      <td>0.003887</td>
+      <td>0.000000e+00</td>
+      <td>0.006177</td>
+      <td>6.590932e-02</td>
+      <td>0.014033</td>
+      <td>0.006177</td>
+      <td>0.003887</td>
+      <td>0.006177</td>
+      <td>3.787228e-06</td>
+      <td>0.001189</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.008077</td>
+      <td>0.001189</td>
+      <td>0.006150</td>
+      <td>0.000000e+00</td>
+      <td>0.008077</td>
+      <td>0.000000</td>
+      <td>0.004152</td>
+      <td>0.000000e+00</td>
+      <td>0.006443</td>
+      <td>6.874719e-01</td>
+      <td>0.006150</td>
+      <td>0.006443</td>
+      <td>0.004152</td>
+      <td>0.006443</td>
+      <td>6.385924e-05</td>
+      <td>0.000039</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.000061</td>
+      <td>0.000322</td>
+      <td>0.001203</td>
+      <td>0.000000e+00</td>
+      <td>0.000061</td>
+      <td>0.000134</td>
+      <td>0.007283</td>
+      <td>0.000000e+00</td>
+      <td>0.003896</td>
+      <td>4.532046e-02</td>
+      <td>0.001203</td>
+      <td>0.003896</td>
+      <td>0.007283</td>
+      <td>0.003896</td>
+      <td>1.007283e-03</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>But those are just numbers… PDFs are meant to be plotted:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plot_all_pdfs</span><span class="p">(</span><span class="n">agewiz</span><span class="p">):</span>
+    <span class="c1"># creating the figure</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+    <span class="n">axes</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="c1"># We plot each star an individual axis</span>
+    <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">axis</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">agewiz</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">axes</span><span class="p">):</span>
+
+        <span class="c1"># Plotting one PDF</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">agewiz</span><span class="o">.</span><span class="n">pdfs</span><span class="p">[</span><span class="n">source</span><span class="p">],</span><span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">)</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">agewiz</span><span class="o">.</span><span class="n">pdfs</span><span class="p">[</span><span class="n">source</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+        <span class="c1"># Labels and limits</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Probability (%)&#39;</span><span class="p">)</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;log(years)&#39;</span><span class="p">)</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.6</span><span class="p">])</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mf">8.5</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Age-PDFs-at-z=0.006">
+<h3>Age PDFs at z=0.006<a class="headerlink" href="#Age-PDFs-at-z=0.006" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_all_pdfs</span><span class="p">(</span><span class="n">agewiz006</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_13_0.png" src="_images/AgeWizard_13_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Age-PDFs-at-z=0.008">
+<h3>Age PDFs at z=0.008<a class="headerlink" href="#Age-PDFs-at-z=0.008" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plot_all_pdfs</span><span class="p">(</span><span class="n">agewiz008</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_15_0.png" src="_images/AgeWizard_15_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Most-Likely-Ages">
+<h2>Most Likely Ages<a class="headerlink" href="#Most-Likely-Ages" title="Permalink to this headline">¶</a></h2>
+<p>The most likely age for <strong>each source</strong> is summarised by <code class="docutils literal notranslate"><span class="pre">AgeWizard.most_likely_ages</span></code>. This is returned as a numpy array.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz006</span><span class="o">.</span><span class="n">most_likely_ages</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
+       6.9, 6.9, 6.9])
+</pre></div>
+</div>
+</div>
+<p>Different metallicities will give different results. In this example we summarise our results into a new DataFrame:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">most_likely_ages</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">agewiz006</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span>
+                                           <span class="s1">&#39;z006&#39;</span><span class="p">:</span> <span class="n">agewiz006</span><span class="o">.</span><span class="n">most_likely_ages</span><span class="p">,</span>
+                                           <span class="s1">&#39;z008&#39;</span><span class="p">:</span> <span class="n">agewiz008</span><span class="o">.</span><span class="n">most_likely_ages</span><span class="p">})</span>
+
+<span class="c1"># Note that the attribute AgeWizard.sources is the list of names you provided, or if you didn&#39;t the ones it created</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">most_likely_ages</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>z006</th>
+      <th>z008</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Star1</td>
+      <td>6.9</td>
+      <td>6.8</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Star2</td>
+      <td>6.7</td>
+      <td>6.7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Star3</td>
+      <td>6.8</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Star4</td>
+      <td>6.5</td>
+      <td>6.5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Star5</td>
+      <td>6.9</td>
+      <td>6.8</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Star6</td>
+      <td>6.7</td>
+      <td>6.7</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Star7</td>
+      <td>6.8</td>
+      <td>6.8</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Star8</td>
+      <td>6.7</td>
+      <td>6.5</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Star9</td>
+      <td>6.9</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Star10</td>
+      <td>7.3</td>
+      <td>7.3</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Star11</td>
+      <td>6.8</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Star12</td>
+      <td>6.9</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Star13</td>
+      <td>6.8</td>
+      <td>6.8</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Star14</td>
+      <td>6.9</td>
+      <td>6.9</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>WR1</td>
+      <td>6.9</td>
+      <td>6.8</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>WR2</td>
+      <td>6.9</td>
+      <td>6.9</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="section" id="IMPORTANT">
+<h3>IMPORTANT<a class="headerlink" href="#IMPORTANT" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">most_likely_ages</span></code> (and <code class="docutils literal notranslate"><span class="pre">most_likley_age</span></code>, see below) tools <strong>do not give you a direct answer</strong> - they are a way to summarise the data and be used in your interpretation but <strong>please do not use these as a black box</strong>.</p>
+<p>Looking at the PDFs plotted above and the table of most likely ages, we can see that a few stars stand out:</p>
+<ul class="simple">
+<li><p>Star 4 has a lower (most likely) age than the rest of the sample</p></li>
+<li><p>Star 10 has a higher (most likely) age than the rest of the sample</p></li>
+<li><p>The WR PDFs show peaks beyond log(age/years) - which souldn’t be possible for WR stars.</p></li>
+</ul>
+<p>All of these are discussed an interpreted in details in Stevance et al. (in prep). Star 4 is an example of a star that is probably the result of a merger and rejuvination, Star 10 is more likely to be on the young tail of the distribution and not as old as the most likley age implies, and the WR stars share their HRD locations with helium stars which appear at later times, which populate the later peak.</p>
+</div>
+</div>
+<div class="section" id="Plotting-Aggregate-Ages">
+<h2>Plotting Aggregate Ages<a class="headerlink" href="#Plotting-Aggregate-Ages" title="Permalink to this headline">¶</a></h2>
+<p>If you are looking for the age of a whole population then you can ask <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code> to combine the PDFs it calcualted on initialisation. This is done with the method <code class="docutils literal notranslate"><span class="pre">AgeWizard.calcualte_sample_pdfs()</span></code>.</p>
+<p>It can be called as such and it will multiply all the PDFs, or you can provide a list of columns to ignore in the paramter <code class="docutils literal notranslate"><span class="pre">not_you</span></code>. You can also ask it to return the resulting PDF by setting <code class="docutils literal notranslate"><span class="pre">return_df</span></code> to True. If you don’t, it will store the result in <code class="docutils literal notranslate"><span class="pre">AgeWizard.sample_pdf</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Returns None</span>
+<span class="n">agewiz006</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz006</span><span class="o">.</span><span class="n">sample_pdf</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pdf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.018170</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.025543</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.030998</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.042060</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.052826</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.057152</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.085512</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.152308</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.196053</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.206209</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>You can also quickly retrieve the <strong>most likely age of the whole sample</strong> from the PDF you just calculated using <code class="docutils literal notranslate"><span class="pre">AgeWizard.most_likely_age</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz006</span><span class="o">.</span><span class="n">most_likely_age</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([6.9])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Or return directly</span>
+<span class="n">agewiz008</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">(</span><span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pdf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.024695</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.025288</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.019613</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.034380</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.058792</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.072591</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.132265</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.174126</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.211425</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.190401</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz008</span><span class="o">.</span><span class="n">most_likely_age</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([6.8])
+</pre></div>
+</div>
+</div>
+<p>Down below we create a quick function to plot our aggregate ages for z=0.006 and z=0.008.</p>
+<p>As an example of the</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cluster1_sources</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Star1&#39;</span><span class="p">,</span> <span class="s1">&#39;Star2&#39;</span><span class="p">,</span> <span class="s1">&#39;Star3&#39;</span><span class="p">,</span> <span class="s1">&#39;Star4&#39;</span><span class="p">,</span> <span class="s1">&#39;WR1&#39;</span><span class="p">]</span>
+<span class="n">cluster2_sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">agewiz006</span><span class="o">.</span><span class="n">sources</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cluster1_sources</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plot_aggregate_age</span><span class="p">(</span><span class="n">agewiz</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+
+    <span class="c1"># Aggregate age PDF for all sources</span>
+    <span class="n">cluster12</span> <span class="o">=</span> <span class="n">agewiz</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">(</span><span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span>
+
+    <span class="c1"># Aggregate age PDF for cluster1</span>
+    <span class="n">cluster1</span> <span class="o">=</span> <span class="n">agewiz</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">(</span><span class="n">not_you</span><span class="o">=</span><span class="n">cluster2_sources</span><span class="p">,</span> <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span>
+
+    <span class="c1"># Aggregate age PDF for cluster2</span>
+    <span class="n">cluster2</span> <span class="o">=</span> <span class="n">agewiz</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">(</span><span class="n">not_you</span><span class="o">=</span><span class="n">cluster1_sources</span><span class="p">,</span> <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">pdf</span>
+
+
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster1</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Cluster1&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster2</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span>  <span class="n">cluster2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Cluster2&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster12</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span>  <span class="n">cluster12</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;All&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Probability&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;log(ages)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plot_aggregate_age</span><span class="p">(</span><span class="n">agewiz006</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_aggregate_age</span><span class="p">(</span><span class="n">agewiz008</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.4</span><span class="p">])</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mf">8.5</span><span class="p">])</span>
+
+<span class="c1"># Cool legend</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.9</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>&lt;matplotlib.legend.Legend at 0x7f6b320e16d8&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_31_1.png" src="_images/AgeWizard_31_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Probability-given-an-age-range">
+<h2>Probability given an age range<a class="headerlink" href="#Probability-given-an-age-range" title="Permalink to this headline">¶</a></h2>
+<p>The BPASS time bins are separated by 0.1 dex in log space (log(age/years) = 6.0, 6.1, 6.2, 6.3 etc..) and the PDFs for your individual sources will cover a range of BPASS time bins.</p>
+<p>Consequently, giving a single age may not make a lot of sense. Also the PDFs will rarely, if ever, resemble a Gaussian distribution: that means that you can’t give an error bar in the “classical” sense.</p>
+<p>Another interesting measure is the probability that the age of your star falls into a chosen age range. In this case our aggregate age is most likely to be between 6.7-6.9, so let’s investigate how likely it is for each individual star to fall in that range.</p>
+<p>For that we use <code class="docutils literal notranslate"><span class="pre">AgeWizard.calculate_p_given_age_range()</span></code> which returns a Series containing the probabilities corresponding to each source.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">agewiz006</span><span class="o">.</span><span class="n">calculate_p_given_age_range</span><span class="p">([</span><span class="mf">6.7</span><span class="p">,</span> <span class="mf">6.9</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>name
+Star1     0.857630
+Star2     0.932043
+Star3     0.779729
+Star4     0.127003
+Star5     0.857630
+Star6     0.948770
+Star7     0.500073
+Star8     0.666553
+Star9     0.446666
+Star10    0.023493
+Star11    0.779729
+Star12    0.446666
+Star13    0.500073
+Star14    0.446666
+WR1       0.850846
+WR2       0.784204
+dtype: float64
+</pre></div>
+</div>
+</div>
+<p>We can collate those in one single DataFrame</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">p_ages_679</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">agewiz006</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span>
+                                     <span class="s1">&#39;z006&#39;</span><span class="p">:</span> <span class="n">agewiz006</span><span class="o">.</span><span class="n">calculate_p_given_age_range</span><span class="p">([</span><span class="mf">6.7</span><span class="p">,</span><span class="mf">6.9</span><span class="p">]),</span>
+                                     <span class="s1">&#39;z008&#39;</span><span class="p">:</span> <span class="n">agewiz008</span><span class="o">.</span><span class="n">calculate_p_given_age_range</span><span class="p">([</span><span class="mf">6.7</span><span class="p">,</span><span class="mf">6.9</span><span class="p">])})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">p_ages_679</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>z006</th>
+      <th>z008</th>
+    </tr>
+    <tr>
+      <th>name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Star1</th>
+      <td>Star1</td>
+      <td>0.857630</td>
+      <td>0.784335</td>
+    </tr>
+    <tr>
+      <th>Star2</th>
+      <td>Star2</td>
+      <td>0.932043</td>
+      <td>0.737951</td>
+    </tr>
+    <tr>
+      <th>Star3</th>
+      <td>Star3</td>
+      <td>0.779729</td>
+      <td>0.659319</td>
+    </tr>
+    <tr>
+      <th>Star4</th>
+      <td>Star4</td>
+      <td>0.127003</td>
+      <td>0.134967</td>
+    </tr>
+    <tr>
+      <th>Star5</th>
+      <td>Star5</td>
+      <td>0.857630</td>
+      <td>0.784335</td>
+    </tr>
+    <tr>
+      <th>Star6</th>
+      <td>Star6</td>
+      <td>0.948770</td>
+      <td>0.738479</td>
+    </tr>
+    <tr>
+      <th>Star7</th>
+      <td>Star7</td>
+      <td>0.500073</td>
+      <td>0.469008</td>
+    </tr>
+    <tr>
+      <th>Star8</th>
+      <td>Star8</td>
+      <td>0.666553</td>
+      <td>0.278005</td>
+    </tr>
+    <tr>
+      <th>Star9</th>
+      <td>Star9</td>
+      <td>0.446666</td>
+      <td>0.549145</td>
+    </tr>
+    <tr>
+      <th>Star10</th>
+      <td>Star10</td>
+      <td>0.023493</td>
+      <td>0.023109</td>
+    </tr>
+    <tr>
+      <th>Star11</th>
+      <td>Star11</td>
+      <td>0.779729</td>
+      <td>0.659319</td>
+    </tr>
+    <tr>
+      <th>Star12</th>
+      <td>Star12</td>
+      <td>0.446666</td>
+      <td>0.549145</td>
+    </tr>
+    <tr>
+      <th>Star13</th>
+      <td>Star13</td>
+      <td>0.500073</td>
+      <td>0.469008</td>
+    </tr>
+    <tr>
+      <th>Star14</th>
+      <td>Star14</td>
+      <td>0.446666</td>
+      <td>0.549145</td>
+    </tr>
+    <tr>
+      <th>WR1</th>
+      <td>WR1</td>
+      <td>0.850846</td>
+      <td>0.721919</td>
+    </tr>
+    <tr>
+      <th>WR2</th>
+      <td>WR2</td>
+      <td>0.784204</td>
+      <td>0.789553</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>To learn more about how we use and interpret this statistic, you can checkout Stevance et al. in prep an the associated Jupyter Notebook (link)</p>
+</div>
+<div class="section" id="Ages-from-Colour-Magnitude-Diagram">
+<h2>Ages from Colour-Magnitude Diagram<a class="headerlink" href="#Ages-from-Colour-Magnitude-Diagram" title="Permalink to this headline">¶</a></h2>
+<p>[TO WRITE]</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

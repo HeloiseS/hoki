@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick Start &mdash; hoki beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Publication" href="citation.html" />
+    <link rel="prev" title="What is Hoki?" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#set-up">Set-up</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-hoki">Install Hoki</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-tutorials">Download the tutorials</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-the-bpass-models">Download the BPASS models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-in-data">Loading in Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#stellar-population-outputs">Stellar Population Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectral-synthesis-outputs">Spectral Synthesis Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stellar-models">Stellar Models</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#citing-hoki">Citing Hoki</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quick Start</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quick_start.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="citation.html" class="btn btn-neutral float-right" title="Publication" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro.html" class="btn btn-neutral float-left" title="What is Hoki?" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="set-up">
+<h2>Set-up<a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-hoki">
+<h3>Install Hoki<a class="headerlink" href="#install-hoki" title="Permalink to this headline">¶</a></h3>
+<p>To install the most recent stable release of hoki you can use:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo pip3 install --user hoki
+</pre></div>
+</div>
+<p>If you are feeling adventurous and want the most recent (in development) version of hoki, you can clone our <a class="reference external" href="https://github.com/HeloiseS/hoki">GitHub repository</a></p>
+</div>
+<div class="section" id="download-the-tutorials">
+<h3>Download the tutorials<a class="headerlink" href="#download-the-tutorials" title="Permalink to this headline">¶</a></h3>
+<p>They can be found in the side-bar to read, but you can dowload the <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">jupyter notebooks</a> so you can play with them later.</p>
+</div>
+<div class="section" id="download-the-bpass-models">
+<h3>Download the BPASS models<a class="headerlink" href="#download-the-bpass-models" title="Permalink to this headline">¶</a></h3>
+<p>BPASS models can be downloaded from the BPASS:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 5%" />
+<col style="width: 21%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Download</p></th>
+<th class="head"><p>Hoki Compatible</p></th>
+<th class="head"><p>Release Date</p></th>
+<th class="head"><p>Reference</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">BPASSv2.2</a></p></td>
+<td><p>Yes</p></td>
+<td><p>July 2018</p></td>
+<td><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2018MNRAS.479...75S/abstract">Stanway &amp; Eldridge (2018)</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/0B7vqPPPgOdtIdjdyV3JwODZ3TlU">BPASSv2.1</a></p></td>
+<td><p>untested</p></td>
+<td><p>October 2017</p></td>
+<td><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2017PASA...34...58E/abstract">Eldridge, Stanway, Xiao, et al. (2017)</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/0B7vqPPPgOdtIfjUtb3RsV2JUOTFFX29WV1FZNURPMHAxTEtZQjhJOGtyNXZUTTNVSzFZazQ">BPASSv2.0</a></p></td>
+<td><p>untested</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://bpass.auckland.ac.nz/1.html">BPASSv1</a></p></td>
+<td><p>untested</p></td>
+<td><p>–</p></td>
+<td><p>–</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">hoki</span></code> is dedicated to being an interface with the BPASS models, but given the substancial size of the entire set of models, they are not downloaded upon installation of <code class="docutils literal notranslate"><span class="pre">hoki</span></code>, and you should download the models you want to work on.</p>
+</div>
+</div>
+<div class="section" id="loading-in-data">
+<h2>Loading in Data<a class="headerlink" href="#loading-in-data" title="Permalink to this headline">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>More details on the outputs mentioned below can be found in the <a class="reference external" href="https://bpass.auckland.ac.nz/8/files/bpassv2_1_manual_accessible_version.pdf">BPASS manual</a>.</p>
+</div>
+<div class="section" id="stellar-population-outputs">
+<h3>Stellar Population Outputs<a class="headerlink" href="#stellar-population-outputs" title="Permalink to this headline">¶</a></h3>
+<p>A stellar output file can be loaded in using the <code class="docutils literal notranslate"><span class="pre">model_output()</span></code> function in the <code class="docutils literal notranslate"><span class="pre">load</span></code> module.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;path_to_output&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The function will figure out based on the file name what data is being loaded in and will return the appropriate data format: <code class="docutils literal notranslate"><span class="pre">pandas.DataFrames</span></code> in most cases, apart from HR diagrams, which have their own <code class="docutils literal notranslate"><span class="pre">HRDiagrams</span></code> class – because they’re quite a complex data structure.</p>
+<p>Here we summarise the shape of the outputs (51 time bins) for a given metalicity and IMF.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Output</p></th>
+<th class="head"><p>File Name Root</p></th>
+<th class="head"><p>Shape</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Massive star type numbers</p></td>
+<td><p>numbers</p></td>
+<td><p>51 x 21</p></td>
+</tr>
+<tr class="row-odd"><td><p>Supernova Rates</p></td>
+<td><p>supernova</p></td>
+<td><p>51 x 18</p></td>
+</tr>
+<tr class="row-even"><td><p>Energy and elemental yields</p></td>
+<td><p>yields</p></td>
+<td><p>51 x 9</p></td>
+</tr>
+<tr class="row-odd"><td><p>Stellar mass remaining at the end</p></td>
+<td><p>starmass</p></td>
+<td><p>51 x 3</p></td>
+</tr>
+<tr class="row-even"><td><p>HR diagrams</p></td>
+<td><p>hrs</p></td>
+<td><p>51 x 100 x 100 x 3 x 3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="spectral-synthesis-outputs">
+<h3>Spectral Synthesis Outputs<a class="headerlink" href="#spectral-synthesis-outputs" title="Permalink to this headline">¶</a></h3>
+<p>The spectral synthesis output files can be also loaded in using the <code class="docutils literal notranslate"><span class="pre">model_output()</span></code> function in the <code class="docutils literal notranslate"><span class="pre">load</span></code> module.
+All outputs are returned as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrames</span></code> with sensible column names.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;path_to_output&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Output</p></th>
+<th class="head"><p>File Name Root</p></th>
+<th class="head"><p>Shape</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Spectra (SEDs)</p></td>
+<td><p>spectra</p></td>
+<td><p>52x10E5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ionizing flux predictions</p></td>
+<td><p>ionizing</p></td>
+<td><p>51x5</p></td>
+</tr>
+<tr class="row-even"><td><p>Colours (broad-band)</p></td>
+<td><p>colours</p></td>
+<td><p>51x26</p></td>
+</tr>
+</tbody>
+</table>
+<p>The full suite of stellar models is also available from the BPASS website (careful, the file is big ~50GB), and they are required to make colour magnitude diagram (CMD) such as in Figure 24 of <a class="reference external" href="https://bpass.auckland.ac.nz/8.html">BPASSv2.1</a>. Creating these CMD and exploring these files is very tricky - in a future release <code class="docutils literal notranslate"><span class="pre">hoki</span></code> will offer features to make this straight forward.</p>
+</div>
+<div class="section" id="stellar-models">
+<h3>Stellar Models<a class="headerlink" href="#stellar-models" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the population and spectral synthesis outputs, the stellar models are also available as a BPASS data product. They can be downloaded from the <a class="reference external" href="ttps://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">google drive</a>: the name of the folder containing the most recent models is <strong>bpass-v2.2-newmodels</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These folder is ~50 GB. Make sure you have a good internet connection and sufficient space.</p>
+</div>
+<p>The stellar models are required to make Colour-Magnitude Diagrams (see RECIPES) and other deeper searches within the models that are not summarised in the population or spectral synthesis outputs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is where the files names <code class="docutils literal notranslate"><span class="pre">model_input</span></code> become necesary. They are not human readable but are used within <code class="docutils literal notranslate"><span class="pre">hoki</span></code> to apply the correct algorithm to the stellar models in order to collate them correctly. (So don’t panic if you open them and wonder what is going on).</p>
+</div>
+</div>
+</div>
+<div class="section" id="citing-hoki">
+<h2>Citing Hoki<a class="headerlink" href="#citing-hoki" title="Permalink to this headline">¶</a></h2>
+<p>Hoki has been reviewed and published by the Journal Of Open Source Software! Click the button below to access the online publication.</p>
+<a class="reference external image-reference" href="https://doi.org/10.21105/joss.01987"><img alt="https://joss.theoj.org/papers/10.21105/joss.01987/status.svg" src="https://joss.theoj.org/papers/10.21105/joss.01987/status.svg" /></a>
+<p>If you use <cite>hoki</cite> for your science, please include the following reference in your paper:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@ARTICLE{2020JOSS....5.1987S,
+    author = {{Stevance}, Heloise and {Eldridge}, J. and {Stanway}, Elizabeth},
+    title = &quot;{Hoki: Making BPASS accessible through Python}&quot;,
+    journal = {The Journal of Open Source Software},
+  keywords = {Python, galaxies, Batchfile, SED, astronomy, binary stars, Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
+     year = &quot;2020&quot;,
+     month = &quot;Jan&quot;,
+     volume = {5},
+     number = {45},
+     eid = {1987},
+     pages = {1987},
+     doi = {10.21105/joss.01987},
+     archivePrefix = {arXiv},
+     eprint = {2001.11069},
+     primaryClass = {astro-ph.SR},
+     adsurl = {https://ui.adsabs.harvard.edu/abs/2020JOSS....5.1987S},
+    adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+ }
+</pre></div>
+</div>
+<hr class="docutils" />
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For dedicated tutorials about specific aspecs of hoki and BPASS, check our RECIPES section in the side bar!</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

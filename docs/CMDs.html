@@ -1,0 +1,937 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Colour Magnitude Diagrams &mdash; hoki beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Age Wizard" href="AgeWizard.html" />
+    <link rel="prev" title="Spectra" href="Spectra.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: black" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Colour Magnitude Diagrams</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Initial-Imports">Initial Imports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Getting-the-Stellar-models-and-input-files">Getting the Stellar models and input files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#CMD-objects">CMD objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Making-the-CMDs">Making the CMDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Changing-the-resolution-of-the-CMD-grids">Changing the resolution of the CMD grids</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Plotting-the-CMDs">Plotting the CMDs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Pickle-CMDs---don't-make-them-twice!">Pickle CMDs - don’t make them twice!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Loading-a-pickled-CMD-file">Loading a pickled CMD file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Pickling-a-CMD-file">Pickling a CMD file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Creating-a-publication-ready-figure">Creating a publication-ready figure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Colour Magnitude Diagrams</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/CMDs.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
+      
+        <a href="AgeWizard.html" class="btn btn-neutral float-right" title="Age Wizard" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Spectra.html" class="btn btn-neutral float-left" title="Spectra" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+  </div>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 5ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Colour-Magnitude-Diagrams">
+<h1>Colour Magnitude Diagrams<a class="headerlink" href="#Colour-Magnitude-Diagrams" title="Permalink to this headline">¶</a></h1>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
+<div class="section" id="Initial-Imports">
+<h2>Initial Imports<a class="headerlink" href="#Initial-Imports" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">hoki.cmd</span> <span class="k">import</span> <span class="n">CMD</span>
+<span class="kn">from</span> <span class="nn">hoki.load</span> <span class="k">import</span> <span class="n">set_models_path</span><span class="p">,</span> <span class="n">unpickle</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Getting-the-Stellar-models-and-input-files">
+<h3>Getting the Stellar models and input files<a class="headerlink" href="#Getting-the-Stellar-models-and-input-files" title="Permalink to this headline">¶</a></h3>
+<p>Colour Magnitude Diagrams (CMDs) are created by reading in the <a class="reference external" href="https://bpass.auckland.ac.nz/9.html">BPASS</a> stellar models listed in the <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files that can be found in the BPASS output folders (e.g. <em>bpass_v2.2.1_imf135_300</em>). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>NOTE: You will be able to run the cells in the section “Loading a pickled CMD file” even if you can’t download the full set of stellar models **</p>
+<p>The stellar models and input files can be downloaded from <a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">the google drive</a> (<em>bpass-v2.2-newmodels</em> for the models and e.g. <em>bpass_v2.2.1_imf135_300</em> to get the required <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files). Then you will have to change the path to the models in the <code class="docutils literal notranslate"><span class="pre">settings.yaml</span></code> file – this can be done using the <code class="docutils literal notranslate"><span class="pre">set_models_path</span></code> function contained in the <code class="docutils literal notranslate"><span class="pre">hoki.load</span></code> module:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The following path is valid on my machine - make sure you put the right ABSOLUTE path for your system</span>
+<span class="n">set_models_path</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Looks like everything went well! You can check the path was correctly updated by looking at this file:
+/home/fste075/hoki/hoki/data/settings.yaml
+</pre></div></div>
+</div>
+<p><strong>NOTE: You’ll probably have to reload hoki or restart the kernel at this point if you’ve jsut updated the yaml file :)</strong></p>
+</div>
+</div>
+<div class="section" id="CMD-objects">
+<h2>CMD objects<a class="headerlink" href="#CMD-objects" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Making-the-CMDs">
+<h3>Making the CMDs<a class="headerlink" href="#Making-the-CMDs" title="Permalink to this headline">¶</a></h3>
+<p>To create a synthetic CMD, <code class="docutils literal notranslate"><span class="pre">hoki</span></code> creates a grid in colour-magnitude space and then consults the entire set of stellar models to fill that grid. It is basically a histogram - the value of each cell/bin increases according to the proportion of the stellar population that falls into that bin. You could just plot this grid with a colour-map like an image, but we traditionally create contour plots for visualisation.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">hoki</span></code> you will be creating a <code class="docutils literal notranslate"><span class="pre">CMD()</span></code> object instanciated with a model of your choosing (a particular IMF and metallicity)- for this you need to provide the <strong>location of a BPASS input file</strong>.</p>
+<p>To know WHAT to do with this information, we also need to give the <strong>two broad-band filters</strong> we are interested in to make the plot filter2 Vs filter1-filter2 (e.g. V Vs B-V). This is given in the <code class="docutils literal notranslate"><span class="pre">CMD.make()</span></code> method, which actually creates and fills the CMD grids.</p>
+<p><strong>NOTE: This step is the most time consuming because there are thousands and thousands of models to look at. For that reason it also take much longer for the binary stellar models than the single star models to make a CMD. In the next section we will show you how to avoid having to go repeat his step in the future</strong></p>
+<p>The good news is that <strong>once you have instanciated and ‘made’ the CMD object, plotting it is VERY fast</strong> and you have a CMD for <strong>each time bin</strong>, which are also trivial and quick to access.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># ONLY RUN IF YOU HAVE THE MODELS IN YOUR MACHINE</span>
+
+<span class="c1"># Update this path if you want to run this cell</span>
+<span class="n">input_file</span> <span class="o">=</span> <span class="s1">&#39;/home/fste075/BPASS_hoki_dev/bpass_v2.2.1_imf135_300/input_bpass_z020_bin_imf135_300&#39;</span>
+<span class="n">mycmd</span> <span class="o">=</span> <span class="n">CMD</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+
+<span class="c1"># actually makes and fills the grids - this is the time and memory consuming step</span>
+<span class="n">mycmd</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="n">mag_filter</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">col_filters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/fste075/hoki/hoki/cmd.py:191: RuntimeWarning: divide by zero encountered in log10
+  self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))
+/home/fste075/hoki/hoki/cmd.py:207: RuntimeWarning: divide by zero encountered in log10
+  self._log_ages = np.concatenate((np.array([0]), np.log10(self._my_data[1,1:])))
+</pre></div></div>
+</div>
+<p>Below is a summary illustration of what the synthetic CMDs are and what a <code class="docutils literal notranslate"><span class="pre">CMD()</span></code> instance is.</p>
+<p>You can easily access the grid by simply calling the attribute <code class="docutils literal notranslate"><span class="pre">CMD.grid</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="o">.</span><span class="n">grid</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([[[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]],
+
+       [[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]],
+
+       [[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]],
+
+       ...,
+
+       [[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]],
+
+       [[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]],
+
+       [[0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        ...,
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.],
+        [0., 0., 0., ..., 0., 0., 0.]]])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>(51, 240, 100)
+</pre></div>
+</div>
+</div>
+<p>But <code class="docutils literal notranslate"><span class="pre">CMD</span></code> objects are also indexable!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       ...,
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>(240, 100)
+</pre></div>
+</div>
+</div>
+<p>This would give you the grid for log(age/years)=6.0, but it can get tricky to find the right age CMD grid just based on indices, so for that purpose you can use <code class="docutils literal notranslate"><span class="pre">CMD.at_log_age()</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mycmd</span><span class="o">.</span><span class="n">at_log_age</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area highlight-none notranslate"><div class="highlight"><pre>
+<span></span>array([[0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       ...,
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.],
+       [0., 0., 0., ..., 0., 0., 0.]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Changing-the-resolution-of-the-CMD-grids">
+<h3>Changing the resolution of the CMD grids<a class="headerlink" href="#Changing-the-resolution-of-the-CMD-grids" title="Permalink to this headline">¶</a></h3>
+<p>As we can see we have 51 time bins, 240 magnitude intervals and 100 colour intervals.</p>
+<p>The number of time bins is fixed by BPASS but you can chose the size of your colour-magnitude grid and its resolution when you instanciate a <code class="docutils literal notranslate"><span class="pre">CMD</span></code> object.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">blurry_cmd</span> <span class="o">=</span> <span class="n">CMD</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">col_lim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="n">mag_lim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">res_el</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="n">blurry_cmd</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="n">mag_filter</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">col_filters</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;V&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Plotting-the-CMDs">
+<h2>Plotting the CMDs<a class="headerlink" href="#Plotting-the-CMDs" title="Permalink to this headline">¶</a></h2>
+<p>Like I said above, once the grid is made and filled, plotting is quick and straight forward. As in other <code class="docutils literal notranslate"><span class="pre">hoki</span></code> tools the plotting function returns the plot, which you can store in a variable to add your own labels and customize limits.</p>
+<p>Similarly to the <code class="docutils literal notranslate"><span class="pre">hoki.HRDiagrams</span></code> plots, the contours are on a log scale.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="n">myplot</span> <span class="o">=</span> <span class="n">mycmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">)</span> <span class="c1"># Here you can chose the time bin you want to plot.</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>As with the HRDiagrams, you can also tell the plotting function where your want it to plot your data!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">mycmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Here you can chose the time bin you want to plot.</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;High resolution&#39;</span><span class="p">)</span>
+
+<span class="n">blurry_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># Here you can chose the time bin you want to plot.</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Low resolution&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Pickle-CMDs---don't-make-them-twice!">
+<h2>Pickle CMDs - don’t make them twice!<a class="headerlink" href="#Pickle-CMDs---don't-make-them-twice!" title="Permalink to this headline">¶</a></h2>
+<p>Because it is a little time consuming to create the synthetic CMDs, we actually recommend you <a class="reference external" href="https://www.datacamp.com/community/tutorials/pickle-python-tutorial">pickle</a> your CMD objects. This will allow you to re-use them in the future and plot them virtually instantly, by-passing the <code class="docutils literal notranslate"><span class="pre">CMD.make()</span></code> step.</p>
+<div class="section" id="Loading-a-pickled-CMD-file">
+<h3>Loading a pickled CMD file<a class="headerlink" href="#Loading-a-pickled-CMD-file" title="Permalink to this headline">¶</a></h3>
+<p>We’ve provided a couple of pickled CMD files in the <code class="docutils literal notranslate"><span class="pre">./data/cmds/</span></code> directory for you to try even if you couldn’t download the full sets of stellar models.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pickled_cmd</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./data/cmds/cmd_bv_z020_bin_imf135_300&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="n">myplot</span> <span class="o">=</span> <span class="n">pickled_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">)</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Pickling-a-CMD-file">
+<h3>Pickling a CMD file<a class="headerlink" href="#Pickling-a-CMD-file" title="Permalink to this headline">¶</a></h3>
+<p>Now let’s make your own pickle file! If you have the stellar models and made the CMD in the previous sections of this tutorial, you can now save your work!</p>
+<p>All you need is the following code (feel free to change the output file name).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># First we open a file we can write into</span>
+<span class="n">outfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./data/cmds/BV_CMD.pckl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+<span class="c1"># Then we call the &#39;dump&#39; function from the pickle module to dump our cmd in our output file</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">mycmd</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
+<span class="c1"># And to avoid funny business we close our file.</span>
+<span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">new_pickled_cmd</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./data/cmds/BV_CMD.pckl&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="n">myplot</span> <span class="o">=</span> <span class="n">new_pickled_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">)</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Creating-a-publication-ready-figure">
+<h2>Creating a publication-ready figure<a class="headerlink" href="#Creating-a-publication-ready-figure" title="Permalink to this headline">¶</a></h2>
+<p>Just like with the HRDiagrams, the tool provided by <code class="docutils literal notranslate"><span class="pre">hoki</span></code> will allow you to make publication ready figures in not time!</p>
+<p>Let’s make a plot comparing the CMDs for Cygnus OB2 and Upper Sco in B-V and U-V plots.</p>
+<p>First we need to load our data (which is provided in the ./data/cmds/ repository) - we also need to make sure our observational data is in <strong>absolute</strong> magnitude, because that’s what our synthetic CMDs provide. If <strong>extinction</strong> is important in your osbervational data, you also need to take that into account.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Cygnus OB2 data</span>
+<span class="n">Av</span><span class="p">,</span> <span class="n">cyg_U</span><span class="p">,</span> <span class="n">cyg_B</span><span class="p">,</span> <span class="n">cyg_V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s1">&#39;./data/cmds/cygnusob.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">skip_header</span><span class="o">=</span><span class="mi">54</span><span class="p">)</span>
+
+<span class="c1"># Assumes Milky Way extinction</span>
+<span class="n">Ab</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.324</span><span class="o">*</span><span class="n">Av</span><span class="p">)</span>
+<span class="n">Au</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.531</span><span class="o">*</span><span class="n">Av</span><span class="p">)</span>
+
+<span class="c1"># Distance to Cyg OB2 and distance modulus</span>
+<span class="n">d_cygob2</span> <span class="o">=</span> <span class="mi">1750</span> <span class="c1">#pc</span>
+<span class="n">mu_cygob2</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">d_cygob2</span><span class="p">)</span><span class="o">-</span><span class="mi">5</span>
+
+<span class="c1"># Taking away the extinction and turning our mags into absolute mags</span>
+<span class="c1"># Note it was derived from single star models so extinction may be a tad off</span>
+<span class="c1"># for your science, feel free to do a better job of it ;)</span>
+<span class="n">cyg_U</span><span class="p">,</span> <span class="n">cyg_B</span><span class="p">,</span> <span class="n">cyg_V</span> <span class="o">=</span> <span class="n">cyg_U</span><span class="o">-</span><span class="n">Au</span><span class="o">-</span><span class="n">mu_cygob2</span> <span class="p">,</span> <span class="n">cyg_B</span><span class="o">-</span><span class="n">Ab</span><span class="o">-</span><span class="n">mu_cygob2</span> <span class="p">,</span> <span class="n">cyg_V</span><span class="o">-</span><span class="n">Av</span><span class="o">-</span><span class="n">mu_cygob2</span>
+
+<span class="c1"># Now calculating colours</span>
+<span class="n">cyg_UV</span> <span class="o">=</span> <span class="n">cyg_U</span><span class="o">-</span><span class="n">cyg_V</span>
+<span class="n">cyg_BV</span> <span class="o">=</span> <span class="n">cyg_B</span><span class="o">-</span><span class="n">cyg_V</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Upper Sco data</span>
+<span class="n">p</span><span class="p">,</span> <span class="n">usco_U</span><span class="p">,</span> <span class="n">usco_B</span><span class="p">,</span> <span class="n">usco_V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s1">&#39;./data/cmds/usco.dat&#39;</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">skip_header</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Distance modulus - this time based on parallax.</span>
+<span class="c1"># (Note I inverted parallax to make this tutorial quick - don&#39;t @ me.)</span>
+<span class="c1"># Extinction is not a problem for this data set</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">p</span><span class="p">)</span><span class="o">-</span><span class="mi">5</span>
+<span class="n">usco_U</span><span class="p">,</span> <span class="n">usco_B</span><span class="p">,</span> <span class="n">usco_V</span> <span class="o">=</span> <span class="n">usco_U</span><span class="o">+</span><span class="n">mu</span><span class="p">,</span> <span class="n">usco_B</span><span class="o">+</span><span class="n">mu</span><span class="p">,</span> <span class="n">usco_V</span><span class="o">+</span><span class="n">mu</span>
+
+<span class="c1"># Calculating colours</span>
+<span class="n">usco_UV</span> <span class="o">=</span> <span class="n">usco_U</span><span class="o">-</span><span class="n">usco_V</span>
+<span class="n">usco_BV</span> <span class="o">=</span> <span class="n">usco_B</span><span class="o">-</span><span class="n">usco_V</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Unpickling our BV and UV cmds!</span>
+<span class="n">BV_cmd</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./data/cmds/cmd_bv_z020_bin_imf135_300&#39;</span><span class="p">)</span>
+<span class="n">UV_cmd</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./data/cmds/cmd_uv_z020_bin_imf135_300&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Now let’s plot the data!</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+
+<span class="c1"># This is a bit off on the colour axis which is probs just because of my conversion from Av to Ab and Au</span>
+<span class="n">UV_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cyg_UV</span><span class="p">,</span> <span class="n">cyg_V</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">BV_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cyg_BV</span><span class="p">,</span> <span class="n">cyg_V</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">2.0</span><span class="p">])</span>
+
+<span class="c1"># this is not the same data as the paper</span>
+<span class="n">UV_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco_UV</span><span class="p">,</span> <span class="n">usco_V</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="n">BV_cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">usco_BV</span><span class="p">,</span> <span class="n">usco_V</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]:</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Cygnus OB2</span><span class="se">\n</span><span class="s1">Z=0.020</span><span class="se">\n</span><span class="s1">log(age)=6.8 yrs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Cygnus OB2</span><span class="se">\n</span><span class="s1">Z=0.020</span><span class="se">\n</span><span class="s1">log(age)=6.8 yrs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;USco</span><span class="se">\n</span><span class="s1">Z=0.020</span><span class="se">\n</span><span class="s1">log(age)=6.8 yrs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;USco</span><span class="se">\n</span><span class="s1">Z=0.020</span><span class="se">\n</span><span class="s1">log(age)=6.8 yrs&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<p><strong>YOU’RE ALL SET!</strong></p>
+<p>I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on <code class="docutils literal notranslate"><span class="pre">hoki</span></code> GitHub page <a class="reference external" href="https://github.com/HeloiseS/hoki">here</a> or on the <code class="docutils literal notranslate"><span class="pre">hoki_tutorials</span></code> GitHub <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">there</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, H. F. Stevance
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
