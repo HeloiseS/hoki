@@ -1,4 +1,4 @@
-Copyright (c) 2019, H. F. Stevance
+Copyright (c) 2020, H. F. Stevance
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
