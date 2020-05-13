@@ -34,6 +34,12 @@ jobs:
     - name: Run Tox
       run: tox
       
+    - name: Generate coverage report
+      run: |
+        pip install pytest
+        pip install pytest-cov
+        pytest --cov=./ --cov-report=xml
+      
     - uses: actions/checkout@migration
     - uses: codecov/codecov-action@v1
       with:
