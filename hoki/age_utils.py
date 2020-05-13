@@ -76,9 +76,10 @@ class AgeWizard(HokiObject):
     @property
     def most_likely_age(self):
         """
-        Finds  the most likely age by finding the max value in self.multiplied_pdf
+        Finds  the most likely age by finding the max value in self.calculate_sample_pdf
         """
         if self._most_likely_age is not None: return self._most_likely_age
+
         if self.sample_pdf is None:
             warnings.warn('self.multiplied_pdf is not yet defined -- running AgeWizard.combined_pdfs()', HokiUserWarning)
             self.calculate_sample_pdf()

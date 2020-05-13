@@ -50,10 +50,6 @@ class CMD(HokiObject):
 
     # dummy_col_number=len(dummy_dict) I think this line is no longer useful
 
-    # just for consistency with the HRDiagram
-    t = BPASS_TIME_BINS
-    dt = BPASS_TIME_INTERVALS
-
     def __init__(self, file,
                  col_lim=[-3, 7],
                  mag_lim=[-14, 10],
@@ -147,7 +143,7 @@ class CMD(HokiObject):
 
             # PRE PROCESSING THE MODEL INPUTS
 
-            # The model_img and mixed_img have different precisions because of the FORTRAN code
+            # The model_imf and mixed_imf have different precisions because of the FORTRAN code
             # model_imf is double precision but mixed_imf is double precision. We round to take care of that.
             model_imf = round(model_imf, 6)
             mixed_imf = round(mixed_imf, 6)
