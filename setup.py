@@ -8,7 +8,7 @@ import os
 import sys
 
 from setuptools import setup
-from extension_helpers import get_extensions
+#from extension_helpers import get_extensions
 
 # First provide helpful messages if contributors try and run legacy commands
 # for tests or docs.
@@ -60,6 +60,6 @@ except Exception:
     version = '{version}'
 """.lstrip()
 
-setup(use_scm_version={'write_to': os.path.join('astropy', 'version.py'),
-                       'write_to_template': VERSION_TEMPLATE},
-      ext_modules=get_extensions())
+setup(use_scm_version={'write_to': os.path.join('hoki', 'version.py'),
+                       'write_to_template': VERSION_TEMPLATE})
+      #,ext_modules=get_extensions())
