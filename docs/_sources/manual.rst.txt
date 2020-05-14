@@ -20,9 +20,9 @@ Here is a list of dependencies for `hoki`. If you choose to `pip` install it, th
     :members:
 
 
-################
+###################
 **hoki.constants**
-################
+###################
 
 This module just contains BPASS constants and defines variables used in hoki.
 
@@ -48,27 +48,27 @@ dummy_dict
    Dictionary linking column number to column name for the large BPASS array traditionally called dummy. See the BPASS manual for a text version of the numner/name correspondance. 
 
 
-################
+####################
 **hoki.hrdiagrams**
-################
+####################
 
 
 .. automodule:: hoki.hrdiagrams
     :members:
 
 
-##########
+################
 **hoki.load**
-##########
+################
 
 
 .. automodule:: hoki.load
     :members:
 
 
-##########
+#############
 **hoki.spec**
-##########
+#############
 
 .. automodule:: hoki.spec
     :members:

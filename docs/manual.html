@@ -100,19 +100,15 @@
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html#The-science-behind-the-code"><em>The science behind the code</em></a></li>
-<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html#Most-Likely-Ages">Most Likely Ages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html#Plotting-Aggregate-Ages">Plotting Aggregate Ages</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html#Probability-given-an-age-range">Probability given an age range</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#hoki-constants"><strong>hoki.constants</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#hoki-hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#hoki-load"><strong>hoki.load</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#hoki-spec"><strong>hoki.spec</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-hoki.spec"><strong>hoki.spec</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -407,9 +403,9 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 </dd>
 </dl>
 </div>
-<div class="section" id="hoki-hrdiagrams">
-<h1><strong>hoki.hrdiagrams</strong><a class="headerlink" href="#hoki-hrdiagrams" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-hoki.hrdiagrams"></span><p>This module implements the HR diagram infrastructure.</p>
+<div class="section" id="module-hoki.hrdiagrams">
+<span id="hoki-hrdiagrams"></span><h1><strong>hoki.hrdiagrams</strong><a class="headerlink" href="#module-hoki.hrdiagrams" title="Permalink to this headline">¶</a></h1>
+<p>This module implements the HR diagram infrastructure.</p>
 <dl class="class">
 <dt id="hoki.hrdiagrams.HRDiagram">
 <em class="property">class </em><code class="sig-prename descclassname">hoki.hrdiagrams.</code><code class="sig-name descname">HRDiagram</code><span class="sig-paren">(</span><em class="sig-param">high_H_input</em>, <em class="sig-param">medium_H_input</em>, <em class="sig-param">low_H_input</em>, <em class="sig-param">hr_type</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram" title="Permalink to this definition">¶</a></dt>
@@ -705,9 +701,9 @@ levels fall).</p>
 </dd></dl>
 
 </div>
-<div class="section" id="hoki-load">
-<h1><strong>hoki.load</strong><a class="headerlink" href="#hoki-load" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-hoki.load"></span><p>This module implements the tools to easily load BPASS data.</p>
+<div class="section" id="module-hoki.load">
+<span id="hoki-load"></span><h1><strong>hoki.load</strong><a class="headerlink" href="#module-hoki.load" title="Permalink to this headline">¶</a></h1>
+<p>This module implements the tools to easily load BPASS data.</p>
 <dl class="function">
 <dt id="hoki.load.model_input">
 <code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_input</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_input" title="Permalink to this definition">¶</a></dt>
@@ -760,15 +756,144 @@ bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and
 </dd></dl>
 
 </div>
-<div class="section" id="hoki-spec">
-<h1><strong>hoki.spec</strong><a class="headerlink" href="#hoki-spec" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-hoki.spec"></span><p>Module to hold functions and utilities to be applied to spectra, especially BPASS synthetic spectra</p>
+<div class="section" id="module-hoki.spec">
+<span id="hoki-spec"></span><h1><strong>hoki.spec</strong><a class="headerlink" href="#module-hoki.spec" title="Permalink to this headline">¶</a></h1>
+<p>Module to hold functions and utilities to be applied to spectra,
+especially BPASS synthetic spectra</p>
+<dl class="function">
+<dt id="hoki.spec.apply_bandpass">
+<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">apply_bandpass</code><span class="sig-paren">(</span><em class="sig-param">spectrum</em>, <em class="sig-param">bandpass</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.apply_bandpass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies a bandpass filter to a given spectrum.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function overrides the optmized wavelength binning of pysynphot.
+Instead it uses the wavelength binning of the given spectrum.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spectrum</strong> (<em>pysynphot.spectrum.ArraySourceSpectrum</em>) – The spectrum of a source</p></li>
+<li><p><strong>bandpass</strong> (<em>'pysynphot.spectrum.TabularSpectralElement'</em>) – <dl class="simple">
+<dt>or ‘pysynphot.spectrum.TabularSpectralElement.ObsModeBandpass’</dt><dd><p>or <cite>pysynphot.spectrum.ArraySpectralElement</cite></p>
+</dd>
+</dl>
+<p>A bandpass to apply to the spectrum</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The spectrum with the bandpass applied.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pysynphot.observation.Observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.spec.bpass_to_psp_spectrum">
+<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">bpass_to_psp_spectrum</code><span class="sig-paren">(</span><em class="sig-param">wavelength</em>, <em class="sig-param">flux</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.bpass_to_psp_spectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creats a pysynphot.ArraySpectrum object from a BPASS wavelength and flux.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wavelength</strong> (<cite>numpy.array</cite> or <cite>pandas.Series</cite>) – An array or pandas series of wavelength from BPASS</p></li>
+<li><p><strong>flux</strong> (<cite>numpy.array</cite> or <cite>pandas.Series</cite>) – An array containing the flux at each wavelength in units
+Solar luminosity per Angstrom.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An pysynphot ArraySpectrum with the flux in erg/s/Anstrom.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>‘pysynphot.spectrum.ArraySourceSpectrum’</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="function">
 <dt id="hoki.spec.dopcor">
 <code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">dopcor</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">z</em>, <em class="sig-param">wl_col_index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.dopcor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basis doppler correction for hoki’s dataframes</p>
 <p class="rubric">Notes</p>
 <p>The correction is applied IN PLACE.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.spec.flux_to_vegamag">
+<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">flux_to_vegamag</code><span class="sig-paren">(</span><em class="sig-param">bandpass</em>, <em class="sig-param">observation</em>, <em class="sig-param">distance=10</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.flux_to_vegamag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a vega magnitude in vega system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bandpass</strong> (<em>'pysynphot.spectrum.TabularSpectralElement'</em>) – <dl class="simple">
+<dt>or ‘pysynphot.spectrum.TabularSpectralElement.ObsModeBandpass’</dt><dd><p>or <cite>pysynphot.spectrum.ArraySpectralElement</cite></p>
+</dd>
+</dl>
+<p>A bandpass applied to the spectrum.</p>
+</p></li>
+<li><p><strong>observation</strong> (<em>pysynphot.observation.Observation</em>) – A spectrum with the bandpass applied to it.</p></li>
+<li><p><strong>distance</strong> (<em>float</em>) – The distance to the object in pc. Default=10</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Vega Magnitude</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.spec.import_custom_filter">
+<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">import_custom_filter</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.import_custom_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives a filter profile class from a filter profile file containing
+a VOTable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The filename conatining a VOTable with the filter profile.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The bandpass filter from the file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>‘pysynphot.spectrum.ArraySpectralElement’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hoki.spec.load_bandpass">
+<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">load_bandpass</code><span class="sig-paren">(</span><em class="sig-param">string</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.load_bandpass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a bandpass filter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>load_bandpass()</cite> first checks if the filter is available in the pysynphot
+directory. If so, this filter is loaded.
+If no built-in filter is found, the function searches for a VOTable file
+at the given <cite>string</cite> parameter.</p>
+<p>If multiple throughputs are used, a <cite>ObsModeBandpass</cite> is returned.
+If a single througput is used a <cite>TabularSpectralElement</cite> is returned.
+And if a custom filter is used, a <cite>ArraySpectralElement</cite> is returned.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> (<em>string</em>) – The name of a built-in pysynphot filter or the path to a custom filter
+file.</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em>) – Print logging output messages if True. Default=False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><cite>pysynphot.spectrum.ArraySpectralElement</cite></p></li>
+<li><p>or <cite>pysynphot.obsbandpass.ObsModeBandpass</cite></p></li>
+<li><p>or <cite>pysynphot.spectrum.TabularSpectralElement</cite> – A bandpass object</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

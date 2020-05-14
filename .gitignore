@@ -59,6 +59,7 @@ distribute-*.tar.gz
 .project
 .pydevproject
 .settings
+hoki/version.py
 
 # Mac OSX
 .DS_Store
