@@ -1,17 +1,13 @@
 .. image:: black_text.png
     :height: 35px
 
+.. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   :alt: Build
 
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   :alt: PyPI
 
-.. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg
-
-.. image:: https://travis-ci.org/HeloiseS/hoki.svg?branch=master
-    :target: https://travis-ci.org/HeloiseS/hoki
-    
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
