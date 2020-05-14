@@ -1,7 +1,7 @@
 .. image:: black_text.png
     :height: 35px
 
-.. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   :alt: Build
+.. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   
 
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
