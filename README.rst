@@ -3,16 +3,10 @@
 
 .. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   
    :alt: tests
-   
 .. image:: https://zenodo.org/badge/197853216.svg
    :target: https://zenodo.org/badge/latestdoi/197853216
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
-
-.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
-    :target: http://www.astropy.org
-    :alt: Powered by Astropy Badge
-    
     
 Bridging the Gap Between Observation and Theory
 ==============================================
@@ -134,3 +128,7 @@ If ANYTHING comes to mind, whether it be something in the tutorials, features yo
 **Please just drop it in an issue! Don't let your imposter syndrome talk you out of it ;)**
 
 
+.. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
+    :target: http://www.astropy.org
+    :alt: Powered by Astropy Badge
+    
