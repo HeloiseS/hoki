@@ -34,6 +34,7 @@ class TestCMD(object):
 
         with pytest.raises(HokiFormatError):
             self.cmd.make(mag_filter='V', col_filters=4), 'HokiFormatError should be raised'
+"""
 
     def test_make(self):
         print(os.listdir(data_path))
@@ -50,4 +51,4 @@ class TestCMD(object):
     def test_at_log_age(self):
         self.cmd.at_log_age(log_age=6.8)
 
-
+"""
