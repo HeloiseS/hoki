@@ -9,8 +9,8 @@ import pytest
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
 #wavelengths and throughput/transmission manually read from the LICK.LICK.U file
-wl = [3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100]
-transmission = [0.015, 0.140,0.347,0.440,0.625,0.685,0.708,0.643,0.458,0.170,0.029]
+wl = [3099,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4101]
+transmission = [0.0,0.015, 0.140,0.347,0.440,0.625,0.685,0.708,0.643,0.458,0.170,0.029,0.0]
 data = load.model_output(f"{data_path}/spectra-bin-imf135_300.z002.dat")
 
 def test_dopcor():
