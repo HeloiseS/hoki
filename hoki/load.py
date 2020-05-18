@@ -12,6 +12,8 @@ import yaml
 import io
 import pickle
 import pkg_resources
+import warnings
+from hoki.utils.exceptions import HokiDeprecationWarning
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
@@ -48,6 +50,11 @@ def set_models_path(path):
     You are going to have to reload hoki for your new path to take effect.
 
     """
+    deprecation_msg = "set_models_path has been moved to the hoki.constants module -- In future versions of hoki" \
+                      "calling set_models_path from hoki.load will fail"
+
+    warnings.warn(deprecation_msg, HokiDeprecationWarning)
+
     assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
     path_to_settings = data_path+'/settings.yaml'
