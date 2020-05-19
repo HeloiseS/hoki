@@ -2,6 +2,8 @@ import numpy as np
 from ..utils.hoki_object import HokiObject
 import emcee
 import pandas as pd
+import corner
+import matplotlib.pyplot as plt
 
 #TODO: UNITEST
 def ratio_with_poisson_errs(n1, n2):
@@ -107,3 +109,27 @@ class UnderlyingCountRatio(HokiObject):
                                                  np.concatenate((np.array(['n2_hat']), np.round(self.n2_hat, 4)))]),
                                        columns=columns)
         return self.summary_df
+
+    def corner_plot(self, save=True):
+        if not self.phi:
+            print("You haven't run the MCMC yet.")
+
+        fig = corner.corner(self.samples, labels=[r'$\hat{R}$', r'$\hat{n}_{2}$'],
+                            truths=[self.R_hat[0], self.n2_hat[0]], quantiles=[.16, .84])
+        plt.suptitle(f'{self.name}')
+
+        fig.dpi = 200
+
+        for ax in fig.axes:
+            ax.xaxis.label.set_size(16)
+            ax.yaxis.label.set_size(16)
+            for tick in ax.xaxis.get_major_ticks():
+                tick.label.set_fontsize(12)
+            for tick in ax.yaxis.get_major_ticks():
+                tick.label.set_fontsize(12)
+
+        if not save:
+            return plt.show()
+        if save:
+            plt.savefig(f'{self.name}_corner.png')
+            return plt.show()
