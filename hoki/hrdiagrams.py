@@ -25,7 +25,8 @@ class HRDiagram(HokiObject):
 
     Note
     -----
-    - **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.
+    - **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time weighted arrays
+    corresponding to the 3 different abundances.
 
     - Initialisation from a text file is done through the hoki.load functions
 

@@ -31,7 +31,59 @@ def ratio_with_poisson_errs(n1, n2):
 
 #TODO: UNITEST
 class UnderlyingCountRatio(HokiObject):
-    def __init__(self, n1, n2, name="Undefined Ratio"):
+    """
+    Pipeline to calculate the underlying stellar number count ratio from observed stellar numbers
+
+    Parameters
+    ----------
+    n1 : int
+        Numerator of the star count ratio
+    n2 : int
+        Denominator of the star count ratio
+    name : str, optional
+        Name of the number count ratio -- will apear at the top of the corner plots. Default = Unnamed Ratio
+
+
+    Attributes
+    ----------
+    self.name : str
+        Name of the pipeline instance and title of the corner plot
+    self.n1 : int
+        **Observed** number of stars on the numerator
+    self.n2 : int
+        **Observed** number of stars on the denominator
+    self.phi : float
+        Hyperparameter in the prior function
+    self.R_hat : tuple of 3 float
+        **Underlying** number count ratio. The 3 values in the tuple correspond to the 50th percentile and the upper and
+        lower percentile calculated using self.ci_width. For the default value of self.ci_width=68 percent, the 16th and
+        84th percentile will be calculated.
+    self.n2_hat : tuple of 3 float
+        **Underlying** value of n2. The 3 values in the tuple correspond to the 50th percentile and the upper and
+        lower percentile calculated using self.ci_width. For the default value of self.ci_width=68 percent, the 16th and
+        84th percentile will be calculated.
+    self.sampler : emcee.ensemble.EnsembleSampler
+    self.samples : numpy.ndarray
+        Samples from the MCMC with shape (nsteps*nwalkers, ndimensions)
+    self.ci_width : int
+        Width of the credible interval.
+    self.results_summary : pandas.DataFrame
+        Summary of the results in a dataframe.
+
+    """
+    def __init__(self, n1, n2, name="Unnamed Ratio"):
+        """
+
+        Parameters
+        ----------
+        n1 : int
+            Numerator of the star count ratio
+        n2 : int
+            Denominator of the star count ratio
+        name : str, optional
+            Name of the number count ratio -- will apear at the top of the corner plots. Default = Unnamed Ratio
+
+        """
         self.n1 = n1
         self.n2 = n2
         self.phi = None
@@ -41,14 +93,17 @@ class UnderlyingCountRatio(HokiObject):
         self.samples = None
         self.ci_width = None
         self.summary_df = None
+        self.name=name
 
     def _lnprior(self, theta):
+        """ Natural lof of the prior """
         R_param, n2_param = theta
         if (R_param <= 0) or (n2_param <= 0):
             return -np.inf
         return (self.phi - 1.0) * np.log(R_param) + (2.0 * self.phi - 1.0) * np.log(n2_param)
 
     def _lnlikelihood(self, theta, n1, n2):
+        """ Natural log of the likelihood"""
         R_param, n2_param = theta
 
         lognumerator = n1 * np.log(R_param) + (n1 + n2) * np.log(n2_param) - n2_param * (R_param + 1.0)
@@ -57,13 +112,41 @@ class UnderlyingCountRatio(HokiObject):
         return lognumerator - logdenominator
 
     def _lnposterior(self, theta, n1, n2):
+        """ Natural log of the posterior """
         lnprior = self._lnprior(theta)
         if not np.isfinite(lnprior):
             return -np.inf
         return lnprior + self._lnlikelihood(theta, n1, n2)
 
-    def run_emcee(self, phi=0.5, nwalkers=100, nburnin=500,
-                  nsteps=3000, ci_width=68.0):
+    def run_emcee(self, nwalkers=100, nburnin=500,
+                  nsteps=3000, ci_width=68.0, phi=0.5):
+        """
+        Runs the MCMC using emcee
+
+        Notes
+        -----
+        This fills the self.R_hat (the underlying ratio) and self.n2_hat (underlying number count of the denominator).
+        Both attribute get filled by a tuple of 3 numbers: the 50th percentile and the upper and lower percentiles
+        according to which ci_width was given. For the default ci_width=68, the 16th and 84th percentile are calculated.
+
+        Parameters
+        ----------
+        nwalkers : int, optional
+            Number of walkers in the MCMC. Default is 100.
+        nburnin : int, optional
+            Number of burn in steps. Default is 500.
+        nsteps : int, optional
+            Number of steps after the burn in phase. Default is 3000
+        ci_width : int or float, optinal
+            Width of the credible interval in percent. Default is 68 percent.
+        phi : float, optional
+            If you don't know what you're doing, don't touch it. See Dorn-Wallenstein & Levesque 2020 for more details.
+            Default is 0.5.
+
+        Returns
+        -------
+        None
+        """
 
         self.nwalkers = nwalkers
         self.phi = phi
@@ -99,9 +182,10 @@ class UnderlyingCountRatio(HokiObject):
 
     @property
     def results_summary(self):
+        """Creates a summary dataframe"""
         if not self.phi:
             print("You haven't run the MCMC yet.")
-        if self.summary_df:
+        if self.summary_df is not None:
             return self.summary_df
 
         columns = ['Variable', f'{int(50 - self.ci_width / 2)}th', '50th', f'{int(50 + self.ci_width / 2)}th']
@@ -110,7 +194,20 @@ class UnderlyingCountRatio(HokiObject):
                                        columns=columns)
         return self.summary_df
 
-    def corner_plot(self, save=True):
+    def corner_plot(self, output_file='corner_plot.png'):
+        """
+        Makes a corner plot
+
+        Parameters
+        ----------
+        output_file : str, optional
+            Location of the output file. Default is './corner_plot.png'
+
+        Returns
+        -------
+        plt.show()
+
+        """
         if not self.phi:
             print("You haven't run the MCMC yet.")
 
@@ -128,8 +225,8 @@ class UnderlyingCountRatio(HokiObject):
             for tick in ax.yaxis.get_major_ticks():
                 tick.label.set_fontsize(12)
 
-        if not save:
+        if not output_file:
             return plt.show()
-        if save:
-            plt.savefig(f'{self.name}_corner.png')
+        if isinstance(output_file, str):
+            plt.savefig(output_file)
             return plt.show()
