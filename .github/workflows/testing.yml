@@ -34,10 +34,10 @@ jobs:
     - name: Run Tox
       run: tox
       
-    - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
-        fail_ci_if_error: False
+   # - name: Upload coverage to codecov
+   #   uses: codecov/codecov-action@v1
+   #   with:
+   #     token: ${{ secrets.CODECOV_TOKEN }}
+   #     file: ./coverage.xml
+   #     fail_ci_if_error: False
 
