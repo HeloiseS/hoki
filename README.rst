@@ -2,7 +2,8 @@
     :height: 35px
 
 
-
+.. image:: https://img.shields.io/badge/arxiv-2004.02883-red
+   :target: https://arxiv.org/abs/2004.02883
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
