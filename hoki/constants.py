@@ -8,7 +8,7 @@ import os
 import io
 
 #TODO: update documentation and add mentions of set_models path and set_default_bpass_verison in the constants
-# module - it will cahnge things in the CMD jupyter notebook I think.
+# module - it will change things in the CMD jupyter notebook I think.
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 

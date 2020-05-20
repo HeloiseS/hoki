@@ -84,6 +84,9 @@ class UnderlyingCountRatio(HokiObject):
             Name of the number count ratio -- will apear at the top of the corner plots. Default = Unnamed Ratio
 
         """
+        assert isinstance(n1, float) or isinstance(n1, int), "n1 should be a number"
+        assert isinstance(n2, float) or isinstance(n2, int), "n2 should be a number"
+
         self.n1 = n1
         self.n2 = n2
         self.phi = None
@@ -148,8 +151,12 @@ class UnderlyingCountRatio(HokiObject):
         None
         """
 
-        self.nwalkers = nwalkers
+        assert phi>=0 and phi<=1, "Phi should be in the range [0,1]"
+
         self.phi = phi
+
+        self.nwalkers = nwalkers
+
         self.nburnin = nburnin
         self.nsteps = nsteps
         self.ci_width = ci_width
@@ -163,17 +170,18 @@ class UnderlyingCountRatio(HokiObject):
         self.sampler = emcee.EnsembleSampler(nwalkers, 2, self._lnposterior, args=(self.n1, self.n2))
 
         # Burn in phase
-        self.sampler.run_mcmc(pos, nburnin)
+        self.sampler.run_mcmc(pos, nburnin, store=True)
 
         # Record position of the walkers after the burn in
-        p1 = self.sampler.chain[:, -1, :]
+        #p1 = self.sampler.chain[:, -1, :] #deprecated
+        p1 = self.sampler.get_chain()[-1, :, :]
 
         # Resetting the MCMC sampler
         self.sampler.reset()
 
         # Sampling again starting Walkers at their positions at the end of the burn in
         self.sampler.run_mcmc(p1, nsteps)
-        self.samples = self.sampler.flatchain  # emcee v2 not v3 be careful to updates
+        self.samples = self.sampler.get_chain(flat=True)  # emcee v2 not v3 be careful to updates
 
         self.R_hat, self.n2_hat = map(lambda v: (v[1], v[2] - v[1], v[1] - v[0]),
                                       zip(*np.percentile(self.samples,
@@ -194,7 +202,7 @@ class UnderlyingCountRatio(HokiObject):
                                        columns=columns)
         return self.summary_df
 
-    def corner_plot(self, output_file='corner_plot.png'):
+    def corner_plot(self, output_file='corner_plot.png', show=True):
         """
         Makes a corner plot
 
@@ -221,12 +229,17 @@ class UnderlyingCountRatio(HokiObject):
             ax.xaxis.label.set_size(16)
             ax.yaxis.label.set_size(16)
             for tick in ax.xaxis.get_major_ticks():
-                tick.label.set_fontsize(12)
+                tick.label1.set_fontsize(12)
             for tick in ax.yaxis.get_major_ticks():
-                tick.label.set_fontsize(12)
+                tick.label1.set_fontsize(12)
 
-        if not output_file:
+        if not output_file and show:
             return plt.show()
+        if not output_file and not show:
+            return fig
         if isinstance(output_file, str):
             plt.savefig(output_file)
-            return plt.show()
+            if show:
+                return plt.show()
+            if not show:
+                return fig
