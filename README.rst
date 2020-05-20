@@ -13,6 +13,8 @@
 .. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   
     :alt: tests
     
+.. image:: https://img.shields.io/pypi/dm/hoki
+    
 Bridging the Gap Between Observation and Theory
 =================================================
 
