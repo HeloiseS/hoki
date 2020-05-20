@@ -91,10 +91,12 @@ The paper is `available on ArXiv <https://arxiv.org/abs/2001.11069>`_ as publish
 If you use the following tools, please acknowledge the follwing publications:
 
 **AgeWizard**:
+
 .. image:: https://img.shields.io/badge/arxiv-2004.02883-red
    :target: https://arxiv.org/abs/2004.02883
 
 **UnderlyingCountRatio***:
+
 .. image:: https://img.shields.io/badge/arxiv-2004.13040-red
    :target: https://arxiv.org/abs/2004.13040
 
