@@ -95,7 +95,7 @@ If you use the following tools, please acknowledge the follwing publications:
 .. image:: https://img.shields.io/badge/arxiv-2004.02883-red
    :target: https://arxiv.org/abs/2004.02883
 
-**UnderlyingCountRatio***:
+**UnderlyingCountRatio**:
 
 .. image:: https://img.shields.io/badge/arxiv-2004.13040-red
    :target: https://arxiv.org/abs/2004.13040
