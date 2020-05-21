@@ -185,7 +185,11 @@ def import_custom_filter(filename):
         The bandpass filter from the file.
     """
     votable = astropy.io.votable.parse(filename).get_first_table()
-    return psp.ArrayBandpass(votable.array["Wavelength"].filled(),
-                             votable.array["Transmission"].filled(),
+    wl = votable.array["Wavelength"].filled()
+    tr = votable.array["Transmission"].filled()
+    wl_edges = np.append(np.append(wl[0]-1, wl),wl[-1]+1)
+    tr_edges = np.append(np.append(0.0, tr), 0.0)
+    return psp.ArrayBandpass(wl_edges,
+                             tr_edges,
                              name=votable.params[1].value.decode('utf-8')
                              )

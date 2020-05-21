@@ -1,8 +1,6 @@
 .. image:: black_text.png
     :height: 35px
 
-
-
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
@@ -58,7 +56,7 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
-   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `pysynphot`
+   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `pysynphot`, emcee
 
 **Note:** Python 2 is not supported
 
