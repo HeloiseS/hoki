@@ -25,20 +25,21 @@ class HRDiagram(HokiObject):
 
     Note
     -----
-    - **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.
+    - **HRDiagram supports indexing.** The indexed array is a 51x100x100 np.array that stacked the time weighted arrays
+    corresponding to the 3 different abundances.
 
     - Initialisation from a text file is done through the hoki.load functions
 
     Parameters
     ----------
     high_H_input : np.ndarray with shape (51x100x100)
-        This inputs the HR diagrams corresponding to a hydrogen abundance X > 0.4.
+        This inputs the HR diagrams corresponding to a hydrogen abundance n1 > 0.4.
 
     medium_H_input : np.ndarray with shape (51x100x100)
-        This inputs the HR diagrams corresponding to a hydrogen abundance E-3 < X < 0.4.
+        This inputs the HR diagrams corresponding to a hydrogen abundance E-3 < n1 < 0.4.
 
     low_H_input : np.ndarray with shape (51x100x100)
-        This inputs the HR diagrams corresponding to a hydrogen abundance X < E-3.
+        This inputs the HR diagrams corresponding to a hydrogen abundance n1 < E-3.
 
     hr_type : str - Valid options are 'TL' , 'Tg', 'TTG'
         This tells the class what type of HR diagrams are being given. For more details on what
@@ -47,40 +48,40 @@ class HRDiagram(HokiObject):
     Attributes
     ----------
     self.high_H : np.ndarray (51x100x100)
-        HR diagrams for 51 time bins with a hydrogen abundance X > 0.4. Time weighted.
+        HR diagrams for 51 time bins with a hydrogen abundance n1 > 0.4. Time weighted.
 
     self.medium_H : np.ndarray (51x100x100)
-        HR diagrams for 51 time bins with a hydrogen abundance E-3 < X < 0.4. Time weighted.
+        HR diagrams for 51 time bins with a hydrogen abundance E-3 < n1 < 0.4. Time weighted.
 
     self.low_H : np.ndarray (51x100x100)
-        HR diagrams for 51 time bins with a hydrogen abundance X < E-3. Time weighted.
+        HR diagrams for 51 time bins with a hydrogen abundance n1 < E-3. Time weighted.
 
     self.type : str
         Type of HR diagram: TL, Tg or TTG
 
     self.high_H_not_weighted : np.ndarray (51x100x100)
-        HR diagrams for 51 time bins with a hydrogen abundance X > 0.4.
+        HR diagrams for 51 time bins with a hydrogen abundance n1 > 0.4.
 
     self.medium_H_not_weighted : np.ndarray (51x100x100)
-        HR diagrams for 51 time bins with a hydrogen abundance E-3 < X < 0.4.
+        HR diagrams for 51 time bins with a hydrogen abundance E-3 < n1 < 0.4.
 
     self.low_H_not_weighted : np.ndarray (51x100x100)
-        HR diagrams for 51 time bins with a hydrogen abundance X < E-3.
+        HR diagrams for 51 time bins with a hydrogen abundance n1 < E-3.
 
     self._all_H : np.ndarray (51x100x100)
         HR diagrams for 51 time bins - all hydrogen abundances stacked. This attribute is private
         because it can simply be called using the indexing capabilities of the class.
 
     self.high_H_stacked : np.ndarray (51x100x100)
-        HR diagram stacked for a given age range - hydrogen abundance X > 0.4. None before calling
+        HR diagram stacked for a given age range - hydrogen abundance n1 > 0.4. None before calling
         self.stack()
 
     self.medium_H_stacked : np.ndarray (51x100x100)
-        HR diagram stacked for a given age range - hydrogen abundance E-3 < X < 0.4. None before
+        HR diagram stacked for a given age range - hydrogen abundance E-3 < n1 < 0.4. None before
         calling self.stack()
 
     self.low_H_stacked : np.ndarray (51x100x100)
-        HR diagram stacked for a given age range - hydrogen abundance E-3 > X. None before calling
+        HR diagram stacked for a given age range - hydrogen abundance E-3 > n1. None before calling
         self.stack()
 
     self.all_stacked : np.ndarray (51x100x100)
@@ -114,13 +115,13 @@ class HRDiagram(HokiObject):
         Parameters
         ----------
         high_H_input : np.ndarray with shape (51x100x100)
-            This inputs the HR diagrams corresponding to a hydrogen abundance X > 0.4.
+            This inputs the HR diagrams corresponding to a hydrogen abundance n1 > 0.4.
 
         medium_H_input : np.ndarray with shape (51x100x100)
-            This inputs the HR diagrams corresponding to a hydrogen abundance E-3 < X < 0.4.
+            This inputs the HR diagrams corresponding to a hydrogen abundance E-3 < n1 < 0.4.
 
         low_H_input : np.ndarray with shape (51x100x100)
-            This inputs the HR diagrams corresponding to a hydrogen abundance X < E-3.
+            This inputs the HR diagrams corresponding to a hydrogen abundance n1 < E-3.
 
         hr_type : str - Valid options are 'TL' , 'Tg', 'TTG'
             This tells the class what type of HR diagrams are being given. For more details on what
@@ -212,9 +213,9 @@ class HRDiagram(HokiObject):
         -------
         Tuple of 4 np.ndarrays (100x100):
             - [0] : Stack of all the abundances
-            - [1] : High hydrogen abundance X>0.4
-            - [2] : Medium hydrogen abundance (E-3 < X < 0.4)
-            - [3] : Low hydrogen abundance (X < E-3)
+            - [1] : High hydrogen abundance n1>0.4
+            - [2] : Medium hydrogen abundance (E-3 < n1 < 0.4)
+            - [3] : Low hydrogen abundance (n1 < E-3)
 
         """
 
@@ -240,7 +241,7 @@ class HRDiagram(HokiObject):
 
         abundances : tuple or list of 3 ints, zeros or ones, optional
             This turns on or off the inclusion of the abundances. The corresponding abundances are:
-            (X > 0.4, E-3 < X < 0.4, E-3>X). A 1 means a particular abundance should be included,
+            (n1 > 0.4, E-3 < n1 < 0.4, E-3>n1). A 1 means a particular abundance should be included,
             a 0 means it will be ignored. Default is (1,1,1), meaning all abundances are plotted.
             Note that (0,0,0) is not valid and will return and assertion error.
 

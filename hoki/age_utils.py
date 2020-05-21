@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import hoki.hrdiagrams
 import hoki.cmd
 import hoki.load as load
