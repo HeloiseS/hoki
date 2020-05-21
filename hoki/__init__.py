@@ -12,7 +12,7 @@ import sys
 from distutils.version import LooseVersion
 from hoki.constants import *
 
-__minimum_python_version__ = "3.5"
+__minimum_python_version__ = "3.6"
 
 __all__ = []
 

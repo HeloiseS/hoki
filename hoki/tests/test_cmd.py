@@ -28,12 +28,13 @@ class TestCMD(object):
     # NOTE: These tests are to do locally in dev - they require 50GB of full model data to test
     # they cannot easily be implemented into Travis CI.
 
-    """
+
     def test_make_error(self):
         #print(os.listdir(data_path))
 
         with pytest.raises(HokiFormatError):
             self.cmd.make(mag_filter='V', col_filters=4), 'HokiFormatError should be raised'
+"""
 
     def test_make(self):
         print(os.listdir(data_path))
@@ -49,5 +50,5 @@ class TestCMD(object):
 
     def test_at_log_age(self):
         self.cmd.at_log_age(log_age=6.8)
-    """
 
+"""

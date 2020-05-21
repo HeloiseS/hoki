@@ -9,6 +9,8 @@ import astropy.io.votable
 
 import pysynphot as psp
 
+__all__ = ['dopcor', 'load_bandpass', 'apply_bandpass', 'bpass_to_psp_spectrum', 'flux_to_vegamag',
+           'import_custom_filter']
 
 def dopcor(df, z, wl_col_index=0):
     """
@@ -22,6 +24,7 @@ def dopcor(df, z, wl_col_index=0):
     wl_dopcor = (df.iloc[:, wl_col_index].values) - (df.iloc[:, wl_col_index].values * z)
     df.iloc[:, wl_col_index] = wl_dopcor
     return
+
 
 def load_bandpass(string, verbose=False):
     """Load a bandpass filter.
@@ -66,6 +69,7 @@ def load_bandpass(string, verbose=False):
             return custom
         except FileNotFoundError:
             raise
+
 
 def apply_bandpass(spectrum, bandpass):
     """Applies a bandpass filter to a given spectrum.
