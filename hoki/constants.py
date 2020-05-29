@@ -20,7 +20,8 @@ with open(os.path.relpath(path_to_settings), 'rb') as stream:
 MODELS_PATH = settings['models_path']
 OUTPUTS_PATH = settings['outputs_path'] # This constant for dev purposes.
 BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
-BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
+BPASS_LIN_TIME_EDGES = np.append([0.0], [10**(t+0.05) for t in BPASS_TIME_BINS])
+BPASS_TIME_INTERVALS = np.diff(BPASS_LIN_TIME_EDGES)
 BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
 
 DEFAULT_BPASS_VERSION = settings['default_bpass_version']
@@ -84,6 +85,3 @@ def set_default_bpass_version(version):
 
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
-
-
-
