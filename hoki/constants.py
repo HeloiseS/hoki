@@ -17,6 +17,14 @@ BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
 BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
 BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
 
+BPASS_LINEAR_TIME_EDGES = np.append([0.0], 10**np.arange(6.05, 11.15, 0.1))
+BPASS_LINEAR_TIME_INTERVALS = np.diff(BPASS_LINEAR_TIME_EDGES)
+
+BPASS_METALLICITIES = ["em5", "em4", "001","002", "003", "004", "006", "008", "010", "014", "020", "030", "040"]
+BPASS_NUM_METALLICITIES = np.array([0.00001, 0.0001, 0.001, 0.002, 0.003, 0.004, 0.006, 0.008, 0.010, 0.014, 0.020, 0.030, 0.040])
+BPASS_METALLICITY_MID_POINTS = np.array([0.00005, 0.0005, 0.0015, 0.0025, 0.0035, 0.005, 0.007, 0.009, 0.012, 0.017, 0.025, 0.035])
+
+
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,
               'ONe_core1': 8, 'X': 10, 'Y': 11, 'C': 14, 'N': 15, 'O': 16, 'Ne': 17, 'MH1': 18, 'MHe1': 19, 'MC1': 20,
               'MN1': 21, 'MO1': 22, 'MNe1': 23, 'MMg1': 24, 'MSi1': 25, 'MFe1': 26, 'envelope_binding_E': 27,
@@ -28,6 +36,3 @@ dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4,
               'f555w': 70, 'f606w': 71, 'f814w': 72, 'U2': 73, 'B2': 74, 'V2': 75, 'R2': 76, 'I2': 77, 'J2': 78,
               'H2': 79, 'K2': 80, 'u2': 81, 'g2': 82, 'r2': 83, 'i2': 84, 'z2': 85, 'f300w2': 86, 'f336w2': 87,
               'f435w2': 88, 'f450w2': 89, 'f555w2': 90, 'f606w2': 91, 'f814w2': 92, 'Halpha': 93, 'FUV': 94, 'NUV': 95}
-
-
-
