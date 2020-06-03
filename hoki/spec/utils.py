@@ -19,39 +19,49 @@ def dopcor(df, z, wl_col_index=0):
     df.iloc[:, wl_col_index] = wl_dopcor
     return
 
-#TODO: Unittests
-def pseudo_continuum(wl, spectrum, lower, upper):
+
+def pseudo_continuum(wl, spectrum, lower_cont, upper_cont):
     """
     Traces a linear pseudo-continuum
 
+    Notes
+    -----
+    This function takes two ranges of wavelength (typically below and above a line for which the EW will be calculated),
+    and calculates a linear pseudo continuum between their respective middle point.
+
     Parameters
     ----------
-    wl
-    spectrum
-    lower
-    upper
+    wl: 1D array
+        Wavelength
+    spectrum: 1D array
+        Flux spectrum
+    lower_cont: tuple, list or array of length==2
+        Lower range of wavelength to probe the continuum
+    upper_cont: tuple, list or array of length==2
+        Upper range of wavelength to probe the continuum
 
     Returns
     -------
+    pseudo continuum flux values in a 1D np.ndarray
 
     """
     # Calculating the mean Flux of the lower continuum region
     try:
-        cont1 = np.mean(spectrum[(wl > lower[0]) & (wl < lower[1])])
+        cont1 = np.mean(spectrum[(wl > lower_cont[0]) & (wl < lower_cont[1])])
     except TypeError as e:
         raise HokiFormatError(f'{e} DEBUGGING ASSISTANT: Check your input types!')
 
     # Finding the middle wavelength of the lower continuum region
-    wl1 = np.mean(lower)
+    wl1 = np.mean(lower_cont)
 
     # Calculating the mean Flux of the upper continuum region
     try:
-        cont2 = np.mean(spectrum[(wl > upper[0]) & (wl < upper[1])])
+        cont2 = np.mean(spectrum[(wl > upper_cont[0]) & (wl < upper_cont[1])])
     except TypeError as e:
         raise HokiFormatError(f'{e} DEBUGGING ASSISTANT: Check your input types!')
 
     # Finding the middle wavelength of the upper continuum region
-    wl2 = np.mean(upper)
+    wl2 = np.mean(upper_cont)
 
     # Calculates the gradient and intercept...
     m = (cont2 - cont1) / (wl2 - wl1)
@@ -69,14 +79,21 @@ def equivalent_width(wl, spectrum, lower_cont, upper_cont, line_bound=None):
 
     Parameters
     ----------
-    wl
-    spectrum
-    lower_cont
-    upper_cont
-    line_bound
+    wl: 1D array
+        Wavelength
+    spectrum: 1D array
+        Flux spectrum
+    lower_cont: tuple, list or array of length==2
+        Lower range of wavelength to probe the continuum
+    upper_cont: tuple, list or array of length==2
+        Upper range of wavelength to probe the continuum
+    line_bound: tuple, list or array of length==2, optional
+        The range within which to calculate the equivalent width. This is optional and if no range is given the
+        equivalent width will be calculated in the between the lower and upper continuum ranges.
 
     Returns
     -------
+    Equivalent width in a 1D np.ndarray
 
     """
 
