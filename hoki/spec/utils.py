@@ -5,6 +5,7 @@ especially BPASS synthetic spectra
 
 import numpy as np
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning
+import pandas as pd
 
 def dopcor(df, z, wl_col_index=0):
     """
@@ -69,8 +70,8 @@ def pseudo_continuum(wl, spectrum, lower_cont, upper_cont):
 
     # An then calculates the line of the continuum for the whole wavelength range.
     pseudo_cont = m * wl + c
-
-    return pseudo_cont.values
+    if isinstance(pseudo_cont, pd.Series): return pseudo_cont.values
+    return pseudo_cont
 
 
 def equivalent_width(wl, spectrum, lower_cont, upper_cont, line_bound=None):
