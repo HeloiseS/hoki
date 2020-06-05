@@ -1,9 +1,9 @@
 """
 Object to contain the stellar formation history.
 """
-from scipy import interpolate
 import numpy as np
-
+import hoki.csp.utils as utils
+from scipy import interpolate
 
 class SFH(object):
     """
@@ -29,8 +29,9 @@ class SFH(object):
             Determines which stellar model is used.
         """
         self.time_bins = time_bins
+        self.sfh = None
         if model_type == "custom":
-            self.sfr = interpolate.splrep(time_bins, sfh, k=1)
+            self.sfh = interpolate.splrep(time_bins, sfh, k=1)
         else:
             raise TypeError("model type not recognised.")
 
@@ -43,7 +44,7 @@ class SFH(object):
         t : float
             A lookback time
         """
-        return interpolate.splev(t, self.sfr)
+        return interpolate.splev(t, self.sfh)
 
     def mass_per_bin(self, time_edges):
         """
@@ -60,8 +61,7 @@ class SFH(object):
             The mass per time bin given the time edges.
         """
 
-        return np.array([interpolate.splint(t1, t2, self.sfr)
-                for t1, t2 in zip(time_edges[:-1], time_edges[1:])])
+        return utils.mass_per_bin(self.sfh, time_edges)
 
 
 
