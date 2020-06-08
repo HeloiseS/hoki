@@ -18,9 +18,10 @@ BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME
 BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
 
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,
-              'ONe_core1': 8, 'X': 10, 'Y': 11, 'C': 14, 'N': 15, 'O': 16, 'Ne': 17, 'MH1': 18, 'MHe1': 19, 'MC1': 20,
-              'MN1': 21, 'MO1': 22, 'MNe1': 23, 'MMg1': 24, 'MSi1': 25, 'MFe1': 26, 'envelope_binding_E': 27,
-              'star_binding_E': 28, 'Mrem_weakSN': 29, 'Mej_weakSN': 30, 'Mrem_SN': 31, 'Mej_SN': 32, 'AM_bin': 33,
+              'ONe_core1': 8, 'X': 10, 'Y': 11, 'C': 12, 'N': 13, 'O': 14, 'Ne': 15, 'MH1': 16, 'MHe1': 17, 'MC1': 18,
+              'MN1': 19, 'MO1': 20, 'MNe1': 21, 'MMg1': 22, 'MSi1': 23, 'MFe1': 24, 'envelope_binding_E': 25,
+              'star_binding_E': 26, 'Mrem_weakSN': 27, 'Mej_weakSN': 28, 'Mrem_SN': 29, 'Mej_SN': 30,
+              'Mrem_superSN': 31, 'Mej_superSN': 32, 'AM_bin': 33,
               'P_bin': 34, 'log(a)': 35, 'M2': 37, 'MTOT': 38, 'DM1W': 39, 'DM2W': 40, 'DM1A': 41, 'DM2A': 42,
               'DM1R': 43, 'DM2R': 44, 'DAM': 45, 'log(R2)': 46, 'log(T2)': 47, 'log(L2)': 48, '?': 49, 'modelimf': 50,
               'mixedimf': 51, 'V-I': 52, 'U': 53, 'B': 54, 'V': 55, 'R': 56, 'I': 57, 'J': 58, 'H': 59, 'K': 60,
