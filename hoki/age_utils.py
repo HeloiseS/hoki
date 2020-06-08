@@ -518,8 +518,12 @@ def calculate_sample_pdf(distributions_df, not_you=None):
 
     # We also must be careful not to multiply the time bin column in there so we have a list of the column names
     # that remain after the "not_you" exclusion minus the time_bins column.
-    columns = [col for col in distributions_df.columns if "time_bins" not in col]
-
+    #columns = [col for col in distributions_df.columns if "time_bins" not in col]
+    columns = []
+    if "time_bins" not in distributions_df.columns:
+        for col in distributions_df.columns:
+            columns.append(col) 
+            
     for col in columns:
         # for col in distributions_df.columns:
         combined_pdf += distributions_df[col].values

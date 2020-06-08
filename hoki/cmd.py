@@ -53,7 +53,8 @@ class CMD(HokiObject):
     def __init__(self, file,
                  col_lim=[-3, 7],
                  mag_lim=[-14, 10],
-                 res_el=0.1):
+                 res_el=0.1,
+                 bpass_version=DEFAULT_BPASS_VERSION):
         """
          Initialisation of the Colour Magnitude Diagram object
 
@@ -71,6 +72,7 @@ class CMD(HokiObject):
          """
         self.bpass_input = load.model_input(file)
         self._file_does_not_exist = []
+        self.dummy_dict=dummy_dicts[bpass_version]
 
         # Setting up the grid's resolution
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
@@ -126,7 +128,7 @@ class CMD(HokiObject):
         col_keys = ['timestep', 'age', self.col_filter1, self.col_filter2, 'M1', 'log(R1)', 'log(L1)']
 
         try:
-            cols = tuple([dummy_dict[key] for key in col_keys])
+            cols = tuple([self.dummy_dict[key] for key in col_keys])
         except KeyError as e:
             err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: \nOne or both of the chosen filters do not correspond ' \
                                          'to a valid filter key. Here is a list of valid filters - ' \
