@@ -100,7 +100,7 @@ def set_default_bpass_version(version):
 
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
->>>>>>> dff2051fb3718825206572f82b3a2c4849e6e24b
+
 
 
 
