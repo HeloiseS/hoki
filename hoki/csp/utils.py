@@ -17,6 +17,7 @@ class CSP(object):
 ########################
 # Calculations per bin #
 ########################
+# TODO add check if time outside of age universe range
 
 def mass_per_bin(sfh, time_edges):
     """
@@ -115,6 +116,8 @@ def _find_bpass_metallicities(Z_values):
 ########################################
 # Complex Stellar History Calculations #
 ########################################
+# TODO the DTD width is the build in LINEAR TIME INTERVALS.
+# Not necessary to keep as an input parameter.
 
 
 @numba.njit
@@ -156,10 +159,13 @@ def _over_time(Z_values, mass_per_bin, edges, rates, DTD_width):
                 event_rate[j] += bin_events*mass_per_bin[count]
     return event_rate
 
-
-def _at_time():
-    pass
-
+@numba.njit
+def _at_time(Z_values, mass_per_bin, rates):
+    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    out = 0.0
+    for count, Z in enumerate(Z_index_per_bin):
+        out = out + rates[count,Z]*mass_per_bin[count]
+    return out
 
 ##########################
 #    HELPER FUNCTIONS    #
