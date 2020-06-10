@@ -18,7 +18,8 @@ class TestCMD(object):
         del myplot
         del cmd
 
-    cmd = CMD(data_path+'/input_bpass_z020_bin_imf135_300')
+    cmd = CMD(data_path+'/input_bpass_z020_bin_imf135_300',
+              models_path=data_path+"/sample_stellar_models/")
 
     def test_init_(self):
         #print(os.listdir(data_path))
@@ -28,7 +29,7 @@ class TestCMD(object):
     # NOTE: These tests are to do locally in dev - they require 50GB of full model data to test
     # they cannot easily be implemented into Travis CI.
 
-    """
+#    """
     def test_make_error(self):
         #print(os.listdir(data_path))
 
@@ -49,5 +50,5 @@ class TestCMD(object):
 
     def test_at_log_age(self):
         self.cmd.at_log_age(log_age=6.8)
-    """
+#    """
 

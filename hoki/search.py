@@ -10,10 +10,14 @@ from hoki.utils.hoki_object import HokiObject
 #TODO: Write docstrings
 #TODO: Write tutorial
 
+bpass_input_z_list = ['zem5','zem4', 'z001', 'z002', 'z003', 'z004', 'z006',
+                       'z008', 'z014', 'z010', 'z020','z030','z040']
+
 
 class DataCompiler(HokiObject):
     def __init__(self, z_list, columns=['V'], single=False, binary=True,
-                 models_path=MODELS_PATH, input_files_path=OUTPUTS_PATH, verbose=True):
+                 models_path=MODELS_PATH, input_files_path=OUTPUTS_PATH,
+                 verbose=True, bpass_version=DEFAULT_BPASS_VERSION):
 
         assert isinstance(z_list, list), "z_list should be a list of strings"
 
@@ -25,7 +29,7 @@ class DataCompiler(HokiObject):
                 f"Here is a list of valid metallicity keywords\n{bpass_input_z_list}")
 
         assert isinstance(columns, list), "columns should be a list of strings"
-        self.dummy_dict_cols = list(dummy_dicts[DEFAULT_BPASS_VERSION].keys())
+        self.dummy_dict_cols = list(dummy_dicts[bpass_version].keys())
         wrong_column_names = set(columns) - set(self.dummy_dict_cols)
         if len(wrong_column_names) != 0:
             raise HokiFormatError(
