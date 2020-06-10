@@ -9,7 +9,7 @@ import numba
 from scipy import interpolate
 from hoki.constants import *
 import pandas as pd
-
+import matplotlib.pyplot as plt
 class CSP(object):
     pass
 
@@ -84,8 +84,9 @@ def _load_files(data_folder, file_type, binary=True, imf="imf135_300"):
 
     Returns
     -------
-    numpy.array
-        A numpy array with the files loaded according to metallicty.
+    pandas.DataFrame
+        A pandas MultiIndex dataframe containing the BPASS number of events
+        per metallicity per type.
     """
     if binary:
         star = "bin"
@@ -104,11 +105,36 @@ def _load_files(data_folder, file_type, binary=True, imf="imf135_300"):
 
     return rates.swaplevel(0,1, axis=1)
 
-def _normalise_rates(rates, bin_width):
-    return rates.div(1e6*bin_width, axis=0)
+def _normalise_rates(rates):
+    """Normalise the BPASS rates.
+
+    Input
+    -----
+    rates : pandas.DataFrame
+        A pandas DataFrame containing the the events per bin
+
+
+    Returns
+    -------
+    pandas.DataFrame
+        A pandas DataFrame containing the events/yr/M_\odot
+    """
+    return rates.div(1e6*BPASS_LINEAR_TIME_INTERVALS, axis=0)
 
 
 def _find_bpass_metallicities(Z_values):
+    """Finds the nearest BPASS metallicities for each item in the list.
+
+    Input
+    -----
+    Z_values : `list` or `numpy.array`
+        A list of metallicities
+
+    Returns
+    -------
+    `numpy.array`
+        A list of the nearest BPASS metallicity for each given metallicity
+    """
     return BPASS_NUM_METALLICITIES[[np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values]]
 
 
@@ -116,31 +142,29 @@ def _find_bpass_metallicities(Z_values):
 ########################################
 # Complex Stellar History Calculations #
 ########################################
-# TODO the DTD width is the build in LINEAR TIME INTERVALS.
-# Not necessary to keep as an input parameter.
+# replace Z_index_per_bin to _find_bpass_metallicities
 
 
 @numba.njit
-def _over_time(Z_values, mass_per_bin, edges, rates, DTD_width):
-    """
-    Numba function to calculate the event rates for the given rates, SFR,
-    and mass per bin
+def _over_time(Z_values, mass_per_bin, edges, rates):
+    """Calculates the events rates per bin over the given bin edges.
 
     Parameters
     ----------
-    Z_values: numpy.array
+    Z_values : `numpy.array`
         An array containing the metallicity values at each bin.
-    mass_per_bin : numpy.array
+    mass_per_bin : `numpy.array`
         An array containig the amount of mass per bin in the final binning.
-    np_rates : 2D numpy.array
+    edges : `numpy.array`
+        The bin edges of the Z_values and mass_per_bin
+    rates : `2D numpy.array`
         A 2D array containig the different metallicities over time
-        in BPASS binning. Format np_rates[metallicity][time]
-    DTD_width : numpy.array
-        An array containing the bin widths from the Delay Time Distribution.
+        in BPASS binning. Format rates[metallicity][time]
 
     Returns
     -------
-    An non-normalised event rate. Number of events per bin.
+    `numpy.array`
+        The number of events per bin
 
     """
     Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
@@ -155,17 +179,39 @@ def _over_time(Z_values, mass_per_bin, edges, rates, DTD_width):
                                        p1,
                                        BPASS_LINEAR_TIME_EDGES,
                                        rates[Z_index_per_bin[count]],
-                                       DTD_width)
+                                       BPASS_LINEAR_TIME_INTERVALS)
                 event_rate[j] += bin_events*mass_per_bin[count]
     return event_rate
 
+
 @numba.njit
-def _at_time(Z_values, mass_per_bin, rates):
-    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+def _at_time(Z_values, mass_per_bin, edges,rates):
+    """Calculates the number of events at a specific time.
+
+    Note
+    ----
+    edges[0] defines the time at which the events are calculated.
+
+    Input
+    -----
+    Z_values : `numpy.array`
+        An array containing the metallicity values at each bin.
+    mass_per_bin : `numpy.array`
+        An array containig the amount of mass per bin in the final binning.
+    edges : `numpy.array`
+        The bin edges of the Z_values and mass_per_bin.
+
+    """
+    Z_index_per_bin = np.array(
+                        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES))
+                        for i in Z_values])
+    bin_index = np.array([_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
     out = 0.0
-    for count, Z in enumerate(Z_index_per_bin):
-        out = out + rates[count,Z]*mass_per_bin[count]
+    for count in range(len(mass_per_bin)):
+        out += rates[Z_index_per_bin[count]][bin_index[count]]*mass_per_bin[count]
     return out
+
+
 
 ##########################
 #    HELPER FUNCTIONS    #
@@ -212,8 +258,10 @@ def _integral(x1, x2, edges, values, bin_width):
 
 @numba.njit
 def _get_bin_index(x, edges):
-    """
-    The numba version to get the bin number.
+    """Get the bin number given the edges.
+
+    Note
+    -----
     Used to speed up the calculation.
 
     Parameters
@@ -238,3 +286,9 @@ def _get_bin_index(x, edges):
     if x == edges[-1]:
         out = len(edges)-2
     return int(out)
+    # if x < edges[0] or x > edges[-1]:
+    #     raise Exception("x outside of range")
+    # mids = (edges[1:] + edges[:-1])/2   # calculate bin midpoints
+    # d = np.abs(x - mids)                # distance to midpoints
+    # outer = np.where(d == d.min())      # find shortest
+    # return outer[0][-1]           # select last, such that lower edge inclusive

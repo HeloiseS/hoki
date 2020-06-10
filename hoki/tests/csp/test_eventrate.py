@@ -6,9 +6,11 @@ import hoki.csp.eventrate as er
 import pkg_resources
 import numpy as np
 from hoki.constants import *
+from hoki.utils.exceptions import HokiFatalError
 import hoki.csp.utils as utils
 from scipy import interpolate
 import matplotlib.pyplot as plt
+import pytest
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 test_sfh = np.loadtxt(f"{data_path}/csp_test_data/mass_points.txt")
@@ -17,7 +19,7 @@ test_mass_per_bin = np.loadtxt(f"{data_path}/csp_test_data/mass_per_bin.txt")
 time_points = np.loadtxt(f"{data_path}/csp_test_data/time_points.txt")
 
 
-
+# ADD A TEST TO CHECK THE TYPE OF THE INPUT FUNCTIONS!
 class TestCSPEventRate():
 
     def test_init(self):
@@ -26,28 +28,39 @@ class TestCSPEventRate():
     CSP = er.CSPEventRate(f"{data_path}/supernova")
     fnc_Z = interpolate.splrep(time_points, test_metallicity, k=1)
     fnc_sfh = interpolate.splrep(time_points, test_sfh, k=1)
-    out = CSP.calculate_rate_over_time([fnc_Z], [fnc_sfh], ["Ia"],100)
+    out, time_edges = CSP.calculate_rate_over_time([fnc_Z],
+                                                   [fnc_sfh],
+                                                   ["Ia"],
+                                                   100,
+                                                   return_edges=True)
 
 
     def test_bins(self):
-        assert self.CSP.nr_bins == 100, "nr_bins not properly set."
-        assert np.isclose(self.CSP.time_edges,  np.linspace(0,HOKI_NOW, 101)).all(),\
+        assert np.isclose(self.time_edges,  np.linspace(0,HOKI_NOW, 101)).all(),\
             "time edges are not properly set."
-
-    def test_metallicity(self):
-        assert np.isclose(self.CSP.metallicity_per_bin[0],
-            np.loadtxt(f"{data_path}/csp_test_data/metallicity_per_bin.txt")).all(),\
-            "The metallicity per bin is set incorrectly."
-
-    def test_mass_per_bin(self):
-        assert np.isclose(self.CSP.mass_per_bin[0],
-            np.loadtxt(f"{data_path}/csp_test_data/mass_per_bin.txt")).all(),\
-            "The mass per bin is incorrect."
 
     def test_event_rate_calculation(self):
         expected = np.loadtxt(f"{data_path}/csp_test_data/type_Ia_rates.txt")
-        assert np.isclose(self.CSP.event_rates["Ia"], expected).all(),\
+        assert np.isclose(self.out["Ia"], expected).all(),\
             "The event rate calculation is wrong."
+
+    def test_event_rate_wrong_input(self):
+        with pytest.raises(HokiFatalError):
+            _ = self.CSP.calculate_rate_over_time([self.fnc_Z],
+                                             [self.fnc_sfh, self.fnc_sfh],
+                                             ["Ia"],
+                                             100)
+        with pytest.raises(KeyError):
+            _ = self.CSP.calculate_rate_over_time([self.fnc_Z],
+                                             [self.fnc_sfh],
+                                             ["B"],
+                                             100)
+        with pytest.raises(HokiFatalError):
+            _ = self.CSP.calculate_rate_over_time([self.fnc_Z, self.fnc_Z],
+                                             [self.fnc_sfh],
+                                             ["B"],
+                                             100)
+
 
     def test_event_rate_calculation_multi_type(self):
         out = self.CSP.calculate_rate_over_time([self.fnc_Z], [self.fnc_sfh], ["Ia", "II"], 100)

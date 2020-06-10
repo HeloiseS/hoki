@@ -109,10 +109,9 @@ def test_metallicity_per_bin():
 
 
 def test_normalise_rates():
-    bin_width = np.zeros(101) + 2
-    rates = pd.DataFrame(np.linspace(0,100, 101))
-    out = utils._normalise_rates(rates, bin_width)
-    expected = pd.DataFrame(np.linspace(0,50,101)/1e6)
+    rates = pd.DataFrame(np.linspace(0,100, 51))
+    out = utils._normalise_rates(rates)
+    expected = pd.DataFrame(np.linspace(0,100,51)/1e6/BPASS_LINEAR_TIME_INTERVALS)
     assert np.isclose(out, expected).all(), "Rate normalisation failed"
 
 
@@ -121,8 +120,3 @@ def test_find_bpass_metallicities():
     expected = [0.0001, 0.00001, 0.04, 0.02, 0.04]
     out = utils._find_bpass_metallicities(test_metallicities)
     assert np.isclose(out, expected).all(), "find_bpass_metallicities not working"
-
-class TestOverTime(object):
-
-    def test_event_rate_calculation(self):
-        pass
