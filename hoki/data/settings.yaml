@@ -204,5 +204,5 @@ dummy_dicts:
     u2: 90
     z: 65
     z2: 94
-models_path: C:\Users\GG\Dropbox\uni\HonsProject\GAIA\models-v2.2.2-z030\
-outputs_path: C:\\Users\\GG\\Dropbox\\uni\\HonsProject\\BPASSv2.2.1_bin-imf135_100\\input_bpass_z014_bin_imf135_100
+models_path: /home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/
+outputs_path: /home/fste075/BPASS_hoki_dev/bpass_v2.2.1_imf135_300/

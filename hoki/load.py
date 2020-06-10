@@ -3,8 +3,6 @@ This module implements the tools to easily load BPASS data.
 """
 
 import pandas as pd
-#from specutils import Spectrum1D
-import numpy as np
 import hoki.hrdiagrams as hr
 from hoki.constants import *
 import os
@@ -20,6 +18,7 @@ __all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
+
 ########################
 # GENERAL LOAD HELPERS #
 ########################
@@ -31,7 +30,7 @@ def unpickle(path):
     return pickle.load(open(path, 'rb'))
 
 
-# TODO: Make this a general function to change any setting of the yaml file?
+# TODO: Deprecation warning
 def set_models_path(path):
     """
     Changes the path to the stellar models in hoki's settings
@@ -61,6 +60,18 @@ def set_models_path(path):
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
 
+
+########################
+#  LOAD DUMMY VARIABLE #
+########################
+
+
+def dummy_to_dataframe(filename):
+    """Reads in dummy to df from a filename"""
+    inv_dict ={v: k for k, v in dummy_dicts[DEFAULT_BPASS_VERSION].items()}
+    cols = [inv_dict[key] if key in inv_dict.keys() else 'Nan'+str(key) for key in range(96)]
+    dummy = pd.read_csv(filename, names=cols, sep=r"\s+", engine='python')
+    return dummy
 
 #########################
 # MODEL INPUT FUNCTIONS #

@@ -10,6 +10,7 @@ import matplotlib.cm as cm
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
 
+
 class CMD(HokiObject):
     """
     **Colour Magnitude Diagram Object**
