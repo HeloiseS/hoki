@@ -11,6 +11,7 @@ from scipy import interpolate
 import numpy as np
 from hoki.constants import *
 
+#TODO Add imf selection
 
 
 class CSPEventRate(HokiObject, utils.CSP):
@@ -19,7 +20,7 @@ class CSPEventRate(HokiObject, utils.CSP):
     Parameters
     ----------
     data_folder : `str`
-        folder containing the BPASS data files
+        folder containing the BPASS data files (in units #events per bin)
     binary : boolean
         If `True`, loads the binary files. Otherwise, just loads single stars.
         Default=True
@@ -34,7 +35,7 @@ class CSPEventRate(HokiObject, utils.CSP):
 
     def __init__(self, data_folder, binary=True):
         self.now = HOKI_NOW
-        self.bpass_rates = utils._normalise_rates(utils._load_files(data_folder, "supernova", binary=binary))
+        self.bpass_rates = utils._normalise_rates(utils.load_rates(data_folder, binary=binary))
 
     def calculate_rate_over_time(self, metallicity, sfh, event_types, nr_bins, return_edges=False):
         """Calculates the event rates over lookback time.
@@ -46,7 +47,7 @@ class CSPEventRate(HokiObject, utils.CSP):
             A list of scipy spline representations of the metallicity evolution.
         sfh : `list(tuple,)`
             A list of scipy splite representations of the stellar formation
-            history.
+            history in units M_\\odot per yr.
         event_types : `list(str)`
             A list of BPASS event types.
         nr_bins : `int`
@@ -70,8 +71,9 @@ class CSPEventRate(HokiObject, utils.CSP):
         # currently both are scipy.interpolate.splrep (spline representations)
         # or arrays of them
         # TODO: ADD BETTER TYPE CHECK!
-        _type_check(metallicity, sfh, event_types)
-
+        utils._type_check(metallicity, sfh)
+        if isinstance(event_types, type(list)):
+            raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
 
         nr_events = len(event_types)
         nr_sfh = len(sfh)
@@ -127,11 +129,13 @@ class CSPEventRate(HokiObject, utils.CSP):
         """
 
 
-        _type_check(metallicity, SFH, event_types)
+        _type_check(metallicity, SFH)
+        if isinstance(event_types, type(list)):
+            raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
+
 
         # The setup of these elements could almost all be combined into a function
         # with code that's repeated above.
-
         nr_sfh = len(SFH)
         output_dtype = np.dtype([(i, np.float64) for i in event_types])
         event_rates = np.zeros(nr_sfh, dtype=output_dtype)
@@ -152,15 +156,3 @@ class CSPEventRate(HokiObject, utils.CSP):
 
 
         return event_rates
-
-
-def _type_check(metallicity, SFH, event_types):
-
-    if isinstance(metallicity, type(list)):
-        raise HokiFatalError("metallicity is not a list. Only list are taken as input")
-    if isinstance(SFH, type(list)):
-        raise HokiFatalError("sfr is not a list. Only lists are taken as input.")
-    if isinstance(event_types, type(list)):
-        raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
-    if len(metallicity) != len(SFH):
-        raise HokiFatalError("metallicity and sfr are not of equal length.")

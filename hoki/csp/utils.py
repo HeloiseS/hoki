@@ -68,7 +68,7 @@ def metallicity_per_bin(metallicity, time_edges):
 ########################
 
 
-def _load_files(data_folder, file_type, binary=True, imf="imf135_300"):
+def load_rates(data_folder, binary=True, imf="imf135_300"):
     """Returns the requested file types.
 
     Input
@@ -99,11 +99,60 @@ def _load_files(data_folder, file_type, binary=True, imf="imf135_300"):
     rates = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
     rates.index.name = "log_age"
     for num, metallicity in enumerate(BPASS_METALLICITIES):
-        data = hoki.load.model_output(f"{data_folder}/{file_type}-{star}-{imf}.z{metallicity}.dat")
+        data = hoki.load.model_output(f"{data_folder}/supernova-{star}-{imf}.z{metallicity}.dat")
         data = data.loc[:,slice(BPASS_EVENT_TYPES[0],BPASS_EVENT_TYPES[-1])]
         rates.loc[:, (BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
 
     return rates.swaplevel(0,1, axis=1)
+
+
+def load_spectra(data_folder, binary=True, imf="imf135_300"):
+    """Load all BPASS spectra.
+
+    Notes
+    -----
+    The first time this function is ran on a folder it will generate a pickle
+    file containing all the BPASS spectra per metallicity for faster loading
+    in the future. It stores the file in the same folder with the name:
+    `all_spectra-[bin/sin]-[imf].pkl`
+
+    Input
+    -----
+    data_folder : `str`
+        The path to the folder containing the BPASS spectra.
+    binary : boolean
+        Use the binary files or just the single stars. Default=True
+    imf : str
+        BPASS Identifier of the IMF to be used.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A pandas DataFrame containing the high quality BPASS spectra
+
+    """
+    if binary:
+        star = "bin"
+    else:
+        star = "sin"
+
+    try:
+        spectra = pd.read_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")
+    except:
+        arrays = [BPASS_NUM_METALLICITIES, np.linspace(1,100000,100000)]
+        columns = pd.MultiIndex.from_product(arrays, names=["Metallicicty", "wavelength"])
+        print("Allocating memory")
+        spectra = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
+        spectra.index.name = "log_age"
+        for num, metallicity in enumerate(BPASS_METALLICITIES):
+            print(f"Loading metallicity: {metallicity}")
+            data = hoki.load.model_output(f"{data_folder}/spectra-{star}-{imf}.z{metallicity}.dat")
+            data = data.loc[:, slice("6.0", "11.0")].T
+            spectra.loc[:,(BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
+        spectra = spectra.swaplevel(0,1,axis=1)
+        spectra.to_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")
+
+    return spectra
 
 def _normalise_rates(rates):
     """Normalise the BPASS rates.
@@ -117,7 +166,7 @@ def _normalise_rates(rates):
     Returns
     -------
     pandas.DataFrame
-        A pandas DataFrame containing the events/yr/M_\odot
+        A pandas DataFrame containing the events/yr/M_\\odot
     """
     return rates.div(1e6*BPASS_LINEAR_TIME_INTERVALS, axis=0)
 
@@ -292,3 +341,13 @@ def _get_bin_index(x, edges):
     # d = np.abs(x - mids)                # distance to midpoints
     # outer = np.where(d == d.min())      # find shortest
     # return outer[0][-1]           # select last, such that lower edge inclusive
+
+
+
+def _type_check_histories(metallicity, SFH):
+    if isinstance(metallicity, type(list)):
+        raise HokiFatalError("metallicity is not a list. Only list are taken as input")
+    if isinstance(SFH, type(list)):
+        raise HokiFatalError("sfr is not a list. Only lists are taken as input.")
+    if len(metallicity) != len(SFH):
+        raise HokiFatalError("metallicity and sfr are not of equal length.")

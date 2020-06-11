@@ -2,21 +2,21 @@
 Test for the Complex Stellar Population event rate calculations
 """
 
-import hoki.csp.eventrate as er
 import pkg_resources
 import numpy as np
+from scipy import interpolate
+import pytest
+
 from hoki.constants import *
 from hoki.utils.exceptions import HokiFatalError
+import hoki.csp.eventrate as er
 import hoki.csp.utils as utils
-from scipy import interpolate
-import matplotlib.pyplot as plt
-import pytest
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 test_sfh = np.loadtxt(f"{data_path}/csp_test_data/mass_points.txt")
 test_metallicity = np.loadtxt(f"{data_path}/csp_test_data/metallicity.txt")
-test_mass_per_bin = np.loadtxt(f"{data_path}/csp_test_data/mass_per_bin.txt")
 time_points = np.loadtxt(f"{data_path}/csp_test_data/time_points.txt")
+test_mass_per_bin = np.loadtxt(f"{data_path}/csp_test_data/mass_per_bin.txt")
 
 
 # ADD A TEST TO CHECK THE TYPE OF THE INPUT FUNCTIONS!
