@@ -24,7 +24,7 @@ class CSPSpectra(HokiObject, utils.CSP):
     """
     def __init__(self, data_folder, binary=True):
         self.now = HOKI_NOW
-        self.bpass_spectra = utils.load_spectra(data_folder, binary=binary)
+        self.bpass_spectra = utils._normalise_spectrum(utils.load_spectra(data_folder, binary=binary))
 
     def calculate_spec_over_time(self, metallicity, sfh, nr_bins, return_edges=False):
         """Calculates spectra over lookback time.

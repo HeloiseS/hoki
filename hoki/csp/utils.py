@@ -170,6 +170,9 @@ def _normalise_rates(rates):
     """
     return rates.div(1e6*BPASS_LINEAR_TIME_INTERVALS, axis=0)
 
+def _normalise_spectrum(spectra):
+    return spectra.div(1e6, axis=0)
+
 
 def _find_bpass_metallicities(Z_values):
     """Finds the nearest BPASS metallicities for each item in the list.
