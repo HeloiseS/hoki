@@ -19,7 +19,7 @@ class TestCMD(object):
         del cmd
 
     cmd = CMD(data_path+'/input_bpass_z020_bin_imf135_300',
-              models_path=data_path)#+"/sample_stellar_models/")
+              models_path=data_path+"/")#+"/sample_stellar_models/")
 
     def test_init_(self):
         #print(os.listdir(data_path))
@@ -50,5 +50,5 @@ class TestCMD(object):
 
     def test_at_log_age(self):
         self.cmd.at_log_age(log_age=6.8)
-"""
+    """
 
