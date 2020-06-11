@@ -59,7 +59,7 @@ def apply_bandpass(spectrum, bandpass):
     Parameters
     ----------
     spectrum : pysynphot.spectrum.ArraySourceSpectrum
-        The spectrum of a source
+        The spectrum of a models_path
     bandpass : 'pysynphot.spectrum.TabularSpectralElement'
                or 'pysynphot.spectrum.TabularSpectralElement.ObsModeBandpass'
                or `pysynphot.spectrum.ArraySpectralElement`

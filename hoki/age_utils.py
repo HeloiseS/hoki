@@ -105,7 +105,7 @@ class AgeWizard(HokiObject):
 
     def calculate_p_given_age_range(self, age_range):
         """
-        Calculates the probability that each source has age within age_range
+        Calculates the probability that each models_path has age within age_range
 
         Parameters
         ----------
@@ -314,11 +314,11 @@ def calculate_distributions(obs_df, model):
     if isinstance(model, hoki.cmd.CMD):
         y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
-    # If source names not given we make our own
+    # If models_path names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
-        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
+        warnings.warn("No models_path names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     likelihoods = []
@@ -329,7 +329,7 @@ def calculate_distributions(obs_df, model):
 
         # Here we take care of the possibility that a coordinate is a NaN
         if np.isnan(xi) or np.isnan(yi):
-            warnings.warn("NaN Value encountered in coordinates for source: " + name, HokiUserWarning)
+            warnings.warn("NaN Value encountered in coordinates for models_path: " + name, HokiUserWarning)
             likelihoods.append([0] * 51)  # Probability is then 0 at all times - That star doesn't exist in our models
             continue
 
@@ -346,7 +346,7 @@ def calculate_distributions(obs_df, model):
         # finally our pdf is added to the list
         likelihoods.append(distrib_i)
 
-    # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
+    # Our list of pdfs (which is a list of lists) is turned into a PDF with the models_path names as column names
     likelihoods_df = pd.DataFrame((np.array(likelihoods)).T, columns=source_names)
     # We add the time bins in there because it can make plotting extra convenient.
     # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
@@ -375,11 +375,11 @@ def calculate_distributions_normalised(obs_df, model):
     if isinstance(model, hoki.cmd.CMD):
         y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
-    # If source names not given we make our own
+    # If models_path names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
-        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
+        warnings.warn("No models_path names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     likelihoods = []
@@ -390,7 +390,7 @@ def calculate_distributions_normalised(obs_df, model):
 
         # Here we take care of the possibility that a coordinate is a NaN
         if np.isnan(xi) or np.isnan(yi):
-            warnings.warn("NaN Value encountered in coordinates for source: " + name, HokiUserWarning)
+            warnings.warn("NaN Value encountered in coordinates for models_path: " + name, HokiUserWarning)
             likelihoods.append([0] * 51)  # Probability is then 0 at all times - That star doesn't exist in our models
             continue
 
@@ -407,7 +407,7 @@ def calculate_distributions_normalised(obs_df, model):
         # finally our pdf is added to the list
         likelihoods.append(normalise_1d(distrib_i))
 
-    # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
+    # Our list of pdfs (which is a list of lists) is turned into a PDF with the models_path names as column names
     likelihoods_df = pd.DataFrame((np.array(likelihoods)).T, columns=source_names)
     # We add the time bins in there because it can make plotting extra convenient.
     # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
@@ -437,11 +437,11 @@ def calculate_distributions_dt_divided(obs_df, model):
     if isinstance(model, hoki.cmd.CMD):
         y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
-    # If source names not given we make our own
+    # If models_path names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
-        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
+        warnings.warn("No models_path names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     models = [model[i] / model.dt[i] for i in range(51)]
@@ -454,7 +454,7 @@ def calculate_distributions_dt_divided(obs_df, model):
 
         # Here we take care of the possibility that a coordinate is a NaN
         if np.isnan(xi) or np.isnan(yi):
-            warnings.warn("NaN Value encountered in coordinates for source: " + name, HokiUserWarning)
+            warnings.warn("NaN Value encountered in coordinates for models_path: " + name, HokiUserWarning)
             likelihoods.append([0] * 51)  # Probability is then 0 at all times - That star doesn't exist in our models
             continue
 
@@ -471,7 +471,7 @@ def calculate_distributions_dt_divided(obs_df, model):
         # finally our pdf is added to the list
         likelihoods.append(distrib_i)
 
-    # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
+    # Our list of pdfs (which is a list of lists) is turned into a PDF with the models_path names as column names
     likelihoods_df = pd.DataFrame((np.array(likelihoods)).T, columns=source_names)
     # We add the time bins in there because it can make plotting extra convenient.
     # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
@@ -536,7 +536,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
 
 def calculate_p_given_age_range(pdfs, age_range=None):
     """
-    Calculates the probability that each source has age within age_range
+    Calculates the probability that each models_path has age within age_range
 
     Parameters
     ----------

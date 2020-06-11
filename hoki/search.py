@@ -17,6 +17,28 @@ class DataCompiler(HokiObject):
     def __init__(self, z_list, columns=['V'], single=False, binary=True,
                  models_path=MODELS_PATH, input_files_path=OUTPUTS_PATH,
                  verbose=True, bpass_version=DEFAULT_BPASS_VERSION):
+        """
+
+        Parameters
+        ----------
+        z_list: list
+            List of metallicities to include.
+        columns: list
+            Columns to include from the dummy array
+        single: bool, optional
+            Whether to include the BPASS models that only contain single star models. Default is False.
+        binary: bool, optional
+            Whether to include BPASS models that contain binary systems. Default is True.
+        models_path: str, optional
+            Location of the BPASS models (the 50GB folder). Default=MODELS_PATH
+        input_files_path: str, optional
+            Location of the input files (which are BPASS model outputs - I know. Focus.).
+            Default=hopki.constants.OUTPUTS_PATH
+        verbose: bool, optional
+            Whether to print the welcome and goodbye messages. Default=True
+        bpass_version: str, optional
+            BPASS version. Default=hoki.constants.DEFAULT_BPASS_VERSION
+        """
 
         assert isinstance(z_list, list), "z_list should be a list of strings"
 
@@ -56,7 +78,7 @@ class DataCompiler(HokiObject):
 
         # ... and finally compiling the model data corresponding to the contents of
         # our inputs dataframe.
-        self.data = compile_model_data(inputs_dataframe, columns=self.columns, source=models_path)
+        self.data = compile_model_data(inputs_dataframe, columns=self.columns, models_path=models_path)
 
         # Telling the user everything went well with the compilation
         if verbose: _print_exit_message()
@@ -65,7 +87,23 @@ class DataCompiler(HokiObject):
         return self.data[item]
 
 
-def compile_model_data(inputs_df, columns, source=MODELS_PATH):
+def compile_model_data(inputs_df, columns, models_path=MODELS_PATH):
+    """
+    Compile dataframe of models contained in the input_dataframe provided
+
+    Parameters
+    ----------
+    inputs_df: pandas.DataFrame from compile_input_files_to_dataframe
+        DataFrame containing the selected inputs we care about
+    columns: list
+        Columns to include from the dummy array
+    models_path:
+        Location of the BPASS models (the 50GB folder). Default=MODELS_PATH
+
+    Returns
+    -------
+    pandas.DataFrame containing the columns requested for the models mentioned in the given input dataframe
+    """
     dataframes = []
     not_found = []
 
@@ -74,7 +112,7 @@ def compile_model_data(inputs_df, columns, source=MODELS_PATH):
         model_path = inputs_df.iloc[i, 0]
         if len(model_path) > 46:
             try:
-                dummy_i = dummy_to_dataframe(source + 'NEWBINMODS/' + model_path)
+                dummy_i = dummy_to_dataframe(models_path + 'NEWBINMODS/' + model_path)
                 dummy_i = dummy_i[columns]
             except FileNotFoundError as e:
                 not_found.append(model_path)
@@ -82,7 +120,7 @@ def compile_model_data(inputs_df, columns, source=MODELS_PATH):
 
         else:
             try:
-                dummy_i = dummy_to_dataframe(source + model_path)
+                dummy_i = dummy_to_dataframe(models_path + model_path)
                 dummy_i = dummy_i[columns]
             except FileNotFoundError as e:
                 not_found.append(model_path)
@@ -103,11 +141,12 @@ def compile_input_files_to_dataframe(input_file_list):
 
     Parameters
     ----------
-    input_file_list
+    input_file_list: list
+        List of input files of interest
 
     Returns
     -------
-
+    pandas.DataFrame containing information in the input files given
     """
     input_dfs = []
     for file in input_file_list:
@@ -125,15 +164,22 @@ def select_input_files(z_list, directory=OUTPUTS_PATH,
 
     Parameters
     ----------
-    z_list
-    directory
-    binary
-    single
-    imf
+    z_list: list
+        List of metallicities to include.
+    directory: str, optional
+        Location of the input files
+    single: bool, optional
+        Whether to include the BPASS models that only contain single star models. Default is False.
+    binary: bool, optional
+        Whether to include BPASS models that contain binary systems. Default is True.
+    imf: str, optional
+        IMF specification at the end of the filename. Default is 'imf135_300'. Consult the BPASS manual to check
+        the format and valid IMF specifications (or just look at the last 10 characters of the input
+        filenames that you care about and just use that).
 
     Returns
     -------
-
+    List of filenames
     """
     base = 'input_bpass_'
 
