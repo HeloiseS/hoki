@@ -92,7 +92,7 @@ def model_input(path):
     """
 
     assert isinstance(path, str), "The location of the file is expected to be a string."
-    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
+    assert os.path.isfile(path), f"File {path} does not exist, or its path is incorrect."
 
     lines = open(path).read().split("\n")
 

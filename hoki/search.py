@@ -6,7 +6,6 @@ from hoki.utils.progressbar import print_progress_bar
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
 
-#TODO: Write tests
 #TODO: Write docstrings
 #TODO: Write tutorial
 
@@ -21,13 +20,16 @@ class DataCompiler(HokiObject):
 
         assert isinstance(z_list, list), "z_list should be a list of strings"
 
-        # Checking if a keyword is wrong
+        ####### CHECKING INPUTS ######
+
+        # Metalicity
         wrong_z_keyword = set(z_list) - set(bpass_input_z_list)
         if len(wrong_z_keyword) != 0:
             raise HokiFormatError(
                 f"Unknown metallicity keyword(s): {wrong_z_keyword}\n\nDEBBUGGING ASSISTANT: "
                 f"Here is a list of valid metallicity keywords\n{bpass_input_z_list}")
 
+        # Columns
         assert isinstance(columns, list), "columns should be a list of strings"
         self.dummy_dict_cols = list(dummy_dicts[bpass_version].keys())
         wrong_column_names = set(columns) - set(self.dummy_dict_cols)
@@ -36,17 +38,27 @@ class DataCompiler(HokiObject):
                 f"Unknown column name(s): {wrong_column_names}\n\nDEBBUGGING ASSISTANT: "
                 f"Here is a list of valid column names\n{self.dummy_dict_cols}")
 
+        # Saying hi to the user and giving them advice
         if verbose: _print_welcome()
 
+        # Basic attributes
         self.z_list = z_list
         self.columns = columns
         self.single = single
         self.binary = binary
+
+        # Creating the list of input file names...
         input_file_list = select_input_files(self.z_list, directory=input_files_path,
                                              single=self.single, binary=self.binary)
-        inputs_dataframe = compile_inputs(input_file_list)
+
+        # ...then turning them into dataframes ...
+        inputs_dataframe = compile_input_files_to_dataframe(input_file_list)
+
+        # ... and finally compiling the model data corresponding to the contents of
+        # our inputs dataframe.
         self.data = compile_model_data(inputs_dataframe, columns=self.columns, source=models_path)
 
+        # Telling the user everything went well with the compilation
         if verbose: _print_exit_message()
 
     def __getitem__(self, item):
@@ -85,7 +97,7 @@ def compile_model_data(inputs_df, columns, source=MODELS_PATH):
     return pd.concat(dataframes).reset_index().drop('index', axis=1)
 
 
-def compile_inputs(input_file_list):
+def compile_input_files_to_dataframe(input_file_list):
     """
     Puts together all inputs into one dataframe
 
@@ -151,7 +163,5 @@ def _print_exit_message():
     print('*******     JOB DONE! HAPPY SCIENCING!     ******')
     print('*************************************************')
 
-
-### should be in load??
 
 
