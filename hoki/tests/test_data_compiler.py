@@ -1,5 +1,5 @@
-from hoki.search import DataCompiler, bpass_input_z_list
-import hoki.search as s
+from hoki.data_compilers import ModelDataCompiler, bpass_input_z_list
+import hoki.data_compilers as dc
 import pytest
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 import numpy as np
@@ -13,30 +13,30 @@ data_path+="/"
 
 class TestSelectInputFiles(object):
     def test_given_z(self):
-        filename = s.select_input_files(['z014'])[0]
+        filename = dc._select_input_files(['z014'])[0]
         assert filename[-19:-15] =='z014', "metallicity not in right place"
     def test_different_tail(self):
-        filename = s.select_input_files(['z014'], imf='imf135_100')[0]
+        filename = dc._select_input_files(['z014'], imf='imf135_100')[0]
         assert filename[-10:] == 'imf135_100', ""
 
 
 def test_compile_input_files_to_dataframe():
-    filename = s.select_input_files(['z001'], directory=data_path)
-    s.compile_input_files_to_dataframe(filename)
+    filename = dc._select_input_files(['z001'], directory=data_path)
+    dc._compile_input_files_to_dataframe(filename)
 
 
 class TestDataCompiler(object):
     def test_bad_input_metalicity(self):
         with pytest.raises(HokiFormatError):
-            __ = DataCompiler(z_list=['bla'], columns=['M1'])
+            __ = ModelDataCompiler(z_list=['bla'], columns=['M1'])
 
     def test_bad_input_columns(self):
         with pytest.raises(HokiFormatError):
-            __ = DataCompiler(z_list=['z020'], columns=['bla'])
+            __ = ModelDataCompiler(z_list=['z020'], columns=['bla'])
 
 """
     def test_compiling_small_dataset(self):
-        small_set = DataCompiler(z_list=['z020'],
+        small_set = ModelDataCompiler(z_list=['z020'],
                                  columns=['M1'],
                                  binary=False,
                                  single=True,

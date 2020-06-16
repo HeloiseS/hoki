@@ -9,7 +9,7 @@ import pandas as pd
 
 def dopcor(df, z, wl_col_index=0):
     """
-    Basis doppler correction for hoki's dataframes
+    Basis doppler correction for hoki'dc dataframes
 
     Notes
     -----

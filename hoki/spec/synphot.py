@@ -98,7 +98,7 @@ def bpass_to_psp_spectrum(wavelength, flux):
     Returns
     -------
     'pysynphot.spectrum.ArraySourceSpectrum'
-        An pysynphot ArraySpectrum with the flux in erg/s/Anstrom.
+        An pysynphot ArraySpectrum with the flux in erg/dc/Anstrom.
     """
     # check if values are pandas series
     if type(wavelength) == pd.Series:

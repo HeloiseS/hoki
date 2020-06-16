@@ -2,7 +2,7 @@
 
 __all__ = ['__version__']
 
-# this indicates whether or not we are in the package's setup.py
+# this indicates whether or not we are in the package'dc setup.py
 try:
     _ASTROPY_SETUP_
 except NameError:

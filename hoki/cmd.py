@@ -76,7 +76,7 @@ class CMD(HokiObject):
         self._file_does_not_exist = []
         self.dummy_dict=dummy_dicts[bpass_version]
 
-        # Setting up the grid's resolution
+        # Setting up the grid'dc resolution
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
         self.mag_range = np.arange(mag_lim[0], mag_lim[1], res_el)
         self.grid = None

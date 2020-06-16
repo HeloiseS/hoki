@@ -46,7 +46,7 @@ dummy_dicts = settings['dummy_dicts']
 
 def set_models_path(path):
     """
-    Changes the path to the stellar models in hoki's settings
+    Changes the path to the stellar models in hoki'dc settings
 
     Parameters
     ----------
@@ -76,7 +76,7 @@ def set_models_path(path):
 
 def set_default_bpass_version(version):
     """
-    Changes the path to the stellar models in hoki's settings
+    Changes the path to the stellar models in hoki'dc settings
 
     Parameters
     ----------

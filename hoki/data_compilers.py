@@ -12,7 +12,7 @@ bpass_input_z_list = ['zem5','zem4', 'z001', 'z002', 'z003', 'z004', 'z006',
                        'z008', 'z014', 'z010', 'z020','z030','z040']
 
 
-class DataCompiler(HokiObject):
+class ModelDataCompiler(HokiObject):
     def __init__(self, z_list, columns=['V'], single=False, binary=True,
                  models_path=MODELS_PATH, input_files_path=OUTPUTS_PATH,
                  verbose=True, bpass_version=DEFAULT_BPASS_VERSION):
@@ -47,7 +47,7 @@ class DataCompiler(HokiObject):
         wrong_z_keyword = set(z_list) - set(bpass_input_z_list)
         if len(wrong_z_keyword) != 0:
             raise HokiFormatError(
-                f"Unknown metallicity keyword(s): {wrong_z_keyword}\n\nDEBBUGGING ASSISTANT: "
+                f"Unknown metallicity keyword(dc): {wrong_z_keyword}\n\nDEBBUGGING ASSISTANT: "
                 f"Here is a list of valid metallicity keywords\n{bpass_input_z_list}")
 
         # Columns
@@ -56,7 +56,7 @@ class DataCompiler(HokiObject):
         wrong_column_names = set(columns) - set(self.dummy_dict_cols)
         if len(wrong_column_names) != 0:
             raise HokiFormatError(
-                f"Unknown column name(s): {wrong_column_names}\n\nDEBBUGGING ASSISTANT: "
+                f"Unknown column name(dc): {wrong_column_names}\n\nDEBBUGGING ASSISTANT: "
                 f"Here is a list of valid column names\n{self.dummy_dict_cols}")
 
         # Saying hi to the user and giving them advice
@@ -69,16 +69,16 @@ class DataCompiler(HokiObject):
         self.binary = binary
 
         # Creating the list of input file names...
-        self.input_file_list = select_input_files(self.z_list, directory=input_files_path,
-                                                  single=self.single, binary=self.binary)
+        self.input_file_list = _select_input_files(self.z_list, directory=input_files_path,
+                                                   single=self.single, binary=self.binary)
 
         # ...then turning them into dataframes ...
-        self.inputs_dataframe = compile_input_files_to_dataframe(self.input_file_list)
+        self.inputs_dataframe = _compile_input_files_to_dataframe(self.input_file_list)
 
         # ... and finally compiling the model data corresponding to the contents of
         # our inputs dataframe.
-        self.data, self.not_found = compile_model_data(self.inputs_dataframe, columns=self.columns,
-                                                       models_path=models_path, bpass_version=bpass_version)
+        self.data, self.not_found = _compile_model_data(self.inputs_dataframe, columns=self.columns,
+                                                        models_path=models_path, bpass_version=bpass_version)
 
         # Telling the user everything went well with the compilation
         if verbose: _print_exit_message()
@@ -87,7 +87,7 @@ class DataCompiler(HokiObject):
         return self.data[item]
 
 
-def compile_model_data(inputs_df, columns, models_path=MODELS_PATH, bpass_version=DEFAULT_BPASS_VERSION):
+def _compile_model_data(inputs_df, columns, models_path=MODELS_PATH, bpass_version=DEFAULT_BPASS_VERSION):
     """
     Compile dataframe of models contained in the input_dataframe provided
 
@@ -135,7 +135,7 @@ def compile_model_data(inputs_df, columns, models_path=MODELS_PATH, bpass_versio
     return pd.concat(dataframes).reset_index().drop('index', axis=1), not_found
 
 
-def compile_input_files_to_dataframe(input_file_list):
+def _compile_input_files_to_dataframe(input_file_list):
     """
     Puts together all inputs into one dataframe
 
@@ -157,8 +157,8 @@ def compile_input_files_to_dataframe(input_file_list):
     return inputs_df.reset_index().drop('index', axis=1)
 
 
-def select_input_files(z_list, directory=OUTPUTS_PATH,
-                       binary=True, single=False, imf='imf135_300'):
+def _select_input_files(z_list, directory=OUTPUTS_PATH,
+                        binary=True, single=False, imf='imf135_300'):
     """
     Creates list of relevant input file
 
@@ -200,7 +200,7 @@ def _print_welcome():
     print("\n\nThis may take a while ;)\nGo get yourself a cup of tea, sit back and relax\nI'm working for you boo!")
 
     print(
-        "\nNOTE: The progress bar doesn't move smoothly - it might accelerate or slow down - it's perfectly normal :D")
+        "\nNOTE: The progress bar doesn't move smoothly - it might accelerate or slow down - it'dc perfectly normal :D")
 
 
 def _print_exit_message():
