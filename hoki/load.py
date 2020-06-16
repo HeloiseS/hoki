@@ -33,7 +33,7 @@ def unpickle(path):
 # TODO: Deprecation warning
 def set_models_path(path):
     """
-    Changes the path to the stellar models in hoki'dc settings
+    Changes the path to the stellar models in hoki's settings
 
     Parameters
     ----------

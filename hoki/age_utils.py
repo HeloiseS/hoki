@@ -185,7 +185,7 @@ def _find_hrd_coordinates(obs_df, myhrd):
     # How this works:
     # abs(model.L_coord-L)==abs(model.L_coord-L).min() *finds* the HRD location that most closely corresponds to obs.
     # np.where(....)[0] *finds* the index of that location (which was originally in L or T space)
-    # int( ....) is juuust to make sure we get an integer because Python is a motherfucker and adds dc.f. for no reason
+    # int( ....) is juuust to make sure we get an integer because Python is a motherfucker and adds s.f. for no reason
     # Then we append that index to our list.
 
     for T, L in zip(logT, logL):
@@ -242,7 +242,7 @@ def _find_cmd_coordinates(obs_df, mycmd):
     # abs(model.L_coord-L)==abs(model.L_coord-L).min() *finds* the HRD location that most closely corresponds to obs.
     # np.where(....)[0] *finds* the index
     # of that location (which was originally in L or T space)
-    # int( ....) is juuust to make sure we get an integer because Python is a motherfucker and adds dc.f. for no reason
+    # int( ....) is juuust to make sure we get an integer because Python is a motherfucker and adds s.f. for no reason
     # Then we append that index to our list.
 
     for col, mag in zip(colours, magnitudes):
@@ -308,18 +308,18 @@ def calculate_distributions(obs_df, model):
     Age Probability Distribution Functions in a pandas.DataFrame.
 
     """
-    # Checking whether it;dc HRD or CMD
+    # Checking whether it;s HRD or CMD
     if isinstance(model, hoki.hrdiagrams.HRDiagram):
         x_coord, y_coord = find_coordinates(obs_df, model)
     if isinstance(model, hoki.cmd.CMD):
-        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it'dc reversed... -_-
+        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
     # If models_path names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
         warnings.warn("No models_path names given so I'll make my own", HokiUserWarning)
-        source_names = ["dc" + str(i) for i in range(obs_df.shape[0])]
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     likelihoods = []
 
@@ -369,18 +369,18 @@ def calculate_distributions_normalised(obs_df, model):
     Age Probability Distribution Functions in a pandas.DataFrame.
 
     """
-    # Checking whether it;dc HRD or CMD
+    # Checking whether it;s HRD or CMD
     if isinstance(model, hoki.hrdiagrams.HRDiagram):
         x_coord, y_coord = find_coordinates(obs_df, model)
     if isinstance(model, hoki.cmd.CMD):
-        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it'dc reversed... -_-
+        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
     # If models_path names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
         warnings.warn("No models_path names given so I'll make my own", HokiUserWarning)
-        source_names = ["dc" + str(i) for i in range(obs_df.shape[0])]
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     likelihoods = []
 
@@ -431,18 +431,18 @@ def calculate_distributions_dt_divided(obs_df, model):
     Age Probability Distribution Functions in a pandas.DataFrame.
 
     """
-    # Checking whether it;dc HRD or CMD
+    # Checking whether it's' HRD or CMD
     if isinstance(model, hoki.hrdiagrams.HRDiagram):
         x_coord, y_coord = find_coordinates(obs_df, model)
     if isinstance(model, hoki.cmd.CMD):
-        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it'dc reversed... -_-
+        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
     # If models_path names not given we make our own
     try:
         source_names = obs_df.name
     except AttributeError:
         warnings.warn("No models_path names given so I'll make my own", HokiUserWarning)
-        source_names = ["dc" + str(i) for i in range(obs_df.shape[0])]
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
 
     models = [model[i] / model.dt[i] for i in range(51)]
 
