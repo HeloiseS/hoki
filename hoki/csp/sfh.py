@@ -19,22 +19,22 @@ class SFH(object):
         """
         Input
         ------
-        time_bins: numpy.array
+        time_bins: numpy.ndarray
             An array containing the time points of the SFH.
             Must be given in yr.
-        sfh: numpy array
-            An array containing the Stellar Formation History at the time points.
+        sfh: numpy.ndarray
+            An array containing the Stellar Formation History at the time bins.
             Must be given in M_solar/yr
-        model_type : str
-            Determines which stellar model is used.
+        model_type : str #[Change model_type to "parametric_sfh"]
+            blaaaaa [HELOISE FIX]
         """
         self.time_bins = time_bins
         self.sfh = None
         if model_type == "custom":
             self.sfh = interpolate.splrep(time_bins, sfh, k=1)
         else:
-            raise TypeError("model type not recognised.")
-
+            raise TypeError("model type not recognised.") # put a hoki error there
+		
     def stellar_formation_rate(self, t):
         """
         Returns the stellar formation rate at a given time.
