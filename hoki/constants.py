@@ -46,7 +46,7 @@ dummy_dicts = settings['dummy_dicts']
 
 def set_models_path(path):
     """
-    Changes the path to the stellar models in hoki'dc settings
+    Changes the path to the stellar models in hoki's settings
 
     Parameters
     ----------
@@ -67,6 +67,34 @@ def set_models_path(path):
         settings = yaml.safe_load(stream)
 
     settings['models_path'] = path
+    with io.open(path_to_settings, 'w', encoding='utf8') as outfile:
+        yaml.dump(settings, outfile, default_flow_style=False, allow_unicode=True)
+
+    print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
+          '\n'+path_to_settings)
+
+
+def set_outputs_path(path):
+    """
+    Changes the defaullt path to the BPASS outputs in hoki's settings
+
+    Parameters
+    ----------
+    path : str,
+        Absolute path to the folder containing the BPASS outputs.
+
+    Notes
+    -----
+    You are going to have to reload hoki for your new path to take effect.
+
+    """
+    assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
+
+    path_to_settings = data_path+'/settings.yaml'
+    with open(path_to_settings, 'r') as stream:
+        settings = yaml.safe_load(stream)
+
+    settings['outputs_path'] = path
     with io.open(path_to_settings, 'w', encoding='utf8') as outfile:
         yaml.dump(settings, outfile, default_flow_style=False, allow_unicode=True)
 
