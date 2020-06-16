@@ -1,4 +1,4 @@
-from hoki.constants import *
+from hoki.constants import DEFAULT_BPASS_VERSION, MODELS_PATH, OUTPUTS_PATH, dummy_dicts
 from hoki.load import model_input, dummy_to_dataframe
 import pandas as pd
 import re
@@ -6,7 +6,6 @@ from hoki.utils.progressbar import print_progress_bar
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
 
-#TODO: Write docstrings
 #TODO: Write tutorial
 
 bpass_input_z_list = ['zem5','zem4', 'z001', 'z002', 'z003', 'z004', 'z006',
@@ -70,15 +69,16 @@ class DataCompiler(HokiObject):
         self.binary = binary
 
         # Creating the list of input file names...
-        input_file_list = select_input_files(self.z_list, directory=input_files_path,
-                                             single=self.single, binary=self.binary)
+        self.input_file_list = select_input_files(self.z_list, directory=input_files_path,
+                                                  single=self.single, binary=self.binary)
 
         # ...then turning them into dataframes ...
-        inputs_dataframe = compile_input_files_to_dataframe(input_file_list)
+        self.inputs_dataframe = compile_input_files_to_dataframe(self.input_file_list)
 
         # ... and finally compiling the model data corresponding to the contents of
         # our inputs dataframe.
-        self.data = compile_model_data(inputs_dataframe, columns=self.columns, models_path=models_path)
+        self.data, self.not_found = compile_model_data(self.inputs_dataframe, columns=self.columns,
+                                                       models_path=models_path, bpass_version=bpass_version)
 
         # Telling the user everything went well with the compilation
         if verbose: _print_exit_message()
@@ -87,7 +87,7 @@ class DataCompiler(HokiObject):
         return self.data[item]
 
 
-def compile_model_data(inputs_df, columns, models_path=MODELS_PATH):
+def compile_model_data(inputs_df, columns, models_path=MODELS_PATH, bpass_version=DEFAULT_BPASS_VERSION):
     """
     Compile dataframe of models contained in the input_dataframe provided
 
@@ -112,7 +112,7 @@ def compile_model_data(inputs_df, columns, models_path=MODELS_PATH):
         model_path = inputs_df.iloc[i, 0]
         if len(model_path) > 46:
             try:
-                dummy_i = dummy_to_dataframe(models_path + 'NEWBINMODS/' + model_path)
+                dummy_i = dummy_to_dataframe(models_path + model_path, bpass_version)
                 dummy_i = dummy_i[columns]
             except FileNotFoundError as e:
                 not_found.append(model_path)
@@ -120,7 +120,7 @@ def compile_model_data(inputs_df, columns, models_path=MODELS_PATH):
 
         else:
             try:
-                dummy_i = dummy_to_dataframe(models_path + model_path)
+                dummy_i = dummy_to_dataframe(models_path + model_path, bpass_version)
                 dummy_i = dummy_i[columns]
             except FileNotFoundError as e:
                 not_found.append(model_path)
@@ -132,7 +132,7 @@ def compile_model_data(inputs_df, columns, models_path=MODELS_PATH):
 
         dataframes.append(pd.concat([dummy_i, inputs_to_add], axis=1))
 
-    return pd.concat(dataframes).reset_index().drop('index', axis=1)
+    return pd.concat(dataframes).reset_index().drop('index', axis=1), not_found
 
 
 def compile_input_files_to_dataframe(input_file_list):
@@ -153,7 +153,7 @@ def compile_input_files_to_dataframe(input_file_list):
         input_dfs.append(model_input(file))
 
     inputs_df = pd.concat(input_dfs)
-    inputs_df['z'] = [re.search('-z(.*)-', name).group()[2:-1] for name in inputs_df.filenames]
+    inputs_df['z'] = [re.search('-z(.*?)-', name).group()[2:-1] for name in inputs_df.filenames]
     return inputs_df.reset_index().drop('index', axis=1)
 
 

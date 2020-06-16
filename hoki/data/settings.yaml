@@ -1,4 +1,4 @@
-default_bpass_version: v222
+default_bpass_version: 'v221'
 dummy_dicts:
   v221:
     '?': 49
