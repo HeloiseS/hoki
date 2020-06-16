@@ -394,7 +394,7 @@ def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
     if kind == 'TL':
         X, Y = np.meshgrid(np.arange(0.1, 10.1, 0.1), np.arange(-2.9, 7.1, 0.1))
     elif kind == 'Tg':
-        X, Y = np.meshgrid(np.arange(-2.9, 7.1, 0.1), np.arange(-2.9, 7.1, 0.1))
+        X, Y = np.meshgrid(np.arange(0.1, 10.1, 0.1), np.arange(-2.9, 7.1, 0.1))
     elif kind == 'TTG':
         X, Y = np.meshgrid(np.arange(0.1, 10.1, 0.1), np.arange(-2.9, 7.1, 0.1))
 
