@@ -1,3 +1,7 @@
+"""
+Objects and pipelines that compile BPASS data files into more convenient, more pythonic data types
+"""
+
 from hoki.constants import DEFAULT_BPASS_VERSION, MODELS_PATH, OUTPUTS_PATH, dummy_dicts
 from hoki.load import model_input, dummy_to_dataframe
 import pandas as pd
@@ -13,6 +17,10 @@ bpass_input_z_list = ['zem5','zem4', 'z001', 'z002', 'z003', 'z004', 'z006',
 
 
 class ModelDataCompiler(HokiObject):
+    """
+    Given a list of metalicities, a list of valid BPASS model attributes (in the dummy array), chosen types of model
+    (binary,s ingle or both) and correct paths, will compile the corresponding BPASS stellar models into a DataFrame
+    """
     def __init__(self, z_list, columns=['V'], single=False, binary=True,
                  models_path=MODELS_PATH, input_files_path=OUTPUTS_PATH,
                  verbose=True, bpass_version=DEFAULT_BPASS_VERSION):
