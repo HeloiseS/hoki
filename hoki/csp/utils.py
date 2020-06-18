@@ -25,7 +25,7 @@ def mass_per_bin(sfh, time_edges):
 
     Input
     -----
-    sfh : scipy.interpolate.splrep
+    sfh_arr : scipy.interpolate.splrep
         A scipy spline representation of the stellar formation history.
     time_edges : numpy array
         The edges of the bins in which the mass per bin is wanted in yrs.
@@ -46,7 +46,7 @@ def metallicity_per_bin(metallicity, time_edges):
 
     Input
     -----
-    sfh : scipy.interpolate.splrep
+    sfh_arr : scipy.interpolate.splrep
         A scipy spline representation of the metallicity history
     time_edges : numpy array
         The edges of the bins in which the mass per bin is wanted in yrs.
