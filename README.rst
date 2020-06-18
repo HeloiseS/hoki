@@ -1,8 +1,6 @@
 .. image:: black_text.png
     :height: 35px
 
-
-
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
@@ -12,6 +10,8 @@
    
 .. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   
     :alt: tests
+    
+.. image:: https://img.shields.io/pypi/dm/hoki
     
 Bridging the Gap Between Observation and Theory
 =================================================
@@ -58,7 +58,8 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
-   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`
+
+   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`
 
 **Note:** Python 2 is not supported
 
@@ -67,12 +68,14 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 Read the docs
 ^^^^^^^^^^^^^^^
 
+
 `Click Here! Click Here! Click Here! <https://heloises.github.io/hoki/intro.html>`_
 
 ----
 
 Download Tutorials
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
+
 Check out these Jupyter notebooks I made - you can find them on `this repo! <https://github.com/HeloiseS/hoki_tutorials>`__
 
 ---- 
@@ -88,6 +91,17 @@ The paper is `available on ArXiv <https://arxiv.org/abs/2001.11069>`_ as publish
 
 **Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
+If you use the following tools, please acknowledge the follwing publications:
+
+**AgeWizard**:
+
+.. image:: https://img.shields.io/badge/arxiv-2004.02883-red
+   :target: https://arxiv.org/abs/2004.02883
+
+**UnderlyingCountRatio**:
+
+.. image:: https://img.shields.io/badge/arxiv-2004.13040-red
+   :target: https://arxiv.org/abs/2004.13040
 
 **BIBTEX**
 

@@ -6,9 +6,8 @@ name: CI
 # events but only for the master branch
 on:
   push:
-#    branches: [ master, spectra, csp]
+  
   pull_request:
-#    branches: [ master, spectra, csp ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,3 +32,11 @@ jobs:
         
     - name: Run Tox
       run: tox
+      
+   # - name: Upload coverage to codecov
+   #   uses: codecov/codecov-action@v1
+   #   with:
+   #     token: ${{ secrets.CODECOV_TOKEN }}
+   #     file: ./coverage.xml
+   #     fail_ci_if_error: False
+

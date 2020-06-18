@@ -10,6 +10,8 @@ import matplotlib.cm as cm
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
 
+__all__ = ['CMD']
+
 
 class CMD(HokiObject):
     """
@@ -26,6 +28,9 @@ class CMD(HokiObject):
     res_el : float or int, optional
         Resolution element of the CMD grid. The resolution element is the same for colour and magnitude.
         Default is 0.1.
+    bpass_version : str, optional (v221 or v222)
+        The BPASS version to consider - this changes the "dummy_dictionary" that is loaded from the settings.yaml file
+        Default = hoki.constants.DEFAULT_BPASS_VERSION
 
     Attributes
     ----------
@@ -133,7 +138,7 @@ class CMD(HokiObject):
         except KeyError as e:
             err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: \nOne or both of the chosen filters do not correspond ' \
                                          'to a valid filter key. Here is a list of valid filters - ' \
-                                         'input them as string:\n'+str(list(dummy_dict.keys())[49:-23])
+                                         'input them as string:\n'+str(list(self.dummy_dict.keys())[49:-23])
             raise HokiKeyError(err_m)
 
 

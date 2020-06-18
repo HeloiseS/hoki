@@ -8,7 +8,9 @@ import os
 import io
 
 #TODO: update documentation and add mentions of set_models path and set_default_bpass_verison in the constants
-# module - it will cahnge things in the CMD jupyter notebook I think.
+
+# module - it will change things in the CMD jupyter notebook I think.
+
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
@@ -23,8 +25,7 @@ BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
 BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
 BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
 
-
-"""
+# Create a deprecation warning when using dummy_dict
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,
               'ONe_core1': 8, 'X': 10, 'Y': 11, 'C': 12, 'N': 13, 'O': 14, 'Ne': 15, 'MH1': 16, 'MHe1': 17, 'MC1': 18,
               'MN1': 19, 'MO1': 20, 'MNe1': 21, 'MMg1': 22, 'MSi1': 23, 'MFe1': 24, 'envelope_binding_E': 25,
@@ -37,7 +38,6 @@ dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4,
               'f555w': 70, 'f606w': 71, 'f814w': 72, 'U2': 73, 'B2': 74, 'V2': 75, 'R2': 76, 'I2': 77, 'J2': 78,
               'H2': 79, 'K2': 80, 'u2': 81, 'g2': 82, 'r2': 83, 'i2': 84, 'z2': 85, 'f300w2': 86, 'f336w2': 87,
               'f435w2': 88, 'f450w2': 89, 'f555w2': 90, 'f606w2': 91, 'f814w2': 92, 'Halpha': 93, 'FUV': 94, 'NUV': 95}
-"""
 
 DEFAULT_BPASS_VERSION = settings['default_bpass_version']
 
@@ -100,7 +100,4 @@ def set_default_bpass_version(version):
 
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
-
-
-
 
