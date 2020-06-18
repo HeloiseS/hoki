@@ -10,9 +10,13 @@ from scipy import interpolate
 from hoki.constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# CODEREVIEW [H]: This is currently useless - There are two options here: Either the functionalities in
+# CSP spectra and CSP rates can be streamlined and some of the global ones can be put in here OR this is useless
+# and we drop this entierly.
+
 class CSP(object):
     pass
-
 
 ########################
 # Calculations per bin #
@@ -35,6 +39,8 @@ def mass_per_bin(sfh, time_edges):
     numpy.array
         The mass per time bin.
     """
+
+    # CODEREVIEW [H]: Can spline be replaced by numpy interp?
     return np.array([interpolate.splint(t1, t2, sfh)
                         for t1, t2 in zip(time_edges[:-1], time_edges[1:])])
 
@@ -56,6 +62,8 @@ def metallicity_per_bin(metallicity, time_edges):
     numpy.array
         The average metallicity per bin
     """
+
+    # CODEREVIEW [H]: Can spline be replaced by numpy interp or a numpy funcitonality?
     Z_values = np.array(interpolate.splev(time_edges, metallicity))
     Z_average = (Z_values[1:] + Z_values[:-1])/2
     return np.array(Z_average)
@@ -103,11 +111,12 @@ def load_rates(data_folder, binary=True, imf="imf135_300"):
         data = data.loc[:,slice(BPASS_EVENT_TYPES[0],BPASS_EVENT_TYPES[-1])]
         rates.loc[:, (BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
 
-    return rates.swaplevel(0,1, axis=1)
+    return rates.swaplevel(0, 1, axis=1)
 
 
 def load_spectra(data_folder, binary=True, imf="imf135_300"):
-    """Load all BPASS spectra.
+    """
+    Load all BPASS spectra.
 
     Notes
     -----
@@ -138,12 +147,15 @@ def load_spectra(data_folder, binary=True, imf="imf135_300"):
 
     try:
         spectra = pd.read_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")
+
+    # CODEREVIEW [H]: No pokemon exceptions please ;)
     except:
-        arrays = [BPASS_NUM_METALLICITIES, np.linspace(1,100000,100000)]
+        arrays = [BPASS_NUM_METALLICITIES, np.linspace(1, 100000, 100000)]
         columns = pd.MultiIndex.from_product(arrays, names=["Metallicicty", "wavelength"])
         print("Allocating memory")
         spectra = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
         spectra.index.name = "log_age"
+
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print(f"Loading metallicity: {metallicity}")
             data = hoki.load.model_output(f"{data_folder}/spectra-{star}-{imf}.z{metallicity}.dat")
@@ -169,6 +181,7 @@ def _normalise_rates(rates):
         A pandas DataFrame containing the events/yr/M_\\odot
     """
     return rates.div(1e6*BPASS_LINEAR_TIME_INTERVALS, axis=0)
+
 
 def _normalise_spectrum(spectra):
     return spectra.div(1e6, axis=0)
@@ -254,9 +267,7 @@ def _at_time(Z_values, mass_per_bin, edges,rates):
         The bin edges of the Z_values and mass_per_bin.
 
     """
-    Z_index_per_bin = np.array(
-                        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES))
-                        for i in Z_values])
+    Z_index_per_bin = np.array( [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
     bin_index = np.array([_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
     out = 0.0
     for count in range(len(mass_per_bin)):
@@ -329,9 +340,12 @@ def _get_bin_index(x, edges):
 
     """
     if x < edges[0] or x > edges[-1]:
+        # CODEREVIEW [H]: Use Hoki Exception (this is probably a hoki formatting problem if it's a formatting you chose
+        # and want to impose.
         raise Exception("x outside of range")
     out = 0
-    for i,val in enumerate(edges):
+
+    for i, val in enumerate(edges):
         if val > x:
             out = i-1
             break
@@ -346,8 +360,8 @@ def _get_bin_index(x, edges):
     # return outer[0][-1]           # select last, such that lower edge inclusive
 
 
-
 def _type_check_histories(metallicity, SFH):
+    # CODEREVIEW [H]: BEAU-TI-FULL
     if isinstance(metallicity, type(list)):
         raise HokiFatalError("metallicity is not a list. Only list are taken as input")
     if isinstance(SFH, type(list)):
