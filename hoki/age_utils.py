@@ -26,6 +26,10 @@ class AgeWizard(HokiObject):
         model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
             Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
             path to an HR Diagram file or a pickled CMD.
+        test: str, optional
+            This is a development testing feature that will be removed or refactored. Valid options are: 'norm' for
+            normalise, 'div' for divide. Default is None for the OG agewizard method which neither normalises nor divides
+            the individual HRDs or CMDs by the width of their time bins.
         """
 
         # Making sure the osbervational properties are given in a format we can use.
@@ -289,7 +293,7 @@ def calculate_individual_pdfs(obs_df, model, test=None):
 
 
 ####
-# ALLL THE DISTRIBUTIONS TO CHECK
+# ALL THE DISTRIBUTIONS TO CHECK
 ####
 
 def calculate_distributions(obs_df, model):
@@ -352,6 +356,7 @@ def calculate_distributions(obs_df, model):
     # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
 
     return likelihoods_df
+
 
 def calculate_distributions_normalised(obs_df, model):
     """
