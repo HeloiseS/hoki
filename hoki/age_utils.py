@@ -293,7 +293,7 @@ def calculate_individual_pdfs(obs_df, model, test=None):
 
 
 ####
-# ALL THE DISTRIBUTIONS TO CHECK
+# ALL THE DISTRIBUTION TO CHECK
 ####
 
 def calculate_distributions(obs_df, model):
