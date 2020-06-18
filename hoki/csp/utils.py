@@ -26,6 +26,7 @@ class CSP(object):
 ########################
 # TODO add check if time outside of age universe range
 
+
 def mass_per_bin(sfh, time_edges):
     """
     Gives the mass per bin for the given edges in time.
