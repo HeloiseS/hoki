@@ -11,6 +11,9 @@ from hoki.constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# CODEREVIEW [H]: The tests say that there should be a _load_files function in here but there isn't
+
+
 # CODEREVIEW [H]: This is currently useless - There are two options here: Either the functionalities in
 # CSP spectra and CSP rates can be streamlined and some of the global ones can be put in here OR this is useless
 # and we drop this entierly.
