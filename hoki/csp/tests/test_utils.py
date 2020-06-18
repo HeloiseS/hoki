@@ -6,12 +6,14 @@ import pkg_resources
 import numpy as np
 import hoki.load
 import pytest
-from scipy import interpolate
 import pandas as pd
 from hoki.constants import *
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
+# ToDo:
+# - Add test for load_spectra
+# - Add test for CSP class
 
 class TestLoadFiles(object):
 
@@ -38,8 +40,6 @@ class TestLoadFiles(object):
         assert np.isclose(self.x.loc[:,("Ia",0.00001)],
             expected["Ia"]).all(),\
             "Models are not loaded correctly."
-
-# TODO: Add test for load_spectra
 
 
 class TestGetBinIndex(object):
@@ -95,18 +95,15 @@ class TestIntegral(object):
 
 
 def test_mass_per_bin():
-    fnc_mass = interpolate.splrep(np.linspace(0,100, 101), np.zeros(101)+1, k=1)
-    assert np.isclose(utils.mass_per_bin(fnc_mass, np.linspace(0,10, 11)),
+    x = np.linspace(0,100,101)
+    y = np.zeros(101)+1
+    assert np.isclose(utils.mass_per_bin(x, y, np.linspace(0,10, 11)),
                       np.zeros(10)+1).all(), "mass_per_bin calculation wrong."
 
 
 def test_metallicity_per_bin():
     x = np.linspace(0,100,101)
-    fnc_metallicity = interpolate.splrep(x,
-                                         x,
-                                         k=1)
-
-    out = utils.metallicity_per_bin(fnc_metallicity, x)
+    out = utils.metallicity_per_bin(x, x, x)
     expected = np.arange(0.5, 100, 1)
     assert np.isclose(out, expected).all(), "Z per bin has failed"
 

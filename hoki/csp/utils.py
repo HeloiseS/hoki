@@ -6,68 +6,84 @@ from hoki.constants import BPASS_METALLICITIES
 import hoki.load
 import numpy as np
 import numba
-from scipy import interpolate
 from hoki.constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
-
-# CODEREVIEW [H]: The tests say that there should be a _load_files function in here but there isn't
-
-
-# CODEREVIEW [H]: This is currently useless - There are two options here: Either the functionalities in
-# CSP spectra and CSP rates can be streamlined and some of the global ones can be put in here OR this is useless
-# and we drop this entierly.
+from hoki.utils.exceptions import *
 
 class CSP(object):
-    pass
+    self.now = HOKI_NOW
+
+    def __init__(self)
+        pass
+
+    def _type_check_histories(self, time_points, sfh_points, Z_points):
+        # CODEREVIEW [H]: BEAU-TI-FULL
+        if isinstance(time_points, numpy.ndarray):
+            raise HokiTypeError("metallicity is not `numpy.ndarray`. Only list are taken as input")
+        if isinstance(sfh_points, numpy.ndarray):
+            raise HokiTypeError("sfr is not a `numpy.ndarray`. Only lists are taken as input.")
+        if isinstance(Z_points, numpy.ndarray):
+            raise HokiTypelError("metallicity is not a `numpy.ndarray`.")
+        if Z_points.shape != sfh_points.shape:
+            raise HokiTypeError("metallicity and sfr are not of equal shape.")
+        if (Z_points.shape != time_points.shape) and (len(Z_points[0]) != len(time_points));
+            raise HokiTypeError("`time_points` has to be a single array or has to be defined for each sfr/metallicity.")
+
 
 ########################
 # Calculations per bin #
 ########################
 # TODO add check if time outside of age universe range
 
-def mass_per_bin(sfh, time_edges):
+def mass_per_bin(time_points, sfh_points, time_edges):
     """
     Gives the mass per bin for the given edges in time.
 
     Input
     -----
-    sfh_arr : scipy.interpolate.splrep
-        A scipy spline representation of the stellar formation history.
-    time_edges : numpy array
+    time_points : numpy.ndarray
+        The time points at which the stellar formation history is sampled.
+    sfh_points : numpy.ndarray
+        The stellar formation history at the time points
+    time_edges : numpy.ndarray
         The edges of the bins in which the mass per bin is wanted in yrs.
 
     Output
     ------
-    numpy.array
+    numpy.ndarray
         The mass per time bin.
     """
 
-    # CODEREVIEW [H]: Can spline be replaced by numpy interp?
-    return np.array([interpolate.splint(t1, t2, sfh)
-                        for t1, t2 in zip(time_edges[:-1], time_edges[1:])])
+    return np.array([
+                np.trapz(np.interp(np.linspace(t1, t2, 100),
+                                   time_points,
+                                   sfh_points),
+                         np.linspace(t1,t2,100))
+                                for t1, t2 in zip(time_edges[:-1],
+                                                  time_edges[1:])])
 
 
 
-def metallicity_per_bin(metallicity, time_edges):
+def metallicity_per_bin(time_points, Z_points, time_edges):
     """
     Gives the metallicity per bin for the given edges in time.
 
     Input
     -----
-    sfh_arr : scipy.interpolate.splrep
-        A scipy spline representation of the metallicity history
-    time_edges : numpy array
+    time_points : numpy.ndarray
+        The time points at which the metallicity is sampled.
+    Z_points : numpy.ndarray
+        The metallicity at the time points.
+    time_edges : numpy.ndarray
         The edges of the bins in which the mass per bin is wanted in yrs.
 
     Output
     ------
-    numpy.array
+    numpy.ndarray
         The average metallicity per bin
     """
-
-    # CODEREVIEW [H]: Can spline be replaced by numpy interp or a numpy funcitonality?
-    Z_values = np.array(interpolate.splev(time_edges, metallicity))
+    Z_values = np.interp(time_edges, time_points, Z_points)
     Z_average = (Z_values[1:] + Z_values[:-1])/2
     return np.array(Z_average)
 
@@ -361,13 +377,3 @@ def _get_bin_index(x, edges):
     # d = np.abs(x - mids)                # distance to midpoints
     # outer = np.where(d == d.min())      # find shortest
     # return outer[0][-1]           # select last, such that lower edge inclusive
-
-
-def _type_check_histories(metallicity, SFH):
-    # CODEREVIEW [H]: BEAU-TI-FULL
-    if isinstance(metallicity, type(list)):
-        raise HokiFatalError("metallicity is not a list. Only list are taken as input")
-    if isinstance(SFH, type(list)):
-        raise HokiFatalError("sfr is not a list. Only lists are taken as input.")
-    if len(metallicity) != len(SFH):
-        raise HokiFatalError("metallicity and sfr are not of equal length.")

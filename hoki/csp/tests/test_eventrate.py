@@ -4,7 +4,6 @@ Test for the Complex Stellar Population event rate calculations
 
 import pkg_resources
 import numpy as np
-from scipy import interpolate
 import pytest
 
 from hoki.constants import *
@@ -26,10 +25,9 @@ class TestCSPEventRate():
         _ = er.CSPEventRate(f"{data_path}/supernova")
 
     CSP = er.CSPEventRate(f"{data_path}/supernova")
-    fnc_Z = interpolate.splrep(time_points, test_metallicity, k=1)
-    fnc_sfh = interpolate.splrep(time_points, test_sfh, k=1)
-    out, time_edges = CSP.calculate_rate_over_time([fnc_Z],
-                                                   [fnc_sfh],
+    out, time_edges = CSP.calculate_rate_over_time([time_points],
+                                                   [test_metallicity],
+                                                   [test_sfh],
                                                    ["Ia"],
                                                    100,
                                                    return_edges=True)

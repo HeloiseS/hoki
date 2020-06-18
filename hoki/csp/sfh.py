@@ -3,8 +3,7 @@ Object to contain the stellar formation history.
 """
 import numpy as np
 import hoki.csp.utils as utils
-from scipy import interpolate
-from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiTypeError
+from hoki.utils.exceptions import HokiKeyError
 
 
 class SFH(object):
@@ -13,29 +12,29 @@ class SFH(object):
 
     Attributes
     ----------
-    time_bins : numpy.array
+    time_points : `numpy.ndarray`
         An array containing the given time points of the stellar formation rate
-
+    sfh_points : `numpy.ndarray`
+        The stellar formation history at the time points.
     """
-    def __init__(self, time_bins, sfh_arr, sfh_type):
+    def __init__(self, time_points, sfh_points, parametric_sfh):
         """
         Input
         ------
-        time_bins: numpy.ndarray
+        time_points: `numpy.ndarray`
             An array containing the time points of the SFH.
             Must be given in yr.
-        sfh_arr: numpy.ndarray
-            An array containing the Stellar Formation History at the time bins.
+        sfh_points: `numpy.ndarray`
+            An array containing the Stellar Formation History at the time points.
             Must be given in M_solar/yr
-        sfh_type : str #[Change sfh_type to "parametric_sfh"]
+        parametric_sfh : `str` #[Change sfh_type to "parametric_sfh"]
             blaaaaa [HELOISE FIX]
         """
-        self.time_bins = time_bins
-        self.sfh = None
-        if sfh_type == "custom":
-            self.sfh = interpolate.splrep(time_bins, sfh_arr, k=1) # np.interp??
+        if parametric_sfh == "custom":
+            self.time_points = time_points
+            self.sfh_points = sfh_points
         else:
-            raise HokiTypeError("SFH type not recognised: ") #TODO: finish error message
+            raise HokiKeyError(f"{parametric_sfh} is not a valid option.")
 
     def stellar_formation_rate(self, t):
         """
@@ -43,10 +42,10 @@ class SFH(object):
 
         Input
         -----
-        t : float
+        t : `float`
             A lookback time
         """
-        return interpolate.splev(t, self.sfh)
+        return np.interp(t, self.time_points, self.sfh_points)
 
     def mass_per_bin(self, time_edges):
         """
@@ -54,12 +53,12 @@ class SFH(object):
 
         Input
         -----
-        time_edges : numpy array
+        time_edges : `numpy.ndarray`
             The edges of the bins in which the mass per bin is wanted in yrs.
 
         Output
         ------
-        numpy.array
+        `numpy.ndarray`
             The mass per time bin given the time edges.
         """
 

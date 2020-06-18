@@ -7,6 +7,7 @@ import numpy as np
 import pkg_resources
 import pytest
 from hoki.constants import *
+from hoki.utils.exceptions import HokiKeyError
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 sfr = np.loadtxt(f"{data_path}/csp_test_data/mass_points.txt")
@@ -16,18 +17,18 @@ time_points = np.loadtxt(f"{data_path}/csp_test_data/time_points.txt")
 class TestSFH(object):
 
     def test_intialisation(self):
-        _ = SFH(time_points, sfr, sfh_type="custom")
+        _ = SFH(time_points, sfr, "custom")
 
     def test_model_not_recognised(self):
-        with pytest.raises(TypeError):
-            _ = SFH(time_points, sfr, sfh_type="afs")
+        with pytest.raises(HokiKeyError):
+            _ = SFH(time_points, sfr, "afs")
 
     def test_input_sizes(self):
         with pytest.raises(TypeError):
-            _ = SFH(time_points[1:], sfr, sfh_type="custom")
+            _ = SFH(time_points[1:], sfr, "custom")
 
     sfh =  SFH(time_points, sfr, sfh_type="custom")
-    
+
     def test_stellar_formation_rate(self):
         assert np.sum(
             [np.isclose(self.sfh.stellar_formation_rate(time_points[0]),
