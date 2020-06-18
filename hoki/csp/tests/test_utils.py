@@ -15,14 +15,14 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 
 class TestLoadFiles(object):
 
-    def test_load_file(self):
-        _ = utils._load_files(f"{data_path}/supernova", "supernova")
+    def test_load_rates(self):
+        _ = utils.load_rates(f"{data_path}/supernova")
 
     def test_file_not_present(self):
         with pytest.raises(AssertionError):
-            _ = utils._load_files(f"{data_path}", "supernova")
+            _ = utils.load_rates(f"{data_path}")
 
-    x = utils._load_files(f"{data_path}/supernova", "supernova")
+    x = utils.load_rates(f"{data_path}/supernova")
 
     def test_output_shape(self):
         assert type(self.x) == pd.DataFrame
@@ -38,6 +38,9 @@ class TestLoadFiles(object):
         assert np.isclose(self.x.loc[:,("Ia",0.00001)],
             expected["Ia"]).all(),\
             "Models are not loaded correctly."
+
+# TODO: Add test for load_spectra
+
 
 class TestGetBinIndex(object):
     edges = np.linspace(0,100, 101)
