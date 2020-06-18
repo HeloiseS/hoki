@@ -14,7 +14,7 @@
     :alt: tests
     
 Bridging the Gap Between Observation and Theory
-==============================================
+=================================================
 
 
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
@@ -30,7 +30,7 @@ Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing
 ----
    
 Installing hoki
-^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 You can pip install the **most recent stable release** from pip:
 
@@ -58,27 +58,27 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
-   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `pysynphot`
+   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`
 
 **Note:** Python 2 is not supported
 
 ----
 
 Read the docs
-^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 `Click Here! Click Here! Click Here! <https://heloises.github.io/hoki/intro.html>`_
 
 ----
 
 Download Tutorials
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 Check out these Jupyter notebooks I made - you can find them on `this repo! <https://github.com/HeloiseS/hoki_tutorials>`__
 
 ---- 
 
 Paper and how to cite us!
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
    :target: https://doi.org/10.21105/joss.01987
    
@@ -127,7 +127,7 @@ which is licensed under the BSD 3-clause licence.
 ----
 
 Contributing
-^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 If ANYTHING comes to mind, whether it be something in the tutorials, features you would like us to consider, BUGS, etc.. 
 **Please just drop it in an issue! Don't let your imposter syndrome talk you out of it ;)**
