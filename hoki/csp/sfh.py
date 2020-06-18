@@ -4,6 +4,8 @@ Object to contain the stellar formation history.
 import numpy as np
 import hoki.csp.utils as utils
 from scipy import interpolate
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiTypeError
+
 
 class SFH(object):
     """
@@ -15,25 +17,25 @@ class SFH(object):
         An array containing the given time points of the stellar formation rate
 
     """
-    def __init__(self, time_bins, sfh, model_type):
+    def __init__(self, time_bins, sfh_arr, sfh_type):
         """
         Input
         ------
-        time_bins: numpy.array
+        time_bins: numpy.ndarray
             An array containing the time points of the SFH.
             Must be given in yr.
-        sfh: numpy array
-            An array containing the Stellar Formation History at the time points.
+        sfh_arr: numpy.ndarray
+            An array containing the Stellar Formation History at the time bins.
             Must be given in M_solar/yr
-        model_type : str
-            Determines which stellar model is used.
+        sfh_type : str #[Change sfh_type to "parametric_sfh"]
+            blaaaaa [HELOISE FIX]
         """
         self.time_bins = time_bins
         self.sfh = None
-        if model_type == "custom":
-            self.sfh = interpolate.splrep(time_bins, sfh, k=1)
+        if sfh_type == "custom":
+            self.sfh = interpolate.splrep(time_bins, sfh_arr, k=1) # np.interp??
         else:
-            raise TypeError("model type not recognised.")
+            raise HokiTypeError("SFH type not recognised: ") #TODO: finish error message
 
     def stellar_formation_rate(self, t):
         """

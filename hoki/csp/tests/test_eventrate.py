@@ -36,7 +36,7 @@ class TestCSPEventRate():
 
 
     def test_bins(self):
-        assert np.isclose(self.time_edges,  np.linspace(0,HOKI_NOW, 101)).all(),\
+        assert np.isclose(self.time_edges,  np.linspace(0, HOKI_NOW, 101)).all(),\
             "time edges are not properly set."
 
     def test_event_rate_calculation(self):

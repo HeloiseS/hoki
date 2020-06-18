@@ -15,7 +15,8 @@ from hoki.constants import *
 
 
 class CSPEventRate(HokiObject, utils.CSP):
-    """Object to calculate event rates with complex stellar formation histories.
+    """
+    Object to calculate event rates with complex stellar formation histories.
 
     Parameters
     ----------
@@ -38,8 +39,9 @@ class CSPEventRate(HokiObject, utils.CSP):
         self.bpass_rates = utils._normalise_rates(utils.load_rates(data_folder, binary=binary))
 
     def calculate_rate_over_time(self, metallicity, sfh, event_types, nr_bins, return_edges=False):
-        """Calculates the event rates over lookback time.
-
+        # CODEREVIEW [H]: Can we rething the spline formatting dependency?
+        """
+        Calculates the event rates over lookback time.
 
         Parameters
         ----------
@@ -106,7 +108,8 @@ class CSPEventRate(HokiObject, utils.CSP):
             return event_rates
 
     def calculate_rate_at_time(self, metallicity, SFH, event_types, t, sample_rate=None):
-        """Calculates the event rates at lookback time `t`.
+        """
+        Calculates the event rates at lookback time `t`.
 
         Parameters
         ----------
@@ -127,7 +130,6 @@ class CSPEventRate(HokiObject, utils.CSP):
         float
             Returns the event rate at the given lookback time `t`.
         """
-
 
         _type_check__histories(metallicity, SFH)
         if isinstance(event_types, type(list)):

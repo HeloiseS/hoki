@@ -47,3 +47,7 @@ class HokiKeyError(KeyError):
     """
     Hoki Key error
     """
+class HokiTypeError(TypeError):
+    """
+    Hoki Key error
+    """

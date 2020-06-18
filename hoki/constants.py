@@ -15,14 +15,17 @@ MODELS_PATH = settings['models_path']
 OUTPUTS_PATH = settings['outputs_path'] # This constant for dev purposes.
 BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
 BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
-BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
+BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100, 100)) + dt for dt in BPASS_TIME_INTERVALS])
 
 BPASS_LINEAR_TIME_EDGES = np.append([0.0], 10**np.arange(6.05, 11.15, 0.1))
 BPASS_LINEAR_TIME_INTERVALS = np.diff(BPASS_LINEAR_TIME_EDGES)
 
 BPASS_METALLICITIES = ["em5", "em4", "001","002", "003", "004", "006", "008", "010", "014", "020", "030", "040"]
-BPASS_NUM_METALLICITIES = np.array([0.00001, 0.0001, 0.001, 0.002, 0.003, 0.004, 0.006, 0.008, 0.010, 0.014, 0.020, 0.030, 0.040])
-BPASS_METALLICITY_MID_POINTS = np.array([0.00005, 0.0005, 0.0015, 0.0025, 0.0035, 0.005, 0.007, 0.009, 0.012, 0.017, 0.025, 0.035])
+BPASS_NUM_METALLICITIES = np.array([0.00001, 0.0001, 0.001, 0.002, 0.003, 0.004, 0.006, 0.008, 0.010,
+                                    0.014, 0.020, 0.030, 0.040])
+BPASS_METALLICITY_MID_POINTS = np.array([0.00005, 0.0005, 0.0015, 0.0025, 0.0035, 0.005, 0.007, 0.009,
+                                         0.012, 0.017, 0.025, 0.035])
+
 BPASS_EVENT_TYPES = ["Ia", "IIP", "II", "Ib", "Ic", "LGRB", "PISNe"]
 HOKI_NOW = 13.799e9
 

@@ -23,12 +23,15 @@ class CSPSpectra(HokiObject, utils.CSP):
         Default=True
     """
     def __init__(self, data_folder, binary=True):
+        # CODEREVIEW [H]: This "now" variable is also in CSPEventRates. Maybe should eb a class attribute of CSP
+        # (only if it makes sense to keep the CSP parent class)
+
         self.now = HOKI_NOW
         self.bpass_spectra = utils._normalise_spectrum(utils.load_spectra(data_folder, binary=binary))
 
     def calculate_spec_over_time(self, metallicity, sfh, nr_bins, return_edges=False):
-        """Calculates spectra over lookback time.
-
+        """
+        Calculates spectra over lookback time.
 
         Parameters
         ----------
@@ -57,11 +60,8 @@ class CSPSpectra(HokiObject, utils.CSP):
 
         spectra = np.zeros((nr_sfh, nr_bins, 100000), dtype=np.float64)
 
-        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges)
-                                        for i in sfh])
-        metallicity_per_bin = np.array([utils.metallicity_per_bin(i, time_edges)
-                                                for i in metallicity])
-
+        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges) for i in sfh])
+        metallicity_per_bin = np.array([utils.metallicity_per_bin(i, time_edges) for i in metallicity])
 
         for counter, (mass, Z) in enumerate(zip(mass_per_bin,  metallicity_per_bin)):
             for count in range(1, 100001):
@@ -78,7 +78,8 @@ class CSPSpectra(HokiObject, utils.CSP):
             return spectra
 
     def calculate_spec_at_time(self, metallicity, sfh, t, sample_rate=None):
-        """Calculates the spectrum at lookback time `t`.
+        """
+        Calculates the spectrum at lookback time `t`.
 
         Parameters
         ----------
@@ -101,20 +102,18 @@ class CSPSpectra(HokiObject, utils.CSP):
 
         utils._type_check_histories(metallicity, sfh)
 
-
         # The setup of these elements could almost all be combined into a function
         # with code that's repeated above. Similarly, with the event rate calculation.
         nr_sfh = len(sfh)
 
         spectrum = np.zeros((nr_sfh, 100000), dtype=np.float64)
 
-        if sample_rate == None:
+        if sample_rate is None:
             time_edges = BPASS_LINEAR_TIME_EDGES
         else:
-            time_edges = np.linspace(0,13.8e9, sample_rate+1)
+            time_edges = np.linspace(0, 13.8e9, sample_rate+1)
 
-        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges)
-                                        for i in sfh])
+        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges) for i in sfh])
         metallicity_per_bin = np.array([utils.metallicity_per_bin(i, time_edges)
                                                 for i in metallicity])
 
