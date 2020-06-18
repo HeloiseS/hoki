@@ -58,6 +58,7 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
+
    `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`
 
 **Note:** Python 2 is not supported
@@ -65,7 +66,8 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 ----
 
 Read the docs
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
+
 
 `Click Here! Click Here! Click Here! <https://heloises.github.io/hoki/intro.html>`_
 
@@ -73,11 +75,12 @@ Read the docs
 
 Download Tutorials
 ^^^^^^^^^^^^^^^^^^^^
+
 Check out these Jupyter notebooks I made - you can find them on `this repo! <https://github.com/HeloiseS/hoki_tutorials>`__
 
 ---- 
 
-Citations
+Paper and how to cite us!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
    :target: https://doi.org/10.21105/joss.01987
