@@ -71,7 +71,7 @@ class CSPEventRate(HokiObject, utils.CSP):
         # currently both are scipy.interpolate.splrep (spline representations)
         # or arrays of them
         # TODO: ADD BETTER TYPE CHECK!
-        utils._type_check(metallicity, sfh)
+        utils._type_check_histories(metallicity, sfh)
         if isinstance(event_types, type(list)):
             raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
 
@@ -129,7 +129,7 @@ class CSPEventRate(HokiObject, utils.CSP):
         """
 
 
-        _type_check(metallicity, SFH)
+        _type_check__histories(metallicity, SFH)
         if isinstance(event_types, type(list)):
             raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
 
