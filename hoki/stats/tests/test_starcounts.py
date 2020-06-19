@@ -1,12 +1,20 @@
 from hoki.stats.starcounts import UnderlyingCountRatio, ratio_with_poisson_errs
 import pandas as pd
 import numpy as np
+from hoki.utils.exceptions import HokiTypeError
+import pytest
 
 
 def test_ratio_with_poisson_errors():
     R, dR = ratio_with_poisson_errs(2,4)
     assert np.isclose(R, 0.50, atol=0.005), "Ratio is wrong"
     assert np.isclose(dR, 0.43, atol=0.005), "Errors are wrong"
+
+
+def test_ratio_with_poisson_errors_fail():
+    with pytest.raises(HokiTypeError):
+        __, __ = ratio_with_poisson_errs('bla', 4), 'HokiTypeError should be raised'
+
 
 class TestUnderlyingCountRatio(object):
     def test_init(self):
