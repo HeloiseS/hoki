@@ -12,78 +12,80 @@ import matplotlib.pyplot as plt
 from hoki.utils.exceptions import *
 
 class CSP(object):
-    self.now = HOKI_NOW
+    now = HOKI_NOW
 
-    def __init__(self)
+    def __init__(self):
         pass
 
-    def _type_check_histories(self, time_points, sfh_points, Z_points):
-        # CODEREVIEW [H]: BEAU-TI-FULL
-        if isinstance(time_points, numpy.ndarray):
-            raise HokiTypeError("metallicity is not `numpy.ndarray`. Only list are taken as input")
-        if isinstance(sfh_points, numpy.ndarray):
-            raise HokiTypeError("sfr is not a `numpy.ndarray`. Only lists are taken as input.")
-        if isinstance(Z_points, numpy.ndarray):
-            raise HokiTypelError("metallicity is not a `numpy.ndarray`.")
-        if Z_points.shape != sfh_points.shape:
-            raise HokiTypeError("metallicity and sfr are not of equal shape.")
-        if (Z_points.shape != time_points.shape) and (len(Z_points[0]) != len(time_points));
-            raise HokiTypeError("`time_points` has to be a single array or has to be defined for each sfr/metallicity.")
+    def _type_check_histories(self, sfh_functions, Z_functions):
+        if not isinstance(sfh_functions, list):
+            raise HokiTypeError("`sfh_functions` is not a list. Only lists are taken as input.")
+        if not isinstance(Z_functions, list):
+            raise HokiTypeError("`Z_functions` is not a list. Only lists are taken as input.")
+        if len(sfh_functions) != len(Z_functions):
+            raise HokiFormatError("sfh_functions and Z_functions must have the same length.")
+        if not all(callable(val) for val in sfh_functions):
+            raise HokiTypeError("sfh_functions must only contain functions.")
+        if not all(callable(val) for val in Z_functions):
+            raise HokiTypeError("Z_functions must only contain functions.")
 
 
 ########################
 # Calculations per bin #
 ########################
 # TODO add check if time outside of age universe range
+# Can these be turned into numba functions?
 
-def mass_per_bin(time_points, sfh_points, time_edges):
+def mass_per_bin(sfh_function, time_edges, sample_rate=100):
     """
-    Gives the mass per bin for the given edges in time.
+    Gives the mass per bin for the given edges in time
+
+    Notes
+    -----
+    The default `sample_rate` is set to 100 for a untested balance between
+    speed and accuracy
 
     Input
     -----
-    time_points : numpy.ndarray
-        The time points at which the stellar formation history is sampled.
-    sfh_points : numpy.ndarray
-        The stellar formation history at the time points
-    time_edges : numpy.ndarray
+    sfh_function : `function`
+        A function giving the stellar formation history given a lookback time.
+    time_edges : `numpy.ndarray`
         The edges of the bins in which the mass per bin is wanted in yrs.
+    sample_rate : `int`
+        The number of samples to take to use for the trapezodial integration.
+        Default = 100
 
     Output
     ------
-    numpy.ndarray
+    `numpy.ndarray`
         The mass per time bin.
     """
 
     return np.array([
-                np.trapz(np.interp(np.linspace(t1, t2, 100),
-                                   time_points,
-                                   sfh_points),
-                         np.linspace(t1,t2,100))
+                np.trapz(sfh_function(np.linspace(t1, t2, sample_rate)),
+                         np.linspace(t1, t2, sample_rate))
                                 for t1, t2 in zip(time_edges[:-1],
                                                   time_edges[1:])])
 
 
 
-def metallicity_per_bin(time_points, Z_points, time_edges):
+def metallicity_per_bin(Z_function, time_edges):
     """
     Gives the metallicity per bin for the given edges in time.
 
     Input
     -----
-    time_points : numpy.ndarray
-        The time points at which the metallicity is sampled.
-    Z_points : numpy.ndarray
-        The metallicity at the time points.
-    time_edges : numpy.ndarray
+    Z_function : `function`
+        A function giving the metallicity history given a lookback time.
+    time_edges : `numpy.ndarray`
         The edges of the bins in which the mass per bin is wanted in yrs.
 
     Output
     ------
-    numpy.ndarray
+    `numpy.ndarray`
         The average metallicity per bin
     """
-    Z_values = np.interp(time_edges, time_points, Z_points)
+    Z_values = Z_function(time_edges)
     Z_average = (Z_values[1:] + Z_values[:-1])/2
     return np.array(Z_average)
 
@@ -95,25 +97,27 @@ def metallicity_per_bin(time_points, Z_points, time_edges):
 ########################
 
 
-def load_rates(data_folder, binary=True, imf="imf135_300"):
-    """Returns the requested file types.
+def load_rates(data_folder, imf, binary=True):
+    """Loads the BPASS supernova event count files.
+
+    Notes
+    -----
+    The rates are just read from file and not normalised.
 
     Input
     -----
-    data_folder : str
+    data_folder : `str`
         The filepath to the folder containing the BPASS data
-    file_type : str
-        The type of files to load (spectra, supernovae)
-    binary : boolean
+    binary : `bool`
         Use the binary files or just the single stars. Default=True
-    imf : str
+    imf : `str`
         BPASS Identifier of the IMF to be used.
 
     Returns
     -------
-    pandas.DataFrame
+    `pandas.DataFrame`
         A pandas MultiIndex dataframe containing the BPASS number of events
-        per metallicity per type.
+        per metallicity per type. Usage: rates.loc[log_age, (type, metallicity)]
     """
     if binary:
         star = "bin"
@@ -159,10 +163,6 @@ def load_spectra(data_folder, binary=True, imf="imf135_300"):
         A pandas DataFrame containing the high quality BPASS spectra
 
     """
-    if binary:
-        star = "bin"
-    else:
-        star = "sin"
 
     try:
         spectra = pd.read_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")

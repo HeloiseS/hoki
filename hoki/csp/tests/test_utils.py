@@ -8,6 +8,8 @@ import hoki.load
 import pytest
 import pandas as pd
 from hoki.constants import *
+from hoki.utils.exceptions import HokiTypeError,HokiFormatError
+
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
@@ -15,16 +17,47 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 # - Add test for load_spectra
 # - Add test for CSP class
 
-class TestLoadFiles(object):
+class TestCSP(object):
+
+    def test_init(self):
+        csp = utils.CSP()
+        assert csp.now == HOKI_NOW, "CSP parent class initialisation failed."
+
+    def test_type_check_history(self):
+        csp = utils.CSP()
+        x = lambda i : i
+        with pytest.raises(HokiTypeError):
+            csp._type_check_histories([10], [0])
+
+        with pytest.raises(HokiTypeError):
+            csp._type_check_histories([10], 0)
+
+        with pytest.raises(HokiTypeError):
+            csp._type_check_histories([x], x)
+
+        with pytest.raises(HokiFormatError):
+            csp._type_check_histories([x], [x,x])
+        with pytest.raises(HokiFormatError):
+            csp._type_check_histories([x,x], [x])
+        with pytest.raises(HokiFormatError):
+            csp._type_check_histories([x], [])
+        with pytest.raises(HokiTypeError):
+            csp._type_check_histories([x,x], [x,10])
+
+        # Checking if the correct input does run
+        csp._type_check_histories([x],[x])
+
+
+class TestLoadRates(object):
 
     def test_load_rates(self):
-        _ = utils.load_rates(f"{data_path}/supernova")
+        _ = utils.load_rates(f"{data_path}/supernova", "imf135_300")
 
     def test_file_not_present(self):
         with pytest.raises(AssertionError):
-            _ = utils.load_rates(f"{data_path}")
+            _ = utils.load_rates(f"{data_path}", "imf135_300")
 
-    x = utils.load_rates(f"{data_path}/supernova")
+    x = utils.load_rates(f"{data_path}/supernova", "imf135_300")
 
     def test_output_shape(self):
         assert type(self.x) == pd.DataFrame
@@ -97,13 +130,16 @@ class TestIntegral(object):
 def test_mass_per_bin():
     x = np.linspace(0,100,101)
     y = np.zeros(101)+1
-    assert np.isclose(utils.mass_per_bin(x, y, np.linspace(0,10, 11)),
-                      np.zeros(10)+1).all(), "mass_per_bin calculation wrong."
+    sfh_func = lambda i : np.interp(i, x, y)
+    mass_per_bin = utils.mass_per_bin(sfh_func, np.linspace(0,10,11))
+    assert np.isclose(mass_per_bin, np.zeros(10)+1).all(),\
+           "mass_per_bin calculation wrong."
 
 
 def test_metallicity_per_bin():
     x = np.linspace(0,100,101)
-    out = utils.metallicity_per_bin(x, x, x)
+    Z_func = lambda i : np.interp(i, x, x)
+    out = utils.metallicity_per_bin(Z_func, x)
     expected = np.arange(0.5, 100, 1)
     assert np.isclose(out, expected).all(), "Z per bin has failed"
 
