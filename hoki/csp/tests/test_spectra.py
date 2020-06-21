@@ -14,7 +14,7 @@ test_metallicity = np.loadtxt(f"{data_path}/csp_test_data/metallicity.txt")
 time_points = np.loadtxt(f"{data_path}/csp_test_data/time_points.txt")
 
 # This test only works when the spectra folder is present in the data folder
-
+"""
 class TestCSPSSpectra(object):
 
     def test_init(self):
@@ -29,3 +29,6 @@ class TestCSPSSpectra(object):
                                                            [self.fnc_sfh],
                                                            10,
                                                            return_edges=True)
+
+
+"""
