@@ -4,8 +4,10 @@ import emcee
 import pandas as pd
 import corner
 import matplotlib.pyplot as plt
+from hoki.utils.exceptions import HokiTypeError
 
-#TODO: UNITEST
+
+
 def ratio_with_poisson_errs(n1, n2):
     """
     Returns Star Count Ratio and its error
@@ -25,9 +27,14 @@ def ratio_with_poisson_errs(n1, n2):
     R and dR (floats) - Star Count Ratio and its error
 
     """
-    R = n1/n2
-    dR = R*np.sqrt((1/n1)+(1/n2))
+    try:
+        R = n1/n2
+        dR = R*np.sqrt((1/n1)+(1/n2))
+    except TypeError as e:
+        raise HokiTypeError(f"Make sure you provide ints or floats.")
+
     return R, dR
+
 
 #TODO: UNITEST
 class UnderlyingCountRatio(HokiObject):

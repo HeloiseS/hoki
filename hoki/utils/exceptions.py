@@ -48,3 +48,8 @@ class HokiKeyError(KeyError):
     """
     Hoki Key error
     """
+
+class HokiTypeError(KeyError):
+    """
+    Hoki Key error
+    """
