@@ -7,7 +7,7 @@ import numpy as np
 import pkg_resources
 import pytest
 from hoki.constants import *
-from hoki.utils.exceptions import HokiKeyError
+from hoki.utils.exceptions import HokiKeyError, HokiTypeError
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 sfr = np.loadtxt(f"{data_path}/csp_test_data/mass_points.txt")
@@ -17,24 +17,22 @@ time_points = np.loadtxt(f"{data_path}/csp_test_data/time_points.txt")
 class TestSFH(object):
 
     def test_intialisation(self):
-        _ = SFH(time_points, sfr, "custom")
+        _ = SFH("custom",time_points, sfr)
 
     def test_model_not_recognised(self):
         with pytest.raises(HokiKeyError):
-            _ = SFH(time_points, sfr, "afs")
+            _ = SFH("afs", time_points, sfr)
 
     def test_input_sizes(self):
-        with pytest.raises(TypeError):
-            _ = SFH(time_points[1:], sfr, "custom")
+        with pytest.raises(HokiTypeError):
+            _ = SFH("custom", time_points[1:], sfr)
 
-    sfh =  SFH(time_points, sfr, sfh_type="custom")
+    sfh =  SFH("custom", time_points, sfr)
 
     def test_stellar_formation_rate(self):
-        assert np.sum(
-            [np.isclose(self.sfh.stellar_formation_rate(time_points[0]),
-                       sfr[0]),
-            np.isclose(self.sfh.stellar_formation_rate(time_points[10]),
-                       sfr[10])]) == 2, \
+        assert np.isclose(
+                    [self.sfh.stellar_formation_rate(i) for i in time_points],
+                    sfr).all(),\
             "Something is wrong with the stellar formation rate."
 
     def test_mass_per_bin(self):
