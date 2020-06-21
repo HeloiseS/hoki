@@ -7,7 +7,6 @@ lookback time or over binned lookback time
 import hoki.csp.utils as utils
 from hoki.utils.hoki_object import HokiObject
 from hoki.utils.exceptions import HokiFatalError
-from scipy import interpolate
 import numpy as np
 from hoki.constants import *
 
@@ -35,21 +34,29 @@ class CSPEventRate(HokiObject, utils.CSP):
     """
 
     def __init__(self, data_folder, binary=True):
-        self.now = HOKI_NOW
         self.bpass_rates = utils._normalise_rates(utils.load_rates(data_folder, binary=binary))
 
-    def calculate_rate_over_time(self, metallicity, sfh, event_types, nr_bins, return_edges=False):
-        # CODEREVIEW [H]: Can we rething the spline formatting dependency?
+    def calculate_rate_over_time(self,
+                                 time_points,
+                                 sfh_points,
+                                 Z_points,
+                                 event_types,
+                                 nr_bins,
+                                 return_edges = False
+                                 ):
         """
         Calculates the event rates over lookback time.
 
         Parameters
         ----------
-        metallicity : `list(tuple,)`
-            A list of scipy spline representations of the metallicity evolution.
-        sfh : `list(tuple,)`
-            A list of scipy splite representations of the stellar formation
-            history in units M_\\odot per yr.
+        time_points : `numpy.ndarray`
+            The time points at which the stellar formation history and
+            metallicity is sampled in yrs.
+        sfh_points : `numpy.ndarray`
+            The stellar formation history at the time points in
+            units M_\\odot per yr.
+        Z_points : `numpy.ndarray`
+            The metallicity at the time points.
         event_types : `list(str)`
             A list of BPASS event types.
         nr_bins : `int`
@@ -60,7 +67,7 @@ class CSPEventRate(HokiObject, utils.CSP):
 
         Returns
         -------
-        `numpy.array`
+        `numpy.ndarray`
             If `return_edges=False`, returns a numpy array containing the event
             rates.
             If `return_edges=True`, returns a numpy array containing the event
@@ -70,10 +77,9 @@ class CSPEventRate(HokiObject, utils.CSP):
         # input sfr object
         # input 2 arrays of equal length
         # input 2 arrays of many arrays
-        # currently both are scipy.interpolate.splrep (spline representations)
         # or arrays of them
         # TODO: ADD BETTER TYPE CHECK!
-        utils._type_check_histories(metallicity, sfh)
+        self._type_check_histories(metallicity, sfh)
         if isinstance(event_types, type(list)):
             raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
 
@@ -107,7 +113,14 @@ class CSPEventRate(HokiObject, utils.CSP):
         else:
             return event_rates
 
-    def calculate_rate_at_time(self, metallicity, SFH, event_types, t, sample_rate=None):
+    def calculate_rate_at_time(self,
+                               time_points,
+                               sfh_points,
+                               Z_points,
+                               event_types,
+                               t,
+                               sample_rate = None
+                               ):
         """
         Calculates the event rates at lookback time `t`.
 
@@ -131,7 +144,7 @@ class CSPEventRate(HokiObject, utils.CSP):
             Returns the event rate at the given lookback time `t`.
         """
 
-        _type_check__histories(metallicity, SFH)
+        self._type_check__histories(metallicity, SFH)
         if isinstance(event_types, type(list)):
             raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
 

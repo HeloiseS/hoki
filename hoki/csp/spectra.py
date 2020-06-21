@@ -23,10 +23,6 @@ class CSPSpectra(HokiObject, utils.CSP):
         Default=True
     """
     def __init__(self, data_folder, binary=True):
-        # CODEREVIEW [H]: This "now" variable is also in CSPEventRates. Maybe should eb a class attribute of CSP
-        # (only if it makes sense to keep the CSP parent class)
-
-        self.now = HOKI_NOW
         self.bpass_spectra = utils._normalise_spectrum(utils.load_spectra(data_folder, binary=binary))
 
     def calculate_spec_over_time(self, metallicity, sfh, nr_bins, return_edges=False):
