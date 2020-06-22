@@ -61,11 +61,10 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=100):
         The mass per time bin.
     """
 
-    return np.array([
-                np.trapz(sfh_function(np.linspace(t1, t2, sample_rate)),
-                         np.linspace(t1, t2, sample_rate))
-                                for t1, t2 in zip(time_edges[:-1],
-                                                  time_edges[1:])])
+    return np.array([np.trapz(sfh_function(np.linspace(t1, t2, sample_rate)),
+                     np.linspace(t1, t2, sample_rate))
+                     for t1, t2 in zip(time_edges[:-1], time_edges[1:])
+                     ])
 
 
 

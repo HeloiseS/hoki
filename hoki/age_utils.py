@@ -92,7 +92,7 @@ class AgeWizard(HokiObject):
         """
         Finds the most likely ages for all the sources given in the obs_df DataFrame.
         """
-        #index = self.pdfs.drop('time_bins', axis=1).idxmax(axis=0).tolist()
+        #index = self.pdfs.drop('time_axis', axis=1).idxmax(axis=0).tolist()
         index = self.pdfs.idxmax(axis=0).tolist()
         return self.t[index]
 
@@ -332,14 +332,14 @@ def calculate_distributions(obs_df, model):
     # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
     likelihoods_df = pd.DataFrame((np.array(likelihoods)).T, columns=source_names)
     # We add the time bins in there because it can make plotting extra convenient.
-    #distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
+    #distributions_df['time_axis'] = hoki.constants.BPASS_TIME_BINS
 
     return likelihoods_df
 
 
 def calculate_sample_pdf(distributions_df, not_you=None):
     """
-    Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
+    Multiplies together all the columns in given in DataFrame apart from the "time_axis" column
 
     Parameters
     ----------
@@ -369,8 +369,8 @@ def calculate_sample_pdf(distributions_df, not_you=None):
             warnings.warn(message, HokiUserWarning)
 
     # We also must be careful not to multiply the time bin column in there so we have a list of the column names
-    # that remain after the "not_you" exclusion minus the time_bins column.
-    columns = [col for col in distributions_df.columns if "time_bins" not in col]
+    # that remain after the "not_you" exclusion minus the time_axis column.
+    columns = [col for col in distributions_df.columns if "time_axis" not in col]
 
     for col in columns:
     #for col in distributions_df.columns:

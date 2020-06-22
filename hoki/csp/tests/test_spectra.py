@@ -21,8 +21,8 @@ class TestCSPSSpectra(object):
         _ = CSPSpectra(f"{data_path}/spectra")
 
     CSP = CSPSpectra(f"{data_path}/spectra")
-    fnc_Z = interpolate.splrep(time_points, test_metallicity, k=1)
-    fnc_sfh = interpolate.splrep(time_points, test_sfh, k=1)
+    fnc_Z = interpolate.splrep(time_axis, test_metallicity, k=1)
+    fnc_sfh = interpolate.splrep(time_axis, test_sfh, k=1)
 
     def test_calculate_spec_over_time(self):
         spectra, edges = self.CSP.calculate_spec_over_time([self.fnc_Z],
