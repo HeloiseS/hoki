@@ -15,7 +15,10 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 
 # ToDo:
 # - Add test for load_spectra
-# - Add test for CSP class
+# - Add _at_time test
+# - Add _at_time_spectrum test
+# - Add _over_time test
+
 
 class TestCSP(object):
 

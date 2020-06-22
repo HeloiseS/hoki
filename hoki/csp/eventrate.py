@@ -10,8 +10,6 @@ from hoki.utils.exceptions import HokiFatalError
 import numpy as np
 from hoki.constants import *
 
-# TODO Add IMF input option
-
 class CSPEventRate(HokiObject, utils.CSP):
     """
     Object to calculate event rates with complex stellar formation histories.
@@ -57,7 +55,7 @@ class CSPEventRate(HokiObject, utils.CSP):
             A list of BPASS event types.
         nr_bins : `int`
             The number of bins to split the lookback time into.
-        return_edges : `bool `
+        return_edges : `bool`
             If `True`, also returns the edges of the lookback time bins.
             Default=False
 

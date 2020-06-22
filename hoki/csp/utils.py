@@ -10,6 +10,8 @@ from hoki.constants import *
 import pandas as pd
 import matplotlib.pyplot as plt
 from hoki.utils.exceptions import *
+from hoki.data_compilers import SpectraCompiler
+
 
 class CSP(object):
     now = HOKI_NOW
@@ -123,11 +125,13 @@ def load_rates(data_folder, imf, binary=True):
     else:
         star = "sin"
 
+    # Create output DataFrame
     arrays = [BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES]
     columns = pd.MultiIndex.from_product(arrays, names=["Metallicicty", "Event Type"])
-
     rates = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
     rates.index.name = "log_age"
+
+    # load supernova count files
     for num, metallicity in enumerate(BPASS_METALLICITIES):
         data = hoki.load.model_output(f"{data_folder}/supernova-{star}-{imf}.z{metallicity}.dat")
         data = data.loc[:,slice(BPASS_EVENT_TYPES[0],BPASS_EVENT_TYPES[-1])]
@@ -136,7 +140,7 @@ def load_rates(data_folder, imf, binary=True):
     return rates.swaplevel(0, 1, axis=1)
 
 
-def load_spectra(data_folder, binary=True, imf="imf135_300"):
+def load_spectra(data_folder, imf, binary=True):
     """
     Load all BPASS spectra.
 
@@ -147,41 +151,36 @@ def load_spectra(data_folder, binary=True, imf="imf135_300"):
     in the future. It stores the file in the same folder with the name:
     `all_spectra-[bin/sin]-[imf].pkl`
 
+    The spectra are just read from file and not normalised.
+
     Input
     -----
     data_folder : `str`
         The path to the folder containing the BPASS spectra.
-    binary : boolean
+    binary : `bool`
         Use the binary files or just the single stars. Default=True
-    imf : str
+    imf : `str`
         BPASS Identifier of the IMF to be used.
 
     Returns
     -------
-    pandas.DataFrame
+    `pandas.DataFrame`
         A pandas DataFrame containing the high quality BPASS spectra
 
     """
+    if binary:
+        star = "bin"
+    else:
+        star = "sin"
 
+    # Check if compiled spectra are already present in data folder
     try:
         spectra = pd.read_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")
 
-    # CODEREVIEW [H]: No pokemon exceptions please ;)
-    except:
-        arrays = [BPASS_NUM_METALLICITIES, np.linspace(1, 100000, 100000)]
-        columns = pd.MultiIndex.from_product(arrays, names=["Metallicicty", "wavelength"])
-        print("Allocating memory")
-        spectra = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
-        spectra.index.name = "log_age"
-
-        for num, metallicity in enumerate(BPASS_METALLICITIES):
-            print(f"Loading metallicity: {metallicity}")
-            data = hoki.load.model_output(f"{data_folder}/spectra-{star}-{imf}.z{metallicity}.dat")
-            data = data.loc[:, slice("6.0", "11.0")].T
-            spectra.loc[:,(BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
-        spectra = spectra.swaplevel(0,1,axis=1)
-        spectra.to_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")
-
+    # Compile the spectra for faster reading next time
+    except FileNotFoundError:
+        spec = SpectraCompiler(data_folder, data_folder,imf)
+        spectra = spec.spectra
     return spectra
 
 def _normalise_rates(rates):
@@ -189,13 +188,13 @@ def _normalise_rates(rates):
 
     Input
     -----
-    rates : pandas.DataFrame
+    rates : `pandas.DataFrame`
         A pandas DataFrame containing the the events per bin
 
 
     Returns
     -------
-    pandas.DataFrame
+    `pandas.DataFrame`
         A pandas DataFrame containing the events/yr/M_\\odot
     """
     return rates.div(1e6*BPASS_LINEAR_TIME_INTERVALS, axis=0)
@@ -234,19 +233,19 @@ def _over_time(Z_values, mass_per_bin, edges, rates):
 
     Parameters
     ----------
-    Z_values : `numpy.array`
+    Z_values : `numpy.ndarray`
         An array containing the metallicity values at each bin.
-    mass_per_bin : `numpy.array`
+    mass_per_bin : `numpy.ndarray`
         An array containig the amount of mass per bin in the final binning.
-    edges : `numpy.array`
+    edges : `numpy.ndarray`
         The bin edges of the Z_values and mass_per_bin
-    rates : `2D numpy.array`
+    rates : `numpy.ndarray`
         A 2D array containig the different metallicities over time
         in BPASS binning. Format rates[metallicity][time]
 
     Returns
     -------
-    `numpy.array`
+    `numpy.ndarray`
         The number of events per bin
 
     """
@@ -268,7 +267,7 @@ def _over_time(Z_values, mass_per_bin, edges, rates):
 
 
 @numba.njit
-def _at_time(Z_values, mass_per_bin, edges,rates):
+def _at_time(Z_values, mass_per_bin, edges, rates):
     """Calculates the number of events at a specific time.
 
     Note
@@ -277,22 +276,59 @@ def _at_time(Z_values, mass_per_bin, edges,rates):
 
     Input
     -----
-    Z_values : `numpy.array`
+    Z_values : `numpy.ndarray`
         An array containing the metallicity values at each bin.
-    mass_per_bin : `numpy.array`
+    mass_per_bin : `numpy.ndarray`
         An array containig the amount of mass per bin in the final binning.
-    edges : `numpy.array`
-        The bin edges of the Z_values and mass_per_bin.
+    edges : `numpy.ndarray`
+        The bin edges of the Z_values and mass_per_bin with usage
+    rates : `numpy.ndarray`
+        A 2D array containig the different metallicities over time
+        in BPASS binning. Usage: rates[metallicity][time]
 
+    Returns
+    -------
+    `float`
+        The number of events happening at edges[0]
     """
-    Z_index_per_bin = np.array( [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
     bin_index = np.array([_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
     out = 0.0
     for count in range(len(mass_per_bin)):
         out += rates[Z_index_per_bin[count]][bin_index[count]]*mass_per_bin[count]
     return out
 
+@numba.njit
+def _at_time_spectrum(Z_values, mass_per_bin, edges, spectra):
+    """Calculates the spectrum at a specific moment in lookback time.
 
+    Note
+    ----
+    edges[0] defines the time at which the spectrum is calculated.
+
+    Input
+    -----
+    Z_values : `numpy.ndarray`
+        An array containing the metallicity values at each bin.
+    mass_per_bin : `numpy.ndarray`
+        An array containig the amount of mass per bin in the final binning.
+    edges : `numpy.ndarray`
+        The bin edges of the Z_values and mass_per_bin
+    spectra : `numpy.ndarray`
+        A numpy array containing the spectra with usage
+        edges[age_bin][metallicity]
+
+    Returns
+    -------
+    `float`
+        The number of events happening at edges[0]
+    """
+    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    bin_index = np.array([_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
+    out = np.zeros(100000)
+    for count in range(len(mass_per_bin)):
+        out += spectra[bin_index[count]][Z_index_per_bin[count]]*mass_per_bin[count]
+    return out
 
 ##########################
 #    HELPER FUNCTIONS    #

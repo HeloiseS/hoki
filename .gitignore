@@ -63,3 +63,5 @@ hoki/version.py
 
 # Mac OSX
 .DS_Store
+
+hoki/data/spectra/
