@@ -299,6 +299,47 @@ def _at_time(Z_values, mass_per_bin, edges, rates):
     return out
 
 @numba.njit
+def _over_time_spectra(Z_values, mass_per_bin, edges, spectra):
+    """Calculates the events rates per bin over the given bin edges.
+
+    Parameters
+    ----------
+    Z_values : `numpy.ndarray`
+        An array containing the metallicity values at each bin.
+    mass_per_bin : `numpy.ndarray`
+        An array containig the amount of mass per bin in the final binning.
+    edges : `numpy.ndarray`
+        The bin edges of the Z_values and mass_per_bin
+    rates : `numpy.ndarray`
+        A 2D array containig the different metallicities over time
+        in BPASS binning. Format rates[metallicity][time]
+
+    Returns
+    -------
+    `numpy.ndarray`
+        The number of events per bin
+
+    """
+    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    output_spectra = np.zeros((len(mass_per_bin), 100000))
+
+    for count in range(len(mass_per_bin)):
+        t = edges[count+1]
+        for j in range(0,count+1):
+            p1 = t - edges[j]
+            p2 = t - edges[j+1]
+            for wl in np.arange(100000):
+                bin_events = _integral(p2,
+                                       p1,
+                                       BPASS_LINEAR_TIME_EDGES,
+                                       spectra[Z_index_per_bin[count]][wl],
+                                       BPASS_LINEAR_TIME_INTERVALS)
+                output_spectra[j][wl] += bin_events*mass_per_bin[count]
+    return output_spectra
+
+
+
+@numba.njit
 def _at_time_spectrum(Z_values, mass_per_bin, edges, spectra):
     """Calculates the spectrum at a specific moment in lookback time.
 

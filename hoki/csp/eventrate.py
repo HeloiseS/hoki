@@ -31,6 +31,7 @@ class CSPEventRate(HokiObject, utils.CSP):
     """
 
     def __init__(self, data_folder, imf, binary=True):
+        # Check for valid IMF's
         self.bpass_rates = utils._normalise_rates(utils.load_rates(data_folder, imf, binary=binary))
 
     def calculate_rate_over_time(self,
