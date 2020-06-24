@@ -1,0 +1,44 @@
+.. hoki documentation master file, created by
+   sphinx-quickstart on Wed Jul 31 14:29:43 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+ 
+#################################
+**Welcome to Hoki!**
+#################################
+
+
+.. toctree::
+   intro
+   quick_start
+   citation
+   :maxdepth: 1
+   :Caption: Introduction
+
+.. toctree::
+   Transient_rates
+   HR_diagrams
+   Spectra
+   CMDs
+   AgeWizard
+   :maxdepth: 1
+   :caption: Recipes
+
+
+.. toctree::
+   manual
+   :maxdepth: 1
+   :caption: Full Documentation
+
+
+.. toctree::
+   Hoki <https://github.com/HeloiseS/hoki>
+   Notebooks <https://github.com/HeloiseS/hoki_tutorials>
+   :caption: GITHUB LINKS
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
