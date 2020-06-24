@@ -73,9 +73,9 @@ def set_models_path(path):
 ########################
 
 
-def dummy_to_dataframe(filename):
+def dummy_to_dataframe(filename, bpass_version=DEFAULT_BPASS_VERSION):
     """Reads in dummy to df from a filename"""
-    inv_dict ={v: k for k, v in dummy_dicts[DEFAULT_BPASS_VERSION].items()}
+    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()}
     cols = [inv_dict[key] if key in inv_dict.keys() else 'Nan'+str(key) for key in range(96)]
     dummy = pd.read_csv(filename, names=cols, sep=r"\s+", engine='python')
     return dummy
@@ -99,7 +99,7 @@ def model_input(path):
     """
 
     assert isinstance(path, str), "The location of the file is expected to be a string."
-    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
+    assert os.path.isfile(path), f"File {path} does not exist, or its path is incorrect."
 
     lines = open(path).read().split("\n")
 
