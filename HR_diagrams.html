@@ -1,13 +1,13 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="Python" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HR diagrams &mdash; hoki beta documentation</title>
+  <title>HR diagrams &mdash; hoki v1.5 documentation</title>
   
 
   
@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
-  
-    <link rel="shortcut icon" href="_static/favicon.png"/>
   
   
   
@@ -52,16 +50,13 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search"  style="background: black" >
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html">
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
           
 
-          
-            
-            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -132,7 +127,6 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-spec"><strong>hoki.spec</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -160,7 +154,7 @@
 
       <div class="wy-nav-content">
         
-        <div class="rst-content style-external-links">
+        <div class="rst-content">
         
           
 
@@ -197,15 +191,6 @@
     
   </ul>
 
-  
-  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
-      
-        <a href="Spectra.html" class="btn btn-neutral float-right" title="Spectra" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="Transient_rates.html" class="btn btn-neutral float-left" title="Transient rates" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-  </div>
   
   <hr/>
 </div>
@@ -505,7 +490,7 @@ div.rendered_html tbody tr:hover {
 <p><strong>Important</strong>: You should note that when loading an HR diagram you need to specify what type of HR diagram you want to load form the file. The HR diagram files are large and quite complex - see left hand side of the diagam below - so we’ll be loading in one type of HR diagram at a time.</p>
 <p>You can choose from 3 options: - <code class="docutils literal notranslate"><span class="pre">'TL'</span></code>: For a temperature/Luminosity HR diagram - <code class="docutils literal notranslate"><span class="pre">'Tg'</span></code>: For a temperature/surface gravity HR diagram - <code class="docutils literal notranslate"><span class="pre">'TTG'</span></code>: For a temperature/(temperature**4/surface gravity) HR diagram</p>
 <p>These options are there for 2 reasons: * 1.They tell the object which segment of the text file to load in * 2.They tell the plotting function what grid to create in order to plot the contours (also picks the right axis labels).</p>
-<p><img alt="mynewimage" src="_images/HRD_data.png" /></p>
+<p><img alt="mynewimage" src="HRD_data.png" /></p>
 </div>
 <div class="section" id="Loading-the-HR-diagrams">
 <h3>Loading the HR diagrams<a class="headerlink" href="#Loading-the-HR-diagrams" title="Permalink to this headline">¶</a></h3>
@@ -955,14 +940,14 @@ The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_
 </div>
 <p>It indicates that the stacking was performed successfully, and four attributes of the <code class="docutils literal notranslate"><span class="pre">HRDiagram</span></code> class were update.</p>
 <p><code class="docutils literal notranslate"><span class="pre">HRDiagram.all_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H_stacked</span></code>, are the stacked equivalents to <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code>(see right panel of the Figure at the top of this tutorial).</p>
-<p>This means that the original <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code> attributes <strong>remain untouched</strong> when you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method - only the “stacked” attributes will be updated.</p>
-<p>Note, before you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method for the first time the “stacked” HRDs are just 100x100 numpy arrays filled with zeros.</p>
+<p>This means that the original <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code> attributes <strong>remain untouched</strong> when you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method - only the &quot;stacked&quot; attributes will be updated.</p>
+<p>Note, before you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method for the first time the &quot;stacked&quot; HRDs are just 100x100 numpy arrays filled with zeros.</p>
 </div>
 </div>
 <div class="section" id="Plotting-HRDs-of-stacked-ages">
 <h1>Plotting HRDs of stacked ages<a class="headerlink" href="#Plotting-HRDs-of-stacked-ages" title="Permalink to this headline">¶</a></h1>
 <p>Now, it’s possible you don’t actually need to do any opperations on the stacked HRDs, <strong>you just want to plot</strong> HRDs for a range of ages.</p>
-<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of ‘<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
+<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of '<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
 <p>Here is an example of an HRD at 10 Myrs Vs an aggregate of HRDs from 1 to 10 Myrs.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -1019,13 +1004,22 @@ Text(0.5, 1.0, &#39;Stacked Age: log(Age/yrs)= 6.0 - 7.0&#39;)
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Spectra.html" class="btn btn-neutral float-right" title="Spectra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Transient_rates.html" class="btn btn-neutral float-left" title="Transient rates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, H. F. Stevance
+        &copy; Copyright 2020, heloise stevance
 
     </p>
   </div>

@@ -65,10 +65,3 @@ dummy_dict
 .. automodule:: hoki.load
     :members:
 
-
-#############
-**hoki.spec**
-#############
-
-.. automodule:: hoki.spec
-    :members:

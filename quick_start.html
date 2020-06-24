@@ -1,13 +1,13 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="Python" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick Start &mdash; hoki beta documentation</title>
+  <title>Quick Start &mdash; hoki v1.5 documentation</title>
   
 
   
@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
-  
-    <link rel="shortcut icon" href="_static/favicon.png"/>
   
   
   
@@ -52,16 +50,13 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search"  style="background: black" >
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html">
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
           
 
-          
-            
-            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -155,7 +150,7 @@
 
       <div class="wy-nav-content">
         
-        <div class="rst-content style-external-links">
+        <div class="rst-content">
         
           
 
@@ -192,15 +187,6 @@
     
   </ul>
 
-  
-  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
-      
-        <a href="citation.html" class="btn btn-neutral float-right" title="Publication" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="intro.html" class="btn btn-neutral float-left" title="What is Hoki?" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-  </div>
   
   <hr/>
 </div>
@@ -277,13 +263,13 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://drive.google.com/drive/folders/0B7vqPPPgOdtIfjUtb3RsV2JUOTFFX29WV1FZNURPMHAxTEtZQjhJOGtyNXZUTTNVSzFZazQ">BPASSv2.0</a></p></td>
 <td><p>untested</p></td>
-<td><p>–</p></td>
-<td><p>–</p></td>
+<td><p>--</p></td>
+<td><p>--</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference external" href="https://bpass.auckland.ac.nz/1.html">BPASSv1</a></p></td>
 <td><p>untested</p></td>
-<td><p>–</p></td>
-<td><p>–</p></td>
+<td><p>--</p></td>
+<td><p>--</p></td>
 </tr>
 </tbody>
 </table>
@@ -306,7 +292,7 @@
 <span class="n">output</span> <span class="o">=</span> <span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="s1">&#39;path_to_output&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p>The function will figure out based on the file name what data is being loaded in and will return the appropriate data format: <code class="docutils literal notranslate"><span class="pre">pandas.DataFrames</span></code> in most cases, apart from HR diagrams, which have their own <code class="docutils literal notranslate"><span class="pre">HRDiagrams</span></code> class – because they’re quite a complex data structure.</p>
+<p>The function will figure out based on the file name what data is being loaded in and will return the appropriate data format: <code class="docutils literal notranslate"><span class="pre">pandas.DataFrames</span></code> in most cases, apart from HR diagrams, which have their own <code class="docutils literal notranslate"><span class="pre">HRDiagrams</span></code> class -- because they're quite a complex data structure.</p>
 <p>Here we summarise the shape of the outputs (51 time bins) for a given metalicity and IMF.</p>
 <table class="docutils align-default">
 <colgroup>
@@ -394,7 +380,7 @@ All outputs are returned as <code class="docutils literal notranslate"><span cla
 <p>The stellar models are required to make Colour-Magnitude Diagrams (see RECIPES) and other deeper searches within the models that are not summarised in the population or spectral synthesis outputs.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is where the files names <code class="docutils literal notranslate"><span class="pre">model_input</span></code> become necesary. They are not human readable but are used within <code class="docutils literal notranslate"><span class="pre">hoki</span></code> to apply the correct algorithm to the stellar models in order to collate them correctly. (So don’t panic if you open them and wonder what is going on).</p>
+<p>This is where the files names <code class="docutils literal notranslate"><span class="pre">model_input</span></code> become necesary. They are not human readable but are used within <code class="docutils literal notranslate"><span class="pre">hoki</span></code> to apply the correct algorithm to the stellar models in order to collate them correctly. (So don't panic if you open them and wonder what is going on).</p>
 </div>
 </div>
 </div>
@@ -437,13 +423,22 @@ All outputs are returned as <code class="docutils literal notranslate"><span cla
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="citation.html" class="btn btn-neutral float-right" title="Publication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro.html" class="btn btn-neutral float-left" title="What is Hoki?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, H. F. Stevance
+        &copy; Copyright 2020, heloise stevance
 
     </p>
   </div>

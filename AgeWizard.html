@@ -1,13 +1,13 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="Python" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Age Wizard &mdash; hoki beta documentation</title>
+  <title>Age Wizard &mdash; hoki v1.5 documentation</title>
   
 
   
@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
-  
-    <link rel="shortcut icon" href="_static/favicon.png"/>
   
   
   
@@ -52,16 +50,13 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search"  style="background: black" >
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="index.html">
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
           
 
-          
-            
-            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -133,7 +128,6 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-spec"><strong>hoki.spec</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -161,7 +155,7 @@
 
       <div class="wy-nav-content">
         
-        <div class="rst-content style-external-links">
+        <div class="rst-content">
         
           
 
@@ -198,15 +192,6 @@
     
   </ul>
 
-  
-  <div class="rst-breadcrumbs-buttons" role="navigation" aria-label="breadcrumb navigation">
-      
-        <a href="manual.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="CMDs.html" class="btn btn-neutral float-left" title="Colour Magnitude Diagrams" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-  </div>
   
   <hr/>
 </div>
@@ -1441,7 +1426,7 @@ array([6.8])
 <div class="section" id="Probability-given-an-age-range">
 <h2>Probability given an age range<a class="headerlink" href="#Probability-given-an-age-range" title="Permalink to this headline">¶</a></h2>
 <p>The BPASS time bins are separated by 0.1 dex in log space (log(age/years) = 6.0, 6.1, 6.2, 6.3 etc..) and the PDFs for your individual sources will cover a range of BPASS time bins.</p>
-<p>Consequently, giving a single age may not make a lot of sense. Also the PDFs will rarely, if ever, resemble a Gaussian distribution: that means that you can’t give an error bar in the “classical” sense.</p>
+<p>Consequently, giving a single age may not make a lot of sense. Also the PDFs will rarely, if ever, resemble a Gaussian distribution: that means that you can’t give an error bar in the &quot;classical&quot; sense.</p>
 <p>Another interesting measure is the probability that the age of your star falls into a chosen age range. In this case our aggregate age is most likely to be between 6.7-6.9, so let’s investigate how likely it is for each individual star to fall in that range.</p>
 <p>For that we use <code class="docutils literal notranslate"><span class="pre">AgeWizard.calculate_p_given_age_range()</span></code> which returns a Series containing the probabilities corresponding to each source.</p>
 <div class="nbinput docutils container">
@@ -1658,13 +1643,22 @@ dtype: float64
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="manual.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CMDs.html" class="btn btn-neutral float-left" title="Colour Magnitude Diagrams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2020, H. F. Stevance
+        &copy; Copyright 2020, heloise stevance
 
     </p>
   </div>
