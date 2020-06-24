@@ -2,7 +2,7 @@
 Objects and pipelines that compile BPASS data files into more convenient, more pythonic data types
 """
 
-from hoki.constants import BPASS_NUM_METALLICITIES, BPASS_METALLICITIES
+from hoki.constants import BPASS_NUM_METALLICITIES, BPASS_METALLICITIES, BPASS_IMFS
 from hoki.load import model_output
 import pandas as pd
 import numpy as np
@@ -13,6 +13,13 @@ from hoki.utils.progressbar import print_progress_bar
 class SpectraCompiler():
     """
     Pipeline to load the BPASS spectra txt files and save them as a pandas DataFrame.
+
+    Attributes
+    ----------
+    spectra : `pandas.DataFrame`
+        A DataFrame containing all the spectra for a specific imf and
+        binary/single star population.
+        Usage spectra.loc[log_age, (metallicity, wavelength)]
     """
     def __init__(self, spectra_folder, output_folder, imf, binary=True, verbose=False):
         """
@@ -33,13 +40,17 @@ class SpectraCompiler():
         else:
             star = "sin"
 
+        # check IMF key
+        if imf not in BPASS_IMFS:
+            raise HokiKeyError(f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+
+
         # Setup output pandas DataFrame with metallicities and wavelenths
         arrays = [BPASS_NUM_METALLICITIES, np.linspace(1, 100000, 100000)]
         columns = pd.MultiIndex.from_product(arrays, names=["Metallicicty", "Wavelength"])
         print("Allocating memory...", end="")
         spectra = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
         spectra.index.name = "log_age"
-
         # loop over all the metallicities and load all the specta
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)

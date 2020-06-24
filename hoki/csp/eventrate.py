@@ -17,15 +17,15 @@ class CSPEventRate(HokiObject, utils.CSP):
     Parameters
     ----------
     data_folder : `str`
-        folder containing the BPASS data files (in units #events per bin)
-    binary : boolean
+        Folder containing the BPASS data files (in units #events per bin)
+    imf : `str`
+        The BPASS identifier for the IMF of the BPASS event rate files.
+    binary : `bool`
         If `True`, loads the binary files. Otherwise, just loads single stars.
         Default=True
 
     Attributes
     ----------
-    now : float
-        The age of the universe.
     bpass_rates : pandas.DataFrame
         The BPASS delay time distributions in #events/yr/M_\odot per metallicity.
     """

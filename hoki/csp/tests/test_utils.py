@@ -6,10 +6,11 @@ import pkg_resources
 import numpy as np
 import hoki.load
 import pytest
+import os
 import pandas as pd
 from hoki.constants import *
-from hoki.utils.exceptions import HokiTypeError,HokiFormatError
-
+from hoki.utils.exceptions import HokiTypeError,HokiFormatError, HokiKeyError
+import shutil
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
@@ -19,9 +20,13 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 # - Add _at_time_spectrum test
 # - Add _over_time test
 
+#################################################
+# Test Complex Stellar Populations Parent Class #
+#################################################
 
 class TestCSP(object):
 
+    # Test `now` attribute
     def test_init(self):
         csp = utils.CSP()
         assert csp.now == HOKI_NOW, "CSP parent class initialisation failed."
@@ -29,29 +34,60 @@ class TestCSP(object):
     def test_type_check_history(self):
         csp = utils.CSP()
         x = lambda i : i
+
+        # Check Types
         with pytest.raises(HokiTypeError):
             csp._type_check_histories([10], [0])
-
         with pytest.raises(HokiTypeError):
             csp._type_check_histories([10], 0)
-
         with pytest.raises(HokiTypeError):
             csp._type_check_histories([x], x)
+        with pytest.raises(HokiTypeError):
+            csp._type_check_histories([x,x], [x,10])
 
+        # Check Format
         with pytest.raises(HokiFormatError):
             csp._type_check_histories([x], [x,x])
         with pytest.raises(HokiFormatError):
             csp._type_check_histories([x,x], [x])
         with pytest.raises(HokiFormatError):
             csp._type_check_histories([x], [])
-        with pytest.raises(HokiTypeError):
-            csp._type_check_histories([x,x], [x,10])
 
         # Checking if the correct input does run
-        csp._type_check_histories([x],[x])
+        assert csp._type_check_histories([x],[x]) == None
+
+#############################
+# Test Calculations per bin #
+#############################
+
+def test_mass_per_bin():
+    x = np.linspace(0,100,101)
+    y = np.zeros(101)+1
+    sfh_func = lambda i : np.interp(i, x, y)
+    mass_per_bin = utils.mass_per_bin(sfh_func, np.linspace(0,10,11))
+    assert np.isclose(mass_per_bin, np.zeros(10)+1).all(),\
+           "mass_per_bin calculation wrong."
+
+
+def test_metallicity_per_bin():
+    x = np.linspace(0,100,101)
+    Z_func = lambda i : np.interp(i, x, x)
+    out = utils.metallicity_per_bin(Z_func, x)
+    expected = np.arange(0.5, 100, 1)
+    assert np.isclose(out, expected).all(), "Z per bin has failed"
+
+#############################
+#  Test BPASS File Loading  #
+#############################
 
 
 class TestLoadRates(object):
+
+    # Setup files to load
+    os.makedirs(os.path.dirname(f"{data_path}/supernova/"), exist_ok=True)
+    for Z in BPASS_METALLICITIES:
+        shutil.copy(f"{data_path}/supernova-bin-imf135_300.zem5.dat",
+                    f"{data_path}/supernova/supernova-bin-imf135_300.z{Z}.dat")
 
     def test_load_rates(self):
         _ = utils.load_rates(f"{data_path}/supernova", "imf135_300")
@@ -59,6 +95,10 @@ class TestLoadRates(object):
     def test_file_not_present(self):
         with pytest.raises(AssertionError):
             _ = utils.load_rates(f"{data_path}", "imf135_300")
+
+    def test_wrong_imf(self):
+        with pytest.raises(HokiKeyError):
+            _ = utils.load_rates(f"{data_path}/supernova", "i")
 
     x = utils.load_rates(f"{data_path}/supernova", "imf135_300")
 
@@ -76,6 +116,19 @@ class TestLoadRates(object):
         assert np.isclose(self.x.loc[:,("Ia",0.00001)],
             expected["Ia"]).all(),\
             "Models are not loaded correctly."
+
+    def test_remove_temp_files(self):
+        shutil.rmtree(f"{data_path}/supernova")
+
+# def TestLoadSpectra(object):
+#     # Setup files to load
+#     os.makedirs(os.path.dirname(f"{data_path}/spectra/"), exist_ok=True)
+#     for Z in BPASS_METALLICITIES:
+#         shutil.copy(f"{data_path}/spectra-bin-imf135_300.z002.dat",
+#                     f"{data_path}/spectra/spectra-bin-imf135_300.z{Z}.dat")
+
+    # def test_init(self):
+    #     x = utils.
 
 
 class TestGetBinIndex(object):
@@ -128,23 +181,6 @@ class TestIntegral(object):
     def test_with_middle_bins(self):
         assert np.isclose(utils._integral(10.2, 20.2, self.edges, self.values, self.bin_widths), 10),\
             "The integral over multiple bins is wrong."
-
-
-def test_mass_per_bin():
-    x = np.linspace(0,100,101)
-    y = np.zeros(101)+1
-    sfh_func = lambda i : np.interp(i, x, y)
-    mass_per_bin = utils.mass_per_bin(sfh_func, np.linspace(0,10,11))
-    assert np.isclose(mass_per_bin, np.zeros(10)+1).all(),\
-           "mass_per_bin calculation wrong."
-
-
-def test_metallicity_per_bin():
-    x = np.linspace(0,100,101)
-    Z_func = lambda i : np.interp(i, x, x)
-    out = utils.metallicity_per_bin(Z_func, x)
-    expected = np.arange(0.5, 100, 1)
-    assert np.isclose(out, expected).all(), "Z per bin has failed"
 
 
 def test_normalise_rates():

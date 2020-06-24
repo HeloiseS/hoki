@@ -12,14 +12,33 @@ import matplotlib.pyplot as plt
 from hoki.utils.exceptions import *
 from hoki.data_compilers import SpectraCompiler
 
+############################################
+# Complex Stellar Populations Parent Class #
+############################################
 
 class CSP(object):
+    """Complex Stellar Population class
+
+    Notes
+    -----
+    Parent class for `CSPEventRate` and `CSPSpectra`
+
+    Attributes
+    ----------
+    now : `float`
+        The age of the universe.
+    """
     now = HOKI_NOW
 
     def __init__(self):
         pass
 
     def _type_check_histories(self, sfh_functions, Z_functions):
+        """
+        Function to make sure inputted stellar formation history functions and
+        metallicity histories are in the correct format.
+
+        """
         if not isinstance(sfh_functions, list):
             raise HokiTypeError("`sfh_functions` is not a list. Only lists are taken as input.")
         if not isinstance(Z_functions, list):
@@ -92,7 +111,6 @@ def metallicity_per_bin(Z_function, time_edges):
 
 
 
-
 ########################
 #  BPASS File Loading  #
 ########################
@@ -120,10 +138,16 @@ def load_rates(data_folder, imf, binary=True):
         A pandas MultiIndex dataframe containing the BPASS number of events
         per metallicity per type. Usage: rates.loc[log_age, (type, metallicity)]
     """
+
+    # This is repeated several times. Make a function?
     if binary:
         star = "bin"
     else:
         star = "sin"
+
+    # Check IMF
+    if imf not in BPASS_IMFS:
+        raise HokiKeyError(f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
     # Create output DataFrame
     arrays = [BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES]
@@ -165,13 +189,18 @@ def load_spectra(data_folder, imf, binary=True):
     Returns
     -------
     `pandas.DataFrame`
-        A pandas DataFrame containing the high quality BPASS spectra
+        A pandas DataFrame containing the high quality BPASS spectra.
+        Usage spectra.loc[age, (metallicity, wavelength)]
 
     """
     if binary:
         star = "bin"
     else:
         star = "sin"
+
+    # check IMF key
+    if imf not in BPASS_IMFS:
+        raise HokiKeyError(f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
     # Check if compiled spectra are already present in data folder
     try:
@@ -191,7 +220,6 @@ def _normalise_rates(rates):
     rates : `pandas.DataFrame`
         A pandas DataFrame containing the the events per bin
 
-
     Returns
     -------
     `pandas.DataFrame`
@@ -201,8 +229,19 @@ def _normalise_rates(rates):
 
 
 def _normalise_spectrum(spectra):
-    return spectra.div(1e6, axis=0)
+    """Normalises the BPASS spectra.
 
+    Input
+    -----
+    spectra : `pandas.DataFrame`
+        A DataFrame containing the spectra for a 1e6 M_\\odot population.
+
+    Returns
+    -------
+    `pandas.DataFrame`
+        A DataFrame containing the spectra per mass (L_\\odot/M_\\odot).
+    """
+    return spectra.div(1e6, axis=0)
 
 def _find_bpass_metallicities(Z_values):
     """Finds the nearest BPASS metallicities for each item in the list.
@@ -224,8 +263,6 @@ def _find_bpass_metallicities(Z_values):
 ########################################
 # Complex Stellar History Calculations #
 ########################################
-# replace Z_index_per_bin to _find_bpass_metallicities
-
 
 @numba.njit
 def _over_time(Z_values, mass_per_bin, edges, rates):
@@ -300,7 +337,7 @@ def _at_time(Z_values, mass_per_bin, edges, rates):
 
 @numba.njit
 def _over_time_spectra(Z_values, mass_per_bin, edges, spectra):
-    """Calculates the events rates per bin over the given bin edges.
+    """Calculates the spectra per bin over the given bin edges.
 
     Parameters
     ----------

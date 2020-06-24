@@ -26,8 +26,13 @@ BPASS_NUM_METALLICITIES = np.array([0.00001, 0.0001, 0.001, 0.002, 0.003, 0.004,
 BPASS_METALLICITY_MID_POINTS = np.array([0.00005, 0.0005, 0.0015, 0.0025, 0.0035, 0.005, 0.007, 0.009,
                                          0.012, 0.017, 0.025, 0.035])
 
-BPASS_EVENT_TYPES = ["Ia", "IIP", "II", "Ib", "Ic", "LGRB", "PISNe"]
+BPASS_EVENT_TYPES = ["Ia", "IIP", "II", "Ib", "Ic", "LGRB", "PISNe", "low_mass"]
 HOKI_NOW = 13.799e9
+
+BPASS_IMFS = ["imf_chab100", "imf_chab300", "imf100_100", "imf100_300",
+              "imf135_100", "imf135_300", "imf135all_100", "imf170_100",
+              "imf170_300"]
+
 
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,
               'ONe_core1': 8, 'X': 10, 'Y': 11, 'C': 14, 'N': 15, 'O': 16, 'Ne': 17, 'MH1': 18, 'MHe1': 19, 'MC1': 20,
