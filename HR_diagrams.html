@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="Python" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   
   
   
@@ -50,13 +52,16 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search"  style="background: #FFA428" >
           
 
           
             <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
           
 
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -940,14 +945,14 @@ The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_
 </div>
 <p>It indicates that the stacking was performed successfully, and four attributes of the <code class="docutils literal notranslate"><span class="pre">HRDiagram</span></code> class were update.</p>
 <p><code class="docutils literal notranslate"><span class="pre">HRDiagram.all_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H_stacked</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H_stacked</span></code>, are the stacked equivalents to <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code>(see right panel of the Figure at the top of this tutorial).</p>
-<p>This means that the original <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code> attributes <strong>remain untouched</strong> when you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method - only the &quot;stacked&quot; attributes will be updated.</p>
-<p>Note, before you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method for the first time the &quot;stacked&quot; HRDs are just 100x100 numpy arrays filled with zeros.</p>
+<p>This means that the original <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code> attributes <strong>remain untouched</strong> when you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method - only the “stacked” attributes will be updated.</p>
+<p>Note, before you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method for the first time the “stacked” HRDs are just 100x100 numpy arrays filled with zeros.</p>
 </div>
 </div>
 <div class="section" id="Plotting-HRDs-of-stacked-ages">
 <h1>Plotting HRDs of stacked ages<a class="headerlink" href="#Plotting-HRDs-of-stacked-ages" title="Permalink to this headline">¶</a></h1>
 <p>Now, it’s possible you don’t actually need to do any opperations on the stacked HRDs, <strong>you just want to plot</strong> HRDs for a range of ages.</p>
-<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of '<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
+<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of ‘<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
 <p>Here is an example of an HRD at 10 Myrs Vs an aggregate of HRDs from 1 to 10 Myrs.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:

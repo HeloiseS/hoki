@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="Python" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   
   
   
@@ -49,13 +51,16 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search"  style="background: #FFA428" >
           
 
           
             <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
           
 
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -221,12 +226,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file</strong> (<em>str</em>) -- Location of the file containing the model inputs</p></li>
-<li><p><strong>col_lim</strong> (<em>list of 2 integers</em><em> (</em><em>positive</em><em> or </em><em>negative</em><em>)</em><em>, </em><em>optional</em>) -- Limits on the colour range of the CMD grid, Default is [-3,7].</p></li>
-<li><p><strong>mag_lim</strong> (<em>list of 2 integers</em><em> (</em><em>positive</em><em> or </em><em>negative</em><em>)</em><em>, </em><em>optional</em>) -- Limits on the magnitude range of the CMD grid. Default is [-14,10].</p></li>
-<li><p><strong>res_el</strong> (<em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) -- Resolution element of the CMD grid. The resolution element is the same for colour and magnitude.
+<li><p><strong>file</strong> (<em>str</em>) – Location of the file containing the model inputs</p></li>
+<li><p><strong>col_lim</strong> (<em>list of 2 integers</em><em> (</em><em>positive</em><em> or </em><em>negative</em><em>)</em><em>, </em><em>optional</em>) – Limits on the colour range of the CMD grid, Default is [-3,7].</p></li>
+<li><p><strong>mag_lim</strong> (<em>list of 2 integers</em><em> (</em><em>positive</em><em> or </em><em>negative</em><em>)</em><em>, </em><em>optional</em>) – Limits on the magnitude range of the CMD grid. Default is [-14,10].</p></li>
+<li><p><strong>res_el</strong> (<em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Resolution element of the CMD grid. The resolution element is the same for colour and magnitude.
 Default is 0.1.</p></li>
-<li><p><strong>bpass_version</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>v221</em><em> or </em><em>v222</em><em>)</em>) -- The BPASS version to consider - this changes the &quot;dummy_dictionary&quot; that is loaded from the settings.yaml file
+<li><p><strong>bpass_version</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>v221</em><em> or </em><em>v222</em><em>)</em>) – The BPASS version to consider - this changes the “dummy_dictionary” that is loaded from the settings.yaml file
 Default = hoki.constants.DEFAULT_BPASS_VERSION</p></li>
 </ul>
 </dd>
@@ -315,7 +320,7 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <dd><p>Returns the HR diagrams at a specific age.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em>) -- The log(age) of choice.</p>
+<dd class="field-odd"><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em>) – The log(age) of choice.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>The CMD grid</strong></p>
@@ -339,8 +344,8 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mag_filter</strong> (<em>str</em>) -- Magnitude Axis Filter</p></li>
-<li><p><strong>col_filters</strong> (<em>list of 2 str</em>) -- The two filters for the colour. The colours will be col_filter[0]-col_filter[1].</p></li>
+<li><p><strong>mag_filter</strong> (<em>str</em>) – Magnitude Axis Filter</p></li>
+<li><p><strong>col_filters</strong> (<em>list of 2 str</em>) – The two filters for the colour. The colours will be col_filter[0]-col_filter[1].</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -359,9 +364,9 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>log_age</strong> (<em>float</em>) -- Must be a valid BPASS time bin</p></li>
-<li><p><strong>loc</strong> (<em>3 integers</em><em>, </em><em>optional</em>) -- Location of the subplot. Default is 111.</p></li>
-<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) -- Colour map for the contours. Default is 'Greys'
+<li><p><strong>log_age</strong> (<em>float</em>) – Must be a valid BPASS time bin</p></li>
+<li><p><strong>loc</strong> (<em>3 integers</em><em>, </em><em>optional</em>) – Location of the subplot. Default is 111.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – Colour map for the contours. Default is ‘Greys’
 <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs : matplotlib keyword arguments, optional</p></li>
 </ul>
 </dd>
@@ -384,10 +389,10 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <dl class="py function">
 <dt id="hoki.constants.set_default_bpass_version">
 <code class="sig-prename descclassname">hoki.constants.</code><code class="sig-name descname">set_default_bpass_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.constants.set_default_bpass_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Changes the path to the stellar models in hoki's settings</p>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>version</strong> (<em>str</em><em>, </em><em>v221</em><em> or </em><em>v222</em>) -- Version of BPASS to consider by default.</p>
+<dd class="field-odd"><p><strong>version</strong> (<em>str</em><em>, </em><em>v221</em><em> or </em><em>v222</em>) – Version of BPASS to consider by default.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -397,11 +402,11 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <dl class="py function">
 <dt id="hoki.constants.set_models_path">
 <code class="sig-prename descclassname">hoki.constants.</code><code class="sig-name descname">set_models_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.constants.set_models_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Changes the path to the stellar models in hoki's settings</p>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>,</em>) -- Absolute path to the top level of the stellar models this could be a directory named something like
-bpass-v2.2-newmodels and the next level down should contain 'NEWBINMODS' and 'NEWSINMODS'.</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>,</em>) – Absolute path to the top level of the stellar models this could be a directory named something like
+bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and ‘NEWSINMODS’.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -411,7 +416,7 @@ bpass-v2.2-newmodels and the next level down should contain 'NEWBINMODS' and 'NE
 <dl class="simple">
 <dt>path_to_settings</dt><dd><p>path to the <cite>settings.yaml</cite> file located in the package resources</p>
 </dd>
-<dt>MODELS_PATH</dt><dd><p>Path to the BPASS models as defined in the settings file. If you have not downloaded the models and updated this path with <cite>load.set_models_path()</cite>, it will not correspond to a valid path on your machine. This is not going to cause issues unless you're using functionalities that require the full set of BPASS models (like making CMDs)</p>
+<dt>MODELS_PATH</dt><dd><p>Path to the BPASS models as defined in the settings file. If you have not downloaded the models and updated this path with <cite>load.set_models_path()</cite>, it will not correspond to a valid path on your machine. This is not going to cause issues unless you’re using functionalities that require the full set of BPASS models (like making CMDs)</p>
 </dd>
 <dt>BPASS_TIME_BINS</dt><dd><p>1D array containing the 51 BPASS time bins (from log(age) = 6.0 to 11.0)</p>
 </dd>
@@ -448,10 +453,10 @@ please refer to the manual:
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>high_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) -- This inputs the HR diagrams corresponding to a hydrogen abundance n1 &gt; 0.4.</p></li>
-<li><p><strong>medium_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) -- This inputs the HR diagrams corresponding to a hydrogen abundance E-3 &lt; n1 &lt; 0.4.</p></li>
-<li><p><strong>low_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) -- This inputs the HR diagrams corresponding to a hydrogen abundance n1 &lt; E-3.</p></li>
-<li><p><strong>hr_type</strong> (<em>str - Valid options are 'TL'</em><em> , </em><em>'Tg'</em><em>, </em><em>'TTG'</em>) -- This tells the class what type of HR diagrams are being given. For more details on what
+<li><p><strong>high_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance n1 &gt; 0.4.</p></li>
+<li><p><strong>medium_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance E-3 &lt; n1 &lt; 0.4.</p></li>
+<li><p><strong>low_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance n1 &lt; E-3.</p></li>
+<li><p><strong>hr_type</strong> (<em>str - Valid options are 'TL'</em><em> , </em><em>'Tg'</em><em>, </em><em>'TTG'</em>) – This tells the class what type of HR diagrams are being given. For more details on what
 the 3 options mean, consult the BPASS manual section on HR diagram isocontours.</p></li>
 </ul>
 </dd>
@@ -621,7 +626,7 @@ self.stack()</p>
 <dd><p>Returns the HR diagrams at a specific age.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em>) -- The log(age) of choice.</p>
+<dd class="field-odd"><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em>) – The log(age) of choice.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
@@ -645,13 +650,13 @@ self.stack()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) -- Log(age) at which to plot the HRdiagram.</p></li>
-<li><p><strong>age_range</strong> (<em>tuple</em><em> or </em><em>list of 2 ints</em><em> or </em><em>floats</em><em>, </em><em>optional</em>) -- Age range within which you want to plot the HR diagram</p></li>
-<li><p><strong>abundances</strong> (<em>tuple</em><em> or </em><em>list of 3 ints</em><em>, </em><em>zeros</em><em> or </em><em>ones</em><em>, </em><em>optional</em>) -- This turns on or off the inclusion of the abundances. The corresponding abundances are:
+<li><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Log(age) at which to plot the HRdiagram.</p></li>
+<li><p><strong>age_range</strong> (<em>tuple</em><em> or </em><em>list of 2 ints</em><em> or </em><em>floats</em><em>, </em><em>optional</em>) – Age range within which you want to plot the HR diagram</p></li>
+<li><p><strong>abundances</strong> (<em>tuple</em><em> or </em><em>list of 3 ints</em><em>, </em><em>zeros</em><em> or </em><em>ones</em><em>, </em><em>optional</em>) – This turns on or off the inclusion of the abundances. The corresponding abundances are:
 (n1 &gt; 0.4, E-3 &lt; n1 &lt; 0.4, E-3&gt;n1). A 1 means a particular abundance should be included,
 a 0 means it will be ignored. Default is (1,1,1), meaning all abundances are plotted.
 Note that (0,0,0) is not valid and will return and assertion error.</p></li>
-<li><p><strong>**kwargs</strong> (<em>matplotlib keyword arguments</em><em>, </em><em>optional</em>) -- </p></li>
+<li><p><strong>**kwargs</strong> (<em>matplotlib keyword arguments</em><em>, </em><em>optional</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -675,8 +680,8 @@ You will get a warning if that happens though.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>log_age_min</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) -- Minimum log(age) to stack</p></li>
-<li><p><strong>log_age_max</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) -- Maximum log(age) to stack</p></li>
+<li><p><strong>log_age_min</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Minimum log(age) to stack</p></li>
+<li><p><strong>log_age_max</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Maximum log(age) to stack</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -698,18 +703,18 @@ self.medium_H_stacked, self.low_H_stacked and self.all_stacked.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>single_hr_grid</strong> (<em>np.ndarray</em><em> (</em><em>100x100</em><em>)</em>) -- One HR diagram grid.</p></li>
-<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) -- Type of HR diagram: 'TL', 'Tg', or 'TTG'. Default is 'TL'.</p></li>
-<li><p><strong>loc</strong> (<em>int - 3 digits</em><em>, </em><em>optional</em>) -- Location to parse plt.subplot(). The Default is 111, to make only one plot.</p></li>
-<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) -- The matplotlib colour map to use. Default is 'RdGy'.</p></li>
-<li><p><strong>kwargs</strong> (<em>matplotlib key word arguments to parse</em>) -- </p></li>
+<li><p><strong>single_hr_grid</strong> (<em>np.ndarray</em><em> (</em><em>100x100</em><em>)</em>) – One HR diagram grid.</p></li>
+<li><p><strong>kind</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of HR diagram: ‘TL’, ‘Tg’, or ‘TTG’. Default is ‘TL’.</p></li>
+<li><p><strong>loc</strong> (<em>int - 3 digits</em><em>, </em><em>optional</em>) – Location to parse plt.subplot(). The Default is 111, to make only one plot.</p></li>
+<li><p><strong>cmap</strong> (<em>str</em><em>, </em><em>optional</em>) – The matplotlib colour map to use. Default is ‘RdGy’.</p></li>
+<li><p><strong>kwargs</strong> (<em>matplotlib key word arguments to parse</em>) – </p></li>
 </ul>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The default levels are defined such that they show the maximum value, then a 10th, then a 100th,
-etc... down to the minimum level. You can also use the &quot;levels&quot; keyword of the contour function
+etc… down to the minimum level. You can also use the “levels” keyword of the contour function
 to choose the number of levels you want (but them matplotlib will arbitrarily define where the
 levels fall).</p>
 </div>
@@ -733,7 +738,7 @@ levels fall).</p>
 <dd><p>Loads inputs from one file and put them in a dataframe</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) -- Path to the file containing the input data.</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the file containing the input data.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -745,8 +750,8 @@ levels fall).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) -- Path to the file containing the target data.</p></li>
-<li><p><strong>hr_type</strong> (<em>str</em><em>, </em><em>optional</em>) -- Type of HR diagram to load: 'TL', 'Tg' or 'TTG'.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – Path to the file containing the target data.</p></li>
+<li><p><strong>hr_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of HR diagram to load: ‘TL’, ‘Tg’ or ‘TTG’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -761,11 +766,11 @@ levels fall).</p>
 <dl class="py function">
 <dt id="hoki.load.set_models_path">
 <code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">set_models_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.set_models_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Changes the path to the stellar models in hoki's settings</p>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>,</em>) -- Absolute path to the top level of the stellar models this could be a directory named something like
-bpass-v2.2-newmodels and the next level down should contain 'NEWBINMODS' and 'NEWSINMODS'.</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>,</em>) – Absolute path to the top level of the stellar models this could be a directory named something like
+bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and ‘NEWSINMODS’.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>

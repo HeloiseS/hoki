@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="Python" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
 
   
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
   
   
   
@@ -50,13 +52,16 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+        <div class="wy-side-nav-search"  style="background: #FFA428" >
           
 
           
             <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
           
 
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -474,7 +479,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Getting-the-Stellar-models-and-input-files">
 <h3>Getting the Stellar models and input files<a class="headerlink" href="#Getting-the-Stellar-models-and-input-files" title="Permalink to this headline">¶</a></h3>
 <p>Colour Magnitude Diagrams (CMDs) are created by reading in the <a class="reference external" href="https://bpass.auckland.ac.nz/9.html">BPASS</a> stellar models listed in the <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files that can be found in the BPASS output folders (e.g. <em>bpass_v2.2.1_imf135_300</em>). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.</p>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>NOTE: You will be able to run the cells in the section &quot;Loading a pickled CMD file&quot; even if you can’t download the full set of stellar models **</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>NOTE: You will be able to run the cells in the section “Loading a pickled CMD file” even if you can’t download the full set of stellar models **</p>
 <p>The stellar models and input files can be downloaded from <a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">the google drive</a> (<em>bpass-v2.2-newmodels</em> for the models and e.g. <em>bpass_v2.2.1_imf135_300</em> to get the required <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files). Then you will have to change the path to the models in the <code class="docutils literal notranslate"><span class="pre">settings.yaml</span></code> file – this can be done using the <code class="docutils literal notranslate"><span class="pre">set_models_path</span></code> function contained in the <code class="docutils literal notranslate"><span class="pre">hoki.load</span></code> module:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -506,7 +511,7 @@ Looks like everything went well! You can check the path was correctly updated by
 <p>In <code class="docutils literal notranslate"><span class="pre">hoki</span></code> you will be creating a <code class="docutils literal notranslate"><span class="pre">CMD()</span></code> object instanciated with a model of your choosing (a particular IMF and metallicity)- for this you need to provide the <strong>location of a BPASS input file</strong>.</p>
 <p>To know WHAT to do with this information, we also need to give the <strong>two broad-band filters</strong> we are interested in to make the plot filter2 Vs filter1-filter2 (e.g. V Vs B-V). This is given in the <code class="docutils literal notranslate"><span class="pre">CMD.make()</span></code> method, which actually creates and fills the CMD grids.</p>
 <p><strong>NOTE: This step is the most time consuming because there are thousands and thousands of models to look at. For that reason it also take much longer for the binary stellar models than the single star models to make a CMD. In the next section we will show you how to avoid having to go repeat his step in the future</strong></p>
-<p>The good news is that <strong>once you have instanciated and 'made' the CMD object, plotting it is VERY fast</strong> and you have a CMD for <strong>each time bin</strong>, which are also trivial and quick to access.</p>
+<p>The good news is that <strong>once you have instanciated and ‘made’ the CMD object, plotting it is VERY fast</strong> and you have a CMD for <strong>each time bin</strong>, which are also trivial and quick to access.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
