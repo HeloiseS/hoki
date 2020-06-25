@@ -118,9 +118,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#Customizing-your-plots-with-matplotlib-key-word-arguments">Customizing your plots with matplotlib key word arguments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Creating-a-publication-ready-figure">Creating a publication-ready figure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Stacking-a-range-of-Ages">Stacking a range of Ages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
@@ -491,7 +491,7 @@ div.rendered_html tbody tr:hover {
 <h2>Loading in the data<a class="headerlink" href="#Loading-in-the-data" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="About-the-tools-you're-about-to-use.">
 <h3>About the tools you’re about to use.<a class="headerlink" href="#About-the-tools-you're-about-to-use." title="Permalink to this headline">¶</a></h3>
-<p>HR diagram data can be loaded using the <code class="docutils literal notranslate"><span class="pre">hoki.load.population_output()</span></code> function. This function will automatically know that you are trying to load an HR diagram from the name of the text file.</p>
+<p>HR diagram data can be loaded using the <code class="docutils literal notranslate"><span class="pre">hoki.load.model_output()</span></code> function. This function will automatically know that you are trying to load an HR diagram from the name of the text file.</p>
 <p><strong>Important</strong>: You should note that when loading an HR diagram you need to specify what type of HR diagram you want to load form the file. The HR diagram files are large and quite complex - see left hand side of the diagam below - so we’ll be loading in one type of HR diagram at a time.</p>
 <p>You can choose from 3 options: - <code class="docutils literal notranslate"><span class="pre">'TL'</span></code>: For a temperature/Luminosity HR diagram - <code class="docutils literal notranslate"><span class="pre">'Tg'</span></code>: For a temperature/surface gravity HR diagram - <code class="docutils literal notranslate"><span class="pre">'TTG'</span></code>: For a temperature/(temperature**4/surface gravity) HR diagram</p>
 <p>These options are there for 2 reasons: * 1.They tell the object which segment of the text file to load in * 2.They tell the plotting function what grid to create in order to plot the contours (also picks the right axis labels).</p>
@@ -676,7 +676,7 @@ Text(0.5, 1.0, &#39;Single stars&#39;)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x7fc159d9beb8&gt;
+&lt;matplotlib.legend.Legend at 0x12c4472d0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -719,7 +719,7 @@ Text(0.5, 1.0, &#39;Single stars&#39;)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x7fc159ec4b38&gt;
+&lt;matplotlib.legend.Legend at 0x12bf37850&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -769,7 +769,7 @@ Text(0.5, 1.0, &#39;Single stars&#39;)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x7fc15dd46d68&gt;
+&lt;matplotlib.legend.Legend at 0x11e805090&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -866,6 +866,8 @@ Text(0.5, 1.0, &#39;Single stars&#39;)
             <span class="n">ls</span> <span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Cygnus OB2&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mf">6.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=6.8&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
 
 
 <span class="n">hr_census_bin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">6.8</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
@@ -873,6 +875,8 @@ Text(0.5, 1.0, &#39;Single stars&#39;)
             <span class="n">ls</span> <span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Cygnus OB2&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">])</span>
 <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mf">6.4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.4</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">,</span> <span class="s2">&quot;Z = 0.02 </span><span class="se">\n</span><span class="s2">log(Age/yrs)=6.8&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span>
+
 
 
 <span class="n">hr_usco_sin</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># levels adjusted for visualisation</span>
@@ -948,9 +952,8 @@ The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_
 <p>This means that the original <code class="docutils literal notranslate"><span class="pre">HRDiagram.all</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.high_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.medium_H</span></code>, <code class="docutils literal notranslate"><span class="pre">HRDiagram.low_H</span></code> attributes <strong>remain untouched</strong> when you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method - only the “stacked” attributes will be updated.</p>
 <p>Note, before you run the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method for the first time the “stacked” HRDs are just 100x100 numpy arrays filled with zeros.</p>
 </div>
-</div>
 <div class="section" id="Plotting-HRDs-of-stacked-ages">
-<h1>Plotting HRDs of stacked ages<a class="headerlink" href="#Plotting-HRDs-of-stacked-ages" title="Permalink to this headline">¶</a></h1>
+<h2>Plotting HRDs of stacked ages<a class="headerlink" href="#Plotting-HRDs-of-stacked-ages" title="Permalink to this headline">¶</a></h2>
 <p>Now, it’s possible you don’t actually need to do any opperations on the stacked HRDs, <strong>you just want to plot</strong> HRDs for a range of ages.</p>
 <p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of ‘<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
 <p>Here is an example of an HRD at 10 Myrs Vs an aggregate of HRDs from 1 to 10 Myrs.</p>
@@ -1001,6 +1004,7 @@ Text(0.5, 1.0, &#39;Stacked Age: log(Age/yrs)= 6.0 - 7.0&#39;)
 <hr class="docutils" />
 <p><strong>YOU’RE ALL SET!</strong></p>
 <p>I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on <code class="docutils literal notranslate"><span class="pre">hoki</span></code> GitHub page <a class="reference external" href="https://github.com/HeloiseS/hoki">here</a> or on the <code class="docutils literal notranslate"><span class="pre">hoki_tutorials</span></code> GitHub <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">there</a>.</p>
+</div>
 </div>
 
 
