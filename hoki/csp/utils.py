@@ -2,19 +2,19 @@
 Utilities to be used in the complex stellar populations
 """
 
-from hoki.constants import BPASS_METALLICITIES
-import hoki.load
-import numpy as np
 import numba
-from hoki.constants import *
+import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from hoki.utils.exceptions import *
+
+import hoki.load
+from hoki.constants import *
 from hoki.data_compilers import SpectraCompiler
+from hoki.utils.exceptions import *
 
 ############################################
 # Complex Stellar Populations Parent Class #
 ############################################
+
 
 class CSP(object):
     """Complex Stellar Population class
@@ -40,11 +40,14 @@ class CSP(object):
 
         """
         if not isinstance(sfh_functions, list):
-            raise HokiTypeError("`sfh_functions` is not a list. Only lists are taken as input.")
+            raise HokiTypeError(
+                "`sfh_functions` is not a list. Only lists are taken as input.")
         if not isinstance(Z_functions, list):
-            raise HokiTypeError("`Z_functions` is not a list. Only lists are taken as input.")
+            raise HokiTypeError(
+                "`Z_functions` is not a list. Only lists are taken as input.")
         if len(sfh_functions) != len(Z_functions):
-            raise HokiFormatError("sfh_functions and Z_functions must have the same length.")
+            raise HokiFormatError(
+                "sfh_functions and Z_functions must have the same length.")
         if not all(callable(val) for val in sfh_functions):
             raise HokiTypeError("sfh_functions must only contain functions.")
         if not all(callable(val) for val in Z_functions):
@@ -81,12 +84,12 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=100):
     `numpy.ndarray`
         The mass per time bin.
     """
-
-    return np.array([np.trapz(sfh_function(np.linspace(t1, t2, sample_rate)),
-                     np.linspace(t1, t2, sample_rate))
+    # Vectorize function to allow numpy array input
+    vec_func = np.vectorize(sfh_function)
+    return np.array([np.trapz(vec_func(np.linspace(t1, t2, sample_rate)),
+                              np.linspace(t1, t2, sample_rate))
                      for t1, t2 in zip(time_edges[:-1], time_edges[1:])
                      ])
-
 
 
 def metallicity_per_bin(Z_function, time_edges):
@@ -105,10 +108,11 @@ def metallicity_per_bin(Z_function, time_edges):
     `numpy.ndarray`
         The average metallicity per bin
     """
-    Z_values = Z_function(time_edges)
-    Z_average = (Z_values[1:] + Z_values[:-1])/2
+    # Vectorize function to allow numpy array input
+    vec_func = np.vectorize(Z_function)
+    Z_values = vec_func(time_edges)
+    Z_average = (Z_values[1:] + Z_values[:-1]) / 2
     return np.array(Z_average)
-
 
 
 ########################
@@ -116,7 +120,7 @@ def metallicity_per_bin(Z_function, time_edges):
 ########################
 
 
-def load_rates(data_folder, imf, binary=True):
+def load_rates(data_path, imf, binary=True):
     """Loads the BPASS supernova event count files.
 
     Notes
@@ -125,7 +129,7 @@ def load_rates(data_folder, imf, binary=True):
 
     Input
     -----
-    data_folder : `str`
+    data_path : `str`
         The filepath to the folder containing the BPASS data
     binary : `bool`
         Use the binary files or just the single stars. Default=True
@@ -147,24 +151,29 @@ def load_rates(data_folder, imf, binary=True):
 
     # Check IMF
     if imf not in BPASS_IMFS:
-        raise HokiKeyError(f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+        raise HokiKeyError(
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
     # Create output DataFrame
     arrays = [BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES]
-    columns = pd.MultiIndex.from_product(arrays, names=["Metallicicty", "Event Type"])
-    rates = pd.DataFrame(index=np.linspace(6,11, 51), columns=columns, dtype=np.float64)
+    columns = pd.MultiIndex.from_product(
+        arrays, names=["Metallicicty", "Event Type"])
+    rates = pd.DataFrame(index=np.linspace(6, 11, 51),
+                         columns=columns, dtype=np.float64)
     rates.index.name = "log_age"
 
     # load supernova count files
     for num, metallicity in enumerate(BPASS_METALLICITIES):
-        data = hoki.load.model_output(f"{data_folder}/supernova-{star}-{imf}.z{metallicity}.dat")
-        data = data.loc[:,slice(BPASS_EVENT_TYPES[0],BPASS_EVENT_TYPES[-1])]
-        rates.loc[:, (BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
+        data = hoki.load.model_output(
+            f"{data_path}/supernova-{star}-{imf}.z{metallicity}.dat")
+        data = data.loc[:, slice(BPASS_EVENT_TYPES[0], BPASS_EVENT_TYPES[-1])]
+        rates.loc[:, (BPASS_NUM_METALLICITIES[num],
+                      slice(None))] = data.to_numpy()
 
     return rates.swaplevel(0, 1, axis=1)
 
 
-def load_spectra(data_folder, imf, binary=True):
+def load_spectra(data_path, imf, binary=True):
     """
     Load all BPASS spectra.
 
@@ -179,7 +188,7 @@ def load_spectra(data_folder, imf, binary=True):
 
     Input
     -----
-    data_folder : `str`
+    data_path : `str`
         The path to the folder containing the BPASS spectra.
     binary : `bool`
         Use the binary files or just the single stars. Default=True
@@ -200,17 +209,25 @@ def load_spectra(data_folder, imf, binary=True):
 
     # check IMF key
     if imf not in BPASS_IMFS:
-        raise HokiKeyError(f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+        raise HokiKeyError(
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
     # Check if compiled spectra are already present in data folder
     try:
-        spectra = pd.read_pickle(f"{data_folder}/all_spectra-{star}-{imf}.pkl")
+        print("Trying to load precompiled file.")
+        spectra = pd.read_pickle(f"{data_path}/all_spectra-{star}-{imf}.pkl")
 
     # Compile the spectra for faster reading next time
     except FileNotFoundError:
-        spec = SpectraCompiler(data_folder, data_folder,imf)
+        print("Data will be compiled")
+        spec = SpectraCompiler(data_path, data_path, imf)
         spectra = spec.spectra
     return spectra
+
+
+###########################
+#  Normasise BPASS Files  #
+###########################
 
 def _normalise_rates(rates):
     """Normalise the BPASS rates.
@@ -225,7 +242,7 @@ def _normalise_rates(rates):
     `pandas.DataFrame`
         A pandas DataFrame containing the events/yr/M_\\odot
     """
-    return rates.div(1e6*BPASS_LINEAR_TIME_INTERVALS, axis=0)
+    return rates.div(1e6 * BPASS_LINEAR_TIME_INTERVALS, axis=0)
 
 
 def _normalise_spectrum(spectra):
@@ -243,6 +260,11 @@ def _normalise_spectrum(spectra):
     """
     return spectra.div(1e6, axis=0)
 
+###########################
+#   BPASS Metallicities   #
+###########################
+
+
 def _find_bpass_metallicities(Z_values):
     """Finds the nearest BPASS metallicities for each item in the list.
 
@@ -257,7 +279,6 @@ def _find_bpass_metallicities(Z_values):
         A list of the nearest BPASS metallicity for each given metallicity
     """
     return BPASS_NUM_METALLICITIES[[np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values]]
-
 
 
 ########################################
@@ -286,20 +307,21 @@ def _over_time(Z_values, mass_per_bin, edges, rates):
         The number of events per bin
 
     """
-    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    Z_index_per_bin = np.array(
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
     event_rate = np.zeros(len(mass_per_bin))
 
     for count in range(len(mass_per_bin)):
-            t = edges[count+1]
-            for j in range(0,count+1):
-                p1 = t - edges[j]
-                p2 = t - edges[j+1]
-                bin_events = _integral(p2,
-                                       p1,
-                                       BPASS_LINEAR_TIME_EDGES,
-                                       rates[Z_index_per_bin[count]],
-                                       BPASS_LINEAR_TIME_INTERVALS)
-                event_rate[j] += bin_events*mass_per_bin[count]
+        t = edges[count + 1]
+        for j in range(0, count + 1):
+            p1 = t - edges[j]
+            p2 = t - edges[j + 1]
+            bin_events = _integral(p2,
+                                   p1,
+                                   BPASS_LINEAR_TIME_EDGES,
+                                   rates[Z_index_per_bin[count]],
+                                   BPASS_LINEAR_TIME_INTERVALS)
+            event_rate[j] += bin_events * mass_per_bin[count]
     return event_rate
 
 
@@ -328,15 +350,19 @@ def _at_time(Z_values, mass_per_bin, edges, rates):
     `float`
         The number of events happening at edges[0]
     """
-    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
-    bin_index = np.array([_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
+    Z_index_per_bin = np.array(
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    bin_index = np.array(
+        [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
     out = 0.0
     for count in range(len(mass_per_bin)):
-        out += rates[Z_index_per_bin[count]][bin_index[count]]*mass_per_bin[count]
+        out += rates[Z_index_per_bin[count]
+                     ][bin_index[count]] * mass_per_bin[count]
     return out
 
+
 @numba.njit
-def _over_time_spectra(Z_values, mass_per_bin, edges, spectra):
+def _over_time_spectrum(Z_values, mass_per_bin, edges, spectra):
     """Calculates the spectra per bin over the given bin edges.
 
     Parameters
@@ -349,31 +375,31 @@ def _over_time_spectra(Z_values, mass_per_bin, edges, spectra):
         The bin edges of the Z_values and mass_per_bin
     rates : `numpy.ndarray`
         A 2D array containig the different metallicities over time
-        in BPASS binning. Format rates[metallicity][time]
+        in BPASS binning. Format rates[metallicity][wl][time]
 
     Returns
     -------
     `numpy.ndarray`
-        The number of events per bin
+        An `numpy.ndarray` with the following shape: (nr_time_bins, 100000)
 
     """
-    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    Z_index_per_bin = np.array(
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
     output_spectra = np.zeros((len(mass_per_bin), 100000))
 
     for count in range(len(mass_per_bin)):
-        t = edges[count+1]
-        for j in range(0,count+1):
+        t = edges[count + 1]
+        for j in range(0, count + 1):
             p1 = t - edges[j]
-            p2 = t - edges[j+1]
+            p2 = t - edges[j + 1]
             for wl in np.arange(100000):
                 bin_events = _integral(p2,
                                        p1,
                                        BPASS_LINEAR_TIME_EDGES,
                                        spectra[Z_index_per_bin[count]][wl],
                                        BPASS_LINEAR_TIME_INTERVALS)
-                output_spectra[j][wl] += bin_events*mass_per_bin[count]
+                output_spectra[j][wl] += bin_events * mass_per_bin[count]
     return output_spectra
-
 
 
 @numba.njit
@@ -394,26 +420,31 @@ def _at_time_spectrum(Z_values, mass_per_bin, edges, spectra):
         The bin edges of the Z_values and mass_per_bin
     spectra : `numpy.ndarray`
         A numpy array containing the spectra with usage
-        edges[age_bin][metallicity]
+        spectra[age_bin][metallicity][wl]
 
     Returns
     -------
-    `float`
-        The number of events happening at edges[0]
+    `numpy.ndarray`
+        The spectrum at at edges[0]
     """
-    Z_index_per_bin = np.array([np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
-    bin_index = np.array([_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
+    Z_index_per_bin = np.array(
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+    bin_index = np.array(
+        [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
     out = np.zeros(100000)
     for count in range(len(mass_per_bin)):
-        out += spectra[bin_index[count]][Z_index_per_bin[count]]*mass_per_bin[count]
+        out += spectra[bin_index[count]
+                       ][Z_index_per_bin[count]] * mass_per_bin[count]
     return out
+
 
 ##########################
 #    HELPER FUNCTIONS    #
 ##########################
+
 @numba.njit
 def _integral(x1, x2, edges, values, bin_width):
-    """The numba wrapper around a basic integration for the histogram.
+    """The numba wrapper around a basic integration method
 
     Parameters
     ----------
@@ -438,18 +469,23 @@ def _integral(x1, x2, edges, values, bin_width):
     upper_bin = _get_bin_index(x2, edges)
 
     total = 0
-    if lower_bin == upper_bin:
-        total = values[lower_bin] * (x2-x1)
-    else:
 
-        ledge = lower_bin+1
-        total += (values[lower_bin] * (edges[ledge]-x1))
+    # Values within the same bin. Return fraction of the bin
+    if lower_bin == upper_bin:
+        total = values[lower_bin] * (x2 - x1)
+    else:
+        # Add part of the lower and upper bin to the total
+        ledge = lower_bin + 1
+        total += (values[lower_bin] * (edges[ledge] - x1))
         total += (values[upper_bin] * (x2 - edges[upper_bin]))
 
+        # Add any remaining bins to the total
         if ledge < upper_bin:
-            total += np.sum(bin_width[ledge:upper_bin]*values[ledge:upper_bin])
+            total += np.sum(bin_width[ledge:upper_bin]
+                            * values[ledge:upper_bin])
 
     return total
+
 
 @numba.njit
 def _get_bin_index(x, edges):
@@ -457,7 +493,7 @@ def _get_bin_index(x, edges):
 
     Note
     -----
-    Used to speed up the calculation.
+    Numba is used to speed up the bin index calculation.
 
     Parameters
     ----------
@@ -471,22 +507,17 @@ def _get_bin_index(x, edges):
         bin index
 
     """
+    # Check if x within edge ranges
     if x < edges[0] or x > edges[-1]:
-        # CODEREVIEW [H]: Use Hoki Exception (this is probably a hoki formatting problem if it's a formatting you chose
-        # and want to impose.
-        raise Exception("x outside of range")
-    out = 0
+        raise HokiFormatError("x outside of range")
 
-    for i, val in enumerate(edges):
-        if val > x:
-            out = i-1
-            break
+    out = 0
+    # if x is equal to the last bin, return len-2
     if x == edges[-1]:
-        out = len(edges)-2
+        out = len(edges) - 2
+    # Loop over bin edges to find bin
+    for i, val in enumerate(edges):
+        if val > x:  # x larger than bin, return answer
+            out = i - 1
+            break
     return int(out)
-    # if x < edges[0] or x > edges[-1]:
-    #     raise Exception("x outside of range")
-    # mids = (edges[1:] + edges[:-1])/2   # calculate bin midpoints
-    # d = np.abs(x - mids)                # distance to midpoints
-    # outer = np.where(d == d.min())      # find shortest
-    # return outer[0][-1]           # select last, such that lower edge inclusive

@@ -4,11 +4,13 @@ Object to calculate the event rate at a certain
 lookback time or over binned lookback time
 """
 
-import hoki.csp.utils as utils
-from hoki.utils.hoki_object import HokiObject
-from hoki.utils.exceptions import HokiFatalError
 import numpy as np
+
+import hoki.csp.utils as utils
 from hoki.constants import *
+from hoki.utils.exceptions import HokiFatalError
+from hoki.utils.hoki_object import HokiObject
+
 
 class CSPEventRate(HokiObject, utils.CSP):
     """
@@ -16,7 +18,7 @@ class CSPEventRate(HokiObject, utils.CSP):
 
     Parameters
     ----------
-    data_folder : `str`
+    data_path : `str`
         Folder containing the BPASS data files (in units #events per bin)
     imf : `str`
         The BPASS identifier for the IMF of the BPASS event rate files.
@@ -27,19 +29,19 @@ class CSPEventRate(HokiObject, utils.CSP):
     Attributes
     ----------
     bpass_rates : pandas.DataFrame
-        The BPASS delay time distributions in #events/yr/M_\odot per metallicity.
+        The BPASS delay time distributions in #events/yr/M_\\odot per metallicity.
     """
 
-    def __init__(self, data_folder, imf, binary=True):
-        # Check for valid IMF's
-        self.bpass_rates = utils._normalise_rates(utils.load_rates(data_folder, imf, binary=binary))
+    def __init__(self, data_path, imf, binary=True):
+        self.bpass_rates = utils._normalise_rates(
+            utils.load_rates(data_path, imf, binary=binary))
 
     def calculate_rate_over_time(self,
                                  sfh_functions,
                                  Z_functions,
                                  event_types,
                                  nr_bins,
-                                 return_edges = False
+                                 return_edges=False
                                  ):
         """
         Calculates the event rates over lookback time.
@@ -72,27 +74,28 @@ class CSPEventRate(HokiObject, utils.CSP):
         # input sfr objects?
         self._type_check_histories(sfh_functions, Z_functions)
         if isinstance(event_types, type(list)):
-            raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
+            raise HokiFatalError(
+                "event_types is not a list. Only a list is taken as input.")
 
         nr_events = len(event_types)
         nr_sfh = len(sfh_functions)
-        output_dtype = np.dtype([(i, np.float64, nr_bins) for i in event_types])
+        output_dtype = np.dtype([(i, np.float64, nr_bins)
+                                 for i in event_types])
         event_rates = np.zeros(nr_sfh, dtype=output_dtype)
 
         time_edges = np.linspace(0, self.now, nr_bins+1)
 
-
-        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges)
-                                        for i in sfh_functions])
-        metallicity_per_bin = np.array([utils.metallicity_per_bin(i, time_edges)
-                                                for i in Z_functions])
+        mass_per_bin = np.array([utils.mass_per_bin(np.vectorize(i), time_edges)
+                                 for i in sfh_functions])
+        metallicity_per_bin = np.array([utils.metallicity_per_bin(np.vectorize(i), time_edges)
+                                        for i in Z_functions])
         for counter, (mass, Z) in enumerate(zip(mass_per_bin,  metallicity_per_bin)):
             for count, t in enumerate(event_types):
 
                 event_rate = utils._over_time(Z,
-                                       mass,
-                                       time_edges,
-                                       self.bpass_rates[t].T.to_numpy())
+                                              mass,
+                                              time_edges,
+                                              self.bpass_rates[t].T.to_numpy())
 
                 event_rates[counter][count] = event_rate/np.diff(time_edges)
 
@@ -106,7 +109,7 @@ class CSPEventRate(HokiObject, utils.CSP):
                                Z_functions,
                                event_types,
                                t,
-                               sample_rate = None
+                               sample_rate=None
                                ):
         """
         Calculates the event rates at lookback time `t`.
@@ -134,8 +137,8 @@ class CSPEventRate(HokiObject, utils.CSP):
 
         self._type_check_histories(sfh_functions, Z_functions)
         if isinstance(event_types, type(list)):
-            raise HokiFatalError("event_types is not a list. Only a list is taken as input.")
-
+            raise HokiFatalError(
+                "event_types is not a list. Only a list is taken as input.")
 
         # The setup of these elements could almost all be combined into a function
         # with code that's repeated above.
@@ -146,16 +149,16 @@ class CSPEventRate(HokiObject, utils.CSP):
         if sample_rate == None:
             time_edges = BPASS_LINEAR_TIME_EDGES
         else:
-            time_edges = np.linspace(0,13.8e9, sample_rate+1)
+            time_edges = np.linspace(0, self.now, sample_rate+1)
 
         mass_per_bin = np.array([utils.mass_per_bin(i, t+time_edges)
-                                    for i in sfh_functions])
+                                 for i in sfh_functions])
         metallicity_per_bin = np.array([utils.metallicity_per_bin(i, t+time_edges)
-                                                for i in Z_functions])
+                                        for i in Z_functions])
         for counter, (mass, Z) in enumerate(zip(mass_per_bin, metallicity_per_bin)):
             for count, ty in enumerate(event_types):
 
-                event_rates[counter][count] = utils._at_time(Z, mass, time_edges,self.bpass_rates[ty].T.to_numpy())
-
+                event_rates[counter][count] = utils._at_time(
+                    Z, mass, time_edges, self.bpass_rates[ty].T.to_numpy())
 
         return event_rates

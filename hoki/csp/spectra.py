@@ -2,34 +2,34 @@
 Object to calculate the spectra at a certain
 lookback time or over a binned lookback time
 """
+import numpy as np
 
 import hoki.csp.utils as utils
-from hoki.utils.hoki_object import HokiObject
 from hoki.constants import *
-import hoki.csp.utils as utils
+from hoki.utils.hoki_object import HokiObject
 
-
-# TODO add IMF selection
 
 class CSPSpectra(HokiObject, utils.CSP):
     """Object to calculate synthetic spectra with complex stellar formation histories.
 
     Parameters
     ----------
-    data_folder : `str`
+    data_path : `str`
         folder containing the BPASS data files
     binary : boolean
         If `True`, loads the binary files. Otherwise, just loads single stars.
         Default=True
     """
-    def __init__(self, data_folder, imf, binary=True):
-        self.bpass_spectra = utils._normalise_spectrum(utils.load_spectra(data_folder, imf, binary=binary))
+
+    def __init__(self, data_path, imf, binary=True):
+        self.bpass_spectra = utils._normalise_spectrum(
+            utils.load_spectra(data_path, imf, binary=binary))
 
     def calculate_spec_over_time(self,
                                  sfh_functions,
                                  Z_functions,
                                  nr_bins,
-                                 return_edges = False
+                                 return_edges=False
                                  ):
         """
         Calculates spectra over lookback time.
@@ -65,21 +65,24 @@ class CSPSpectra(HokiObject, utils.CSP):
 
         # Initialise binning
         time_edges = np.linspace(0, self.now, nr_bins+1)
-
         # Calculate mass and average metallicity per bin
-        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges) for i in sfh_functions])
-        metallicity_per_bin = np.array([utils.metallicity_per_bin(i, time_edges) for i in Z_functions])
+        mass_per_bin = np.array(
+            [utils.mass_per_bin(i, time_edges) for i in sfh_functions])
+        metallicity_per_bin = np.array(
+            [utils.metallicity_per_bin(i, time_edges) for i in Z_functions])
 
         spectra = np.zeros((nr_sfh, nr_bins, 100000), dtype=np.float64)
+        print(spectra)
         # Make numpy array with usage [metallicity][wavelength][age]
         # for faster access and integration over time.
-        np_spectra = self.bpass_spectra.T.to_numpy().reshape(13, 100000, 51)
+        np_spectra = np.reshape(
+            self.bpass_spectra.T.to_numpy(), (13, 100000, 51))
 
         for counter, (mass, Z) in enumerate(zip(mass_per_bin,  metallicity_per_bin)):
-            spec = utils._over_time_spectra(Z,
-                                    mass,
-                                    time_edges,
-                                    np_spectra)
+            spec = utils._over_time_spectrum(Z,
+                                             mass,
+                                             time_edges,
+                                             np_spectra)
 
             spectra[counter] = spec/np.diff(time_edges)[:, None]
         if return_edges:
@@ -129,12 +132,14 @@ class CSPSpectra(HokiObject, utils.CSP):
         else:
             time_edges = np.linspace(0, 13.8e9, sample_rate+1)
 
-        mass_per_bin = np.array([utils.mass_per_bin(i, time_edges) for i in sfh_functions])
+        mass_per_bin = np.array(
+            [utils.mass_per_bin(i, time_edges) for i in sfh_functions])
         metallicity_per_bin = np.array([utils.metallicity_per_bin(i, time_edges)
-                                                for i in Z_functions])
+                                        for i in Z_functions])
 
         # make numpy.ndarray and reshape to use in [age][metallicity][wl]
-        np_spectra = self.bpass_spectra.to_numpy().reshape(51, 13, 100000)
+        np_spectra = np.reshape(
+            self.bpass_spectra.to_numpy(), (51, 13, 100000))
 
         for counter, (mass, Z) in enumerate(zip(mass_per_bin, metallicity_per_bin)):
             spectrum[counter] = utils._at_time_spectrum(Z,

@@ -3,10 +3,12 @@ Authors: Max Briel and Heloise Stevance
 
 Object to contain the stellar formation history.
 """
-import numpy as np
-import hoki.csp.utils as utils
-from hoki.utils.exceptions import HokiKeyError, HokiTypeError, HokiFormatError, HokiAttributeError
 import matplotlib.pyplot as plt
+import numpy as np
+
+import hoki.csp.utils as utils
+from hoki.utils.exceptions import (HokiAttributeError, HokiFormatError,
+                                   HokiKeyError, HokiTypeError)
 
 # [M]: Should metallicity be part of this?
 # [H]: Not sure what you mean
@@ -16,14 +18,15 @@ def sfherrormessage(func, *args, **kwargs):
     """
     A decorator to automate a repeated error message.
     """
-    def wrapper( *args, **kwargs):
-        e_message="DEBUGGING ASSISTANT: make sure the parameters_dict contains " \
-                  "all the necessary parameters spelt correctly. " \
-                  "Accepted parameters are: 'tau', 'T0', 'constant', 'alpha', 'beta'"
+    def wrapper(*args, **kwargs):
+        e_message = "DEBUGGING ASSISTANT: make sure the parameters_dict contains " \
+            "all the necessary parameters spelt correctly. " \
+            "Accepted parameters are: 'tau', 'T0', 'constant', 'alpha', 'beta'"
         try:
             func(*args, **kwargs)
         except KeyError as e:
-            raise HokiKeyError(f"{e} has not been defined and I need it. "+e_message)
+            raise HokiKeyError(
+                f"{e} has not been defined and I need it. "+e_message)
     return wrapper
 
 
@@ -76,26 +79,31 @@ class SFH(object):
         #### Star Formation History Types and Calculations ###
         if sfh_type == "custom" and sfh_arr is not None:
             if len(self.time_axis) != len(sfh_arr):
-                raise HokiFormatError("time_axis and sfh_arr do not have the same length.")
+                raise HokiFormatError(
+                    "time_axis and sfh_arr do not have the same length.")
 
-            self._sfh_calculator = lambda x : np.interp(x, self.time_axis, self.sfh)
+            self._sfh_calculator = lambda x: np.interp(
+                x, self.time_axis, self.sfh)
 
         elif set([sfh_type]) - set(self.parametric_sfh_dic.keys()) == set():
-            if sfh_type=='custom':
+            if sfh_type == 'custom':
                 raise HokiFormatError('Something went wrong with your custom SFH. DEBUGGING ASSISTANT: Check that the '
                                       'sfh_arr parameter is given an array with same length as the time_axis')
             try:
-                invalid_params = set(self.params.keys()) - set(self._valid_parameters)
+                invalid_params = set(self.params.keys()) - \
+                    set(self._valid_parameters)
                 if invalid_params != set():
-                    raise HokiFormatError(f"You submitted invalid parameters: {invalid_params}")
+                    raise HokiFormatError(
+                        f"You submitted invalid parameters: {invalid_params}")
             except AttributeError:
                 raise HokiAttributeError("Did you provide a parameters_dict?")
 
             getattr(self, self.parametric_sfh_dic[sfh_type])()  # (self.params)
-            self._sfh_calculator = lambda x: np.interp(x, self.time_axis, self.sfh)
+            self._sfh_calculator = lambda x: np.interp(
+                x, self.time_axis, self.sfh)
 
         else:
-            raise HokiTypeError(f"SFH type not recognised\nDEBUGGING ASSISTANT: Valid options are" \
+            raise HokiTypeError(f"SFH type not recognised\nDEBUGGING ASSISTANT: Valid options are"
                                 f" {list(self.parametric_sfh_dic)}")
 
     def sfr_at(self, t):
@@ -152,13 +160,13 @@ class SFH(object):
     @sfherrormessage
     def _dble_pwr_law_sfh(self):
         self.sfh = self.params['constant'] / ((self.time_axis / self.params['tau']) ** self.params['alpha'] + (
-                self.time_axis / self.params['tau']) ** (-self.params['beta']))
+            self.time_axis / self.params['tau']) ** (-self.params['beta']))
 
     @sfherrormessage
     def _lognormal_sfh(self):
         self.sfh = self.params['constant'] * (
-                    (1 / np.sqrt(2 * np.pi * self.params['tau'] ** 2)) * (1 / self.params['tau']) * np.exp(
-            - ((np.log(self.time_axis) - self.params['T0']) ** 2) / (2 * self.params['tau'] ** 2)))
+            (1 / np.sqrt(2 * np.pi * self.params['tau'] ** 2)) * (1 / self.params['tau']) * np.exp(
+                - ((np.log(self.time_axis) - self.params['T0']) ** 2) / (2 * self.params['tau'] ** 2)))
 
     def plot(self, loc=111, **kwargs):
         # return plot
