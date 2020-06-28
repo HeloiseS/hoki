@@ -10,7 +10,6 @@ from hoki.utils.progressbar import print_progress_bar
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
 
-#TODO: Write tutorial
 
 bpass_input_z_list = ['zem5','zem4', 'z001', 'z002', 'z003', 'z004', 'z006',
                        'z008', 'z014', 'z010', 'z020','z030','z040']
