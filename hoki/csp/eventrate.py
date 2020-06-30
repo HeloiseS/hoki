@@ -1,18 +1,20 @@
-#!/usr/local/bin/python3
 """
+Author: Max Briel
+
 Object to calculate the event rate at a certain
 lookback time or over binned lookback time
 """
 
 import numpy as np
 
+from hoki.csp.csp import CSP
 import hoki.csp.utils as utils
 from hoki.constants import *
 from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.hoki_object import HokiObject
 
 
-class CSPEventRate(HokiObject, utils.CSP):
+class CSPEventRate(HokiObject, CSP):
     """
     Object to calculate event rates using complex stellar formation histories.
 

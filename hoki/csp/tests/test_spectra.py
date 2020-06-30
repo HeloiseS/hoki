@@ -1,4 +1,6 @@
 """
+Author: Max Briel
+
 Tests for the CSP spectra subpackage.
 """
 import os
@@ -40,7 +42,7 @@ class TestCSPSSpectra(object):
             13, 51, 100000), "Output shape is wrong."
 
     def test_compiled_file(self):
-        assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy"),
+        assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy"),\
         "No compiled file is made."
 
     def test_calculate_spec_at_time(self):

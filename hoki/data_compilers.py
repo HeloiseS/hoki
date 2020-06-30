@@ -1,4 +1,6 @@
 """
+Author: Max Briel
+
 Objects and pipelines that compile BPASS data files into more convenient, more pythonic data types
 """
 

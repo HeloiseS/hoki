@@ -1,4 +1,6 @@
 """
+Author: Max Briel
+
 Tests for the data_compiler package
 """
 

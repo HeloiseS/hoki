@@ -4,12 +4,14 @@ lookback time or over a binned lookback time
 """
 import numpy as np
 
+
 import hoki.csp.utils as utils
+from hoki.csp.csp import CSP
 from hoki.constants import *
 from hoki.utils.hoki_object import HokiObject
 
 
-class CSPSpectra(HokiObject, utils.CSP):
+class CSPSpectra(HokiObject, CSP):
     """
     Object to calculate synthetic spectra with complex stellar formation histories.
 

@@ -6,7 +6,7 @@ Object to contain the stellar formation history.
 import matplotlib.pyplot as plt
 import numpy as np
 
-import hoki.csp.utils as utils
+from hoki.csp.utils import mass_per_bin
 from hoki.utils.exceptions import (HokiAttributeError, HokiFormatError,
                                    HokiKeyError, HokiTypeError)
 
@@ -129,7 +129,7 @@ class SFH(object):
             The mass per time bin given the time edges.
         """
 
-        return utils.mass_per_bin(self._sfh_calculator, time_edges, sample_rate=sample_rate)
+        return mass_per_bin(self._sfh_calculator, time_edges, sample_rate=sample_rate)
 
     @sfherrormessage
     def _constant_sfh(self):

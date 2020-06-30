@@ -1,4 +1,6 @@
 """
+Author: Max Briel
+
 Test for the Complex Stellar Population event rate calculations
 """
 
@@ -114,13 +116,13 @@ class TestCSPEventRate():
         out = self.CSP.calculate_rate_over_time(
             [sfh_fnc], [Z_fnc], ["Ia", "II"], 100)
         assert len(out) == 1, "The output of calculate_over_time is wrong."
-        assert len(out[0]) == 2, , "The output of calculate_over_time is wrong."
+        assert len(out[0]) == 2, "The output of calculate_over_time is wrong."
 
     def test_event_rate_calculation_multi(self):
         out = self.CSP.calculate_rate_over_time(
             [sfh_fnc, sfh_fnc], [Z_fnc, Z_fnc], ["Ia"], 100)
-        assert len(out) == 2, , "The output ofcalculate_over_time is wrong."
-        assert len(out[0]) == 1, , "The output of calculate_over_time is wrong."
+        assert len(out) == 2, "The output ofcalculate_over_time is wrong."
+        assert len(out[0]) == 1, "The output of calculate_over_time is wrong."
 
     def test_event_rate_at_time(self):
         x = self.CSP.calculate_rate_at_time([sfh_fnc], [Z_fnc], ["Ia"], 0)

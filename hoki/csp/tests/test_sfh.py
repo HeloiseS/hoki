@@ -1,4 +1,6 @@
 """
+Author: Max Briel
+
 Test the stellar formation history object
 """
 
