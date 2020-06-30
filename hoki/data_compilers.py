@@ -13,14 +13,16 @@ from hoki.utils.progressbar import print_progress_bar
 
 class SpectraCompiler():
     """
-    Pipeline to load the BPASS spectra txt files and save them as a pandas DataFrame.
+    Pipeline to load the BPASS spectra txt files and save them as a 3D
+    `numpy.ndarray`.
 
     Attributes
     ----------
-    spectra : `pandas.DataFrame`
-        A DataFrame containing all the spectra for a specific imf and
-        binary/single star population.
-        Usage spectra.loc[log_age, (metallicity, wavelength)]
+    spectra : `numpy.ndarray` (13, 51, 100000) [(metallicity, log_age, wavelength)]
+        A 3D numpy array containing all the BPASS spectra for a specific imf
+        and binary or single star population.
+        Usage: spectra[1][2][1000]
+                (gives L_\\odot for Z=0.0001 and log_age=6.2 at 999 Angstrom)
     """
 
     def __init__(self, spectra_folder, output_folder, imf, binary=True, verbose=False):
@@ -31,7 +33,6 @@ class SpectraCompiler():
             Path to the folder containing the spectra of the given imf.
         output_folder : `str`
             Path to the folder, where to output the pickled pandas.DataFrame
-
 
         """
         if verbose:
@@ -48,27 +49,22 @@ class SpectraCompiler():
             raise HokiKeyError(
                 f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
-        # Setup output pandas DataFrame with metallicities and wavelenths
-        arrays = [BPASS_NUM_METALLICITIES, np.linspace(1, 100000, 100000)]
-        columns = pd.MultiIndex.from_product(
-            arrays, names=["Metallicicty", "Wavelength"])
-        print("Allocating memory...", end="")
-        spectra = pd.DataFrame(index=np.linspace(
-            6, 11, 51), columns=columns, dtype=np.float64)
-        spectra.index.name = "log_age"
+
+        # Setup the numpy output
+        spectra = np.zeros((13, 51, 100000), dtype=np.float64)
+
         # loop over all the metallicities and load all the specta
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
             data = model_output(
                 f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat")
-            data = data.loc[:, slice("6.0", "11.0")].T
-            spectra.loc[:, (BPASS_NUM_METALLICITIES[num],
-                            slice(None))] = data.to_numpy()
+            spectra[num] = data.loc[:, slice("6.0", "11.0")].T.to_numpy()
 
-        spectra.to_pickle(f"{output_folder}/all_spectra-{star}-{imf}.pkl")
+        # pickle the datafile
+        np.save(f"{output_folder}/all_spectra-{star}-{imf}", spectra)
         self.spectra = spectra
         print(
-            f"Spectra file stored in {output_folder} as 'all_spectra-{star}-{imf}.pkl'")
+            f"Spectra file stored in {output_folder} as 'all_spectra-{star}-{imf}.npy'")
         if verbose:
             _print_exit_message()
 
