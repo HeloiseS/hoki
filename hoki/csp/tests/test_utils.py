@@ -13,6 +13,7 @@ import pytest
 import hoki.csp.utils as utils
 import hoki.load
 from hoki.constants import *
+from hoki.csp.sfh import SFH
 from hoki.utils.exceptions import HokiFormatError, HokiKeyError, HokiTypeError
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
@@ -32,15 +33,18 @@ class TestCSP(object):
     def test_type_check_history(self):
         csp = utils.CSP()
 
+        # define pyton callable
         def x(i): return i
+
+        # define SFH object
+        time_axis = np.linspace(0, 13e9, 1000)
+        sfh = SFH(time_axis, "b", {"constant": 10, "T0": 5e9})
 
         # Check Types
         with pytest.raises(HokiTypeError):
             csp._type_check_histories([10], [0])
         with pytest.raises(HokiTypeError):
             csp._type_check_histories([10], 0)
-        with pytest.raises(HokiTypeError):
-            csp._type_check_histories([x], x)
         with pytest.raises(HokiTypeError):
             csp._type_check_histories([x, x], [x, 10])
 
@@ -53,7 +57,13 @@ class TestCSP(object):
             csp._type_check_histories([x], [])
 
         # Checking if the correct input does run
-        assert csp._type_check_histories([x], [x]) == None
+        assert csp._type_check_histories([x], [x]) == ([x], [x])
+        assert csp._type_check_histories([x, x], [x, x]) == ([x, x], [x, x])
+        assert csp._type_check_histories(x, x) == ([x], [x])
+        assert csp._type_check_histories([x], x) == ([x], [x])
+        assert csp._type_check_histories(sfh, x) == ([sfh], [x])
+        assert csp._type_check_histories([sfh], [x]) == ([sfh], [x])
+
 
 #############################
 # Test Calculations per bin #
@@ -132,45 +142,37 @@ class TestLoadRates(object):
 
 class TestLoadSpectra(object):
 
-    # Initialise a smaller pandas dataframe
-    columns = pd.MultiIndex.from_product([BPASS_NUM_METALLICITIES, np.linspace(1, 10, 10)],
-                                         names=["Metallicicty", "Wavelength"])
-    df = pd.DataFrame(index=np.linspace(6, 11, 51),
-                      columns=columns, dtype=np.float64)
-
-    # Initialise model_output DataFrame return a smaller single dataframe
+    # Initialise model_output DataFrame
     # This reduces I/O readings
     data = hoki.load.model_output(
         f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
 
-    # Patch the Dataframe creation function
-    @patch("hoki.data_compilers.pd.DataFrame")
     # Patch the model_output function
     @patch("hoki.data_compilers.model_output")
-    def test_compile_spectra(self, mock_model_output, mock_dataframe):
-
-        # Set the smaller output DataFrame as pandas DataFrame creation output
-        mock_dataframe.return_value = self.df
+    def test_compile_spectra(self, mock_model_output):
 
         # Set the model_output to the DataFrame
         mock_model_output.return_value = self.data
 
         spec = utils.load_spectra(f"{data_path}", "imf135_300")
 
-        # Check if pkl file is created
-        assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.pkl")
+        # Check if compiled file is created
+        assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy"),\
+            "No compiled file is created."
 
-        # Check output dataframe
-        npt.assert_allclose(spec.loc[:, (0.002, slice(0, 10))], self.data.T)
+        # Check output numpy array
+        npt.assert_allclose(spec[3], self.data.T,
+                            err_msg="Loading of files has failed.")
 
     def test_load_pickled_file(self):
 
         spec = utils.load_spectra(f"{data_path}", "imf135_300")
 
-        # Check output dataframe
-        npt.assert_allclose(spec.loc[:, (0.002, slice(0, 10))], self.data.T)
+        # Check output numpy array
+        npt.assert_allclose(spec[3], self.data.T,
+                            err_msg="Loading of compiled file has failed.")
 
-        os.remove(f"{data_path}/all_spectra-bin-imf135_300.pkl")
+        os.remove(f"{data_path}/all_spectra-bin-imf135_300.npy")
 
 ################################
 #  Test Normasise BPASS Files  #

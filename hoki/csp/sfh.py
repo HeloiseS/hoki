@@ -10,9 +10,6 @@ import hoki.csp.utils as utils
 from hoki.utils.exceptions import (HokiAttributeError, HokiFormatError,
                                    HokiKeyError, HokiTypeError)
 
-# [M]: Should metallicity be part of this?
-# [H]: Not sure what you mean
-
 
 def sfherrormessage(func, *args, **kwargs):
     """
@@ -106,13 +103,13 @@ class SFH(object):
             raise HokiTypeError(f"SFH type not recognised\nDEBUGGING ASSISTANT: Valid options are"
                                 f" {list(self.parametric_sfh_dic)}")
 
-    def sfr_at(self, t):
+    def __call__(self, t):
         """
-        Returns the stellar formation rate at a given time.
+        Return the stellar formation rate at a given time.
 
         Input
         -----
-        t : float or int
+        t : `float` or `int`
             A lookback time
         """
         return self._sfh_calculator(t)
@@ -123,12 +120,12 @@ class SFH(object):
 
         Input
         -----
-        time_edges : numpy.ndarray
+        time_edges : `numpy.ndarray`
             The edges of the bins in which the mass per bin is wanted in yrs.
 
         Output
         ------
-        numpy.ndarray
+        `numpy.ndarray`
             The mass per time bin given the time edges.
         """
 

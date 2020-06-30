@@ -8,6 +8,7 @@ import pandas as pd
 
 import hoki.load
 from hoki.constants import *
+from hoki.csp.sfh import SFH
 from hoki.data_compilers import SpectraCompiler
 from hoki.utils.exceptions import *
 
@@ -17,7 +18,8 @@ from hoki.utils.exceptions import *
 
 
 class CSP(object):
-    """Complex Stellar Population class
+    """
+    Complex Stellar Population class
 
     Notes
     -----
@@ -33,32 +35,84 @@ class CSP(object):
     def __init__(self):
         pass
 
-    def _type_check_histories(self, sfh_functions, Z_functions):
+    def _type_check_histories(self, sfh, zeh):
         """
         Function to make sure inputted stellar formation history functions and
         metallicity histories are in the correct format.
 
-        """
-        if not isinstance(sfh_functions, list):
-            raise HokiTypeError(
-                "`sfh_functions` is not a list. Only lists are taken as input.")
-        if not isinstance(Z_functions, list):
-            raise HokiTypeError(
-                "`Z_functions` is not a list. Only lists are taken as input.")
-        if len(sfh_functions) != len(Z_functions):
-            raise HokiFormatError(
-                "sfh_functions and Z_functions must have the same length.")
-        if not all(callable(val) for val in sfh_functions):
-            raise HokiTypeError("sfh_functions must only contain functions.")
-        if not all(callable(val) for val in Z_functions):
-            raise HokiTypeError("Z_functions must only contain functions.")
+        Input
+        -----
+        sfh
+            Object to check the type of
+        zeh
+            Object to check the type of
 
+        Returns
+        -------
+        `tuple` ([sfh], [zeh])
+            A tuple containing the sfh callables and zeh callables as arrays.
+        """
+        # Check sfh list
+        if isinstance(sfh, list):
+
+            # check if zeh is also a list
+            if isinstance(zeh, list):
+                # have to be equal lengths
+                if len(sfh) == len(zeh):
+                    # have to be all callables
+                    if (all(callable(val) for val in sfh) and all(callable(val) for val in zeh)):
+                        return (sfh, zeh)
+                    # A non-callable is present
+                    else:
+                        raise HokiTypeError(
+                            "SFH or ZEH contains an object that's not a SFH object or function.")
+                # sfh and zeh are not equal length
+                else:
+                    raise HokiFormatError(
+                        "sfh_functions and Z_functions must have the same length.")
+            # zeh is not a list
+            else:
+                # sfh has to be 1 length and a callable, zeh has to be a callable
+                if len(sfh) == 1:
+                    if (callable(sfh[0]) and callable(zeh)):
+
+                        return (sfh, [zeh])
+                    else:
+                        raise HokiTypeError(
+                            "SFH or ZEH contains an object that's not a SFH object or python callable.")
+                else:
+                    raise HokiFormatError(
+                        "SFH must have length 1, be a python callable, or a SFH object.")
+        # sfh is a callable
+        elif callable(sfh):
+            # zeh is a list
+            if isinstance(zeh, list):
+                # list has to be 1 long, because sfh is callable
+                if len(zeh) == 1:
+                    return ([sfh], zeh)
+                # list it too long
+                else:
+                    raise HokiFormatError(
+                        "ZEH must be either length 1 or a python callable")
+
+            # zeh is also a callable return
+            elif callable(zeh):
+                return ([sfh], [zeh])
+            else:
+                raise HokiTypeError(
+                    "ZEH is not a python callable or a list of callables.")
+        # sfh cannot be identified
+        else:
+            raise HokiTypeError(
+                "SFH type is not a python callable or a SFH object."
+            )
 
 ########################
 # Calculations per bin #
 ########################
 # TODO add check if time outside of age universe range
 # Can these be turned into numba functions?
+
 
 def mass_per_bin(sfh_function, time_edges, sample_rate=100):
     """
@@ -71,8 +125,9 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=100):
 
     Input
     -----
-    sfh_function : `function`
-        A function giving the stellar formation history given a lookback time.
+    sfh_function : `callable
+        A python callable (function) giving the stellar formation rate at a
+        given lookback time.
     time_edges : `numpy.ndarray`
         The edges of the bins in which the mass per bin is wanted in yrs.
     sample_rate : `int`
@@ -81,7 +136,7 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=100):
 
     Output
     ------
-    `numpy.ndarray`
+    `numpy.ndarray` [len(time_edges)-1]
         The mass per time bin.
     """
     # Vectorize function to allow numpy array input
@@ -105,8 +160,8 @@ def metallicity_per_bin(Z_function, time_edges):
 
     Output
     ------
-    `numpy.ndarray`
-        The average metallicity per bin
+    `numpy.ndarray` [len(time_edges)-1]
+        The average metallicity per time bin
     """
     # Vectorize function to allow numpy array input
     vec_func = np.vectorize(Z_function)
@@ -121,7 +176,8 @@ def metallicity_per_bin(Z_function, time_edges):
 
 
 def load_rates(data_path, imf, binary=True):
-    """Loads the BPASS supernova event count files.
+    """
+    Loads the BPASS supernova event files.
 
     Notes
     -----
@@ -140,7 +196,24 @@ def load_rates(data_path, imf, binary=True):
     -------
     `pandas.DataFrame`
         A pandas MultiIndex dataframe containing the BPASS number of events
-        per metallicity per type. Usage: rates.loc[log_age, (type, metallicity)]
+        per metallicity per type.
+        Usage: rates.loc[log_age, (type, metallicity)]
+
+
+        Note
+        -----
+        This dataframe has the following structure.
+        The index is the log_age as a float.
+        The column is a `pandas.MultiIndex` with the event types
+        (level=0, `float`) and the metallicity (level=1, `float`)
+
+        |Event Type | Ia      | IIP      |  ... | PISNe | low_mass |
+        |Metallicity| 0.00001 | 0.00001  |  ... |  0.04 |    0.04  |
+        | log_age   |---------|----------|------|-------|----------|
+        |    6.0    |
+        |    ...    |                  Event Rate values
+        |    11.0   |
+
     """
 
     # This is repeated several times. Make a function?
@@ -175,7 +248,7 @@ def load_rates(data_path, imf, binary=True):
 
 def load_spectra(data_path, imf, binary=True):
     """
-    Load all BPASS spectra.
+    Load all BPASS spectra from files.
 
     Notes
     -----
@@ -197,9 +270,11 @@ def load_spectra(data_path, imf, binary=True):
 
     Returns
     -------
-    `pandas.DataFrame`
-        A pandas DataFrame containing the high quality BPASS spectra.
-        Usage spectra.loc[age, (metallicity, wavelength)]
+    spectra : `numpy.ndarray` (13, 51, 100000) [(metallicity, log_age, wavelength)]
+        A 3D numpy array containing all the BPASS spectra for a specific imf
+        and binary or single star population.
+        Usage: spectra[1][2][1000]
+                (gives L_\\odot for Z=0.0001 and log_age=6.2 at 999 Angstrom)
 
     """
     if binary:
@@ -215,7 +290,8 @@ def load_spectra(data_path, imf, binary=True):
     # Check if compiled spectra are already present in data folder
     try:
         print("Trying to load precompiled file.")
-        spectra = pd.read_pickle(f"{data_path}/all_spectra-{star}-{imf}.pkl")
+        spectra = np.load(f"{data_path}/all_spectra-{star}-{imf}.npy")
+        print("Done Loading.")
 
     # Compile the spectra for faster reading next time
     except FileNotFoundError:
@@ -230,7 +306,8 @@ def load_spectra(data_path, imf, binary=True):
 ###########################
 
 def _normalise_rates(rates):
-    """Normalise the BPASS rates.
+    """
+    Normalise the BPASS event rates.
 
     Input
     -----
@@ -242,23 +319,25 @@ def _normalise_rates(rates):
     `pandas.DataFrame`
         A pandas DataFrame containing the events/yr/M_\\odot
     """
-    return rates.div(1e6 * BPASS_LINEAR_TIME_INTERVALS, axis=0)
+    return rates / (1e6 * BPASS_LINEAR_TIME_INTERVALS[:, None])
 
 
 def _normalise_spectrum(spectra):
-    """Normalises the BPASS spectra.
+    """
+    Normalises the BPASS spectra.
 
     Input
     -----
-    spectra : `pandas.DataFrame`
-        A DataFrame containing the spectra for a 1e6 M_\\odot population.
+    spectra : `numpy.ndarray`
+        A numpy.ndarray containing the spectra for a 1e6 M_\\odot population.
 
     Returns
     -------
-    `pandas.DataFrame`
-        A DataFrame containing the spectra per mass (L_\\odot/M_\\odot).
+    `numpy.ndarray`
+        A numpy.ndarray containing the spectra per mass (L_\\odot/M_\\odot).
     """
-    return spectra.div(1e6, axis=0)
+    return spectra*1e-6
+
 
 ###########################
 #   BPASS Metallicities   #
@@ -266,7 +345,8 @@ def _normalise_spectrum(spectra):
 
 
 def _find_bpass_metallicities(Z_values):
-    """Finds the nearest BPASS metallicities for each item in the list.
+    """
+    Finds the nearest BPASS metallicities for each item in the list.
 
     Input
     -----
@@ -275,7 +355,7 @@ def _find_bpass_metallicities(Z_values):
 
     Returns
     -------
-    `numpy.array`
+    `numpy.array` [len(Z_values)]
         A list of the nearest BPASS metallicity for each given metallicity
     """
     return BPASS_NUM_METALLICITIES[[np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values]]
@@ -286,20 +366,26 @@ def _find_bpass_metallicities(Z_values):
 ########################################
 
 @numba.njit
-def _over_time(Z_values, mass_per_bin, edges, rates):
-    """Calculates the events rates per bin over the given bin edges.
+def _over_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
+    """
+    Calculates the events rates per bin over the given bin edges.
 
     Parameters
     ----------
-    Z_values : `numpy.ndarray`
-        An array containing the metallicity values at each bin.
+    Z_per_bin : `numpy.ndarray`
+        An array containing the metallicity values in each time bin.
     mass_per_bin : `numpy.ndarray`
-        An array containig the amount of mass per bin in the final binning.
-    edges : `numpy.ndarray`
-        The bin edges of the Z_values and mass_per_bin
-    rates : `numpy.ndarray`
-        A 2D array containig the different metallicities over time
-        in BPASS binning. Format rates[metallicity][time]
+        An array containig the amount of mass per time bin.
+    time_edges : `numpy.ndarray`
+        The bin edges of the Z_per_bin and mass_per_bin
+
+    bpass_rates : `numpy.ndarray`
+        A 2D array containig the event rates for all BPASS metallicities over
+        time in BPASS bins.
+        Shape: (13x51)
+        Usage: bpass_rates[0][2]
+                (gives the event rate at the metallicity 0.00001 and
+                 a log_age of 6.2)
 
     Returns
     -------
@@ -308,133 +394,150 @@ def _over_time(Z_values, mass_per_bin, edges, rates):
 
     """
     Z_index_per_bin = np.array(
-        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
     event_rate = np.zeros(len(mass_per_bin))
 
     for count in range(len(mass_per_bin)):
-        t = edges[count + 1]
+        t = time_edges[count + 1]
         for j in range(0, count + 1):
-            p1 = t - edges[j]
-            p2 = t - edges[j + 1]
+            p1 = t - time_edges[j]
+            p2 = t - time_edges[j + 1]
             bin_events = _integral(p2,
                                    p1,
                                    BPASS_LINEAR_TIME_EDGES,
-                                   rates[Z_index_per_bin[count]],
+                                   bpass_rates[Z_index_per_bin[count]],
                                    BPASS_LINEAR_TIME_INTERVALS)
             event_rate[j] += bin_events * mass_per_bin[count]
     return event_rate
 
 
 @numba.njit
-def _at_time(Z_values, mass_per_bin, edges, rates):
-    """Calculates the number of events at a specific time.
+def _at_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
+    """
+    Calculates the number of events at a specific time.
 
     Note
     ----
-    edges[0] defines the time at which the events are calculated.
+    time_edges[0] defines the time at which the events are calculated.
 
     Input
     -----
-    Z_values : `numpy.ndarray`
+    Z_per_bin : `numpy.ndarray`
         An array containing the metallicity values at each bin.
     mass_per_bin : `numpy.ndarray`
         An array containig the amount of mass per bin in the final binning.
-    edges : `numpy.ndarray`
-        The bin edges of the Z_values and mass_per_bin with usage
-    rates : `numpy.ndarray`
+    time_edges : `numpy.ndarray`
+        The bin edges of the Z_per_bin and mass_per_bin with usage
+    bpass_rates : `numpy.ndarray`
         A 2D array containig the different metallicities over time
-        in BPASS binning. Usage: rates[metallicity][time]
+        in BPASS binning.
+        Shape: (13x51)
+        Usage: bpass_rates[0][2]
+                        (gives the event rate at the metallicity 0.00001 and
+                         a log_age of 6.2)
 
     Returns
     -------
     `float`
-        The number of events happening at edges[0]
+        The number of events happening at time_edges[0]
     """
     Z_index_per_bin = np.array(
-        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
-    bin_index = np.array(
-        [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
+    time_index_per_bin = np.array(
+        [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in time_edges])
     out = 0.0
     for count in range(len(mass_per_bin)):
-        out += rates[Z_index_per_bin[count]
-                     ][bin_index[count]] * mass_per_bin[count]
+        out += bpass_rates[Z_index_per_bin[count]
+                           ][time_index_per_bin[count]] * mass_per_bin[count]
     return out
 
 
 @numba.njit
-def _over_time_spectrum(Z_values, mass_per_bin, edges, spectra):
-    """Calculates the spectra per bin over the given bin edges.
+def _over_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
+    """
+    Calculates the spectra per bin over the given bin edges.
 
     Parameters
     ----------
-    Z_values : `numpy.ndarray`
+    Z_per_bin : `numpy.ndarray`
         An array containing the metallicity values at each bin.
     mass_per_bin : `numpy.ndarray`
         An array containig the amount of mass per bin in the final binning.
-    edges : `numpy.ndarray`
-        The bin edges of the Z_values and mass_per_bin
-    rates : `numpy.ndarray`
-        A 2D array containig the different metallicities over time
-        in BPASS binning. Format rates[metallicity][wl][time]
+    time_edges : `numpy.ndarray`
+        The bin edges of the Z_per_bin and mass_per_bin
+    bpass_spectra : `numpy.ndarray`
+        A 3D array containig the BPASS spectra luminosities per solar mass for
+        the BPASS metallicities and time bins.
+        Shape: (13, 51, 100000) ([metallicities][log_ages][wavelength])
+        Usage: `bpass_spectra[0][1][99]` or `bpass_spectra[0, 1, 99]`
+                (gives the L_\\odot/M_\\odot at Z=0.00001, 100 Angstrom at
+                log_age 6.1)
 
     Returns
     -------
     `numpy.ndarray`
-        An `numpy.ndarray` with the following shape: (nr_time_bins, 100000)
+        An `numpy.ndarray` containing a spectrum per time bin.
+        Shape: (len(time_edges)-1, 100000)
 
     """
     Z_index_per_bin = np.array(
-        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
     output_spectra = np.zeros((len(mass_per_bin), 100000))
 
     for count in range(len(mass_per_bin)):
-        t = edges[count + 1]
+        t = time_edges[count + 1]
         for j in range(0, count + 1):
-            p1 = t - edges[j]
-            p2 = t - edges[j + 1]
+            p1 = t - time_edges[j]
+            p2 = t - time_edges[j + 1]
             for wl in np.arange(100000):
                 bin_events = _integral(p2,
                                        p1,
                                        BPASS_LINEAR_TIME_EDGES,
-                                       spectra[Z_index_per_bin[count]][wl],
+                                       bpass_spectra[Z_index_per_bin[count], :, wl],
                                        BPASS_LINEAR_TIME_INTERVALS)
                 output_spectra[j][wl] += bin_events * mass_per_bin[count]
     return output_spectra
 
 
 @numba.njit
-def _at_time_spectrum(Z_values, mass_per_bin, edges, spectra):
-    """Calculates the spectrum at a specific moment in lookback time.
+def _at_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
+    """
+    Calculates the spectrum at a specific moment in lookback time.
 
     Note
     ----
-    edges[0] defines the time at which the spectrum is calculated.
+    time_edges[0] defines the time at which the spectrum is calculated.
 
     Input
     -----
-    Z_values : `numpy.ndarray`
+    Z_per_bin : `numpy.ndarray`
         An array containing the metallicity values at each bin.
     mass_per_bin : `numpy.ndarray`
         An array containig the amount of mass per bin in the final binning.
-    edges : `numpy.ndarray`
-        The bin edges of the Z_values and mass_per_bin
-    spectra : `numpy.ndarray`
-        A numpy array containing the spectra with usage
-        spectra[age_bin][metallicity][wl]
+    time_edges : `numpy.ndarray`
+        The bin edges of the Z_per_bin and mass_per_bin
+    bpass_spectra : `numpy.ndarray`
+        A 3D array containig the BPASS spectra luminosities per solar mass for
+        the BPASS metallicities and time bins.
+        Shape: (13x51x100000) ([metallicities][log_ages][wavelength])
+        Usage: `bpass_spectra[0][1][99]` or `bpass_spectra[0, 1, 99]`
+                (gives the L_\\odot/M_\\odot at Z=0.0001, 100 Angstrom at
+                log_age 6.0)
 
     Returns
     -------
-    `numpy.ndarray`
-        The spectrum at at edges[0]
+    `numpy.ndarray` (100000)
+        The spectrum at at time_edges[0]
     """
     Z_index_per_bin = np.array(
-        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_values])
-    bin_index = np.array(
-        [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in edges])
+        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
+    time_index_per_bin = np.array(
+        [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in time_edges])
     out = np.zeros(100000)
+    print(bpass_spectra.shape)
     for count in range(len(mass_per_bin)):
-        out += spectra[bin_index[count]
-                       ][Z_index_per_bin[count]] * mass_per_bin[count]
+        out += bpass_spectra[Z_index_per_bin[count],
+                             time_index_per_bin[count], :] * mass_per_bin[count]
     return out
 
 
@@ -444,24 +547,25 @@ def _at_time_spectrum(Z_values, mass_per_bin, edges, spectra):
 
 @numba.njit
 def _integral(x1, x2, edges, values, bin_width):
-    """The numba wrapper around a basic integration method
+    """
+    Perfoms an intergral over histogram-like binned data.
 
     Parameters
     ----------
-    x1 : float
+    x1 : `float`
         lower bound of the integration
-    x2 : float
+    x2 : `float`
         upper bound of the integration
-    edges : array
-        The histogram bin edges
-    values : array
-        The values in each bin of the histogram
-    bin_width : array
-        The width of each bin in the historgam
+    edges : `numpy.ndarray`
+        The edges of the bins
+    values : `numpy.ndarray`
+        The values in each bin
+    bin_width : `numpy.ndarray`
+        The width of each bin
 
     Returns
     -------
-    float
+    `float`
         The integral between **x1** and **x2**
 
     """
@@ -489,7 +593,8 @@ def _integral(x1, x2, edges, values, bin_width):
 
 @numba.njit
 def _get_bin_index(x, edges):
-    """Get the bin number given the edges.
+    """
+    Get the bin number given the edges.
 
     Note
     -----
@@ -497,14 +602,14 @@ def _get_bin_index(x, edges):
 
     Parameters
     ----------
-    x : float
+    x : `float`
         value where you want to know the bin number
-    edges: array
+    edges: `numpy.ndarray`
         An array with the edges of the histogram
     Returns
     -------
-    int
-        bin index
+    `int`
+        bin index of x
 
     """
     # Check if x within edge ranges

@@ -32,7 +32,7 @@ class TestSFHCustom(object):
 
     def test_sfr_at(self):
         assert np.isclose(
-            [self.sfh.sfr_at(i) for i in time_axis],
+            [self.sfh(i) for i in time_axis],
             sfr).all(),\
             "Something is wrong with the stellar formation rate."
 
@@ -72,7 +72,7 @@ class TestSFHParametric(object):
 
     def test_sfr_at(self):
         # this only works for constant sfr = 1
-        assert np.isclose([self.sfh.sfr_at(i) for i in time_axis], [1]*len(time_axis)).all(),\
+        assert np.isclose([self.sfh(i) for i in time_axis], [1]*len(time_axis)).all(),\
             "Something is wrong with the stellar formation rate."
 
     def test_mass_per_bin(self):
