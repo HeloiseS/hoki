@@ -23,7 +23,7 @@ class TestSpectraCompiler(object):
     # Initialise model_output DataFrame return a smaller single dataframe
     # This reduces I/O readings
     data = model_output(
-        f"{data_path}/spectra/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
+        f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
 
     # Patch the model_output function
     @patch("hoki.data_compilers.model_output")
