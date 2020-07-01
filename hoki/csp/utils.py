@@ -201,6 +201,7 @@ def load_spectra(data_path, imf, binary=True):
 
     # Compile the spectra for faster reading next time
     except FileNotFoundError:
+        print("Failed")
         print("Data will be compiled")
         spec = SpectraCompiler(data_path, data_path, imf)
         spectra = spec.spectra
@@ -440,7 +441,6 @@ def _at_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
     time_index_per_bin = np.array(
         [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in time_edges])
     out = np.zeros(100000)
-    print(bpass_spectra.shape)
     for count in range(len(mass_per_bin)):
         out += bpass_spectra[Z_index_per_bin[count],
                              time_index_per_bin[count], :] * mass_per_bin[count]
