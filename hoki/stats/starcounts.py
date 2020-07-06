@@ -5,7 +5,6 @@ import pandas as pd
 import corner
 import matplotlib.pyplot as plt
 
-#TODO: UNITEST
 def ratio_with_poisson_errs(n1, n2):
     """
     Returns Star Count Ratio and its error
@@ -29,7 +28,6 @@ def ratio_with_poisson_errs(n1, n2):
     dR = R*np.sqrt((1/n1)+(1/n2))
     return R, dR
 
-#TODO: UNITEST
 class UnderlyingCountRatio(HokiObject):
     """
     Pipeline to calculate the underlying stellar number count ratio from observed stellar numbers
@@ -197,9 +195,12 @@ class UnderlyingCountRatio(HokiObject):
             return self.summary_df
 
         columns = ['Variable', f'{int(50 - self.ci_width / 2)}th', '50th', f'{int(50 + self.ci_width / 2)}th']
-        self.summary_df = pd.DataFrame(np.array([np.concatenate((np.array(['R_hat']), np.round(self.R_hat, 4))),
-                                                 np.concatenate((np.array(['n2_hat']), np.round(self.n2_hat, 4)))]),
-                                       columns=columns)
+        row1 = np.array(['R_hat', np.round(self.R_hat[2], 4),
+                         np.round(self.R_hat[0], 4), np.round(self.R_hat[1], 4)])
+        row2 = np.array(['n2_hat', np.round(self.n2_hat[2], 4),
+                         np.round(self.n2_hat[1], 4), np.round(self.n2_hat[0], 4)])
+
+        self.summary_df = pd.DataFrame(np.array([row1, row2]), columns=columns)
         return self.summary_df
 
     def corner_plot(self, output_file='corner_plot.png', show=True):
