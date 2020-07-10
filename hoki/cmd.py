@@ -92,7 +92,8 @@ class CMD(HokiObject):
         self._log_ages = None
         self._ages = None
         self.mag_filter = None
-        self.filter2 = None
+        self.col_filter1 = None
+        self.col_filter2 = None
 
     def make(self, mag_filter, col_filters):
         """
