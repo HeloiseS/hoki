@@ -25,6 +25,8 @@ BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
 BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
 BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
 
+HOKI_NOW = 13.799e9
+
 # Create a deprecation warning when using dummy_dict
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,
               'ONe_core1': 8, 'X': 10, 'Y': 11, 'C': 12, 'N': 13, 'O': 14, 'Ne': 15, 'MH1': 16, 'MHe1': 17, 'MC1': 18,

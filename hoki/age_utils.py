@@ -13,7 +13,7 @@ class AgeWizard(HokiObject):
     AgeWizard object
     """
 
-    def __init__(self, obs_df, model, test=None):
+    def __init__(self, obs_df, model):
         """
         Initialisation of the AgeWizard object
 
@@ -25,10 +25,6 @@ class AgeWizard(HokiObject):
         model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
             Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
             path to an HR Diagram file or a pickled CMD.
-        test: str, optional
-            This is a development testing feature that will be removed or refactored. Valid options are: 'norm' for
-            normalise, 'div' for divide. Default is None for the OG agewizard method which neither normalises nor divides
-            the individual HRDs or CMDs by the width of their time bins.
         """
 
         # Making sure the osbervational properties are given in a format we can use.
@@ -66,20 +62,18 @@ class AgeWizard(HokiObject):
 
         self.obs_df = obs_df
         self.coordinates = find_coordinates(self.obs_df, self.model)
-        if test == 'norm':
-            self._distributions = calculate_distributions_normalised(self.obs_df, self.model)
-        elif test == 'div':
-            self._distributions = calculate_distributions_dt_divided(self.obs_df, self.model)
-        else:
-            self._distributions = calculate_distributions(self.obs_df, self.model)
 
-        self.pdfs = calculate_individual_pdfs(self.obs_df, self.model, test).fillna(0)
+        # This line is obsolete but might need revival if we ever want to add the not normalised distributions again
+        # self._distributions = calculate_distributions_normalised(self.obs_df, self.model)
+
+        self.pdfs = calculate_individual_pdfs(self.obs_df, self.model).fillna(0)
         self.sources = self.pdfs.columns.to_list()
         self.sample_pdf = None
         self._most_likely_age = None
 
     def calculate_sample_pdf(self, not_you=None, return_df=False):
-        self.sample_pdf = calculate_sample_pdf(self._distributions, not_you=not_you)
+        #self.sample_pdf = calculate_sample_pdf(self._distributions, not_you=not_you)
+        self.sample_pdf = calculate_sample_pdf(self.pdfs, not_you=not_you)
         if return_df: return self.sample_pdf
 
     @property
@@ -269,31 +263,47 @@ def _find_cmd_coordinates(obs_df, mycmd):
     return col_i, mag_i
 
 
-def normalise_1d(distribution):
+def normalise_1d(distribution, crop_the_future=False):
     """
     Simple function that devides by the sum of the 1D array or DataFrame given.
     """
+    if crop_the_future:
+        distribution = _crop_the_future(distribution)
+
     area = np.sum([bin_t for bin_t in distribution])
     return distribution / area
 
 
-def calculate_individual_pdfs(obs_df, model, test=None):
-    if test == 'norm':
-        likelihoods = calculate_distributions_normalised(obs_df, model)
-    elif test == 'div':
-        likelihoods = calculate_distributions_dt_divided(obs_df, model)
-    else:
-        likelihoods = calculate_distributions(obs_df, model)
+def _crop_the_future(distribution):
+    # Anything about 10.1 is the future -  time bin 42 and above must have proba == 0
+    array_that_erases_the_future = np.array([1]*42+[0]*9)
+    return np.array(distribution)*array_that_erases_the_future
+
+
+def calculate_individual_pdfs(obs_df, model):
+    """
+     Calculates the age pdfs of all the stars in the sample and returns them in a dataframe
+
+     Parameters
+     ----------
+     obs_df: pandas.DataFrame
+        Dataframe containing the observational data
+     model: hoki.hrdiagrams.HRDiagrams or hoki.cmd.CMD
+        BPASS HRDiagram or CMD
+
+     Returns
+     -------
+     pandas.Dataframe containing the age pdfs of each star
+
+    """
+    likelihoods = calculate_distributions_normalised(obs_df, model)
 
     pdfs = []
     for col in likelihoods.columns:
         pdfs.append(normalise_1d(likelihoods[col].values))
+
     return pd.DataFrame(np.array(pdfs).T, columns=likelihoods.columns)
 
-
-####
-# ALL THE DISTRIBUTION TO CHECK
-####
 
 def calculate_distributions(obs_df, model):
     """
@@ -409,7 +419,7 @@ def calculate_distributions_normalised(obs_df, model):
         # pdf_i = normalise_1d(distrib_i)
 
         # finally our pdf is added to the list
-        likelihoods.append(normalise_1d(distrib_i))
+        likelihoods.append(normalise_1d(distrib_i, crop_the_future=True))
 
     # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
     likelihoods_df = pd.DataFrame((np.array(likelihoods)).T, columns=source_names)
@@ -418,75 +428,6 @@ def calculate_distributions_normalised(obs_df, model):
 
     return likelihoods_df
 
-
-def calculate_distributions_dt_divided(obs_df, model):
-    """
-    Given observations and an HR Diagram, calculates the distribution across ages NORMALISED
-
-    Parameters
-    ----------
-    obs_df: pandas.DataFrame
-        Observational data. MUST contain a logT and logL column.
-    model: hoki.hrdiagrams.HRDiagrams or hoki.cmd.CMD
-        BPASS HRDiagram or CMD
-
-    Returns
-    -------
-    Age Probability Distribution Functions in a pandas.DataFrame.
-
-    """
-    # Checking whether it;s HRD or CMD
-    if isinstance(model, hoki.hrdiagrams.HRDiagram):
-        x_coord, y_coord = find_coordinates(obs_df, model)
-    if isinstance(model, hoki.cmd.CMD):
-        y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
-
-    # If source names not given we make our own
-    try:
-        source_names = obs_df.name
-    except AttributeError:
-        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
-        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
-
-    models = [model[i] / model.dt[i] for i in range(51)]
-
-    likelihoods = []
-
-    # Time to calcualte the pdfs
-    for i, name in zip(range(obs_df.shape[0]), source_names):
-        xi, yi = x_coord[i], y_coord[i]  # just saving space
-
-        # Here we take care of the possibility that a coordinate is a NaN
-        if np.isnan(xi) or np.isnan(yi):
-            warnings.warn("NaN Value encountered in coordinates for source: " + name, HokiUserWarning)
-            likelihoods.append([0] * 51)  # Probability is then 0 at all times - That star doesn't exist in our models
-            continue
-
-        # Here we fill our not-yet-nromalised distribution
-        distrib_i = []
-        for model_i in models:
-            # For each time step i, we retrieve the proba in CMD_i or HRD_i and fill our distribution element distrib_i
-            # with it. At the end of the for loop we have iterated over all 51 time bins
-            distrib_i.append(model_i[xi, yi])
-
-        # Then we normalise, so that we have proper probability distributions
-        # pdf_i = normalise_1d(distrib_i)
-
-        # finally our pdf is added to the list
-        likelihoods.append(distrib_i)
-
-    # Our list of pdfs (which is a list of lists) is turned into a PDF with the source names as column names
-    likelihoods_df = pd.DataFrame((np.array(likelihoods)).T, columns=source_names)
-    # We add the time bins in there because it can make plotting extra convenient.
-    # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
-
-    return likelihoods_df
-
-
-
-####
-# END \ ALLL THE DISTRIBUTIONS TO CHECK
-####
 
 def calculate_sample_pdf(distributions_df, not_you=None):
     """
@@ -523,6 +464,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
     # We also must be careful not to multiply the time bin column in there so we have a list of the column names
     # that remain after the "not_you" exclusion minus the time_bins column.
     #columns = [col for col in distributions_df.columns if "time_bins" not in col]
+
     columns = []
     if "time_bins" not in distributions_df.columns:
         for col in distributions_df.columns:
@@ -532,7 +474,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
         # for col in distributions_df.columns:
         combined_pdf += distributions_df[col].values
 
-    combined_df = pd.DataFrame(normalise_1d(combined_pdf))
+    combined_df = pd.DataFrame(normalise_1d(combined_pdf) )
     combined_df.columns = ['pdf']
 
     return combined_df
