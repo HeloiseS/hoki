@@ -85,13 +85,7 @@ class CMD(HokiObject):
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
         self.mag_range = np.arange(mag_lim[0], mag_lim[1], res_el)
         self.grid = None
-
-        assert os.path.isdir(MODELS_PATH), f"DEBUGGING ASSISTANT: Directory MODELS_PATH = {MODELS_PATH} not found.\n " \
-                                           f"You can change MODELS_PATH by hoki.constants.set_models_path([MYPATH])." \
-                                           f"If you've just done that and it looks like it didn't work, try to restart " \
-                                           f"your notebook or terminal ;). "
-        self.path = MODELS_PATH
-
+        self.path = None
         self._my_data = None
         self._col_bins = None
         self._mag_bins = None
@@ -123,6 +117,13 @@ class CMD(HokiObject):
         -------
         None
         """
+        assert os.path.isdir(MODELS_PATH), f"DEBUGGING ASSISTANT: Directory MODELS_PATH = {MODELS_PATH} not found.\n " \
+                                           f"You can change MODELS_PATH by hoki.constants.set_models_path([MYPATH])." \
+                                           f"If you've just done that and it looks like it didn't work, try to restart " \
+                                           f"your notebook or terminal ;). "
+
+        self.path = MODELS_PATH
+
         self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
 
 
