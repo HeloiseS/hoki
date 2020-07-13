@@ -117,12 +117,7 @@ class CMD(HokiObject):
         -------
         None
         """
-        assert os.path.isdir(MODELS_PATH), f"DEBUGGING ASSISTANT: Directory MODELS_PATH = {MODELS_PATH} not found.\n " \
-                                           f"You can change MODELS_PATH by hoki.constants.set_models_path([MYPATH])." \
-                                           f"If you've just done that and it looks like it didn't work, try to restart " \
-                                           f"your notebook or terminal ;). "
 
-        self.path = MODELS_PATH
 
         self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
 
@@ -136,6 +131,13 @@ class CMD(HokiObject):
         except TypeError as e:
             err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: col_filter must be a list or tuple of 2 strings'
             raise HokiFormatError(err_m)
+
+        assert os.path.isdir(MODELS_PATH), f"DEBUGGING ASSISTANT: Directory MODELS_PATH = {MODELS_PATH} not found.\n " \
+                                           f"You can change MODELS_PATH by hoki.constants.set_models_path([MYPATH])." \
+                                           f"If you've just done that and it looks like it didn't work, try to restart " \
+                                           f"your notebook or terminal ;). "
+
+        self.path = MODELS_PATH
 
 
         # FIND THE KEYS TO THE COLUMNS OF INTEREST IN DUMMY
