@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.cm as cm
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
+import os
 
 __all__ = ['CMD']
 
@@ -84,7 +85,7 @@ class CMD(HokiObject):
         self.col_range = np.arange(col_lim[0], col_lim[1], res_el)
         self.mag_range = np.arange(mag_lim[0], mag_lim[1], res_el)
         self.grid = None
-        self.path = MODELS_PATH
+        self.path = None
         self._my_data = None
         self._col_bins = None
         self._mag_bins = None
@@ -116,6 +117,8 @@ class CMD(HokiObject):
         -------
         None
         """
+
+
         self.grid = np.zeros((len(BPASS_TIME_BINS), len(self.mag_range), len(self.col_range)))
 
 
@@ -128,6 +131,13 @@ class CMD(HokiObject):
         except TypeError as e:
             err_m='Python said: '+str(e)+'\nDEBUGGING ASSISTANT: col_filter must be a list or tuple of 2 strings'
             raise HokiFormatError(err_m)
+
+        assert os.path.isdir(MODELS_PATH), f"DEBUGGING ASSISTANT: Directory MODELS_PATH = {MODELS_PATH} not found.\n " \
+                                           f"You can change MODELS_PATH by hoki.constants.set_models_path([MYPATH])." \
+                                           f"If you've just done that and it looks like it didn't work, try to restart " \
+                                           f"your notebook or terminal ;). "
+
+        self.path = MODELS_PATH
 
 
         # FIND THE KEYS TO THE COLUMNS OF INTEREST IN DUMMY
