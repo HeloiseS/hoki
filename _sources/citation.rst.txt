@@ -1,13 +1,16 @@
 ################
-**Publication**
+**Citing Us**
 ################
+
+Hoki
+^^^^^^^
 
 Hoki has been reviewed and published by the Journal Of Open Source Software! Click the button below to access the online publication. 
 
 .. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
    :target: https://doi.org/10.21105/joss.01987
 
-If you use `hoki` for your science, please include the following reference in your paper:
+If you use ``hoki`` for your science, please include the following reference in your paper:
 
 .. code-block:: none
 
@@ -30,3 +33,52 @@ If you use `hoki` for your science, please include the following reference in yo
        adsnote = {Provided by the SAO/NASA Astrophysics Data System}
     }
 
+
+AgeWizard
+^^^^^^^^^^^
+If you use ``AgeWizard``, please cite both the `hoki` paper above and the following publication describing the pipeline:
+
+.. code-block:: none
+
+   @ARTICLE{2020arXiv200402883S,
+	   author = {{Stevance}, H.~F. and {Eldridge}, J.~J. and {McLeod}, A. and
+		 {Stanway}, E.~R. and {Chrimes}, A.~A.},
+		title = "{A systematic aging method I: HII regions D118 and D119 in NGC 300}",
+	  journal = {arXiv e-prints},
+	 keywords = {Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies},
+		 year = 2020,
+		month = apr,
+		  eid = {arXiv:2004.02883},
+		pages = {arXiv:2004.02883},
+	archivePrefix = {arXiv},
+	   eprint = {2004.02883},
+	primaryClass = {astro-ph.SR},
+	   adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200402883S},
+	  adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+   }
+
+
+UnderlyingCountRatio
+^^^^^^^^^^^^^^^^^^^^^
+If you use ``UnderlyingCountRatio``, please cite both the `hoki` paper above and the following publication describing the method:
+
+.. code-block:: none
+
+   @ARTICLE{2020ApJ...896..164D,
+       author = {{Dorn-Wallenstein}, Trevor Z. and {Levesque}, Emily M.},
+        title = "{A Comparison of Rotating and Binary Stellar Evolution Models: Effects on Massive Star Populations}",
+      journal = {\apj},
+     keywords = {UAT:1634, UAT:1622, UAT:929, UAT:732, UAT:621, UAT:1568, UAT:1629, UAT:154, Astrophysics - Solar and Stellar Astrophysics},
+         year = 2020,
+        month = jun,
+       volume = {896},
+       number = {2},
+          eid = {164},
+        pages = {164},
+          doi = {10.3847/1538-4357/ab8d28},
+     archivePrefix = {arXiv},
+       eprint = {2004.13040},
+     primaryClass = {astro-ph.SR},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020ApJ...896..164D},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+   }

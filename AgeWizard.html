@@ -94,13 +94,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Publication</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">Recipes</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html#Plotting-HRDs-of-stacked-ages">Plotting HRDs of stacked ages</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Age Wizard</a><ul>
@@ -460,7 +459,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Age-Wizard">
 <h1>Age Wizard<a class="headerlink" href="#Age-Wizard" title="Permalink to this headline">¶</a></h1>
-<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">https://github.com/HeloiseS/hoki_tutorials</a></p>
 <div class="section" id="Initial-imports">
 <h2>Initial imports<a class="headerlink" href="#Initial-imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
@@ -496,10 +495,9 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="How-it-works">
 <h3>How it works<a class="headerlink" href="#How-it-works" title="Permalink to this headline">¶</a></h3>
 <p>By matching the observed properties of your sources to the BPASS models you can find the <strong>most likely age</strong> of a <strong>location on the HRD/CMD</strong>.</p>
-<p><img alt="Drawing" src="_images/age_method.png" /></p>
+<p><img alt="Drawing" src="./images/age_method.png" /></p>
 <p>If all your sources belong to the same region, you can then combine the PDFs of your individual sources to find the age PDF of the whole cluster.</p>
-<p>All of this can be done step by step using the chain <code class="docutils literal notranslate"><span class="pre">find_coordinates()</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">calculate_pdfs</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">multiply_pdfs()</span></code>, or you could simply use <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> which handles this pipeline and facilitates loading in the models.</p>
-<p>Note: In this tutorial we will focus on <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> is a pipeline that takes in the observed data, loads in the models and calculates the individual age PDFs of easch source. It also allows the rapid calculation of the age PDF of the sample and gives the user the choice to exclude specific targets (e.g. outliers).</p>
 </div>
 <div class="section" id="Remember-to-exercise-caution-in-your-interpretation">
 <h3>Remember to exercise caution in your interpretation<a class="headerlink" href="#Remember-to-exercise-caution-in-your-interpretation" title="Permalink to this headline">¶</a></h3>
@@ -1140,7 +1138,7 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
 <p>If you are looking for the age of a whole population then you can ask <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code> to combine the PDFs it calcualted on initialisation. This is done with the method <code class="docutils literal notranslate"><span class="pre">AgeWizard.calcualte_sample_pdfs()</span></code>.</p>
 <p>It can be called as such and it will multiply all the PDFs, or you can provide a list of columns to ignore in the paramter <code class="docutils literal notranslate"><span class="pre">not_you</span></code>. You can also ask it to return the resulting PDF by setting <code class="docutils literal notranslate"><span class="pre">return_df</span></code> to True. If you don’t, it will store the result in <code class="docutils literal notranslate"><span class="pre">AgeWizard.sample_pdf</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1150,7 +1148,7 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1159,7 +1157,7 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1187,43 +1185,43 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.018170</td>
+      <td>0.013998</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.025543</td>
+      <td>0.010557</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.030998</td>
+      <td>0.012814</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.042060</td>
+      <td>0.017775</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.052826</td>
+      <td>0.021274</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>0.057152</td>
+      <td>0.072452</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>0.085512</td>
+      <td>0.079372</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>0.152308</td>
+      <td>0.189020</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>0.196053</td>
+      <td>0.199454</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>0.206209</td>
+      <td>0.233262</td>
     </tr>
   </tbody>
 </table>
@@ -1231,7 +1229,7 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
 </div>
 <p>You can also quickly retrieve the <strong>most likely age of the whole sample</strong> from the PDF you just calculated using <code class="docutils literal notranslate"><span class="pre">AgeWizard.most_likely_age</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1240,7 +1238,7 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1249,7 +1247,7 @@ array([6.9])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1259,7 +1257,7 @@ array([6.9])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1287,50 +1285,50 @@ array([6.9])
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.024695</td>
+      <td>0.011530</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.025288</td>
+      <td>0.011737</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.019613</td>
+      <td>0.009253</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.034380</td>
+      <td>0.017201</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.058792</td>
+      <td>0.030133</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>0.072591</td>
+      <td>0.116927</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>0.132265</td>
+      <td>0.117052</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>0.174126</td>
+      <td>0.167216</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>0.211425</td>
+      <td>0.201176</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>0.190401</td>
+      <td>0.187655</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1339,7 +1337,7 @@ array([6.9])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1350,7 +1348,7 @@ array([6.8])
 <p>Down below we create a quick function to plot our aggregate ages for z=0.006 and z=0.008.</p>
 <p>As an example of the</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1360,7 +1358,7 @@ array([6.8])
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1377,13 +1375,13 @@ array([6.8])
 
 
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster1</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster1</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Cluster1&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster2</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster2</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span>  <span class="n">cluster2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Cluster2&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster12</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span> <span class="n">cluster12</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">hoki</span><span class="o">.</span><span class="n">BPASS_TIME_BINS</span><span class="p">,</span>  <span class="n">cluster12</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;All&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 
 
@@ -1393,11 +1391,11 @@ array([6.8])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
 
 <span class="n">plot_aggregate_age</span><span class="p">(</span><span class="n">agewiz006</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">plot_aggregate_age</span><span class="p">(</span><span class="n">agewiz008</span><span class="p">,</span> <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -1412,12 +1410,12 @@ array([6.8])
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x7f6b320e16d8&gt;
+&lt;matplotlib.legend.Legend at 0x7fd28e3f8d90&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1435,7 +1433,7 @@ array([6.8])
 <p>Another interesting measure is the probability that the age of your star falls into a chosen age range. In this case our aggregate age is most likely to be between 6.7-6.9, so let’s investigate how likely it is for each individual star to fall in that range.</p>
 <p>For that we use <code class="docutils literal notranslate"><span class="pre">AgeWizard.calculate_p_given_age_range()</span></code> which returns a Series containing the probabilities corresponding to each source.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1444,7 +1442,7 @@ array([6.8])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1471,7 +1469,7 @@ dtype: float64
 </div>
 <p>We can collate those in one single DataFrame</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1482,7 +1480,7 @@ dtype: float64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1491,7 +1489,7 @@ dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1629,7 +1627,12 @@ dtype: float64
 </div>
 <div class="section" id="Ages-from-Colour-Magnitude-Diagram">
 <h2>Ages from Colour-Magnitude Diagram<a class="headerlink" href="#Ages-from-Colour-Magnitude-Diagram" title="Permalink to this headline">¶</a></h2>
-<p>[TO WRITE]</p>
+<p><code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> also accepts <code class="docutils literal notranslate"><span class="pre">hoki</span></code> CMDs (or the path to <code class="docutils literal notranslate"><span class="pre">hoki</span></code> CMD).</p>
+<p>A more detailed recipe will come soon but it should follow the exact same steps as above (except for the initialisations with a CMD instead of an HRD).</p>
+<p>Watch this space ;)</p>
+<hr class="docutils" />
+<p><strong>YOU’RE ALL SET!</strong></p>
+<p>I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on <code class="docutils literal notranslate"><span class="pre">hoki</span></code> GitHub page <a class="reference external" href="https://github.com/HeloiseS/hoki">here</a> or on the <code class="docutils literal notranslate"><span class="pre">hoki_tutorials</span></code> GitHub <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">there</a>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
