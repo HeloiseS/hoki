@@ -26,7 +26,7 @@ class TestSpectraCompiler(object):
         f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
 
     # Patch the model_output function
-    @patch("hoki.data_compilers.model_output")
+    @patch("hoki.data_compilers.load.model_output")
     def test_compiler(self, mock_model_output):
 
         # Set the model_output to the DataFrame

@@ -9,16 +9,35 @@ import hoki.csp.utils as utils
 from hoki.csp.csp import CSP
 from hoki.constants import *
 from hoki.utils.hoki_object import HokiObject
-
+from hoki import load
 
 class CSPSpectra(HokiObject, CSP):
     """
     Object to calculate synthetic spectra with complex stellar formation histories.
 
+
+    Notes
+    -----
+
+    The accepted IMF identifiers are:
+    - `"imf_chab100"`
+    - `"imf_chab300"`
+    - `"imf100_100"`
+    - `"imf100_300"`
+    - `"imf135_100"`
+    - `"imf135_300"`
+    - `"imfall_300"`
+    - `"imf170_100"`
+    - `"imf170_300"`
+
+
     Parameters
     ----------
     data_path : `str`
         folder containing the BPASS data files
+
+    imf : `str`
+        The BPASS identifier for the IMF of the BPASS event rate files.
 
     binary : boolean
         If `True`, loads the binary files. Otherwise, just loads single stars.
@@ -35,7 +54,7 @@ class CSPSpectra(HokiObject, CSP):
 
     def __init__(self, data_path, imf, binary=True):
         self.bpass_spectra = utils._normalise_spectrum(
-            utils.load_spectra(data_path, imf, binary=binary))
+            load.all_spectra(data_path, imf, binary=binary))
 
     def calculate_spec_over_time(self,
                                  SFH,
@@ -121,7 +140,7 @@ class CSPSpectra(HokiObject, CSP):
                                SFH,
                                ZEH,
                                t0,
-                               sample_rate=None
+                               sample_rate=1000
                                ):
         """
         Calculates the spectrum at lookback time `t0`.
@@ -151,9 +170,9 @@ class CSPSpectra(HokiObject, CSP):
 
         sample_rate : `int`
             The number of samples to take from the SFH and metallicity evolutions.
-            Default = None.
-
-            The default setting uses BPASS binning to calculate the event rates.
+            Default = 1000.
+            If a negative value is given, the BPASS binning to calculate
+            the event rates.
 
         Returns
         -------
@@ -175,7 +194,7 @@ class CSPSpectra(HokiObject, CSP):
 
         output_spectrum = np.zeros((nr_sfh, 100000), dtype=np.float64)
 
-        if sample_rate is None:
+        if sample_rate < 0:
             time_edges = BPASS_LINEAR_TIME_EDGES
         else:
             time_edges = np.linspace(0, 13.8e9, sample_rate + 1)

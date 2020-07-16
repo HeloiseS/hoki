@@ -30,11 +30,11 @@ class TestCSPSSpectra(object):
     data = model_output(
         f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
 
-    with patch("hoki.data_compilers.model_output") as mock_model_output:
+    with patch("hoki.data_compilers.load.model_output") as mock_model_output:
         mock_model_output.return_value = data
         CSP = CSPSpectra(f"{data_path}",  "imf135_300")
 
-    @patch("hoki.data_compilers.model_output")
+    @patch("hoki.data_compilers.load.model_output")
     def test_init(self, mock_model_output):
         mock_model_output.return_value = self.data
         CSP = CSPSpectra(f"{data_path}",  "imf135_300")
@@ -46,7 +46,7 @@ class TestCSPSSpectra(object):
         "No compiled file is made."
 
     def test_calculate_spec_at_time(self):
-        spectra = self.CSP.calculate_spec_at_time([sfh_fnc], [Z_fnc], 0)
+        spectra = self.CSP.calculate_spec_at_time([sfh_fnc], [Z_fnc], 0, sample_rate=-1)
         assert spectra.shape == (1, 100000)
         npt.assert_allclose(
             spectra[0], test_spectra, err_msg="calculate_spec_at_time output is wrong")

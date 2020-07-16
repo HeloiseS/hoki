@@ -12,11 +12,26 @@ import hoki.csp.utils as utils
 from hoki.constants import *
 from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.hoki_object import HokiObject
-
+from hoki import load
 
 class CSPEventRate(HokiObject, CSP):
     """
     Object to calculate event rates using complex stellar formation histories.
+
+    Notes
+    -----
+
+    The accepted IMF identifiers are:
+    - `"imf_chab100"`
+    - `"imf_chab300"`
+    - `"imf100_100"`
+    - `"imf100_300"`
+    - `"imf135_100"`
+    - `"imf135_300"`
+    - `"imfall_300"`
+    - `"imf170_100"`
+    - `"imf170_300"`
+
 
     Parameters
     ----------
@@ -52,7 +67,7 @@ class CSPEventRate(HokiObject, CSP):
 
     def __init__(self, data_path, imf, binary=True):
         self.bpass_rates = utils._normalise_rates(
-            utils.load_rates(data_path, imf, binary=binary))
+            load.all_rates(data_path, imf, binary=binary))
 
     def calculate_rate_over_time(self,
                                  SFH,
@@ -155,7 +170,7 @@ class CSPEventRate(HokiObject, CSP):
                                ZEH,
                                event_type_list,
                                t0,
-                               sample_rate=None
+                               sample_rate=1000
                                ):
         """
         Calculates the event rates at lookback time `t0`.
@@ -195,12 +210,11 @@ class CSPEventRate(HokiObject, CSP):
         t0 : `float`
             The moment in lookback time, where to calculate the the event rate
 
-        sample_rate : `None` or `int`
-            The number of samples to take from the SFH and metallicity
-            evolutions. Default = None.
-
-            The default setting uses BPASS binning to calculate the event rates.
-
+        sample_rate : `int`
+            The number of samples to take from the SFH and metallicity evolutions.
+            Default = 1000.
+            If a negative value is given, the BPASS binning to calculate
+            the event rates.
 
         Returns
         -------
@@ -224,7 +238,7 @@ class CSPEventRate(HokiObject, CSP):
         output_dtype = np.dtype([(i, np.float64) for i in event_type_list])
         event_rates = np.zeros(nr_sfh, dtype=output_dtype)
 
-        if sample_rate == None:
+        if sample_rate < 0:
             time_edges = BPASS_LINEAR_TIME_EDGES
         else:
             time_edges = np.linspace(0, self.now, sample_rate+1)

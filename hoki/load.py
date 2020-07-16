@@ -12,6 +12,8 @@ import yaml
 import io
 import pickle
 import pkg_resources
+import hoki.data_compilers
+from hoki.utils.exceptions import HokiKeyError
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
@@ -391,6 +393,170 @@ def _UV_nebular_lines(path):
                           'SiII1263_F', 'SiII1263_EW', 'SiIII1308_F', 'SiIII1308_EW', 'SiII1531_F', 'SiII1531_EW']
 
     return pd.read_csv(path, skiprows=1, sep=r'\s+', engine='python', names=column_UV_em_lines)
+
+
+
+################################
+#  BPASS Load all metallicity  #
+################################
+
+def all_rates(data_path, imf, binary=True):
+    """
+    Loads the BPASS supernova event files.
+
+    Notes
+    -----
+    The rates are just read from file and not normalised.
+
+    Notes
+    -----
+
+    The accepted IMF identifiers are:
+    - `"imf_chab100"`
+    - `"imf_chab300"`
+    - `"imf100_100"`
+    - `"imf100_300"`
+    - `"imf135_100"`
+    - `"imf135_300"`
+    - `"imfall_300"`
+    - `"imf170_100"`
+    - `"imf170_300"`
+
+    Input
+    -----
+    data_path : `str`
+        The filepath to the folder containing the BPASS data
+    binary : `bool`
+        Use the binary files or just the single stars. Default=True
+    imf : `str`
+        BPASS Identifier of the IMF to be used.
+
+    Returns
+    -------
+    `pandas.DataFrame`
+        A pandas MultiIndex dataframe containing the BPASS number of events
+        per metallicity per type.
+        Usage: rates.loc[log_age, (type, metallicity)]
+
+
+        Note
+        -----
+        This dataframe has the following structure.
+        The index is the log_age as a float.
+        The column is a `pandas.MultiIndex` with the event types
+        (level=0, `float`) and the metallicity (level=1, `float`)
+
+        |Event Type | Ia      | IIP      |  ... | PISNe | low_mass |
+        |Metallicity| 0.00001 | 0.00001  |  ... |  0.04 |    0.04  |
+        | log_age   |---------|----------|------|-------|----------|
+        |    6.0    |
+        |    ...    |                  Event Rate values
+        |    11.0   |
+
+    """
+
+    # This is repeated several times. Make a function?
+    if binary:
+        star = "bin"
+    else:
+        star = "sin"
+
+    # Check IMF
+    if imf not in BPASS_IMFS:
+        raise HokiKeyError(
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+
+    # Create output DataFrame
+    arrays = [BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES]
+    columns = pd.MultiIndex.from_product(
+        arrays, names=["Metallicicty", "Event Type"])
+    rates = pd.DataFrame(index=np.linspace(6, 11, 51),
+                         columns=columns, dtype=np.float64)
+    rates.index.name = "log_age"
+
+    # load supernova count files
+    for num, metallicity in enumerate(BPASS_METALLICITIES):
+        data = model_output(
+            f"{data_path}/supernova-{star}-{imf}.z{metallicity}.dat")
+        data = data.loc[:, slice(BPASS_EVENT_TYPES[0], BPASS_EVENT_TYPES[-1])]
+        rates.loc[:, (BPASS_NUM_METALLICITIES[num],
+                      slice(None))] = data.to_numpy()
+
+    return rates.swaplevel(0, 1, axis=1)
+
+
+def all_spectra(data_path, imf, binary=True):
+    """
+    Load all BPASS spectra from files.
+
+    Notes
+    -----
+    The first time this function is ran on a folder it will generate a pickle
+    file containing all the BPASS spectra per metallicity for faster loading
+    in the future. It stores the file in the same folder with the name:
+    `all_spectra-[bin/sin]-[imf].pkl`
+
+    The spectra are just read from file and not normalised.
+
+
+    Notes
+    -----
+
+    The accepted IMF identifiers are:
+    - `"imf_chab100"`
+    - `"imf_chab300"`
+    - `"imf100_100"`
+    - `"imf100_300"`
+    - `"imf135_100"`
+    - `"imf135_300"`
+    - `"imfall_300"`
+    - `"imf170_100"`
+    - `"imf170_300"`
+
+
+    Input
+    -----
+    data_path : `str`
+        The path to the folder containing the BPASS spectra.
+    binary : `bool`
+        Use the binary files or just the single stars. Default=True
+    imf : `str`
+        BPASS Identifier of the IMF to be used.
+
+    Returns
+    -------
+    spectra : `numpy.ndarray` (13, 51, 100000) [(metallicity, log_age, wavelength)]
+        A 3D numpy array containing all the BPASS spectra for a specific imf
+        and binary or single star population.
+        Usage: spectra[1][2][1000]
+                (gives L_\\odot for Z=0.0001 and log_age=6.2 at 999 Angstrom)
+
+    """
+    if binary:
+        star = "bin"
+    else:
+        star = "sin"
+
+    # check IMF key
+    if imf not in BPASS_IMFS:
+        raise HokiKeyError(
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+
+    # Check if compiled spectra are already present in data folder
+    try:
+        print("Trying to load precompiled file.")
+        spectra = np.load(f"{data_path}/all_spectra-{star}-{imf}.npy")
+        print("Done Loading.")
+
+    # Compile the spectra for faster reading next time
+    except FileNotFoundError:
+        print("Failed")
+        print("Data will be compiled")
+        spec = hoki.data_compilers.SpectraCompiler(data_path, data_path, imf)
+        spectra = spec.spectra
+    return spectra
+
+
 
 #################
 #               #

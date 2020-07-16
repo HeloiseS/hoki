@@ -163,7 +163,7 @@ class SFH(object):
     def _lognormal_sfh(self):
         self.sfh = self.params['constant'] * (
             (1 / np.sqrt(2 * np.pi * self.params['tau'] ** 2)) * (1 / self.params['tau']) * np.exp(
-                - ((np.log(self.time_axis) - self.params['T0']) ** 2) / (2 * self.params['tau'] ** 2)))
+                - ((np.log(self.time_axis/1e9) - self.params['T0']) ** 2) / (2 * self.params['tau'] ** 2)))
 
     def plot(self, loc=111, **kwargs):
         # return plot

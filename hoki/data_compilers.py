@@ -9,7 +9,7 @@ import pandas as pd
 
 from hoki.constants import (BPASS_IMFS, BPASS_METALLICITIES,
                             BPASS_NUM_METALLICITIES)
-from hoki.load import model_output
+import hoki.load as load
 from hoki.utils.progressbar import print_progress_bar
 
 
@@ -17,6 +17,21 @@ class SpectraCompiler():
     """
     Pipeline to load the BPASS spectra txt files and save them as a 3D
     `numpy.ndarray`.
+
+    Notes
+    -----
+
+    The accepted IMF identifiers are:
+    - `"imf_chab100"`
+    - `"imf_chab300"`
+    - `"imf100_100"`
+    - `"imf100_300"`
+    - `"imf135_100"`
+    - `"imf135_300"`
+    - `"imfall_300"`
+    - `"imf170_100"`
+    - `"imf170_300"`
+
 
     Attributes
     ----------
@@ -35,7 +50,14 @@ class SpectraCompiler():
             Path to the folder containing the spectra of the given imf.
         output_folder : `str`
             Path to the folder, where to output the pickled pandas.DataFrame
-
+        imf : `str`
+            BPASS IMF Identifiers as defined in the Note.
+        binary : `bool`
+            If `True`, loads the binary files. Otherwise, just loads single stars.
+            Default=True
+        verbose : `bool`
+            If `True` prints out extra information for the user.
+            Default=False
         """
         if verbose:
             _print_welcome()
@@ -58,7 +80,7 @@ class SpectraCompiler():
         # loop over all the metallicities and load all the specta
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
-            data = model_output(
+            data = load.model_output(
                 f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat")
             spectra[num] = data.loc[:, slice("6.0", "11.0")].T.to_numpy()
 

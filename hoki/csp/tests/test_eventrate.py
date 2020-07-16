@@ -62,28 +62,32 @@ class TestCSPEventRate():
         assert np.isclose(self.CSP.calculate_rate_at_time([sfh_fnc],
                                                           [Z_fnc],
                                                           ["Ia"],
-                                                          0)[0]["Ia"], 0.00203497),\
+                                                          0,
+                                                          sample_rate=-1)[0]["Ia"], 0.00203497),\
             "Correct input is not taken."
 
         assert np.isclose(self.CSP.calculate_rate_at_time(sfh_fnc,
                                                           Z_fnc,
                                                           ["Ia"],
-                                                          0)[0]["Ia"], 0.00203497),\
+                                                          0,
+                                                          sample_rate=-1)[0]["Ia"], 0.00203497),\
             "Correct input is not taken."
         assert np.isclose(self.CSP.calculate_rate_at_time(sfh,
                                                           Z_fnc,
                                                           ["Ia"],
-                                                          0)[0]["Ia"], 0.00203497),\
+                                                          0,
+                                                          sample_rate=-1)[0]["Ia"], 0.00203497),\
             "Correct input is not taken."
+
         assert np.isclose(self.CSP.calculate_rate_at_time([sfh],
                                                           Z_fnc,
                                                           ["Ia"],
-                                                          0)[0]["Ia"], 0.00203497),\
+                                                          0)[0]["Ia"],0.0018987009588956765),\
             "Correct input is not taken."
         assert np.isclose(self.CSP.calculate_rate_at_time([sfh, sfh],
                                                           [Z_fnc, Z_fnc],
                                                           ["Ia"],
-                                                          0)[0]["Ia"], 0.00203497),\
+                                                          0)[0]["Ia"], 0.0018987009588956765),\
             "Correct input is not taken."
 
     def test_event_rate_wrong_input(self):
@@ -126,5 +130,5 @@ class TestCSPEventRate():
 
     def test_event_rate_at_time(self):
         x = self.CSP.calculate_rate_at_time([sfh_fnc], [Z_fnc], ["Ia"], 0)
-        assert np.isclose(x[0]["Ia"], 0.002034966495416449),\
+        assert np.isclose(x[0]["Ia"], 0.0018987009588956765),\
             "The output of calculate_rate_at_time is wrong."
