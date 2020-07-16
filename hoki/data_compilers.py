@@ -15,7 +15,7 @@ from hoki.utils.progressbar import print_progress_bar
 class SpectraCompiler():
     """
     Pipeline to load the BPASS spectra txt files and save them as a 3D
-    `numpy.ndarray`.
+    `numpy.ndarray` binary file.
 
     Notes
     -----

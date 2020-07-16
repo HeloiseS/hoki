@@ -30,11 +30,11 @@ class TestCSPSSpectra(object):
     data = model_output(
         f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
 
-    with patch("hoki.data_compilers.load.model_output") as mock_model_output:
+    with patch("hoki.data_compilers.pd.read_csv") as mock_model_output:
         mock_model_output.return_value = data
         CSP = CSPSpectra(f"{data_path}",  "imf135_300")
 
-    @patch("hoki.data_compilers.load.model_output")
+    @patch("hoki.data_compilers.pd.read_csv")
     def test_init(self, mock_model_output):
         mock_model_output.return_value = self.data
         CSP = CSPSpectra(f"{data_path}",  "imf135_300")
