@@ -171,71 +171,134 @@ class SFH(object):
         sfh_plot.step(self.time_axis, self.sfh, **kwargs)
         return sfh_plot
 
+####################
+#  PARAMETRIC SFH  #
+####################
 
-#
-# class SFH(object):
-#     """
-#     An object to contain a stellar formation history of a population.
-#
-#     Attributes
-#     ----------
-#     time_points : `numpy.ndarray`
-#         An array containing the given time points of the stellar formation rate
-#     sfh_points : `numpy.ndarray`
-#         The stellar formation history at the time points.
-#     """
-#     def __init__(self, parametric_sfh, time_points, sfh_points):
-#         """
-#         Input
-#         ------
-#         parametric_sfh : `str` #[Change sfh_type to "parametric_sfh"]
-#             blaaaaa [HELOISE FIX]
-#         time_axis: `numpy.ndarray`
-#             An array containing the time points of the SFH.
-#             Must be given in yr.
-#         sfh_points: `numpy.ndarray`
-#             An array containing the Stellar Formation History at the time points.
-#             Must be given in M_solar/yr
-#
-#         """
-#         if parametric_sfh == "custom":
-#             if len(time_points) != len(sfh_points):
-#                 raise HokiTypeError("time_axis and sfh_points do not have the same length.")
-#             self.time_points = time_points
-#             self.sfh_points = sfh_points
-#             self._sfh = lambda x : np.interp(x, self.time_points, self.sfh_points)
-#         else:
-#             raise HokiKeyError(f"{parametric_sfh} is not a valid option.")
-#
-#     def stellar_formation_rate(self, t):
-#         """
-#         Returns the stellar formation rate at a given time.
-#
-#         Input
-#         -----
-#         t : `float`
-#             A lookback time
-#         """
-#         return self._sfh(t)
-#
-#     def mass_per_bin(self, time_edges):
-#         """
-#         Gives the mass per bin for the given edges in time.
-#
-#         Input
-#         -----
-#         time_edges : `numpy.ndarray`
-#             The edges of the bins in which the mass per bin is wanted in yrs.
-#
-#         Output
-#         ------
-#         `numpy.ndarray`
-#             The mass per time bin given the time edges.
-#         """
-#
-#         return utils.mass_per_bin(self._sfh, time_edges)
-#
-#
-#
-# def sfr_parameterisations():
-#     pass
+
+def constant_sfh(time_bins, sfr):
+    """
+    Constant star formation history
+
+    Parameters
+    ----------
+    time_bins: list or numpy.ndarray
+        Time bins
+    sfr: int or float
+        Value of the desired constant star formation rate.
+
+    Returns
+    -------
+    Array containing the star formation history corresponding to the given time_bins
+
+    """
+    return np.array([sfr]*len(time_bins))
+
+
+def burst_sfh(time_bins, sfr, burst_time):
+    """
+    Burst star formation history
+
+    Parameters
+    ----------
+    time_bins: list or numpy.ndarray
+        Time bins
+    sfr: int or float
+        Value of the desired star formation rate at the burst time
+    burst_time: int or float
+        Time of the star burst
+
+    Returns
+    -------
+    Array containing the star formation history corresponding to the given time_bins
+    """
+
+    burst_index=np.argmin(np.abs(burst_time-time_bins))
+    sfh = np.array([0.]*len(time_bins))
+    sfh[burst_index] += sfr
+    return sfh
+
+
+def exp_sfh(time_bins, tau, T0, factor=1):
+    """
+    Exponential star formation history
+
+    Parameters
+    ----------
+    time_bins: list or numpy.ndarray
+        Time bins
+    tau: float or int
+    T0: float or int
+    factor: float or int, optional
+        Default = 1
+
+    Returns
+    -------
+    Array containing the star formation history corresponding to the given time_bins
+    """
+    sfh = [np.exp(-(t - T0)/tau) if t > T0 else 0 for t in time_bins]
+    return np.array(sfh)*factor
+
+
+def delayed_exp_sfh(time_bins, tau, T0, factor=1):
+    """
+    Delayed exponential star formation history
+
+    Parameters
+    ----------
+    time_bins: list or numpy.ndarray
+        Time bins
+    tau: float or int
+    T0: float or int
+    factor: float or int, optional
+        Default = 1
+
+    Returns
+    -------
+    Array containing the star formation history corresponding to the given time_bins
+    """
+    sfh = [(t-T0)*np.exp(-(t - T0)/tau) if t > T0 else 0 for t in time_bins]
+    return np.array(sfh)*factor
+
+
+def dble_pwr_law(time_bins, tau, alpha, beta, factor=1):
+    """
+    Double Power Law star formation history
+
+    Parameters
+    ----------
+    time_bins: list or numpy.ndarray
+        Time bins
+    tau: float or int
+    alpha: float or int
+    beta: float or int
+    factor: float or int, optional
+        Default = 1
+
+    Returns
+    -------
+    Array containing the star formation history corresponding to the given time_bins
+    """
+    return factor/((time_bins/tau)**alpha + (time_bins/tau)**(-beta))
+
+
+def lognormal(time_bins, tau, T0, factor=1):
+    """
+    Lognormal star formation history
+
+    Parameters
+    ----------
+    time_bins: list or numpy.ndarray
+        Time bins
+    tau: float or int
+    T0: float or int
+    factor: float or int, optional
+        Default = 1
+
+    Returns
+    -------
+    Array containing the star formation history corresponding to the given time_bins
+    """
+    return factor*((1/np.sqrt(2*np.pi*tau**2))*(1/tau)*
+                   np.exp(-((np.log(time_bins)-T0)**2)/(2*tau**2) ))
+
