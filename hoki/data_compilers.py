@@ -100,7 +100,7 @@ def _print_welcome():
     print("\n\nThis may take a while ;)\nGo get yourself a cup of tea, sit back and relax\nI'm working for you boo!")
 
     print(
-        "\nNOTE: The progress bar doesn't move smoothly - it might accelerate or slow down - it'dc perfectly normal :D")
+        "\nNOTE: The progress bar doesn't move smoothly - it might accelerate or slow down - it's perfectly normal :D")
 
 
 def _print_exit_message():
