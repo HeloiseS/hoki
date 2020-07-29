@@ -103,6 +103,7 @@ class GridInterpolator():
         Returns
         -------
          : `numpy.ndarray` (N, D)
+            Interpolation result.
         """
         # check dtypes
         if metallicities.dtype != self._dtype:
