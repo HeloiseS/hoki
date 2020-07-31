@@ -146,9 +146,9 @@ class CSPEventRate(HokiObject, CSP):
 
         time_edges = np.linspace(0, self.now, nr_time_bins+1)
 
-        mass_per_bin_list = np.array([utils.mass_per_bin(np.vectorize(i), time_edges)
+        mass_per_bin_list = np.array([utils.mass_per_bin(i, time_edges)
                                       for i in SFH])
-        metallicity_per_bin_list = np.array([utils.metallicity_per_bin(np.vectorize(i), time_edges)
+        metallicity_per_bin_list = np.array([utils.metallicity_per_bin(i, time_edges)
                                              for i in ZEH])
         for counter, (mass_per_bin, Z_per_bin) in enumerate(zip(mass_per_bin_list,  metallicity_per_bin_list)):
             for count, event_type in enumerate(event_type_list):
@@ -161,7 +161,7 @@ class CSPEventRate(HokiObject, CSP):
                 event_rates[counter][count] = event_rate/np.diff(time_edges)
 
         if return_time_edges:
-            return np.array([event_rates, time_edges])
+            return np.array([event_rates, time_edges], dtype=object)
         else:
             return event_rates
 
@@ -228,6 +228,7 @@ class CSPEventRate(HokiObject, CSP):
         """
 
         SFH, ZEH = self._type_check_histories(SFH, ZEH)
+
         if isinstance(event_type_list, type(list)):
             raise HokiFatalError(
                 "event_type_list is not a list. Only a list is taken as input.")
