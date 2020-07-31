@@ -6,6 +6,8 @@ lookback time or over binned lookback time
 """
 
 import numpy as np
+import numba
+from numba import prange
 
 from hoki.csp.csp import CSP
 import hoki.csp.utils as utils
@@ -13,6 +15,9 @@ from hoki.constants import *
 from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.hoki_object import HokiObject
 from hoki import load
+from hoki.utils.progressbar import print_progress_bar
+from tqdm import tqdm
+
 
 class CSPEventRate(HokiObject, CSP):
     """
@@ -69,6 +74,81 @@ class CSPEventRate(HokiObject, CSP):
         self.bpass_rates = utils._normalise_rates(
             load.all_rates(data_path, imf, binary=binary))
 
+        # Has the shape (8, 13, 51) [event_type, metallicity, time_bin]
+        self._numpy_bpass_rates = np.array([self.bpass_rates[i].T.to_numpy() for i in BPASS_EVENT_TYPES])
+
+
+    def calculate_event_rate_full_grid(self, SFH_list, time_points, nr_time_bins):
+        """Calculates event rates for 8 BPASS event types for a list of SFH matrices.
+
+        Note
+        -----
+        This function is a wrapper around the highly
+        optimised `_calculate_rate_all_metallicity_SFH_grid` function.
+
+        Parameters
+        ----------
+        SFH_list : `numpy.ndarray` (N1, 13, N2) [nr_sfh, metalllicities, time_points]
+            A list of N1 stellar formation histories divided into BPASS metallicity bins,
+            over lookback time points with length N2
+        time_points : `numpy.ndarray`
+            An array of the lookback time points of length N2 at which the SFH is given in the SFH_list.
+        nr_time_bins : `int`
+            The number of time bins in which to divide the lookback time
+        """
+        nr_gal = SFH_list.shape[0]
+        event_rate_list = np.zeros((nr_gal, 13, 8, nr_time_bins), dtype=np.float64)
+        for i in tqdm(range(nr_gal)):
+            event_rate_list[i] = self._calculate_rate_metallicity_SFH_grid(self._numpy_bpass_rates,
+                                                         SFH_list[i],
+                                                         time_points,
+                                                         nr_time_bins)
+        return event_rate_list
+
+    @staticmethod
+    @numba.njit(parallel=True)
+    def _calculate_rate_metallicity_SFH_grid(bpass_rates, SFH, time_points, nr_time_bins):
+        """Calculates the event rates for all BPASS metallicities and some event types.
+
+        Note
+        ----
+        This is an optimised function and needs very specific input to run.
+
+        Parameters
+        ----------
+        bpass_rates : `numpy.ndarray` (8, 13, 51) [event_type, metallicity, time_bin]
+            Numpy array containing the BPASS event rates per event type, metallicity and BPASS time bin.
+        SFH : `numpy.ndarray` (13, N) [metallicity, SFH_time_sampling_points]
+            Gives the SFH for each metallicity at the time_points
+        time_points : `numpy.ndarray`
+            The time points at which the SFH is sampled
+        nr_time_bins :
+            The number of time points in which to split the lookback time (final binning)
+        """
+        nr_event_type = bpass_rates.shape[0]
+        event_rates = np.zeros((13, nr_event_type, nr_time_bins), dtype=np.float64)
+        time_edges = np.linspace(0, HOKI_NOW, nr_time_bins+1)
+        mass_per_bin_list = np.zeros((13, nr_time_bins), dtype=np.float64)
+
+        # Calculate the mass per bin for each metallicity
+        for i in prange(13):
+            mass_per_bin_list[i] = utils._optimised_mass_per_bin(time_points, SFH[i], time_edges, sample_rate=25)
+
+        # Loop over the metallcities
+        for counter in prange(13):
+
+            # Loop over the event types
+            for count in prange(nr_event_type):
+
+                event_rate = utils._over_time(np.ones(nr_time_bins)*BPASS_NUM_METALLICITIES[counter],
+                                              mass_per_bin_list[counter],
+                                              time_edges,
+                                              bpass_rates[count])
+
+                event_rates[counter][count] = event_rate/np.diff(time_edges)
+        return event_rates
+
+
     def calculate_rate_over_time(self,
                                  SFH,
                                  ZEH,
@@ -78,6 +158,11 @@ class CSPEventRate(HokiObject, CSP):
                                  ):
         """
         Calculates the event rates over lookback time.
+
+        Note
+        ----
+        This is a wrapper around the _calculate_rate_metallicity_SFH_grid` function,
+        such that python callables are allowed as input functions.
 
         Parameters
         ----------
@@ -140,25 +225,40 @@ class CSPEventRate(HokiObject, CSP):
 
         nr_events = len(event_type_list)
         nr_sfh = len(SFH)
-        output_dtype = np.dtype([(i, np.float64, nr_time_bins)
-                                 for i in event_type_list])
-        event_rates = np.zeros(nr_sfh, dtype=output_dtype)
+
+        event_rates = np.zeros((nr_sfh, 13, nr_events, nr_time_bins), dtype=np.float64)
 
         time_edges = np.linspace(0, self.now, nr_time_bins+1)
 
-        mass_per_bin_list = np.array([utils.mass_per_bin(i, time_edges)
-                                      for i in SFH])
-        metallicity_per_bin_list = np.array([utils.metallicity_per_bin(i, time_edges)
-                                             for i in ZEH])
-        for counter, (mass_per_bin, Z_per_bin) in enumerate(zip(mass_per_bin_list,  metallicity_per_bin_list)):
-            for count, event_type in enumerate(event_type_list):
+        # prep the bpass rates for the calculation, such that only the required events are present
+        bpass_rates = np.array([self.bpass_rates[i].T.to_numpy() for i in event_type_list])
 
-                event_rate = utils._over_time(Z_per_bin,
-                                              mass_per_bin,
-                                              time_edges,
-                                              self.bpass_rates[event_type].T.to_numpy())
+        for count in range(nr_sfh):
+            # SFH matrix that's needed for the function input
+            # Basically, we're faking that we have input as a numpy.ndarray
+            # This way we can speed up the calculation
+            SFH_matrix = np.zeros((13, nr_time_bins+1), dtype=np.float64)
 
-                event_rates[counter][count] = event_rate/np.diff(time_edges)
+            # calculate the metallicity at each time point and the associated BPASS index in BPASS_NUM_METALLICITIES
+            metallicity_at_time_edges = np.vectorize(ZEH[count])(time_edges)
+            bpass_Z_index = [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in metallicity_at_time_edges]
+
+            # Calculate the SFH at each time point and add it to the correct Z bin
+            SFH_matrix[bpass_Z_index, range(nr_time_bins+1)] = np.vectorize(SFH[count])(time_edges)
+
+            # calculate the event rates using the optimised function
+            event_rates[count] = self._calculate_rate_metallicity_SFH_grid(bpass_rates,
+                                                           SFH_matrix,
+                                                           time_edges,
+                                                           nr_time_bins)
+
+        # sum over the metallicity bins
+        event_rates = event_rates.sum(axis=1)
+
+        # change output to allow for easier access to different event types
+        output_dtype = np.dtype([(i, np.float64, nr_time_bins)
+                                 for i in event_type_list])
+        event_rates = event_rates.ravel().view(dtype=output_dtype)
 
         if return_time_edges:
             return np.array([event_rates, time_edges], dtype=object)
