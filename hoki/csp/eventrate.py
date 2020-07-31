@@ -16,7 +16,6 @@ from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.hoki_object import HokiObject
 from hoki import load
 from hoki.utils.progressbar import print_progress_bar
-from tqdm import tqdm
 
 
 class CSPEventRate(HokiObject, CSP):
@@ -90,15 +89,23 @@ class CSPEventRate(HokiObject, CSP):
         ----------
         SFH_list : `numpy.ndarray` (N1, 13, N2) [nr_sfh, metalllicities, time_points]
             A list of N1 stellar formation histories divided into BPASS metallicity bins,
-            over lookback time points with length N2
+            over lookback time points with length N2.
         time_points : `numpy.ndarray`
             An array of the lookback time points of length N2 at which the SFH is given in the SFH_list.
         nr_time_bins : `int`
             The number of time bins in which to divide the lookback time
+
+        Returns
+        ------
+        event_rate_list : `numpy.ndarray` (nr_gal, 13, 8, nr_time_bins)
+            A numpy array containing the event rates per galaxy (nr_gal),
+            per metallicity (13), per event type (8) and per time bins (nr_time_bins).
+
         """
         nr_gal = SFH_list.shape[0]
         event_rate_list = np.zeros((nr_gal, 13, 8, nr_time_bins), dtype=np.float64)
-        for i in tqdm(range(nr_gal)):
+        for i in range(nr_gal):
+            print_progress_bar(i, nr_gal)
             event_rate_list[i] = self._calculate_rate_metallicity_SFH_grid(self._numpy_bpass_rates,
                                                          SFH_list[i],
                                                          time_points,
@@ -116,14 +123,19 @@ class CSPEventRate(HokiObject, CSP):
 
         Parameters
         ----------
-        bpass_rates : `numpy.ndarray` (8, 13, 51) [event_type, metallicity, time_bin]
-            Numpy array containing the BPASS event rates per event type, metallicity and BPASS time bin.
+        bpass_rates : `numpy.ndarray` (M, 13, 51) [event_type, metallicity, time_bin]
+            Numpy array containing the BPASS event rates per event type (M), metallicity and BPASS time bin.
         SFH : `numpy.ndarray` (13, N) [metallicity, SFH_time_sampling_points]
             Gives the SFH for each metallicity at the time_points
         time_points : `numpy.ndarray`
-            The time points at which the SFH is sampled
+            The time points at which the SFH is sampled (N)
         nr_time_bins :
             The number of time points in which to split the lookback time (final binning)
+
+        Returns
+        -------
+        event_rates : `numpy.ndarray` (13, M, nr_time_bins)
+            A numpy array containing the event rates per metallicity per event type per time bins.
         """
         nr_event_type = bpass_rates.shape[0]
         event_rates = np.zeros((13, nr_event_type, nr_time_bins), dtype=np.float64)
