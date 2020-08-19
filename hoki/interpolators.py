@@ -47,13 +47,13 @@ class GridInterpolator():
                  ages=BPASS_TIME_BINS,
                  dtype=np.float64):
         for arr, ndim in zip([grid, metallicities, ages], [3, 1, 1]):
-            if not np.ndim(arr) == ndim:
+            if np.ndim(arr) != ndim:
                 raise ValueError("Wrong dimensionality of input arrays.")
-        if not grid.shape[0] == len(metallicities):
+        if grid.shape[0] != len(metallicities):
             raise ValueError(
                 "Shapes of `grid` and `metallicities` are incompatible."
             )
-        if not grid.shape[1] == len(ages):
+        if grid.shape[1] != len(ages):
             raise ValueError(
                 "Shapes of `grid` and `ages` are incompatible."
             )
