@@ -149,7 +149,8 @@ class GridInterpolator():
         return self._interpolator(metallicities, ages) * \
             self._check_masses(masses)
 
-    def _check_masses(self, masses):
+    @staticmethod
+    def _check_masses(masses):
         """
         Make sure `masses` has correct dimensionality.
 
