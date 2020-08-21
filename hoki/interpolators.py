@@ -14,10 +14,10 @@ class GridInterpolator():
     """
     Interpolate BPASS quantities on a metallicity-age grid.
 
-    Base class for the interpolation of BPASS data (possibly vector valued,
-    e.g. spectra) given on a grid of metallicities and ages. Using this class
+    Base class for the interpolation of BPASS quantities (possibly vector
+    valued) given on a grid of metallicities and ages. Using this class
     directly is discouraged, it has no public methods or attributes. It is
-    advisable to implement convenience child classes for each specific
+    advisable to use/implement convenience child classes for each specific
     quantity.
 
     Parameters
@@ -86,7 +86,7 @@ class GridInterpolator():
         )
         return
 
-    def _interpolate(self, metallicities, ages, masses=1):
+    def _interpolate(self, metallicities, ages):
         """
         Perform interpolation on this instance's grid.
 
@@ -98,9 +98,6 @@ class GridInterpolator():
         ages : `numpy.ndarray` (N,)
             Stellar ages at which to interpolate. Same units as those used in
             the construction of this instance.
-        masses : `numpy.ndarray` (N,) or `float`, optional
-            Stellar masses in units of 1e6 M_\\odot. Used to scale the
-            interpolation result. Defaults to unity.
 
         Returns
         -------
@@ -146,7 +143,58 @@ class GridInterpolator():
                 UserWarning
             )
             ages = np.clip(ages, self._aMin, self._aMax)
-        return self._interpolator(metallicities, ages) * \
+        return self._interpolator(metallicities, ages)
+
+
+class GridInterpolatorMassScaled(GridInterpolator):
+    """
+    Interpolate BPASS quantities that scale with population mass on a
+    metallicity-age grid.
+
+    Base class for the interpolation of BPASS quantities (possibly vector
+    valued) which scale with stellar population mass given on a grid of
+    metallicities and ages. Using this class directly is discouraged, it has no
+    public methods or attributes. It is advisable to use/implement convenience
+    child classes for each specific quantity.
+
+    Parameters
+    ----------
+    grid : `numpy.ndarray` (N_Z, N_a, D)
+        A 3D numpy array containing the `D`-dimensional quantity to be
+        interpolated as a function of metallicity and age, normalized to a
+        population mass of 1e6 M_\\odot.
+    metallicities : `numpy.ndarray` (N_Z,), optional
+        The metallicities at which `grid` is evaluated. Defaults to the full
+        array of BPASS output metallicities.
+    ages : `numpy.ndarray` (N_a,), optional
+        The ages at which `grid` is evaluated. Defaults to the full array of
+        BPASS output ages in log scale.
+    dtype : `type`, optional
+        The data type to be used by an instance of this class. Defaults to
+        `numpy.float64`. Can be used to reduce memory footprint.
+    """
+    def _interpolate(self, metallicities, ages, masses=1):
+        """
+        Perform interpolation on this instance's grid.
+
+        Parameters
+        ----------
+        metallicities : `numpy.ndarray` (N,)
+            Stellar metallicities at which to interpolate. Same units as those
+            used in the construction of this instance.
+        ages : `numpy.ndarray` (N,)
+            Stellar ages at which to interpolate. Same units as those used in
+            the construction of this instance.
+        masses : `numpy.ndarray` (N,) or `float`, optional
+            Stellar population masses in units of 1e6 M_\\odot. Used to scale
+            the interpolation result. Defaults to unity.
+
+        Returns
+        -------
+         : `numpy.ndarray` (N, D)
+            Interpolation result.
+        """
+        return super()._interpolate(metallicities, ages) * \
             self._check_masses(masses)
 
     @staticmethod
