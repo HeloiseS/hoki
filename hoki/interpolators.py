@@ -105,7 +105,7 @@ class GridInterpolator():
             Interpolation result.
         """
         # check dtypes
-        if metallicities.dtype != self._dtype:
+        if np.asarray(metallicities).dtype != self._dtype:
             warnings.warn(
                 "Input metallicities for interpolation of wrong dtype, "
                 "attempting copy and cast.",
@@ -114,7 +114,7 @@ class GridInterpolator():
             metallicities = np.array(
                 metallicities, dtype=self._dtype
             )
-        if ages.dtype != self._dtype:
+        if np.asarray(ages).dtype != self._dtype:
             warnings.warn(
                 "Input ages for interpolation of wrong dtype, "
                 "attempting copy and cast.",
