@@ -1,7 +1,7 @@
 """
-Author: Martin Glatzle
-
 Tools that allow to interpolate BPASS quantities on metallicity-age grids.
+
+Author: Martin Glatzle
 """
 
 import numpy as np
@@ -39,8 +39,8 @@ class GridInterpolator():
     -----
     Uses `scipy.interpolate.LinearNDInterpolator`, which performs triangulation
     of the input data and linear barycentric interpolation on each
-    triangle. Support for other interpolation methods should be easy to
-    implemented.
+    triangle. Support for other interpolation methods should be fairly easy to
+    implement.
     """
     def __init__(self, grid,
                  metallicities=BPASS_NUM_METALLICITIES,
@@ -93,9 +93,11 @@ class GridInterpolator():
         Parameters
         ----------
         metallicities : `numpy.ndarray` (N,)
-            Stellar metallicities at which `grid` to interpolate.
+            Stellar metallicities at which to interpolate. Same units as those
+            used in the construction of this instance.
         ages : `numpy.ndarray` (N,)
-            Stellar ages at which to interpolate.
+            Stellar ages at which to interpolate. Same units as those used in
+            the construction of this instance.
         masses : `numpy.ndarray` (N,) or `float`, optional
             Stellar masses in units of 1e6 M_\\odot. Used to scale the
             interpolation result. Defaults to unity.
