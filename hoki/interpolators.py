@@ -131,18 +131,18 @@ class GridInterpolator():
         if np.amax(metallicities) > self._zMax or \
            np.amin(metallicities) < self._zMin:
             warnings.warn(
-                "Input metallicities for interpolation outside of "
-                "available range "+str(self._zMin)+", "+str(self._zMax) +
-                " provided. They will be clipped.",
+                "Input metallicities for interpolation outside of available "
+                f"range {self._zMin} -- {self._zMax} provided. "
+                "They will be clipped.",
                 UserWarning
             )
             metallicities = np.clip(metallicities, self._zMin, self._zMax)
-        if np.amax(ages) > 10**(self._aMax) or \
-           np.amin(ages) < 10**(self._aMin):
+        if np.amax(ages) > self._aMax or \
+           np.amin(ages) < self._aMin:
             warnings.warn(
                 "Input ages for interpolation outside of available "
-                "range "+str(10**self._aMin)+", "+str(10**self._aMax) +
-                " [yr] provided. They will be clipped.",
+                f"range {self._aMin} -- {self._aMax} provided. "
+                "They will be clipped.",
                 UserWarning
             )
             ages = np.clip(ages, self._aMin, self._aMax)
