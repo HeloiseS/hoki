@@ -51,11 +51,13 @@ class GridInterpolator():
                 raise ValueError("Wrong dimensionality of input arrays.")
         if grid.shape[0] != len(metallicities):
             raise ValueError(
-                "Shapes of `grid` and `metallicities` are incompatible."
+                f"Shapes of `grid` {grid.shape} and "
+                f"`metallicities` {metallicities.shape} are incompatible."
             )
         if grid.shape[1] != len(ages):
             raise ValueError(
-                "Shapes of `grid` and `ages` are incompatible."
+                f"Shapes of `grid` {grid.shape} and "
+                f"`ages` {ages.shape} are incompatible."
             )
         self._dtype = dtype
         self._metallicities = metallicities.astype(self._dtype, copy=True)
