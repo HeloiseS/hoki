@@ -10,6 +10,7 @@ from hoki.csp.csp import CSP
 from hoki.csp.sfh import SFH
 from hoki.utils.exceptions import HokiFormatError, HokiKeyError, HokiTypeError
 from hoki.constants import HOKI_NOW
+
 #################################################
 # Test Complex Stellar Populations Parent Class #
 #################################################

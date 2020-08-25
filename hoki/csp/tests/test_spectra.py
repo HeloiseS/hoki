@@ -21,6 +21,7 @@ test_spectra = np.loadtxt(f"{data_path}/csp_test_data/test_spectra.txt")
 
 # Test functions
 def sfh_fnc(x): return 1
+
 def Z_fnc(x): return 0.00001
 
 

@@ -132,7 +132,7 @@ class CSPSpectra(HokiObject, CSP):
 
             output_spectra[counter] = spec / np.diff(time_edges)[:, None]
         if return_time_edges:
-            return np.array([output_spectra, time_edges])
+            return np.array([output_spectra, time_edges], dtype=object)
         else:
             return output_spectra
 
