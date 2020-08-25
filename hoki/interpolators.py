@@ -6,7 +6,10 @@ Author: Martin Glatzle
 
 import numpy as np
 from scipy import interpolate
-from hoki.constants import BPASS_NUM_METALLICITIES, BPASS_TIME_BINS
+from hoki.constants import (
+    BPASS_NUM_METALLICITIES, BPASS_TIME_BINS, BPASS_WAVELENGTHS
+)
+from hoki import load
 import warnings
 
 
@@ -231,3 +234,93 @@ class GridInterpolatorMassScaled(GridInterpolator):
             return masses[:, None]
         else:
             raise ValueError("Wrong dimensionality of `masses`.")
+
+
+class SpectraInterpolator(GridInterpolatorMassScaled):
+    """
+    Interpolate BPASS SSP spectra on a metallicity-age grid.
+
+    Interpolate a spectrum grid for single stellar populations (SSPs) with
+    fixed IMF provided by BPASS over its metallicity-age grid. The wavelength
+    range can be limited to something smaller than the BPASS default to reduce
+    memory footprint.
+
+    Parameters
+    ----------
+    data_path : `str`
+        The path to the folder containing the BPASS spectra. See
+        `load.all_spectra`.
+    imf : `str`
+        BPASS Identifier of the IMF to be used. See `load.all_spectra`.
+    binary : `bool`, optional
+        Use spectra including binaries or only single stars. Defaults to
+        `True`.
+    lam_min : `float`, optional
+        Limit the wavelength range on which this instance will perform
+        interpolation. Defaults to `None`, using full range available.
+    lam_max : `float`, optional
+        Limit the wavelength range on which this instance will perform
+        interpolation. Defaults to `None`, using full range available.
+    dtype : `type`, optional
+        The data type to be used by an instance of this class. Defaults to
+        `numpy.float64`. Can be used to reduce memory footprint.
+    """
+
+    def __init__(self, data_path, imf, binary=True,
+                 lam_min=None, lam_max=None,
+                 dtype=np.float64):
+        if lam_min is not None and lam_max is not None:
+            if lam_min >= lam_max:
+                raise ValueError("lam_min is larger than or equal to lam_max!")
+
+        lam = BPASS_WAVELENGTHS
+        if lam_min is not None:
+            idx_min = np.searchsorted(lam, lam_min, side='left')
+        else:
+            idx_min = None
+        if lam_max is not None:
+            idx_max = np.searchsorted(lam, lam_max, side='right')
+        else:
+            idx_max = None
+        self._wavelengths = lam[idx_min:idx_max].astype(
+            dtype, copy=True)
+
+        self._spectra = load.all_spectra(
+            data_path, imf, binary=binary)[:, :, idx_min:idx_max].astype(
+                dtype, copy=True
+            )
+
+        if len(self._wavelengths) != self._spectra.shape[2]:
+            raise ValueError(
+                "Incompatible dimesions for wavelengths "
+                f"{self._wavelengths.shape} and spectra {self._spectra.shape}."
+            )
+        super().__init__(self._spectra, dtype=dtype)
+
+        return
+
+    def interpolate(self, metallicities, ages, masses=1):
+        """
+        Perform interpolation on this instance's spectrum grid.
+
+        Parameters
+        ----------
+        metallicities : `numpy.ndarray` (N,)
+            Absolute initial stellar metallicities at which to
+            interpolate.
+        ages : `numpy.ndarray` (N,)
+            Stellar ages (in log scale) at which to interpolate.
+        masses : `numpy.ndarray` (N,) or `float`, optional
+            Stellar population masses in units of 1e6 M_\\odot. Used to scale
+            the interpolation result. Defaults to unity.
+
+        Returns
+        -------
+         : `numpy.ndarray` (N_lam,)
+            The wavelengths [angstrom] at which interpolated spectra are
+            provided.
+         : `numpy.ndarray` (N, N_lam)
+            Interpolated SEDs [L_\\odot/angstrom].
+        """
+        return self._wavelengths, \
+            self._interpolate(metallicities, ages, masses)

@@ -1,6 +1,13 @@
-from unittest import TestCase
+"""
+Tests for the interpolators module.
+
+Author: Martin Glatzle
+"""
+from unittest import TestCase, mock
 from hoki import interpolators
-from hoki.constants import BPASS_NUM_METALLICITIES, BPASS_TIME_BINS
+from hoki.constants import (
+    BPASS_NUM_METALLICITIES, BPASS_TIME_BINS
+)
 import numpy as np
 
 
@@ -143,5 +150,64 @@ class TestGridInterpolatorMassScaled(TestGridInterpolator):
         )
         self.assertTrue(
             np.allclose(2.5*grid[1, 1, :], res)
+        )
+        return
+
+
+class TestSpectraInterpolator(TestCase):
+
+    def setUp(self):
+        self.spectra = np.random.random((4, 4, 100))
+        self.lam = np.linspace(1, 10, num=100)
+        self.metallicities = np.linspace(1, 10, num=4)
+        self.ages = np.linspace(1, 10, num=4)
+
+        self.mock_lam = mock.patch.multiple(
+            'hoki.interpolators',
+            BPASS_WAVELENGTHS=self.lam,
+        )
+        self.mock_constructor_defaults = mock.patch(
+            'hoki.interpolators.GridInterpolator.__init__.__defaults__',
+            (self.metallicities, self.ages, np.float64)
+        )
+        self.mock_all_spectra = mock.patch(
+            'hoki.load.all_spectra',
+            return_value=self.spectra
+        )
+
+        return
+
+    def test_init(self):
+        with self.mock_lam, self.mock_constructor_defaults, \
+             self.mock_all_spectra:
+            # standard
+            interpolators.SpectraInterpolator(
+                '', '',
+            )
+            # limit lam range
+            interpolators.SpectraInterpolator(
+                '', '',
+                lam_min=3., lam_max=5.,
+            )
+        return
+
+    def test_interpolate(self):
+        with self.mock_lam, self.mock_constructor_defaults, \
+             self.mock_all_spectra:
+            interp = interpolators.SpectraInterpolator(
+                '', '',
+            )
+        res = interp.interpolate(1., 1.)
+        self.assertEqual(
+            len(res[0]), len(res[1])
+        )
+        interp.interpolate(1., 1., 1.)
+        res = interp.interpolate(
+            np.array([1., 2.]),
+            np.array([1., 2.]),
+            np.array([1., 2.])
+        )
+        self.assertEqual(
+            len(res[0]), res[1].shape[1]
         )
         return
