@@ -1,5 +1,5 @@
 """
-Tests for utils.binning module.
+Tests for the utils.binning module.
 
 Author: Martin Glatzle
 """
