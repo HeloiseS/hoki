@@ -552,7 +552,9 @@ def all_spectra(data_path, imf, binary=True):
     except FileNotFoundError:
         print("Failed")
         print("Data will be compiled")
-        spec = hoki.data_compilers.SpectraCompiler(data_path, data_path, imf)
+        spec = hoki.data_compilers.SpectraCompiler(
+            data_path, data_path, imf, binary=binary
+        )
         spectra = spec.spectra
     return spectra
 
