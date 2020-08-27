@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from hoki.constants import (BPASS_IMFS, BPASS_METALLICITIES,
-                            BPASS_NUM_METALLICITIES)
+                            BPASS_NUM_METALLICITIES, BPASS_TIME_BINS)
 from hoki.utils.progressbar import print_progress_bar
 
 
@@ -16,21 +16,6 @@ class SpectraCompiler():
     """
     Pipeline to load the BPASS spectra txt files and save them as a 3D
     `numpy.ndarray` binary file.
-
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
 
     Attributes
     ----------
@@ -47,13 +32,27 @@ class SpectraCompiler():
         -----
         spectra_folder : `str`
             Path to the folder containing the spectra of the given imf.
+
         output_folder : `str`
             Path to the folder, where to output the pickled pandas.DataFrame
+
         imf : `str`
-            BPASS IMF Identifiers as defined in the Note.
+            BPASS IMF Identifiers
+            The accepted IMF identifiers are:
+            - `"imf_chab100"`
+            - `"imf_chab300"`
+            - `"imf100_100"`
+            - `"imf100_300"`
+            - `"imf135_100"`
+            - `"imf135_300"`
+            - `"imfall_300"`
+            - `"imf170_100"`
+            - `"imf170_300"`
+
         binary : `bool`
             If `True`, loads the binary files. Otherwise, just loads single stars.
             Default=True
+
         verbose : `bool`
             If `True` prints out extra information for the user.
             Default=False
@@ -61,11 +60,8 @@ class SpectraCompiler():
         if verbose:
             _print_welcome()
 
-        # Set text for population type
-        if binary:
-            star = "bin"
-        else:
-            star = "sin"
+        # Check population type
+        star = "bin" if binary else "sin"
 
         # check IMF key
         if imf not in BPASS_IMFS:
@@ -83,10 +79,8 @@ class SpectraCompiler():
             # use manual load, because otherwise a cyclic import is required.
             data = pd.read_csv(f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat",
                                sep=r"\s+",
-                               names=['log_age', 'Ia', 'IIP', 'II', 'Ib', 'Ic', 'LGRB', 'PISNe', 'low_mass',
-                               'e_Ia', 'e_IIP', 'e_II', 'e_Ib', 'e_Ic', 'e_LGRB', 'e_PISNe', 'e_low_mass',
-                               'age_yrs'],
-                               engine='python')
+                               engine='python',
+                               names=['WL']+[f"{i:.1f}" for i in BPASS_TIME_BINS])
             spectra[num] = data.loc[:, slice("6.0", "11.0")].T.to_numpy()
 
         # pickle the datafile
