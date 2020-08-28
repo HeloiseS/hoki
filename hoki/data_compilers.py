@@ -76,7 +76,7 @@ class SpectraCompiler():
         # loop over all the metallicities and load all the spectra
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
-            spectra[num] = np.loadtxt(f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat").T[:1, :]
+            spectra[num] = np.loadtxt(f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat").T[1:, :]
 
         # pickle the datafile
         np.save(f"{output_folder}/all_spectra-{star}-{imf}", spectra)
