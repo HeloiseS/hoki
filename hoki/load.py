@@ -396,9 +396,9 @@ def _UV_nebular_lines(path):
 
 
 
-################################
-#  BPASS Load all metallicity  #
-################################
+#####################################
+#  BPASS Load over all metallicity  #
+#####################################
 
 def all_rates(data_path, imf, binary=True):
     """
@@ -408,32 +408,30 @@ def all_rates(data_path, imf, binary=True):
     -----
     The rates are just read from file and not normalised.
 
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
     Input
     -----
     data_path : `str`
         The filepath to the folder containing the BPASS data
+
     binary : `bool`
         Use the binary files or just the single stars. Default=True
+
     imf : `str`
         BPASS Identifier of the IMF to be used.
+        The accepted IMF identifiers are:
+        - `"imf_chab100"`
+        - `"imf_chab300"`
+        - `"imf100_100"`
+        - `"imf100_300"`
+        - `"imf135_100"`
+        - `"imf135_300"`
+        - `"imfall_300"`
+        - `"imf170_100"`
+        - `"imf170_300"`
 
     Returns
     -------
-    `pandas.DataFrame`
+    `pandas.DataFrame` (51, (8,13))
         A pandas MultiIndex dataframe containing the BPASS number of events
         per metallicity per type.
         Usage: rates.loc[log_age, (type, metallicity)]
@@ -455,33 +453,35 @@ def all_rates(data_path, imf, binary=True):
 
     """
 
-    # This is repeated several times. Make a function?
-    if binary:
-        star = "bin"
-    else:
-        star = "sin"
+    # Check population type
+    star = "bin" if binary else "sin"
 
-    # Check IMF
+    # Check if the given IMF is in the accepted IMFs
     if imf not in BPASS_IMFS:
         raise HokiKeyError(
-            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.\n"\
+            "These can be found in the documentation of this function.")
 
-    # Create output DataFrame
+    # Create the output DataFrame
     arrays = [BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES]
     columns = pd.MultiIndex.from_product(
         arrays, names=["Metallicicty", "Event Type"])
-    rates = pd.DataFrame(index=np.linspace(6, 11, 51),
-                         columns=columns, dtype=np.float64)
+
+    rates = pd.DataFrame(index=BPASS_TIME_BINS,
+                         columns=columns,
+                         dtype=np.float64)
     rates.index.name = "log_age"
 
     # load supernova count files
     for num, metallicity in enumerate(BPASS_METALLICITIES):
         data = model_output(
-            f"{data_path}/supernova-{star}-{imf}.z{metallicity}.dat")
+            f"{data_path}/supernova-{star}-{imf}.z{metallicity}.dat"
+        )
         data = data.loc[:, slice(BPASS_EVENT_TYPES[0], BPASS_EVENT_TYPES[-1])]
-        rates.loc[:, (BPASS_NUM_METALLICITIES[num],
-                      slice(None))] = data.to_numpy()
 
+        rates.loc[:, (BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
+
+    # swap metallicity and event type
     return rates.swaplevel(0, 1, axis=1)
 
 
@@ -489,7 +489,7 @@ def all_spectra(data_path, imf, binary=True):
     """
     Load all BPASS spectra from files.
 
-    Notes
+    Note
     -----
     The first time this function is ran on a folder it will generate a pickle
     file containing all the BPASS spectra per metallicity for faster loading
@@ -499,29 +499,27 @@ def all_spectra(data_path, imf, binary=True):
     The spectra are just read from file and not normalised.
 
 
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
-
     Input
     -----
     data_path : `str`
         The path to the folder containing the BPASS spectra.
+
     binary : `bool`
         Use the binary files or just the single stars. Default=True
+
     imf : `str`
         BPASS Identifier of the IMF to be used.
+        The accepted IMF identifiers are:
+        - `"imf_chab100"`
+        - `"imf_chab300"`
+        - `"imf100_100"`
+        - `"imf100_300"`
+        - `"imf135_100"`
+        - `"imf135_300"`
+        - `"imfall_300"`
+        - `"imf170_100"`
+        - `"imf170_300"`
+
 
     Returns
     -------
@@ -532,10 +530,8 @@ def all_spectra(data_path, imf, binary=True):
                 (gives L_\\odot for Z=0.0001 and log_age=6.2 at 999 Angstrom)
 
     """
-    if binary:
-        star = "bin"
-    else:
-        star = "sin"
+    # Check population type
+    star = "bin" if binary else "sin"
 
     # check IMF key
     if imf not in BPASS_IMFS:
