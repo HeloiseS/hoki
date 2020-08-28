@@ -70,7 +70,7 @@ class SpectraCompiler():
 
 
         # Setup the numpy output
-        spectra = np.zeros((13, 51, 100000), dtype=np.float64)
+        spectra = np.empty((13, 51, 100000), dtype=np.float64)
 
         # loop over all the metallicities and load all the specta
         for num, metallicity in enumerate(BPASS_METALLICITIES):

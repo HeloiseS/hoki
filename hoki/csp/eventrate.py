@@ -141,7 +141,7 @@ class CSPEventRate(HokiObject, CSP):
         nr_sfh = len(SFH)
 
         output_dtype = np.dtype([(i, np.float64) for i in event_type_list])
-        event_rates = np.zeros(nr_sfh, dtype=output_dtype)
+        event_rates = np.empty(nr_sfh, dtype=output_dtype)
 
         # Define time edges
         time_edges = BPASS_LINEAR_TIME_EDGES if sample_rate < 0 else np.linspace(0, self.now, sample_rate+1)
@@ -237,7 +237,7 @@ class CSPEventRate(HokiObject, CSP):
 
         output_dtype = np.dtype([(i, np.float64, nr_time_bins)
                                  for i in event_type_list])
-        event_rates = np.zeros(nr_sfh, dtype=output_dtype)
+        event_rates = np.empty(nr_sfh, dtype=output_dtype)
 
         time_edges = np.linspace(0, self.now, nr_time_bins+1)
 
@@ -315,7 +315,7 @@ class CSPEventRate(HokiObject, CSP):
         nr_events = len(event_type_list)
         bpass_rates =  self._numpy_bpass_rates[[BPASS_EVENT_TYPES.index(i) for i in event_type_list]]
 
-        event_rate_list = np.zeros((nr_sfh, 13, nr_events), dtype=np.float64)
+        event_rate_list = np.empty((nr_sfh, 13, nr_events), dtype=np.float64)
 
         for i in range(nr_sfh):
             print_progress_bar(i, nr_sfh)
@@ -423,9 +423,9 @@ class CSPEventRate(HokiObject, CSP):
         """
 
         nr_event_type = bpass_rates.shape[0]
-        event_rates = np.zeros((13, nr_event_type), dtype=np.float64)
+        event_rates = np.empty((13, nr_event_type), dtype=np.float64)
         time_edges = np.linspace(0, HOKI_NOW, sample_rate+1)
-        mass_per_bin_list = np.zeros((13, sample_rate), dtype=np.float64)
+        mass_per_bin_list = np.empty((13, sample_rate), dtype=np.float64)
 
         # Calculate the mass per bin for each metallicity
         for i in numba.prange(13):
@@ -437,7 +437,6 @@ class CSPEventRate(HokiObject, CSP):
 
             # Loop over the event types
             for count in numba.prange(nr_event_type):
-                # event_rates[counter][count] =
                 event_rates[counter][count] = utils._at_time(np.ones(sample_rate)*BPASS_NUM_METALLICITIES[counter],
                                                 mass_per_bin_list[counter],
                                                 time_edges,
@@ -477,9 +476,9 @@ class CSPEventRate(HokiObject, CSP):
 
         """
         nr_event_type = bpass_rates.shape[0]
-        event_rates = np.zeros((13, nr_event_type, nr_time_bins), dtype=np.float64)
+        event_rates = np.empty((13, nr_event_type, nr_time_bins), dtype=np.float64)
         time_edges = np.linspace(0, HOKI_NOW, nr_time_bins+1)
-        mass_per_bin_list = np.zeros((13, nr_time_bins), dtype=np.float64)
+        mass_per_bin_list = np.empty((13, nr_time_bins), dtype=np.float64)
 
         # Calculate the mass per bin for each metallicity
         for i in numba.prange(13):

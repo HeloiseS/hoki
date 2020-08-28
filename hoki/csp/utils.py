@@ -58,7 +58,7 @@ def trapz_loop(dp, fp, sample_rate):
         An array containing the integrals over bins separated by the sample_rate
     """
     l = int((len(dp)-1)/sample_rate)
-    out = np.zeros(l)
+    out = np.empty(l)
     for i in range(l):
         j1 = i*sample_rate
         j2 = (i+1)*sample_rate + 1
@@ -91,7 +91,7 @@ def _optimised_mass_per_bin(time_points, sfh, time_edges, sample_rate):
         An array of the mass per time bin
     """
     l = len(time_edges)-1
-    out = np.zeros(l)
+    out = np.empty(l)
     for i in range(l):
         x = np.linspace(time_edges[i],time_edges[i+1], sample_rate)
         y = np.interp(x, time_points, sfh)
