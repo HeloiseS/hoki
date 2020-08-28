@@ -15,21 +15,6 @@ class SpectraCompiler():
     Pipeline to load the BPASS spectra txt files and save them as a 3D
     `numpy.ndarray` binary file.
 
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
-
     Attributes
     ----------
     spectra : `numpy.ndarray` (13, 51, 100000) [(metallicity, log_age, wavelength)]
@@ -45,13 +30,27 @@ class SpectraCompiler():
         -----
         spectra_folder : `str`
             Path to the folder containing the spectra of the given imf.
+
         output_folder : `str`
             Path to the folder, where to output the pickled pandas.DataFrame
+
         imf : `str`
-            BPASS IMF Identifiers as defined in the Note.
+            BPASS IMF Identifiers
+            The accepted IMF identifiers are:
+            - `"imf_chab100"`
+            - `"imf_chab300"`
+            - `"imf100_100"`
+            - `"imf100_300"`
+            - `"imf135_100"`
+            - `"imf135_300"`
+            - `"imfall_300"`
+            - `"imf170_100"`
+            - `"imf170_300"`
+
         binary : `bool`
             If `True`, loads the binary files. Otherwise, just loads single stars.
             Default=True
+
         verbose : `bool`
             If `True` prints out extra information for the user.
             Default=False
@@ -59,11 +58,8 @@ class SpectraCompiler():
         if verbose:
             _print_welcome()
 
-        # Set text for population type
-        if binary:
-            star = "bin"
-        else:
-            star = "sin"
+        # Check population type
+        star = "bin" if binary else "sin"
 
         # check IMF key
         if imf not in BPASS_IMFS:
