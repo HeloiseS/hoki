@@ -25,11 +25,10 @@ class TestSpectraCompiler(object):
 
     # Patch the model_output function
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_compiler(self, mock_nploadtxt):
+    def test_compiler(self, mock_model_output):
 
-        print(self.data.shape)
         # Set the model_output to the DataFrame
-        mock_nploadtxt.return_value = self.data.to_numpy()
+        mock_model_output.return_value = self.data.to_numpy()
 
         spec = SpectraCompiler(f"{data_path}",
                                f"{data_path}",
