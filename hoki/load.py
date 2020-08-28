@@ -437,7 +437,7 @@ def all_rates(data_path, imf, binary=True):
         Usage: rates.loc[log_age, (type, metallicity)]
 
 
-        Note
+        Notes
         -----
         This dataframe has the following structure.
         The index is the log_age as a float.
@@ -489,7 +489,7 @@ def all_spectra(data_path, imf, binary=True):
     """
     Load all BPASS spectra from files.
 
-    Note
+    Notes
     -----
     The first time this function is ran on a folder it will generate a pickle
     file containing all the BPASS spectra per metallicity for faster loading
