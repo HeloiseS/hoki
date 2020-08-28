@@ -5,10 +5,8 @@ Objects and pipelines that compile BPASS data files into more convenient, more p
 """
 
 import numpy as np
-import pandas as pd
 
-from hoki.constants import (BPASS_IMFS, BPASS_METALLICITIES,
-                            BPASS_NUM_METALLICITIES)
+from hoki.constants import BPASS_IMFS, BPASS_METALLICITIES
 from hoki.utils.progressbar import print_progress_bar
 
 
@@ -72,22 +70,13 @@ class SpectraCompiler():
             raise HokiKeyError(
                 f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
-
         # Setup the numpy output
-        spectra = np.zeros((13, 51, 100000), dtype=np.float64)
+        spectra = np.empty((13, 51, 100000), dtype=np.float64)
 
-        # loop over all the metallicities and load all the specta
+        # loop over all the metallicities and load all the spectra
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
-
-            # use manual load, because otherwise a cyclic import is required.
-            data = pd.read_csv(f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat",
-                               sep=r"\s+",
-                               names=['log_age', 'Ia', 'IIP', 'II', 'Ib', 'Ic', 'LGRB', 'PISNe', 'low_mass',
-                               'e_Ia', 'e_IIP', 'e_II', 'e_Ib', 'e_Ic', 'e_LGRB', 'e_PISNe', 'e_low_mass',
-                               'age_yrs'],
-                               engine='python')
-            spectra[num] = data.loc[:, slice("6.0", "11.0")].T.to_numpy()
+            spectra[num] = np.loadtxt(f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat").T[:1, :]
 
         # pickle the datafile
         np.save(f"{output_folder}/all_spectra-{star}-{imf}", spectra)
