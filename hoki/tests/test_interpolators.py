@@ -6,7 +6,7 @@ Author: Martin Glatzle
 from unittest import TestCase, mock
 from hoki import interpolators
 from hoki.constants import (
-    BPASS_NUM_METALLICITIES, BPASS_TIME_BINS
+    BPASS_NUM_METALLICITIES, BPASS_TIME_BINS, BPASS_WAVELENGTHS
 )
 import numpy as np
 
@@ -159,12 +159,17 @@ class TestSpectraInterpolator(TestCase):
     def setUp(self):
         self.spectra = np.random.random((4, 4, 100))
         self.lam = np.linspace(1, 10, num=100)
+        self.lam2 = np.linspace(1, 10, num=10)
         self.metallicities = np.linspace(1, 10, num=4)
         self.ages = np.linspace(1, 10, num=4)
 
         self.mock_lam = mock.patch(
             'hoki.interpolators.BPASS_WAVELENGTHS',
             self.lam,
+        )
+        self.mock_lam2 = mock.patch(
+            'hoki.interpolators.BPASS_WAVELENGTHS',
+            self.lam2,
         )
         self.mock_constructor_defaults = mock.patch(
             'hoki.interpolators.GridInterpolator.__init__.__defaults__',
@@ -174,7 +179,6 @@ class TestSpectraInterpolator(TestCase):
             'hoki.load.all_spectra',
             return_value=self.spectra
         )
-
         return
 
     def test_init(self):
@@ -191,23 +195,50 @@ class TestSpectraInterpolator(TestCase):
             )
         return
 
+    def test_exceptions(self):
+        with self.mock_lam, self.mock_constructor_defaults, \
+             self.mock_all_spectra:
+            with self.assertRaises(ValueError):
+                interpolators.SpectraInterpolator(
+                    '', '', lam_min=3, lam_max=2,
+                )
+        with self.mock_lam2, self.mock_constructor_defaults, \
+             self.mock_all_spectra:
+            with self.assertRaises(ValueError):
+                interpolators.SpectraInterpolator(
+                    '', '',
+                )
+        return
+
     def test_interpolate(self):
         with self.mock_lam, self.mock_constructor_defaults, \
              self.mock_all_spectra:
             interp = interpolators.SpectraInterpolator(
                 '', '',
             )
+
+        # simple case
         res = interp.interpolate(1., 1.)
         self.assertEqual(
             len(res[0]), len(res[1])
         )
-        interp.interpolate(1., 1., 1.)
+
+        # with mass value
+        res = interp.interpolate(1., 1., 1.)
+
+        # multiple values
         res = interp.interpolate(
-            np.array([1., 2.]),
-            np.array([1., 2.]),
+            np.array([3., 3.]),
+            np.array([2., 2.]),
             np.array([1., 2.])
         )
         self.assertEqual(
             len(res[0]), res[1].shape[1]
+        )
+        self.assertEqual(
+            2, res[1].shape[0]
+        )
+        self.assertTrue(
+            np.allclose(2*res[1][0, :], res[1][1, :])
         )
         return
