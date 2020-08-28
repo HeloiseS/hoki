@@ -28,6 +28,7 @@ time_points = np.loadtxt(f"{data_path}/csp_test_data/time_points.txt")
 # sfh_fnc = lambda x : np.interp(x, time_points,  test_sfh)
 # Z_fnc = lambda x : np.interp(x, time_points, test_metallicity)
 def sfh_fnc(x): return 1
+
 def Z_fnc(x): return 0.00001
 
 

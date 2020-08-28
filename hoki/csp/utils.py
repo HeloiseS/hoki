@@ -17,9 +17,24 @@ from hoki.utils.exceptions import *
 ########################
 # TODO add check if time outside of age universe range
 # Can these be turned into numba functions?
+@numba.njit
+def _optimised_trapezodial_rule(y,x):
+    s = 0
+    for j in range(1, len(x)):
+        s += (x[j]-x[j-1])*(y[j]+y[j-1])
+    return s/2
 
+@numba.njit
+def _optimised_mass_per_bin(x_data, y_data, time_edges, sample_rate):
+    l = len(time_edges)-1
+    out = np.zeros(l)
+    for i in range(l):
+        x = np.linspace(time_edges[i],time_edges[i+1], sample_rate)
+        y = np.interp(x, x_data, y_data)
+        out[i] = _optimised_trapezodial_rule(y,x)
+    return out
 
-def mass_per_bin(sfh_function, time_edges, sample_rate=100):
+def mass_per_bin(sfh_function, time_edges, sample_rate=25):
     """
     Gives the mass per bin for the given edges in time
 
