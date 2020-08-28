@@ -162,9 +162,9 @@ class TestSpectraInterpolator(TestCase):
         self.metallicities = np.linspace(1, 10, num=4)
         self.ages = np.linspace(1, 10, num=4)
 
-        self.mock_lam = mock.patch.multiple(
-            'hoki.interpolators',
-            BPASS_WAVELENGTHS=self.lam,
+        self.mock_lam = mock.patch(
+            'hoki.interpolators.BPASS_WAVELENGTHS',
+            self.lam,
         )
         self.mock_constructor_defaults = mock.patch(
             'hoki.interpolators.GridInterpolator.__init__.__defaults__',
