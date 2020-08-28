@@ -173,14 +173,14 @@ class TestLoadAllsSpectra(object):
     # Initialise model_output DataFrame
     # This reduces I/O readings
     data = load.model_output(
-        f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
+        f"{data_path}/spectra-bin-imf135_300.z002.dat")
 
     # Patch the model_output function
-    @patch("hoki.data_compilers.pd.read_csv")
+    @patch("hoki.data_compilers.np.loadtxt")
     def test_compile_spectra(self, mock_model_output):
 
         # Set the model_output to the DataFrame
-        mock_model_output.return_value = self.data
+        mock_model_output.return_value = self.data.to_numpy()
 
         spec = load.all_spectra(f"{data_path}", "imf135_300")
 
@@ -189,15 +189,21 @@ class TestLoadAllsSpectra(object):
             "No compiled file is created."
 
         # Check output numpy array
-        npt.assert_allclose(spec[3], self.data.T,
-                            err_msg="Loading of files has failed.")
+        npt.assert_allclose(
+            spec[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Loading of files has failed."
+        )
 
     def test_load_pickled_file(self):
 
         spec = load.all_spectra(f"{data_path}", "imf135_300")
 
         # Check output numpy array
-        npt.assert_allclose(spec[3], self.data.T,
-                            err_msg="Loading of compiled file has failed.")
+        npt.assert_allclose(
+            spec[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Loading of compiled file has failed."
+        )
 
         os.remove(f"{data_path}/all_spectra-bin-imf135_300.npy")
