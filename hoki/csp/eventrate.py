@@ -10,7 +10,8 @@ import numba
 
 from hoki.csp.csp import CSP
 import hoki.csp.utils as utils
-from hoki.constants import *
+from hoki.constants import (BPASS_LINEAR_TIME_EDGES,
+        BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES, HOKI_NOW)
 from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.hoki_object import HokiObject
 from hoki import load
@@ -269,7 +270,7 @@ class CSPEventRate(HokiObject, CSP):
 
     def grid_at_time(self, SFH_list, time_points, event_type_list, t0, sample_rate=1000):
         """Calculates event rates for the given BPASS event types for the
-        given Stellar Formation Histories
+        given SFH in a 2D grid (over BPASS metallicity and time_points)
 
 
         Parameters
@@ -306,7 +307,7 @@ class CSPEventRate(HokiObject, CSP):
         Returns
         ------
         event_rate_list : `numpy.ndarray` (N, 13, nr_events)
-            A numpy array containing the event rates per galaxy (N),
+            A numpy array containing the event rates per SFH (N),
             per metallicity (13), per event type (nr_events) at t0.
 
         """
@@ -385,7 +386,7 @@ class CSPEventRate(HokiObject, CSP):
 
     @staticmethod
     @numba.njit(parallel=True, cache=True)
-    def _grid_rate_calculator_at_time(bpass_rates, SFH, time_points, t0, sample_rate):
+    def _grid_rate_calculator_at_time(bpass_rates, SFH, time_points, t0, sample_rate=1000):
         """Calculates the event rates for the given rates and 2D SFH.
 
         Note
@@ -412,8 +413,6 @@ class CSPEventRate(HokiObject, CSP):
         sample_rate : `int`
             The number of samples to take from the SFH and metallicity evolutions.
             Default = 1000.
-            If a negative value is given, the BPASS binning to calculate
-            the event rates.
 
         Returns
         -------
@@ -424,7 +423,9 @@ class CSPEventRate(HokiObject, CSP):
 
         nr_event_type = bpass_rates.shape[0]
         event_rates = np.empty((13, nr_event_type), dtype=np.float64)
+
         time_edges = np.linspace(0, HOKI_NOW, sample_rate+1)
+
         mass_per_bin_list = np.empty((13, sample_rate), dtype=np.float64)
 
         # Calculate the mass per bin for each metallicity
