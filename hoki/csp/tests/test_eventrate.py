@@ -34,7 +34,7 @@ def vec_sfh(x): return np.zeros(len(x)) +1
 def vec_Z(x): return np.zeros(len(x)) + 0.00001
 
 # define SFH object
-time_axis = np.linspace(0, 13e9, 1000)
+time_axis = np.linspace(0, HOKI_NOW, 1000)
 sfh = SFH(time_axis, "c", {"constant": 1})
 
 

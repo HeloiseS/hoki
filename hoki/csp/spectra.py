@@ -3,41 +3,39 @@ Object to calculate the spectra at a certain
 lookback time or over a binned lookback time
 """
 import numpy as np
-
+import numba
 
 import hoki.csp.utils as utils
 from hoki.csp.csp import CSP
-from hoki.constants import *
+from hoki.constants import (BPASS_LINEAR_TIME_EDGES,
+            HOKI_NOW, BPASS_NUM_METALLICITIES)
 from hoki.utils.hoki_object import HokiObject
 from hoki import load
+from hoki.utils.progressbar import print_progress_bar
+
 
 class CSPSpectra(HokiObject, CSP):
     """
     Object to calculate synthetic spectra with complex stellar formation histories.
 
-
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
-
     Parameters
     ----------
     data_path : `str`
-        folder containing the BPASS data files
+        Folder containing the BPASS data files
 
     imf : `str`
         The BPASS identifier for the IMF of the BPASS event rate files.
+
+        The accepted IMF identifiers are:
+        - `"imf_chab100"`
+        - `"imf_chab300"`
+        - `"imf100_100"`
+        - `"imf100_300"`
+        - `"imf135_100"`
+        - `"imf135_300"`
+        - `"imfall_300"`
+        - `"imf170_100"`
+        - `"imf170_300"`
 
     binary : boolean
         If `True`, loads the binary files. Otherwise, just loads single stars.
@@ -56,14 +54,80 @@ class CSPSpectra(HokiObject, CSP):
         self.bpass_spectra = utils._normalise_spectrum(
             load.all_spectra(data_path, imf, binary=binary))
 
-    def calculate_spec_over_time(self,
-                                 SFH,
-                                 ZEH,
-                                 nr_time_bins,
-                                 return_time_edges=False
-                                 ):
+    ###################
+    # Function inputs #
+    ###################
+    # Public functions that take SFH and ZEH functions as input
+
+    def at_time(self, SFH, ZEH, t0, sample_rate=1000):
         """
-        Calculates spectra over lookback time.
+        Calculates the spectrum at lookback time `t0` for functions as input.
+
+        Parameters
+        ----------
+        SFH : `python callable`,
+              `hoki.csp.sfh.SFH`,
+              `list(hoki.csp.sfh.SFH, )`,
+              `list(callable, )`
+            SFH can be the following things:
+            - A python callable (function) which takes the lookback time and
+              returns the stellar formation rate in units M_\\odot per yr at
+              the given time.
+            - A list of python callables with the above requirement.
+            - A `hoki.csp.sfh.SFH` object.
+            - A list of `hoki.csp.sfh.SFH` objects.
+
+        ZEH : callable, `list(callable, )`
+            ZEH can be the following thins:
+            - A python callable (function) which takes the lookback time and
+              returns the metallicity at the given time.
+            - A list of python callables with the above requirement.
+
+        t0 : `float`
+            The lookback time, where to calculate the event rate.
+
+        sample_rate : `int`
+            The number of samples to take from the SFH and metallicity evolutions.
+            Default = 1000.
+            If a negative value is given, the BPASS binning to calculate
+            the spectra.
+
+        Returns
+        -------
+        `numpy.ndarray`
+            Returns a `numpy.ndarray` containing the spectra for each sfh
+            and metallicity pair at the requested lookback time.
+            Shape: [len(sfh), 100000]
+            Usage: event_spectra[1][999]
+                (Gives the L_\\odot at 1000 Angstrom for the second
+                sfh and metallicity history pair)
+        """
+
+        # check if in correct input format and return list objects
+        SFH, ZEH = self._type_check_histories(SFH, ZEH)
+
+        nr_sfh = len(SFH)
+
+        output_spectra = np.empty((nr_sfh, 100000), dtype=np.float64)
+
+        time_edges = BPASS_LINEAR_TIME_EDGES if sample_rate < 0 \
+                                else np.linspace(0, self.now, sample_rate+1)
+
+        mass_per_bin_list = np.array(
+            [utils.mass_per_bin(i, t0 + time_edges) for i in SFH])
+        metallicity_per_bin_list = np.array(
+            [utils.metallicity_per_bin(i, t0 + time_edges) for i in ZEH])
+        for counter, (mass_per_bin, Z_per_bin) in enumerate(zip(mass_per_bin_list, metallicity_per_bin_list)):
+            output_spectra[counter] = utils._at_time(Z_per_bin,
+                                                     mass_per_bin,
+                                                     time_edges,
+                                                     self.bpass_spectra)
+
+        return output_spectra
+
+    def over_time(self, SFH, ZEH, nr_time_bins, return_time_edges=False):
+        """
+        Calculates spectra over lookback time with functions as input.
 
         Parameters
         ----------
@@ -115,13 +179,14 @@ class CSPSpectra(HokiObject, CSP):
 
         # Initialise binning
         time_edges = np.linspace(0, self.now, nr_time_bins + 1)
+
         # Calculate mass and average metallicity per bin
         mass_per_bin_list = np.array(
             [utils.mass_per_bin(i, time_edges) for i in SFH])
         metallicity_per_bin_list = np.array(
             [utils.metallicity_per_bin(i, time_edges) for i in ZEH])
 
-        output_spectra = np.zeros(
+        output_spectra = np.empty(
             (nr_sfh, nr_time_bins, 100000), dtype=np.float64)
 
         for counter, (mass_per_bin, Z_per_bin) in enumerate(zip(mass_per_bin_list,  metallicity_per_bin_list)):
@@ -129,86 +194,195 @@ class CSPSpectra(HokiObject, CSP):
                                              mass_per_bin,
                                              time_edges,
                                              self.bpass_spectra)
-
             output_spectra[counter] = spec / np.diff(time_edges)[:, None]
+
         if return_time_edges:
             return np.array([output_spectra, time_edges], dtype=object)
         else:
             return output_spectra
 
-    def calculate_spec_at_time(self,
-                               SFH,
-                               ZEH,
-                               t0,
-                               sample_rate=1000
-                               ):
-        """
-        Calculates the spectrum at lookback time `t0`.
+    ####################
+    # Grid calculators #
+    ####################
+    # Public functions that take a 2D SFH split per metallicity (13, nr_time_points).
+
+    def grid_at_time(self, SFH_list, time_points, t0, sample_rate=1000):
+        """Calculates spectra for the given SFH 2d grids
+        (over metallicity and per time_points) at `t0`
+
 
         Parameters
         ----------
-        SFH : `python callable`,
-              `hoki.csp.sfh.SFH`,
-              `list(hoki.csp.sfh.SFH, )`,
-              `list(callable, )`
-            SFH can be the following things:
-            - A python callable (function) which takes the lookback time and
-              returns the stellar formation rate in units M_\\odot per yr at
-              the given time.
-            - A list of python callables with the above requirement.
-            - A `hoki.csp.sfh.SFH` object.
-            - A list of `hoki.csp.sfh.SFH` objects.
+        SFH_list : `numpy.ndarray` (N, 13, M) [nr_sfh, metalllicities, time_points]
+            A list of N stellar formation histories divided into BPASS metallicity bins,
+            over lookback time points with length M.
 
-        ZEH : callable, `list(callable, )`
-            ZEH can be the following thins:
-            - A python callable (function) which takes the lookback time and
-              returns the metallicity at the given time.
-            - A list of python callables with the above requirement.
+        time_points : `numpy.ndarray` (M)
+            An array of the lookback time points of length N2 at which the SFH is given in the SFH_list.
 
         t0 : `float`
-            The lookback time, where to calculate the event rate.
+            The moment in lookback time, where to calculate the the event rate
 
         sample_rate : `int`
             The number of samples to take from the SFH and metallicity evolutions.
             Default = 1000.
-            If a negative value is given, the BPASS binning to calculate
-            the event rates.
+
+        Returns
+        ------
+        `numpy.ndarray` (N, 13, 100000)
+            A numpy array containing the spectra per SFH (N),
+            per metallicity (13), per wavelength (100000) at t0.
+        """
+
+        nr_sfh = SFH_list.shape[0]
+
+        output_spectra = np.empty((nr_sfh, 13, 100000), dtype=np.float64)
+
+        for i in range(nr_sfh):
+            print_progress_bar(i, nr_sfh)
+            output_spectra[i] = self._grid_rate_calculator_at_time(self.bpass_spectra,
+                                                         SFH_list[i],
+                                                         time_points,
+                                                         t0,
+                                                         sample_rate)
+        return output_spectra
+
+    def grid_over_time(self, SFH_list, time_points, nr_time_bins):
+        """Calculates spectra for the given 2D Stellar Formation Histories
+        over lookback time.
+
+
+        Parameters
+        ----------
+        SFH_list : `numpy.ndarray` (N, 13, M) [nr_sfh, metalllicities, time_points]
+            A list of N stellar formation histories divided into BPASS metallicity bins,
+            over lookback time points with length M.
+
+        time_points : `numpy.ndarray` (M)
+            An array of the lookback time points of length N2 at which the SFH is given in the SFH_list.
+
+        nr_time_bins : `int`
+            The number of time bins in which to divide the lookback time
+
+        Returns
+        ------
+        `numpy.ndarray` (N, 13, nr_time_bins, 100000)
+            A numpy array containing the spectra per SFH (N),
+            per metallicity (13), per wavelength (100000) and per time bins (nr_time_bins).
+
+        """
+        nr_sfh = SFH_list.shape[0]
+
+        output_spectra = np.zeros((nr_sfh, 13, nr_time_bins, 100000), dtype=np.float64)
+
+        for i in range(nr_sfh):
+            print_progress_bar(i, nr_sfh)
+            output_spectra[i] = self._grid_rate_calculator_over_time(self.bpass_spectra,
+                                                         SFH_list[i],
+                                                         time_points,
+                                                         nr_time_bins)
+        return output_spectra
+
+
+    #########################
+    # Grid rate calculators #
+    #########################
+    # Private functions to calculate the rate using a 2D SFH split per metallicity (13, nr_time_points).
+
+
+    @staticmethod
+    @numba.njit(parallel=True, cache=True)
+    def _grid_rate_calculator_at_time(bpass_spectra, SFH, time_points, t0, sample_rate=1000):
+        """Calculates the spectra for the given spectra and 2D SFH at a specific time
+
+        Parameters
+        ----------
+        bpass_spectra : `numpy.ndarray` (13, 51, 100000) (metallicity, time_bin, wavelength)
+            Numpy array containing the BPASS spectra
+            metallicity (13), BPASS time bins (51), and wavelength (100000)
+
+        SFH : `numpy.ndarray` (13, N) [metallicity, time_points]
+            Gives the SFH for each metallicity at the time_points.
+
+        time_points : `numpy.ndarray` (N)
+            The time points at which the SFH is sampled (N)
+
+        t0 : 'float'
+            The lookback time at which to calculate the spectra
+
+        sample_rate : `int`
+            The number of samples to take from the SFH and metallicity evolutions.
+            Default = 1000.
 
         Returns
         -------
-        `numpy.ndarray`
-            Returns a `numpy.ndarray` containing the spectra for each sfh
-            and metallicity pair at the requested lookback time.
-            Shape: [len(sfh), 100000]
-            Usage: event_rates[1][999]
-                (Gives the L_\\odot at 1000 Angstrom for the second
-                sfh and metallicity history pair)
+        `numpy.ndarray` (13, 100000)
+            A numpy array containing the spectrum per metallicity (13)
+            per wavelength (100000) at the given time.
         """
 
-        # check if in correct input format and return list objects
-        SFH, ZEH = self._type_check_histories(SFH, ZEH)
+        spectra = np.empty((13, 100000), dtype=np.float64)
 
-        # The setup of these elements could almost all be combined into a function
-        # with code that's repeated above. Similarly, with the event rate calculation.
-        nr_sfh = len(SFH)
 
-        output_spectrum = np.zeros((nr_sfh, 100000), dtype=np.float64)
+        time_edges = np.linspace(0, HOKI_NOW, sample_rate+1)
+        mass_per_bin_list = np.empty((13, sample_rate), dtype=np.float64)
 
-        if sample_rate < 0:
-            time_edges = BPASS_LINEAR_TIME_EDGES
-        else:
-            time_edges = np.linspace(0, 13.8e9, sample_rate + 1)
+        # # Calculate the mass per bin for each metallicity
+        for i in numba.prange(13):
+            # The input parameter here (sample_rate) is between the time sampled points
+            mass_per_bin_list[i] = utils._optimised_mass_per_bin(time_points, SFH[i], t0+time_edges, sample_rate=25)
 
-        mass_per_bin_list = np.array(
-            [utils.mass_per_bin(i, t0 + time_edges) for i in SFH])
-        metallicity_per_bin_list = np.array([utils.metallicity_per_bin(i, t0 + time_edges)
-                                             for i in ZEH])
+        # Loop over the metallicities
+        for counter in numba.prange(13):
+            spectra[counter] = utils._at_time(
+                np.ones(sample_rate)*BPASS_NUM_METALLICITIES[counter],
+                                           mass_per_bin_list[counter],
+                                           time_edges,
+                                           bpass_spectra)
 
-        for counter, (mass_per_bin, Z_per_bin) in enumerate(zip(mass_per_bin_list, metallicity_per_bin_list)):
-            output_spectrum[counter] = utils._at_time_spectrum(Z_per_bin,
-                                                               mass_per_bin,
-                                                               time_edges,
-                                                               self.bpass_spectra
-                                                               )
+        return spectra
 
-        return output_spectrum
+    @staticmethod
+    @numba.njit(parallel=True, cache=True)
+    def _grid_rate_calculator_over_time(bpass_spectra, SFH, time_points, nr_time_bins):
+        """Calculates the spectra for a 2d grid SFH over time
+
+        Parameters
+        ----------
+        bpass_spectra : `numpy.ndarray` (13, 51, 100000) [metallicity, time_bin, wavelength]
+            Numpy array containing the BPASS spectra per metallicity, BPASS time bin, and wavelength.
+
+        SFH : `numpy.ndarray` (13, N) [metallicity, SFH_time_sampling_points]
+            Gives the SFH for each metallicity at the time_points
+
+        time_points : `numpy.ndarray`
+            The time points at which the SFH is sampled (N)
+
+        nr_time_bins : `int`
+            The number of time points in which to split the lookback time (final binning)
+
+        Returns
+        -------
+        `numpy.ndarray` (13, nr_time_bins, 100000)
+            A numpy array containing the spectra per metallicity (13)
+            and per time bins.
+
+        """
+        spectra = np.empty((13, nr_time_bins, 100000), dtype=np.float64)
+        time_edges = np.linspace(0, HOKI_NOW, nr_time_bins+1)
+        mass_per_bin_list = np.empty((13, nr_time_bins), dtype=np.float64)
+
+        # Calculate the mass per bin for each metallicity
+        for i in numba.prange(13):
+            mass_per_bin_list[i] = utils._optimised_mass_per_bin(time_points, SFH[i], time_edges, sample_rate=25)
+
+        # Loop over the metallcities
+        for counter in numba.prange(13):
+            spectrum = utils._over_time_spectrum(np.ones(nr_time_bins)*BPASS_NUM_METALLICITIES[counter],
+                                          mass_per_bin_list[counter],
+                                          time_edges,
+                                          bpass_spectra)
+            for count, i in enumerate(np.diff(time_edges)):
+                spectra[counter, count] = spectrum[count]/i
+
+        return spectra
