@@ -338,7 +338,7 @@ def _over_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
     return event_rate
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _over_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
     """
     Calculates the spectra per bin over the given bin edges.
