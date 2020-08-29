@@ -43,7 +43,7 @@ class CSPEventRate(HokiObject, CSP):
 
     Attributes
     ----------
-    bpass_rates : `pandas.DataFrame`
+    bpass_rates : `pandas.DataFrame` (51, (8, 13))
         The BPASS delay time distributions in #events/yr/M_\\odot per metallicity.
         Usage: rates.loc[log_age, (type, metallicity)]
 

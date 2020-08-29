@@ -108,7 +108,7 @@ class TestRateCalculations(object):
     edges = np.linspace(0, 10, 11)
     Z_values = np.zeros(10) + 0.00001
     mass_values = np.zeros(10) + 1
-    rates = np.zeros((1, 51)) + 1
+    rates = np.zeros((13, 51)) + 1
 
     def test_over_time(self):
         out = utils._over_time(self.Z_values,
@@ -141,7 +141,7 @@ class TestSpectraCalculations(object):
     mass_values = np.zeros(10) + 1
 
     def test_over_time(self):
-        spectra = np.zeros((1, 100000, 51)) + 1
+        spectra = np.zeros((13, 51, 100000)) + 1
         out = utils._over_time_spectrum(self.Z_values,
                                         self.mass_values,
                                         self.edges,
@@ -150,7 +150,7 @@ class TestSpectraCalculations(object):
                             err_msg="_over_time_spectra calculation has failed.")
 
     def test_at_time_now(self):
-        spectra = np.zeros((51, 1, 100000)) + 1
+        spectra = np.zeros((13, 51, 100000)) + 1
         out = utils._at_time(self.Z_values,
                                       self.mass_values,
                                       self.edges,
@@ -160,7 +160,7 @@ class TestSpectraCalculations(object):
                             err_msg="_at_time spectrum calculation has failed for the now.")
 
     def test_at_time_past(self):
-        spectra = np.zeros((51, 1, 100000)) + 1
+        spectra = np.zeros((13, 51, 100000)) + 1
         out = utils._at_time(self.Z_values[5:],
                                       self.mass_values[5:],
                                       self.edges[5:],
