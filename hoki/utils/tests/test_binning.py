@@ -193,4 +193,9 @@ class TestBinSpectra(TestCase):
         bin_edges = np.array([2, 200])
         with self.assertRaises(ValueError):
             binning.bin_spectra(wave, sed, bin_edges, edges=True)
+        wave = np.linspace(100, 1)
+        sed = np.empty((1, len(wave)))
+        bin_edges = np.array([0.5, 20])
+        with self.assertRaises(ValueError):
+            binning.bin_spectra(wave, sed, bin_edges, edges=True)
         return

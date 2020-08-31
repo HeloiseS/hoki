@@ -90,8 +90,8 @@ def bin_spectra(wave, spectra, bins, edges=False):
         bin_edges[1:-1] = (bins[1:] + bins[:-1])/2
         bin_edges[0] = bins[0] - (bin_edges[1]-bins[0])
         bin_edges[-1] = bins[-1] + (bins[-1]-bin_edges[-2])
-    if not (bin_edges[0] >= np.amax(wave[0])
-            and bin_edges[-1] <= np.amin(wave[-1])):
+    if not (np.amax(bin_edges) <= np.amax(wave)
+            and np.amin(bin_edges) >= np.amin(wave)):
         raise ValueError("bin_edges outside of valid range!")
 
     spectra_new = _binwise_trapz_sorted(wave, spectra, bin_edges) \
