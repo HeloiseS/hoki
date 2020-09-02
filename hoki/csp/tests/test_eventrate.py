@@ -151,7 +151,7 @@ class TestCSPEventRate():
 
     def test_vector_input(self):
         assert np.isclose(self.CSP.at_time(
-                [vec_sfh], [vec_Z], ["Ia"],0, sample_rate=-1)[0]["Ia"],
+                [vec_sfh], [vec_Z], ["Ia"], 0, sample_rate=-1)[0]["Ia"],
                 0.002034966495416449),\
                     "Correct input is not taken."
 

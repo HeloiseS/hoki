@@ -65,7 +65,6 @@ def trapz_loop(dp, fp, sample_rate):
         out[i] = _optimised_trapezodial_rule(fp[j1:j2],dp[j1:j2])
     return out
 
-
 @numba.njit(cache=True)
 def _optimised_mass_per_bin(time_points, sfh, time_edges, sample_rate):
     """Mass per bin calculation from grid data
@@ -141,15 +140,17 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=25):
                 for t1, t2 in zip(time_edges[:-1], time_edges[1:])])
         dp = np.append(dp, time_edges[-1])                    # add final time edge back
 
-
-    fp = sfh_function(dp)
+    # catch when stuff goes weird in non-vectorized functions
+    try:
+        fp = sfh_function(dp)
+    except ValueError:
+        fp = np.vectorize(sfh_function)(dp)
 
     # make sure fp is a vector, even if sfh_function isn't a vectorized function
     if type(fp) != np.ndarray or len(fp) != len(dp):
         fp = np.vectorize(sfh_function)(dp)
 
     return trapz_loop(dp, fp, sample_rate)
-
 
 def metallicity_per_bin(Z_function, time_edges):
     """
@@ -168,7 +169,11 @@ def metallicity_per_bin(Z_function, time_edges):
         The average metallicity per time bin
     """
 
-    Z_values = Z_function(time_edges)
+    # Catch weird thing going on in the given function
+    try:
+        Z_values = Z_function(time_edges)
+    except ValueError:
+        Z_values = np.vectorize(Z_function)(time_edges)
     if type(Z_values) != np.ndarray or len(Z_values) != len(time_edges):
         Z_values = np.vectorize(Z_function)(time_edges)
 
@@ -196,7 +201,6 @@ def _normalise_rates(rates):
     """
     return rates / (1e6 * BPASS_LINEAR_TIME_INTERVALS[:, None])
 
-
 def _normalise_spectrum(spectra):
     """
     Normalises the BPASS spectra.
@@ -218,7 +222,6 @@ def _normalise_spectrum(spectra):
 #   BPASS Metallicities   #
 ###########################
 
-
 def _find_bpass_metallicities(Z_values):
     """
     Finds the nearest BPASS metallicities for each item in the list.
@@ -239,7 +242,6 @@ def _find_bpass_metallicities(Z_values):
 ########################################
 # Complex Stellar History Calculations #
 ########################################
-
 
 @numba.njit(cache=True)
 def _at_time(Z_per_bin, mass_per_bin, time_edges, bpass):
@@ -290,8 +292,6 @@ def _at_time(Z_per_bin, mass_per_bin, time_edges, bpass):
         out += rate
     return out
 
-
-
 @numba.njit(cache=True)
 def _over_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
     """
@@ -336,7 +336,6 @@ def _over_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
                                    BPASS_LINEAR_TIME_INTERVALS)
             event_rate[j] += bin_events * mass_per_bin[count]
     return event_rate
-
 
 @numba.njit(cache=True)
 def _over_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
@@ -433,7 +432,6 @@ def _integral(x1, x2, edges, values, bin_width):
                             * values[ledge:upper_bin])
 
     return total
-
 
 @numba.njit(cache=True)
 def _get_bin_index(x, edges):

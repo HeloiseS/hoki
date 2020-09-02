@@ -247,7 +247,7 @@ class CSPSpectra(HokiObject, CSP):
                                                          sample_rate)
         return output_spectra
 
-    def grid_over_time(self, SFH_list, time_points, nr_time_bins):
+    def grid_over_time(self, SFH_list, time_points, nr_time_bins, return_time_edges=False):
         """Calculates spectra for the given 2D Stellar Formation Histories
         over lookback time.
 
@@ -264,12 +264,18 @@ class CSPSpectra(HokiObject, CSP):
         nr_time_bins : `int`
             The number of time bins in which to divide the lookback time
 
+        return_time_edges : `bool`
+            If `True`, also returns the edges of the lookback time bins.
+            Default=False
+
         Returns
         ------
         `numpy.ndarray` (N, 13, nr_time_bins, 100000)
             A numpy array containing the spectra per SFH (N),
             per metallicity (13), per wavelength (100000) and per time bins (nr_time_bins).
 
+            If `return_time_edges=True`, returns a numpy array containing the spectra
+            and the time edges, eg. `out[0]=output_spectra` `out[1]=time_edges`.
         """
         nr_sfh = SFH_list.shape[0]
 
@@ -281,14 +287,16 @@ class CSPSpectra(HokiObject, CSP):
                                                          SFH_list[i],
                                                          time_points,
                                                          nr_time_bins)
-        return output_spectra
+        if return_time_edges:
+            return np.array([output_spectra, time_edges], dtype=object)
+        else:
+            return output_spectra
 
 
     #########################
     # Grid rate calculators #
     #########################
     # Private functions to calculate the rate using a 2D SFH split per metallicity (13, nr_time_points).
-
 
     @staticmethod
     @numba.njit(parallel=True, cache=True)

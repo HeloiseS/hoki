@@ -327,7 +327,7 @@ class CSPEventRate(HokiObject, CSP):
                                                          sample_rate)
         return event_rate_list
 
-    def grid_over_time(self, SFH_list, time_points, event_type_list, nr_time_bins):
+    def grid_over_time(self, SFH_list, time_points, event_type_list, nr_time_bins, return_time_edges=False):
         """Calculates event rates for the given BPASS event types for the
         given Stellar Formation Histories
 
@@ -357,16 +357,25 @@ class CSPEventRate(HokiObject, CSP):
         nr_time_bins : `int`
             The number of time bins in which to divide the lookback time
 
+        return_time_edges : `bool`
+            If `True`, also returns the edges of the lookback time bins.
+            Default=False
+
         Returns
         ------
         event_rate_list : `numpy.ndarray` (N, 13, nr_events, nr_time_bins)
+                                          ((N, 13, nr_events, nr_time_bins), time_edges)
             A numpy array containing the event rates per galaxy (N),
             per metallicity (13), per event type (nr_events) and per time bins (nr_time_bins).
+
+            If `return_time_edges=True`, returns a numpy array containing the event
+            rates and the time edges, eg. `out[0]=event_rates_list` `out[1]=time_edges`.
 
         """
         nr_sfh = SFH_list.shape[0]
 
         nr_events = len(event_type_list)
+        time_edges = np.linspace(0,self.now, nr_time_bins)
         bpass_rates =  self._numpy_bpass_rates[[BPASS_EVENT_TYPES.index(i) for i in event_type_list]]
 
         event_rate_list = np.zeros((nr_sfh, 13, nr_events, nr_time_bins), dtype=np.float64)
@@ -377,7 +386,11 @@ class CSPEventRate(HokiObject, CSP):
                                                          SFH_list[i],
                                                          time_points,
                                                          nr_time_bins)
-        return event_rate_list
+
+        if return_time_edges:
+            return np.array([event_rate_list, time_edges], dtype=object)
+        else:
+            return event_rate_list
 
     #########################
     # Grid rate calculators #
