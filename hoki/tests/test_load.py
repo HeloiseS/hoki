@@ -168,7 +168,7 @@ class TestLoadAllRates(object):
             "Models are not loaded correctly."
 
 
-class TestLoadAllsSpectra(object):
+class TestLoadAllSpectra(object):
 
     # Initialise model_output DataFrame
     # This reduces I/O readings
@@ -207,3 +207,44 @@ class TestLoadAllsSpectra(object):
         )
 
         os.remove(f"{data_path}/all_spectra-bin-imf135_300.npy")
+
+
+class TestLoadAllEmissivities(object):
+
+    # Initialise model_output DataFrame
+    # This reduces I/O readings
+    data = load.model_output(
+        f"{data_path}/ionizing-bin-imf135_300.z002.dat")
+
+    # Patch the model_output function
+    @patch("hoki.data_compilers.np.loadtxt")
+    def test_compile_emissivities(self, mock_model_output):
+
+        # Set the model_output to the DataFrame
+        mock_model_output.return_value = self.data.to_numpy()
+
+        res = load.all_emissivities(f"{data_path}", "imf135_300")
+
+        # Check if compiled file is created
+        assert os.path.isfile(f"{data_path}/all_ionizing-bin-imf135_300.npy"),\
+            "No compiled file is created."
+
+        # Check output numpy array
+        npt.assert_allclose(
+            res[3],
+            self.data.drop(columns='log_age').to_numpy(),
+            err_msg="Loading of files has failed."
+        )
+
+    def test_load_pickled_file(self):
+
+        res = load.all_emissivities(f"{data_path}", "imf135_300")
+
+        # Check output numpy array
+        npt.assert_allclose(
+            res[3],
+            self.data.drop(columns='log_age').to_numpy(),
+            err_msg="Loading of compiled file has failed."
+        )
+
+        os.remove(f"{data_path}/all_ionizing-bin-imf135_300.npy")
