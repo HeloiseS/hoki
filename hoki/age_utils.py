@@ -191,6 +191,10 @@ def _find_hrd_coordinates(obs_df, myhrd):
             T = float(T)
             # Finds the index that is at the minimum distance in Temperature space and adds it to the list
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
+
+        except TypeError:
+            T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0][0]))
+
         except ValueError:
             warnings.warn("T=" + str(T) + " cannot be converted to a float", HokiUserWarning)
             T_i.append(np.nan)
