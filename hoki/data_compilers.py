@@ -20,9 +20,10 @@ class ModelDataCompiler(HokiObject):
     Given a list of metalicities, a list of valid BPASS model attributes (in the dummy array), chosen types of model
     (binary,s ingle or both) and correct paths, will compile the corresponding BPASS stellar models into a DataFrame
     """
+
     def __init__(self, z_list, columns=['V'], single=False, binary=True,
                  models_path=MODELS_PATH, input_files_path=OUTPUTS_PATH,
-                 verbose=True, bpass_version=DEFAULT_BPASS_VERSION):
+                 verbose=True, bpass_version=DEFAULT_BPASS_VERSION, imf='imf135_300'):
         """
 
         Parameters
@@ -77,7 +78,7 @@ class ModelDataCompiler(HokiObject):
 
         # Creating the list of input file names...
         self.input_file_list = _select_input_files(self.z_list, directory=input_files_path,
-                                                   single=self.single, binary=self.binary)
+                                                   single=self.single, binary=self.binary, imf=imf)
 
         # ...then turning them into dataframes ...
         self.inputs_dataframe = _compile_input_files_to_dataframe(self.input_file_list)
