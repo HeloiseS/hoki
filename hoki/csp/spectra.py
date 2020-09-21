@@ -178,7 +178,7 @@ class CSPSpectra(HokiObject, CSP):
         nr_sfh = len(SFH)
 
         # Initialise binning
-        time_edges = np.linspace(0, self.now, nr_time_bins + 1)
+        time_edges = np.linspace(0, self.now, nr_time_bins+1)
 
         # Calculate mass and average metallicity per bin
         mass_per_bin_list = np.array(
@@ -280,6 +280,7 @@ class CSPSpectra(HokiObject, CSP):
         nr_sfh = SFH_list.shape[0]
 
         output_spectra = np.zeros((nr_sfh, 13, nr_time_bins, 100000), dtype=np.float64)
+        time_edges = np.linspace(0, HOKI_NOW, nr_time_bins+1)
 
         for i in range(nr_sfh):
             print_progress_bar(i, nr_sfh)

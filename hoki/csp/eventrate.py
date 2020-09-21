@@ -375,7 +375,7 @@ class CSPEventRate(HokiObject, CSP):
         nr_sfh = SFH_list.shape[0]
 
         nr_events = len(event_type_list)
-        time_edges = np.linspace(0,self.now, nr_time_bins)
+        time_edges = np.linspace(0,self.now, nr_time_bins+1)
         bpass_rates =  self._numpy_bpass_rates[[BPASS_EVENT_TYPES.index(i) for i in event_type_list]]
 
         event_rate_list = np.zeros((nr_sfh, 13, nr_events, nr_time_bins), dtype=np.float64)
