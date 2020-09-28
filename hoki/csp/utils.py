@@ -1,7 +1,7 @@
 """
 Author: Max Briel
 
-Utilities to be used in the complex stellar populations
+Utilities to be used in the complex stellar populations module
 """
 
 import numba
@@ -9,17 +9,18 @@ import numpy as np
 import pandas as pd
 
 import hoki.load
-from hoki.constants import *
-from hoki.utils.exceptions import *
+from hoki.constants import (BPASS_LINEAR_TIME_INTERVALS,
+        BPASS_NUM_METALLICITIES, BPASS_LINEAR_TIME_EDGES)
+from hoki.utils.exceptions import HokiFormatError
 
 ########################
 # Calculations per bin #
 ########################
-# TODO add check if time outside of age universe range
 
 @numba.njit(cache=True)
 def _optimised_trapezodial_rule(y,x):
-    """Basic Trapezodial rule integration
+    """
+    Basic Trapezodial rule integration
 
     Parameters
     ---------
@@ -31,43 +32,56 @@ def _optimised_trapezodial_rule(y,x):
     Returns
     -------
     float
-        The integral over the given values
+        The trapezodial integral over the given values
 
     """
     s = 0
+    # loop over values and perform trapezodial integral
     for j in range(1, len(x)):
         s += (x[j]-x[j-1])*(y[j]+y[j-1])
     return s/2
 
 @numba.njit(cache=True)
 def trapz_loop(dp, fp, sample_rate):
-    """Loop over a trapezodial integration with a sample rate to determine bins
+    """
+    Perform a trapezodial integration over subsections of the given arrays.
+
+    Notes
+    -----
+    dp and fp are split into a number of bins [(N-1)/sample_rate].
+    Each subsection is integrated using the _optimised_trapezodial_rule.
+    An array containing the integral for each subsection is returned.
 
     Parameters
     ----------
     dp : `numpy.ndarray` (N)
-        time points
+        Time points
     fp : `numpy.ndarray` (N)
-        function values at the time points
+        Function values at the time points
     sample_rate : int
-        the sample rate over which to integrate the values
+        The sample rate over which to integrate the values.
+        (N-1) has to be divisible by `sample_rate`
 
     Returns
     -------
-    `numpy.ndarray` (N-1)/sample_rate
-        An array containing the integrals over bins separated by the sample_rate
+    `numpy.ndarray` (N-1)/`sample_rate`
+        An array containing the integrals over bins separated by `sample_rate`
     """
-    l = int((len(dp)-1)/sample_rate)
+
+    l = int((len(dp)-1)/sample_rate) # find the nr_bins
+
     out = np.empty(l)
     for i in range(l):
+        # Find the indices that contain the subsampled points of the bin
         j1 = i*sample_rate
         j2 = (i+1)*sample_rate + 1
         out[i] = _optimised_trapezodial_rule(fp[j1:j2],dp[j1:j2])
     return out
 
 @numba.njit(cache=True)
-def _optimised_mass_per_bin(time_points, sfh, time_edges, sample_rate):
-    """Mass per bin calculation from grid data
+def _optimised_mass_per_bin(time_points, sfh, time_edges, sample_rate=25):
+    """
+    Mass per bin calculation from grid data
 
     Parameters
     ----------
@@ -89,17 +103,17 @@ def _optimised_mass_per_bin(time_points, sfh, time_edges, sample_rate):
     `numpy.ndarray` (M-1)
         An array of the mass per time bin
     """
-    l = len(time_edges)-1
+    l = len(time_edges)-1 # Get nr_bins
     out = np.empty(l)
     for i in range(l):
+        # subsample and interpolate for inbetween values
         x = np.linspace(time_edges[i],time_edges[i+1], sample_rate)
         y = np.interp(x, time_points, sfh)
         out[i] = _optimised_trapezodial_rule(y,x)
     return out
 
 def mass_per_bin(sfh_function, time_edges, sample_rate=25):
-    """
-    Gives the mass per bin for the given edges in time
+    """Calculates the mass per bin for the given edges in time
 
     Notes
     -----
@@ -127,13 +141,13 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=25):
     """
 
     # Subsample the time phase space
-    # check if equal distance
+    # check if equal distance/faster approach
     dif = np.diff(time_edges)
     if np.allclose(dif,dif[0]):
         dp = np.linspace(time_edges[0],
                         time_edges[-1],
                         (sample_rate-1)*(len(time_edges)-1)+len(time_edges))
-    # not equal distance
+    # not equal distance/slower due to required loop
     else:
         dp =  np.array(
             [np.linspace(t1, t2, sample_rate+1)[:-1]          # Remove last one to avoid repetition
@@ -147,6 +161,8 @@ def mass_per_bin(sfh_function, time_edges, sample_rate=25):
         fp = np.vectorize(sfh_function)(dp)
 
     # make sure fp is a vector, even if sfh_function isn't a vectorized function
+    # try/except can be escaped if the function takes an array, but returns a
+    # float.
     if type(fp) != np.ndarray or len(fp) != len(dp):
         fp = np.vectorize(sfh_function)(dp)
 
@@ -174,6 +190,10 @@ def metallicity_per_bin(Z_function, time_edges):
         Z_values = Z_function(time_edges)
     except ValueError:
         Z_values = np.vectorize(Z_function)(time_edges)
+
+    # make sure Z_values is a vector, even if Z_function isn't a vectorized function
+    # try/except can be escaped if the function takes an array, but returns a
+    # float.
     if type(Z_values) != np.ndarray or len(Z_values) != len(time_edges):
         Z_values = np.vectorize(Z_function)(time_edges)
 
@@ -192,12 +212,12 @@ def _normalise_rates(rates):
     Input
     -----
     rates : `pandas.DataFrame`
-        A pandas DataFrame containing the the events per bin
+        Pandas DataFrame containing the the events per bin
 
     Returns
     -------
     `pandas.DataFrame`
-        A pandas DataFrame containing the events/yr/M_\\odot
+        Pandas DataFrame containing the events/yr/M_\\odot
     """
     return rates / (1e6 * BPASS_LINEAR_TIME_INTERVALS[:, None])
 
@@ -208,12 +228,12 @@ def _normalise_spectrum(spectra):
     Input
     -----
     spectra : `numpy.ndarray`
-        A numpy.ndarray containing the spectra for a 1e6 M_\\odot population.
+        Numpy array containing the spectra for a 1e6 M_\\odot population.
 
     Returns
     -------
     `numpy.ndarray`
-        A numpy.ndarray containing the spectra per mass (L_\\odot/M_\\odot).
+        Numpy array containing the spectra per mass (L_\\odot/M_\\odot).
     """
     return spectra*1e-6
 
@@ -246,21 +266,23 @@ def _find_bpass_metallicities(Z_values):
 @numba.njit(cache=True)
 def _at_time(Z_per_bin, mass_per_bin, time_edges, bpass):
     """
-    Calculates the number of events at a specific time.
+    Calculates the number of events or spectra at a specific time.
 
     Note
     ----
-    time_edges[0] defines the time at which the events are calculated.
+    time_edges[0] defines the time at which the events or spectra are calculated.
+    The shape of `bpass` determines if a spectrum or a event rate calculation
+    is performed.
 
     Input
     -----
-    Z_per_bin : `numpy.ndarray`
+    Z_per_bin : `numpy.ndarray` (N)
         An array containing the metallicity values at each bin.
-    mass_per_bin : `numpy.ndarray`
+    mass_per_bin : `numpy.ndarray` (N)
         An array containig the amount of mass per bin in the final binning.
-    time_edges : `numpy.ndarray`
+    time_edges : `numpy.ndarray` (N+1)
         The bin edges of the Z_per_bin and mass_per_bin with usage
-    bpass : `numpy.ndarray` (13, 51) or (13, 51, 100000)
+    bpass : `numpy.ndarray` (13, 51) or (13, 51, 100000) [metallicity, log_age, (wavelength)]
         A ndarray containing either the event rates (13, 51)
         or the luminosity (13, 51, 100000) per metallicity and BPASS time bins.
 
@@ -282,6 +304,7 @@ def _at_time(Z_per_bin, mass_per_bin, time_edges, bpass):
     time_index_per_bin = np.array(
         [_get_bin_index(i, BPASS_LINEAR_TIME_EDGES) for i in time_edges])
 
+    # Check bpass shape if spectra or event rates
     if len(bpass.shape) == 2:
         out = np.zeros(1)
     else:
@@ -299,26 +322,24 @@ def _over_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
 
     Parameters
     ----------
-    Z_per_bin : `numpy.ndarray`
+    Z_per_bin : `numpy.ndarray` (N)
         An array containing the metallicity values in each time bin.
-    mass_per_bin : `numpy.ndarray`
+    mass_per_bin : `numpy.ndarray` (N)
         An array containig the amount of mass per time bin.
-    time_edges : `numpy.ndarray`
+    time_edges : `numpy.ndarray` (N+1)
         The bin edges of the Z_per_bin and mass_per_bin
 
-    bpass_rates : `numpy.ndarray`
+    bpass_rates : `numpy.ndarray` (13, 51) [metallicity, log_age]
         A 2D array containig the event rates for all BPASS metallicities over
         time in BPASS bins.
-        Shape: (13x51)
         Usage: bpass_rates[0][2]
                 (gives the event rate at the metallicity 0.00001 and
                  a log_age of 6.2)
 
     Returns
     -------
-    `numpy.ndarray`
+    `numpy.ndarray` (N)
         The number of events per bin
-
     """
     Z_index_per_bin = np.array(
         [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
@@ -344,26 +365,26 @@ def _over_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
 
     Parameters
     ----------
-    Z_per_bin : `numpy.ndarray`
+    Z_per_bin : `numpy.ndarray` (N)
         An array containing the metallicity values at each bin.
-    mass_per_bin : `numpy.ndarray`
+
+    mass_per_bin : `numpy.ndarray` (N)
         An array containig the amount of mass per bin in the final binning.
-    time_edges : `numpy.ndarray`
+
+    time_edges : `numpy.ndarray` (N+1)
         The bin edges of the Z_per_bin and mass_per_bin
-    bpass_spectra : `numpy.ndarray`
+
+    bpass_spectra : `numpy.ndarray` (13, 51, 100000) [metallicities, log_ages, wavelength]
         A 3D array containig the BPASS spectra luminosities per solar mass for
         the BPASS metallicities and time bins.
-        Shape: (13, 51, 100000) ([metallicities][log_ages][wavelength])
         Usage: `bpass_spectra[0][1][99]` or `bpass_spectra[0, 1, 99]`
                 (gives the L_\\odot/M_\\odot at Z=0.00001, 100 Angstrom at
                 log_age 6.1)
 
     Returns
     -------
-    `numpy.ndarray`
-        An `numpy.ndarray` containing a spectrum per time bin.
-        Shape: (len(time_edges)-1, 100000)
-
+    `numpy.ndarray` (N, 100000)
+        Numpy array containing a spectrum per time bin.
     """
     Z_index_per_bin = np.array(
         [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
@@ -396,9 +417,9 @@ def _integral(x1, x2, edges, values, bin_width):
     Parameters
     ----------
     x1 : `float`
-        lower bound of the integration
+        Lower bound of the integration
     x2 : `float`
-        upper bound of the integration
+        Upper bound of the integration
     edges : `numpy.ndarray`
         The edges of the bins
     values : `numpy.ndarray`
@@ -438,14 +459,10 @@ def _get_bin_index(x, edges):
     """
     Get the bin number given the edges.
 
-    Note
-    -----
-    Numba is used to speed up the bin index calculation.
-
     Parameters
     ----------
     x : `float`
-        value where you want to know the bin number
+        Value where you want to know the bin number
     edges: `numpy.ndarray`
         An array with the edges of the histogram
     Returns
