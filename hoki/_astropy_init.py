@@ -2,7 +2,7 @@
 
 __all__ = ['__version__']
 
-# this indicates whether or not we are in the package's setup.py
+# this indicates whether or not we are in the package'dc setup.py
 try:
     _ASTROPY_SETUP_
 except NameError:
@@ -45,7 +45,7 @@ if not _ASTROPY_SETUP_:  # noqa
                 except ConfigurationDefaultMissingError as e:
                     wmsg = (e.args[0] +
                             " Cannot install default profile. If you are "
-                            "importing from source, this is expected.")
+                            "importing from models_path, this is expected.")
                     warn(ConfigurationDefaultMissingWarning(wmsg))
                     del e
                 except Exception:

@@ -43,6 +43,10 @@ def test_model_output():
     del data
 
 
+#def test_dummy_to_dataframe():
+#    load.dummy_to_dataframe(data_path+"/NEWSINMODS/z020/sneplot-z020-11")
+
+
 def test_load_sn_rates():
     data = load._sn_rates(sn_file)
     assert data.shape[0] > 0, "The DataFrame is empty"

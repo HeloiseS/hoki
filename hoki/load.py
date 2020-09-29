@@ -3,8 +3,6 @@ This module implements the tools to easily load BPASS data.
 """
 
 import pandas as pd
-#from specutils import Spectrum1D
-import numpy as np
 import hoki.hrdiagrams as hr
 from hoki.constants import *
 import os
@@ -13,7 +11,8 @@ import io
 import pickle
 import pkg_resources
 import hoki.data_compilers
-from hoki.utils.exceptions import HokiKeyError
+import warnings
+from hoki.utils.exceptions import HokiDeprecationWarning, HokiKeyError
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
@@ -21,6 +20,7 @@ from hoki.utils.exceptions import HokiKeyError
 __all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
+
 
 ########################
 # GENERAL LOAD HELPERS #
@@ -33,7 +33,7 @@ def unpickle(path):
     return pickle.load(open(path, 'rb'))
 
 
-# TODO: Make this a general function to change any setting of the yaml file?
+# TODO: Deprecation warning
 def set_models_path(path):
     """
     Changes the path to the stellar models in hoki's settings
@@ -50,6 +50,11 @@ def set_models_path(path):
     You are going to have to reload hoki for your new path to take effect.
 
     """
+    deprecation_msg = "set_models_path has been moved to the hoki.constants module -- In future versions of hoki" \
+                      "calling set_models_path from hoki.load will fail"
+
+    warnings.warn(deprecation_msg, HokiDeprecationWarning)
+
     assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
     path_to_settings = data_path+'/settings.yaml'
@@ -63,6 +68,18 @@ def set_models_path(path):
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
 
+
+########################
+#  LOAD DUMMY VARIABLE #
+########################
+
+
+def dummy_to_dataframe(filename, bpass_version=DEFAULT_BPASS_VERSION):
+    """Reads in dummy to df from a filename"""
+    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()}
+    cols = [inv_dict[key] if key in inv_dict.keys() else 'Nan'+str(key) for key in range(96)]
+    dummy = pd.read_csv(filename, names=cols, sep=r"\s+", engine='python')
+    return dummy
 
 #########################
 # MODEL INPUT FUNCTIONS #
@@ -83,7 +100,7 @@ def model_input(path):
     """
 
     assert isinstance(path, str), "The location of the file is expected to be a string."
-    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
+    assert os.path.isfile(path), f"File {path} does not exist, or its path is incorrect."
 
     lines = open(path).read().split("\n")
 
