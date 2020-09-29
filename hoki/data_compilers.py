@@ -6,10 +6,10 @@ Objects and pipelines that compile BPASS data files into more convenient, more p
 
 import numpy as np
 
-from hoki.constants import (DEFAULT_BPASS_VERSION, MODELS_PATH, 
-                            OUTPUTS_PATH, dummy_dicts, 
+from hoki.constants import (DEFAULT_BPASS_VERSION, MODELS_PATH,
+                            OUTPUTS_PATH, dummy_dicts,
                             BPASS_IMFS, BPASS_METALLICITIES)
-from hoki.load import model_input, dummy_to_dataframe
+import hoki.load
 import pandas as pd
 import re
 from hoki.utils.progressbar import print_progress_bar
@@ -123,7 +123,7 @@ def _compile_model_data(inputs_df, columns, models_path=MODELS_PATH, bpass_versi
         model_path = inputs_df.iloc[i, 0]
         if len(model_path) > 46:
             try:
-                dummy_i = dummy_to_dataframe(models_path + model_path, bpass_version)
+                dummy_i = hoki.load.dummy_to_dataframe(models_path + model_path, bpass_version)
                 dummy_i = dummy_i[columns]
             except FileNotFoundError as e:
                 not_found.append(model_path)
@@ -131,7 +131,7 @@ def _compile_model_data(inputs_df, columns, models_path=MODELS_PATH, bpass_versi
 
         else:
             try:
-                dummy_i = dummy_to_dataframe(models_path + model_path, bpass_version)
+                dummy_i = hoki.load.dummy_to_dataframe(models_path + model_path, bpass_version)
                 dummy_i = dummy_i[columns]
             except FileNotFoundError as e:
                 not_found.append(model_path)
@@ -161,7 +161,7 @@ def _compile_input_files_to_dataframe(input_file_list):
     """
     input_dfs = []
     for file in input_file_list:
-        input_dfs.append(model_input(file))
+        input_dfs.append(hoki.load.model_input(file))
 
     inputs_df = pd.concat(input_dfs)
     inputs_df['z'] = [re.search('-z(.*?)-', name).group()[2:-1] for name in inputs_df.filenames]
@@ -292,4 +292,3 @@ def _print_exit_message():
     print('\n\n\n*************************************************')
     print('*******     JOB DONE! HAPPY SCIENCING!     ******')
     print('*************************************************')
-    
