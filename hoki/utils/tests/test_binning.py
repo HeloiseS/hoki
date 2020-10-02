@@ -93,16 +93,16 @@ class TestBinwiseTrapz(TestCase):
 class TestBinSpectra(TestCase):
 
     def test_std(self):
-        wave = np.linspace(1, 1000, num=2000)
-        SEDs = np.random.random((10, len(wave)))
+        wl = np.linspace(1, 1000, num=2000)
+        SEDs = np.random.random((10, len(wl)))
         bins = np.linspace(100, 500, num=5)
         edges = False
-        wave_new, SEDs_new = binning.bin_spectra(
-            wave, SEDs, bins, edges=edges
+        wl_new, SEDs_new = binning.bin_spectra(
+            wl, SEDs, bins, edges=edges
         )
 
         self.assertTrue(
-            np.allclose(bins, wave_new)
+            np.allclose(bins, wl_new)
         )
         self.assertEqual(
             (SEDs.shape[0], len(bins)), SEDs_new.shape
@@ -113,12 +113,12 @@ class TestBinSpectra(TestCase):
         return
 
     def test_L_conservation(self):
-        wave = np.linspace(1, 1000, num=20000, endpoint=True)
-        SEDs = np.random.random((20, len(wave)))
+        wl = np.linspace(1, 1000, num=20000, endpoint=True)
+        SEDs = np.random.random((20, len(wl)))
         bins = np.linspace(1, 1000, num=10, endpoint=True)
         edges = True
-        wave_new, SEDs_new = binning.bin_spectra(
-            wave, SEDs, bins, edges=edges
+        wl_new, SEDs_new = binning.bin_spectra(
+            wl, SEDs, bins, edges=edges
         )
         self.assertEqual(
             (SEDs.shape[0], len(bins)-1), SEDs_new.shape
@@ -128,19 +128,19 @@ class TestBinSpectra(TestCase):
         )
         self.assertTrue(
             np.allclose(
-                np.trapz(SEDs, x=wave, axis=1),
+                np.trapz(SEDs, x=wl, axis=1),
                 np.sum(SEDs_new*np.diff(bins), axis=1)
             )
         )
         return
 
     def test_L_conservation_desc(self):
-        wave = np.linspace(1000, 1, num=20000, endpoint=True)
-        SEDs = np.random.random((20, len(wave)))
+        wl = np.linspace(1000, 1, num=20000, endpoint=True)
+        SEDs = np.random.random((20, len(wl)))
         bins = np.linspace(1000, 1, num=10, endpoint=True)
         edges = True
-        wave_new, SEDs_new = binning.bin_spectra(
-            wave, SEDs, bins, edges=edges
+        wl_new, SEDs_new = binning.bin_spectra(
+            wl, SEDs, bins, edges=edges
         )
         self.assertEqual(
             (SEDs.shape[0], len(bins)-1), SEDs_new.shape
@@ -149,11 +149,11 @@ class TestBinSpectra(TestCase):
             np.all(SEDs_new >= 0)
         )
         self.assertTrue(
-            np.all(wave_new > 0)
+            np.all(wl_new > 0)
         )
         self.assertTrue(
             np.allclose(
-                np.trapz(SEDs, x=wave, axis=1),
+                np.trapz(SEDs, x=wl, axis=1),
                 np.sum(SEDs_new*np.diff(bins), axis=1)
             )
         )
@@ -161,41 +161,41 @@ class TestBinSpectra(TestCase):
 
     def test_exceptions(self):
         # wrong dimensionality
-        wave = np.linspace(1, 100)
-        sed = np.empty((len(wave)))
+        wl = np.linspace(1, 100)
+        sed = np.empty((len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wave, sed, bin_edges)
+            binning.bin_spectra(wl, sed, bin_edges)
 
         # incompatible shapes
-        wave = np.linspace(1, 100)
-        sed = np.empty((1, len(wave)-2))
+        wl = np.linspace(1, 100)
+        sed = np.empty((1, len(wl)-2))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wave, sed, bin_edges)
+            binning.bin_spectra(wl, sed, bin_edges)
 
-        # identical values in wave
-        wave = np.hstack((
+        # identical values in wl
+        wl = np.hstack((
             np.linspace(1, 100),
             np.linspace(1, 100)
         ))
-        sed = np.empty((1, len(wave)))
+        sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wave, sed, bin_edges)
+            binning.bin_spectra(wl, sed, bin_edges)
 
         # bins outside range
-        wave = np.linspace(1, 100)
-        sed = np.empty((1, len(wave)))
+        wl = np.linspace(1, 100)
+        sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wave, sed, bin_edges, edges=True)
+            binning.bin_spectra(wl, sed, bin_edges, edges=True)
         bin_edges = np.array([2, 200])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wave, sed, bin_edges, edges=True)
-        wave = np.linspace(100, 1)
-        sed = np.empty((1, len(wave)))
+            binning.bin_spectra(wl, sed, bin_edges, edges=True)
+        wl = np.linspace(100, 1)
+        sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wave, sed, bin_edges, edges=True)
+            binning.bin_spectra(wl, sed, bin_edges, edges=True)
         return

@@ -7,7 +7,7 @@ import numpy as np
 from numba import jit
 
 
-def bin_spectra(wave, spectra, bins, edges=False):
+def bin_spectra(wl, spectra, bins, edges=False):
     """
     Bin spectra conserving luminosity.
 
@@ -25,55 +25,55 @@ def bin_spectra(wave, spectra, bins, edges=False):
 
     Parameters
     ----------
-    wave : `numpy.ndarray` (N_wave,)
+    wl : `numpy.ndarray` (N_wl,)
         Wavelengths or frequencies at which spectra are known.
-    spectra : `numpy.ndarray` (N, N_wave)
+    spectra : `numpy.ndarray` (N, N_wl)
         The SEDs to resample given as L_lambda [Energy/Time/Wavelength] or L_nu
-        [Energy/Time/Frequency] in accordance with `wave`.
+        [Energy/Time/Frequency] in accordance with `wl`.
     bins : `numpy.ndarray` (N_bins,)
         The bins to which to resample spectra. Either values in the bins or
         their edges. See `edges`. Required to lie within the range provided by
-        `wave`.
+        `wl`.
     edges : bool, optional
         Whether the values given in `bins` are bin edges or values in the
-        bins. If `True`, `N_wave_new=N_bins-1`. If `False`, `N_wave_new=N_bins`
+        bins. If `True`, `N_wl_new=N_bins-1`. If `False`, `N_wl_new=N_bins`
         and in this case bin edges are constructed such that they always lie
         between neighbouring points. The first/last bin is assumed to be
         symmetric around the first/last value in bins.
 
     Returns
     -------
-    wave_new : `numpy.ndarray` (N_wave_new,)
+    wl_new : `numpy.ndarray` (N_wl_new,)
         The wavelength/frequency values to which spectra were binned. If edges
         is `False`, this will be identical to `bins`. Otherwise it will be the
         bin centers.
-    spectra_new : `numpy.ndarray` (N, N_wave_new)
+    spectra_new : `numpy.ndarray` (N, N_wl_new)
         The binned spectra.
 
     Notes
     -----
-    For the actual integration, `wave` has to be sorted in ascending or
-    descending order. If this is not the case, `wave` and `spectra` will be
+    For the actual integration, `wl` has to be sorted in ascending or
+    descending order. If this is not the case, `wl` and `spectra` will be
     sorted/re-ordered, which, depending on their sizes, might imply significant
-    overhead. `bins` will always be sorted in the same order as `wave` as it is
+    overhead. `bins` will always be sorted in the same order as `wl` as it is
     assumed to generally be relatively small.
     """
-    for arr, ndim in zip([wave, spectra, bins], [1, 2, 1]):
+    for arr, ndim in zip([wl, spectra, bins], [1, 2, 1]):
         if np.ndim(arr) != ndim:
             raise ValueError("Wrong dimensionality of input arrays.")
-    if spectra.shape[1] != len(wave):
-        raise ValueError("Shapes of `wave` and `spectra` are incompatible.")
+    if spectra.shape[1] != len(wl):
+        raise ValueError("Shapes of `wl` and `spectra` are incompatible.")
 
-    diff = np.diff(wave)
+    diff = np.diff(wl)
     if np.all(diff > 0):
         asc = True
     elif np.all(diff < 0):
         asc = False
     else:
         if np.any(diff == 0):
-            raise ValueError("Identical values provided in `wave`.")
-        ids = np.argsort(wave)
-        wave = wave[ids]
+            raise ValueError("Identical values provided in `wl`.")
+        ids = np.argsort(wl)
+        wl = wl[ids]
         spectra = spectra[:, ids]
         asc = True
     if asc:
@@ -82,22 +82,22 @@ def bin_spectra(wave, spectra, bins, edges=False):
         bins = bins[np.argsort(-1*bins)]
 
     if edges:
-        wave_new = (bins[1:] + bins[:-1])/2
+        wl_new = (bins[1:] + bins[:-1])/2
         bin_edges = bins
     else:
-        wave_new = bins
+        wl_new = bins
         bin_edges = np.empty((len(bins) + 1))
         bin_edges[1:-1] = (bins[1:] + bins[:-1])/2
         bin_edges[0] = bins[0] - (bin_edges[1]-bins[0])
         bin_edges[-1] = bins[-1] + (bins[-1]-bin_edges[-2])
-    if not (np.amax(bin_edges) <= np.amax(wave)
-            and np.amin(bin_edges) >= np.amin(wave)):
+    if not (np.amax(bin_edges) <= np.amax(wl)
+            and np.amin(bin_edges) >= np.amin(wl)):
         raise ValueError("bin_edges outside of valid range!")
 
-    spectra_new = _binwise_trapz_sorted(wave, spectra, bin_edges) \
+    spectra_new = _binwise_trapz_sorted(wl, spectra, bin_edges) \
         / np.diff(bin_edges)
 
-    return wave_new, spectra_new
+    return wl_new, spectra_new
 
 
 @jit(nopython=True, nogil=True, cache=True)
