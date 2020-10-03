@@ -100,7 +100,7 @@ dummy_dicts:
     AM_bin: 33
     B: 54
     B2: 83
-    C: 14
+    C: 12
     CO_core1: 7
     DAM: 45
     DM1A: 41
@@ -109,7 +109,6 @@ dummy_dicts:
     DM2A: 42
     DM2R: 44
     DM2W: 40
-    FUV: 112
     GaiaB: 80
     GaiaB2: 109
     GaiaG: 79
@@ -118,7 +117,6 @@ dummy_dicts:
     GaiaR2: 110
     H: 59
     H2: 88
-    Halpha: 111
     He_core1: 6
     I: 57
     I2: 86
@@ -128,24 +126,25 @@ dummy_dicts:
     K2: 89
     M1: 5
     M2: 37
-    MC1: 20
-    MFe1: 26
-    MH1: 18
-    MHe1: 19
-    MMg1: 24
-    MN1: 21
-    MNe1: 23
-    MO1: 22
-    MSi1: 25
+    MC1: 18
+    MFe1: 24
+    MH1: 16
+    MHe1: 17
+    MMg1: 22
+    MN1: 19
+    MNe1: 21
+    MO1: 20
+    MSi1: 23
     MTOT: 38
-    Mej_SN: 32
-    Mej_weakSN: 30
-    Mrem_SN: 31
-    Mrem_weakSN: 29
-    N: 15
-    NUV: 113
-    Ne: 17
-    O: 16
+    Mej_SN: 30
+    Mej_superSN: 32
+    Mej_weakSN: 28
+    Mrem_SN: 29
+    Mrem_superSN: 31
+    Mrem_weakSN: 27
+    N: 13
+    Ne: 15
+    O: 14
     ONe_core1: 8
     P_bin: 34
     R: 56
@@ -157,7 +156,7 @@ dummy_dicts:
     X: 10
     Y: 11
     age: 1
-    envelope_binding_E: 27
+    envelope_binding_E: 25
     f110w: 77
     f110w2: 106
     f160w: 78
@@ -200,7 +199,7 @@ dummy_dicts:
     modelimf: 50
     r: 63
     r2: 92
-    star_binding_E: 28
+    star_binding_E: 26
     timestep: 0
     u: 61
     u2: 90
