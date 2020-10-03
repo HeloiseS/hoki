@@ -5,9 +5,10 @@ Author: Martin Glatzle
 """
 import numpy as np
 from numba import jit
+import numbers
 
 
-def bin_spectra(wl, spectra, bins, edges=False):
+def bin_spectra(wl, spectra, bins=10):
     """
     Bin spectra conserving luminosity.
 
@@ -30,24 +31,17 @@ def bin_spectra(wl, spectra, bins, edges=False):
     spectra : `numpy.ndarray` (N, N_wl)
         The spectra to bin given as L_lambda [Energy/Time/Wavelength] or L_nu
         [Energy/Time/Frequency] in accordance with `wl`.
-    bins : `numpy.ndarray` (N_bins,)
-        The bins to which to resample spectra. Either values in the bins or
-        their edges. See `edges`. Required to lie within the range provided by
-        `wl`.
-    edges : bool, optional
-        Whether the values given in `bins` are bin edges or values in the
-        bins. If `True`, `N_wl_new=N_bins-1`. If `False`, `N_wl_new=N_bins`
-        and in this case bin edges are constructed such that they always lie
-        between neighbouring points. The first/last bin is assumed to be
-        symmetric around the first/last value in bins.
+    bins : int or `numpy.ndarray` (N_edges,), optional
+        Either an integer giving the number `N_bins` of desired equal-width
+        bins or an array of bin edges, required to lie within the range given
+        by `wl`. In the latter case, `N_bins=N_edges-1`.
 
     Returns
     -------
-    wl_new : `numpy.ndarray` (N_wl_new,)
-        The wavelength/frequency values to which spectra were binned. If edges
-        is `False`, this will be identical to `bins`. Otherwise it will be the
-        bin centres.
-    spectra_new : `numpy.ndarray` (N, N_wl_new)
+    wl_new : `numpy.ndarray` (N_bins,)
+        The wavelength/frequency values to which spectra were binned,
+        i.e. centre bin values.
+    spectra_new : `numpy.ndarray` (N, N_bins)
         The binned spectra.
 
     Notes
@@ -61,8 +55,8 @@ def bin_spectra(wl, spectra, bins, edges=False):
     application area, the code can naturally be used to bin any function with
     given samples, conserving its integral bin-wise.
     """
-    for arr, ndim in zip([wl, spectra, bins], [1, 2, 1]):
-        if np.ndim(arr) != ndim:
+    for arr, ndim in zip([wl, spectra, bins], [[1], [2], [0, 1]]):
+        if np.ndim(arr) not in ndim:
             raise ValueError("Wrong dimensionality of input arrays.")
     if spectra.shape[1] != len(wl):
         raise ValueError("Shapes of `wl` and `spectra` are incompatible.")
@@ -79,26 +73,21 @@ def bin_spectra(wl, spectra, bins, edges=False):
         wl = wl[ids]
         spectra = spectra[:, ids]
         asc = True
-    if asc:
-        bins = np.sort(bins)
-    else:
-        bins = bins[np.argsort(-1*bins)]
 
-    if edges:
-        wl_new = (bins[1:] + bins[:-1])/2
-        bin_edges = bins
+    if isinstance(bins, numbers.Integral):
+        bins = np.linspace(wl[0], wl[-1], num=bins+1)
     else:
-        wl_new = bins
-        bin_edges = np.empty((len(bins) + 1))
-        bin_edges[1:-1] = (bins[1:] + bins[:-1])/2
-        bin_edges[0] = bins[0] - (bin_edges[1]-bins[0])
-        bin_edges[-1] = bins[-1] + (bins[-1]-bin_edges[-2])
-    if not (np.amax(bin_edges) <= np.amax(wl)
-            and np.amin(bin_edges) >= np.amin(wl)):
-        raise ValueError("bin_edges outside of valid range!")
+        if asc:
+            bins = np.sort(bins)
+        else:
+            bins = bins[np.argsort(-1*bins)]
+    if not (np.amax(bins) <= np.amax(wl)
+            and np.amin(bins) >= np.amin(wl)):
+        raise ValueError("Bin edges outside of valid range!")
 
-    spectra_new = _binwise_trapz_sorted(wl, spectra, bin_edges) \
-        / np.diff(bin_edges)
+    wl_new = (bins[1:] + bins[:-1])/2
+    spectra_new = _binwise_trapz_sorted(wl, spectra, bins) \
+        / np.diff(bins)
 
     return wl_new, spectra_new
 

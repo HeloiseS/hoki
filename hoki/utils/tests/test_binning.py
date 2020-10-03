@@ -94,69 +94,106 @@ class TestBinSpectra(TestCase):
 
     def test_std(self):
         wl = np.linspace(1, 1000, num=2000)
-        SEDs = np.random.random((10, len(wl)))
-        bins = np.linspace(100, 500, num=5)
-        edges = False
-        wl_new, SEDs_new = binning.bin_spectra(
-            wl, SEDs, bins, edges=edges
+        spectra = np.random.random((10, len(wl)))
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra
+        )
+
+        self.assertEqual(
+            (spectra.shape[0], 10), spectra_new.shape
+        )
+        self.assertTrue(
+            np.all(spectra_new >= 0)
+        )
+
+        bin_edges = np.linspace(100, 500, num=500)
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra, bin_edges
         )
 
         self.assertTrue(
-            np.allclose(bins, wl_new)
+            np.allclose(0.5*(bin_edges[1:]+bin_edges[:-1]), wl_new)
         )
         self.assertEqual(
-            (SEDs.shape[0], len(bins)), SEDs_new.shape
+            (spectra.shape[0], len(bin_edges)-1), spectra_new.shape
         )
         self.assertTrue(
-            np.all(SEDs_new >= 0)
+            np.all(spectra_new >= 0)
         )
         return
 
     def test_L_conservation(self):
         wl = np.linspace(1, 1000, num=20000, endpoint=True)
-        SEDs = np.random.random((20, len(wl)))
-        bins = np.linspace(1, 1000, num=10, endpoint=True)
-        edges = True
-        wl_new, SEDs_new = binning.bin_spectra(
-            wl, SEDs, bins, edges=edges
-        )
-        self.assertEqual(
-            (SEDs.shape[0], len(bins)-1), SEDs_new.shape
-        )
-        self.assertTrue(
-            np.all(SEDs_new >= 0)
+        spectra = np.random.random((20, len(wl)))
+        bin_edges = np.linspace(1, 1000, num=10, endpoint=True)
+
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra, bin_edges
         )
         self.assertTrue(
             np.allclose(
-                np.trapz(SEDs, x=wl, axis=1),
-                np.sum(SEDs_new*np.diff(bins), axis=1)
+                np.trapz(spectra, x=wl, axis=1),
+                np.sum(spectra_new*np.diff(bin_edges), axis=1)
             )
         )
+
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra
+        )
+        self.assertTrue(
+            np.allclose(
+                np.trapz(spectra, x=wl, axis=1),
+                np.sum(spectra_new, axis=1)*(wl[-1]-wl[0])/10
+            )
+        )
+
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra, 1
+        )
+        self.assertTrue(
+            np.allclose(
+                np.trapz(spectra, x=wl, axis=1),
+                np.sum(spectra_new, axis=1)*(wl[-1]-wl[0])
+            )
+        )
+
         return
 
     def test_L_conservation_desc(self):
         wl = np.linspace(1000, 1, num=20000, endpoint=True)
-        SEDs = np.random.random((20, len(wl)))
-        bins = np.linspace(1000, 1, num=10, endpoint=True)
-        edges = True
-        wl_new, SEDs_new = binning.bin_spectra(
-            wl, SEDs, bins, edges=edges
-        )
-        self.assertEqual(
-            (SEDs.shape[0], len(bins)-1), SEDs_new.shape
-        )
-        self.assertTrue(
-            np.all(SEDs_new >= 0)
-        )
-        self.assertTrue(
-            np.all(wl_new > 0)
+        spectra = np.random.random((20, len(wl)))
+
+        bin_edges = np.linspace(1000, 1, num=10, endpoint=True)
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra, bin_edges
         )
         self.assertTrue(
             np.allclose(
-                np.trapz(SEDs, x=wl, axis=1),
-                np.sum(SEDs_new*np.diff(bins), axis=1)
+                np.trapz(spectra, x=wl, axis=1),
+                np.sum(spectra_new*np.diff(bin_edges), axis=1)
             )
         )
+
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra
+        )
+        self.assertTrue(
+            np.allclose(
+                np.trapz(spectra, x=wl, axis=1),
+                np.sum(spectra_new, axis=1)*(wl[-1]-wl[0])/10
+            )
+        )
+
+        wl_new, spectra_new = binning.bin_spectra(
+            wl, spectra, 1
+        )
+        self.assertTrue(
+            np.allclose(
+                np.trapz(spectra, x=wl, axis=1),
+                np.sum(spectra_new, axis=1)*(wl[-1]-wl[0])
+            )
+        )
+
         return
 
     def test_exceptions(self):
@@ -189,13 +226,13 @@ class TestBinSpectra(TestCase):
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges, edges=True)
+            binning.bin_spectra(wl, sed, bin_edges)
         bin_edges = np.array([2, 200])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges, edges=True)
+            binning.bin_spectra(wl, sed, bin_edges)
         wl = np.linspace(100, 1)
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges, edges=True)
+            binning.bin_spectra(wl, sed, bin_edges)
         return
