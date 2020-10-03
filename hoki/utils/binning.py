@@ -11,24 +11,24 @@ def bin_spectra(wl, spectra, bins, edges=False):
     """
     Bin spectra conserving luminosity.
 
-    Given SEDs sampled at certain wavelengths/frequencies will compute their
-    values in given wavelength/frequency bins. The new SED values are bin
-    averages computed using trapezoidal integration. This ensures that the
-    luminosity per bin is conserved. Of course, only downsampling really makes
-    sense here, i.e. the input SEDs should be well sampled compared to the
-    desired output bins.
+    Given spectra sampled at certain wavelengths/frequencies will compute their
+    values in given wavelength/frequency bins. These values are bin averages
+    computed using trapezoidal integration, which ensures that the luminosity
+    per bin is conserved. Of course, only downsampling really makes sense here,
+    i.e. the input spectra should be well sampled compared to the desired
+    output bins.
 
     Effectively converts input spectra to step functions of
     wavelength/frequency. Note, in particular, that this means that only
     rectangle rule integration can sensibly be performed on the output
-    spectra. Higher order integration methods are not meaningful.
+    spectra. Other integration methods are not meaningful.
 
     Parameters
     ----------
     wl : `numpy.ndarray` (N_wl,)
         Wavelengths or frequencies at which spectra are known.
     spectra : `numpy.ndarray` (N, N_wl)
-        The SEDs to resample given as L_lambda [Energy/Time/Wavelength] or L_nu
+        The spectra to bin given as L_lambda [Energy/Time/Wavelength] or L_nu
         [Energy/Time/Frequency] in accordance with `wl`.
     bins : `numpy.ndarray` (N_bins,)
         The bins to which to resample spectra. Either values in the bins or
@@ -46,7 +46,7 @@ def bin_spectra(wl, spectra, bins, edges=False):
     wl_new : `numpy.ndarray` (N_wl_new,)
         The wavelength/frequency values to which spectra were binned. If edges
         is `False`, this will be identical to `bins`. Otherwise it will be the
-        bin centers.
+        bin centres.
     spectra_new : `numpy.ndarray` (N, N_wl_new)
         The binned spectra.
 
@@ -54,9 +54,12 @@ def bin_spectra(wl, spectra, bins, edges=False):
     -----
     For the actual integration, `wl` has to be sorted in ascending or
     descending order. If this is not the case, `wl` and `spectra` will be
-    sorted/re-ordered, which, depending on their sizes, might imply significant
-    overhead. `bins` will always be sorted in the same order as `wl` as it is
-    assumed to generally be relatively small.
+    sorted/re-ordered. `bins` will always be sorted in the same order as `wl`
+    as it is assumed to generally be relatively small.
+
+    Although the language used here refers to spectra, the primary intended
+    application area, the code can naturally be used to bin any function with
+    given samples, conserving its integral bin-wise.
     """
     for arr, ndim in zip([wl, spectra, bins], [1, 2, 1]):
         if np.ndim(arr) != ndim:
