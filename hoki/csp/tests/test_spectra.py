@@ -13,7 +13,7 @@ import pkg_resources
 from hoki.csp.spectra import CSPSpectra
 from hoki.load import model_output
 from hoki.constants import BPASS_NUM_METALLICITIES
-
+import itertools
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
 # Load Test spectra. Not an actual spectra.
@@ -33,12 +33,16 @@ class TestCSPSSpectra(object):
         f"{data_path}/spectra-bin-imf135_300.z002.dat").to_numpy()
 
     with patch("hoki.data_compilers.np.loadtxt") as mock_model_output:
-        mock_model_output.return_value = data
-        CSP = CSPSpectra(f"{data_path}",  "imf135_300")
+        with patch("hoki.data_compilers.isfile") as mock_os:
+            mock_os.return_value = True
+            mock_model_output.return_value = data
+            CSP = CSPSpectra(f"{data_path}",  "imf135_300")
 
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_init(self, mock_model_output):
+    @patch("hoki.data_compilers.isfile")
+    def test_init(self, mock_os, mock_model_output):
         mock_model_output.return_value = self.data
+        mock_os.return_value = True
         CSP = CSPSpectra(f"{data_path}",  "imf135_300")
         assert CSP.bpass_spectra.shape == (
             13, 51, 100000), "Output shape is wrong."

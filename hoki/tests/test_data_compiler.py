@@ -1,9 +1,21 @@
-from hoki.data_compilers import ModelDataCompiler, bpass_input_z_list
+"""
+Author: Max Briel & Heloise Stevance
+
+Tests for the data_compiler package
+"""
+
+from hoki.data_compilers import ModelDataCompiler, SpectraCompiler
 import hoki.data_compilers as dc
 import pytest
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 import numpy as np
 import pkg_resources
+
+import os.path
+from unittest.mock import patch
+
+import numpy.testing as npt
+from hoki.load import model_output
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 data_path+="/"
@@ -34,6 +46,40 @@ class TestDataCompiler(object):
         with pytest.raises(HokiFormatError):
             __ = ModelDataCompiler(z_list=['z020'], columns=['bla'])
 
+class TestSpectraCompiler(object):
+
+    # Initialise model_output DataFrame return a smaller single dataframe
+    # This reduces I/O readings
+    data = model_output(
+        f"{data_path}/spectra-bin-imf135_300.z002.dat")
+
+    # Patch the model_output function
+    @patch("hoki.data_compilers.np.loadtxt")
+    @patch("hoki.data_compilers.isfile")
+    def test_compiler(self, mock_isfile, mock_model_output):
+
+        # Set the model_output to the DataFrame
+        mock_model_output.return_value = self.data.to_numpy()
+        mock_isfile.return_value = True
+        
+        spec = SpectraCompiler(f"{data_path}",
+                               f"{data_path}",
+                               "imf135_300")
+
+        # Check if pkl file is created
+        assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy")
+
+        # Check output dataframe
+        npt.assert_allclose(
+            spec.spectra[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Complied spectra is wrong."
+        )
+
+        # Remove created pickle
+        os.remove(f"{data_path}/all_spectra-bin-imf135_300.npy")
+
+
 """
     def test_compiling_small_dataset(self):
         small_set = ModelDataCompiler(z_list=['z020'],
@@ -46,4 +92,3 @@ class TestDataCompiler(object):
         assert np.isclose(small_set.data.iloc[0,0], 11, atol=1e-3), "wrong first mass"
         assert int(small_set.data.shape[0])==613, "wrong shape"
 """
-

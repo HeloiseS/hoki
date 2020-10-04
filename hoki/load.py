@@ -417,7 +417,7 @@ def _UV_nebular_lines(path):
 #  BPASS Load over all metallicity  #
 #####################################
 
-def all_rates(data_path, imf, binary=True):
+def rates_all_z(data_path, imf, binary=True):
     """
     Loads the BPASS supernova event files.
 
@@ -448,10 +448,11 @@ def all_rates(data_path, imf, binary=True):
 
     Returns
     -------
-    `pandas.DataFrame` (51, (8,13))
+    `pandas.DataFrame` (51, (8,13)) (log_age, (event_types, metallicity)
         A pandas MultiIndex dataframe containing the BPASS number of events
         per metallicity per type.
-        Usage: rates.loc[log_age, (type, metallicity)]
+        Usage:   rates.loc[log_age, (type, metallicity)]
+        Example: rates.loc[6.5, ("Ia", 0.02)]
 
 
         Notes
@@ -492,7 +493,7 @@ def all_rates(data_path, imf, binary=True):
     # load supernova count files
     for num, metallicity in enumerate(BPASS_METALLICITIES):
         data = model_output(
-            f"{data_path}/supernova-{star}-{imf}.z{metallicity}.dat"
+            f"{data_path}/supernova-{star}-{imf}.{metallicity}.dat"
         )
         data = data.loc[:, slice(BPASS_EVENT_TYPES[0], BPASS_EVENT_TYPES[-1])]
 
@@ -502,7 +503,7 @@ def all_rates(data_path, imf, binary=True):
     return rates.swaplevel(0, 1, axis=1)
 
 
-def all_spectra(data_path, imf, binary=True):
+def spectra_all_z(data_path, imf, binary=True):
     """
     Load all BPASS spectra from files.
 
@@ -555,22 +556,23 @@ def all_spectra(data_path, imf, binary=True):
         raise HokiKeyError(
             f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
-    # Check if compiled spectra are already present in data folder
-    try:
-        print("Trying to load precompiled file.")
+    # check if data_path is a string
+    if not isinstance(data_path, str):
+         raise HokiTypeError("The folder location is expected to be a string.")
+
+    # check if compiled file exists
+    if os.path.isfile(f"{data_path}/all_spectra-{star}-{imf}.npy"):
+        print("Loading precompiled file.")
         spectra = np.load(f"{data_path}/all_spectra-{star}-{imf}.npy")
         print("Done Loading.")
-
-    # Compile the spectra for faster reading next time
-    except FileNotFoundError:
-        print("Failed")
-        print("Data will be compiled")
+    # Otherwise compile
+    else:
+        print("Compiled file not found. Data will be compiled")
         spec = hoki.data_compilers.SpectraCompiler(
             data_path, data_path, imf, binary=binary
         )
         spectra = spec.spectra
     return spectra
-
 
 
 #################

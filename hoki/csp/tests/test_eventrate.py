@@ -49,53 +49,26 @@ class TestCSPEventRate():
         _ = er.CSPEventRate(f"{data_path}", "imf135_300")
 
     def test_input_functions_at_time(self):
-        assert np.isclose(self.CSP.at_time([sfh_fnc],
-                                                          [Z_fnc],
-                                                          ["Ia"],
-                                                          0,
-                                                          sample_rate=-1)[0]["Ia"],0.002034966495416449),\
-            "Correct input is not taken."
+        assert np.isclose(self.CSP.at_time([sfh_fnc], [Z_fnc], ["Ia"], 0, sample_rate=-1)[0]["Ia"],
+                          0.002034966495416449), "Correct input is not taken."
 
-        assert np.isclose(self.CSP.at_time(sfh_fnc,
-                                                          Z_fnc,
-                                                          ["Ia"],
-                                                          0,
-                                                          sample_rate=-1)[0]["Ia"],  0.002034966495416449),\
-            "Correct input is not taken."
-        assert np.isclose(self.CSP.at_time(sfh,
-                                                          Z_fnc,
-                                                          ["Ia"],
-                                                          0,
-                                                          sample_rate=-1)[0]["Ia"],  0.002034966495416449),\
-            "Correct input is not taken."
+        assert np.isclose(self.CSP.at_time(sfh_fnc, Z_fnc, ["Ia"], 0, sample_rate=-1)[0]["Ia"],
+                          0.002034966495416449), "Correct input is not taken."
+        assert np.isclose(self.CSP.at_time(sfh, Z_fnc, ["Ia"], 0, sample_rate=-1)[0]["Ia"],
+                          0.002034966495416449), "Correct input is not taken."
 
-        assert np.isclose(self.CSP.at_time([sfh],
-                                                          Z_fnc,
-                                                          ["Ia"],
-                                                          0)[0]["Ia"],0.0018987009588956765),\
-            "Correct input is not taken."
-        assert np.isclose(self.CSP.at_time([sfh, sfh],
-                                                          [Z_fnc, Z_fnc],
-                                                          ["Ia"],
-                                                          0)[0]["Ia"], 0.0018987009588956765),\
-            "Correct input is not taken."
+        assert np.isclose(self.CSP.at_time([sfh], Z_fnc, ["Ia"],0)[0]["Ia"],
+                          0.0018987009588956765), "Correct input is not taken."
+        assert np.isclose(self.CSP.at_time([sfh, sfh], [Z_fnc, Z_fnc], ["Ia"], 0)[0]["Ia"],
+                          0.0018987009588956765), "Correct input is not taken."
 
     def test_event_rate_wrong_input(self):
         with pytest.raises(HokiFormatError):
-            _ = self.CSP.over_time([sfh_fnc],
-                                                  [Z_fnc, Z_fnc],
-                                                  ["Ia"],
-                                                  100)
+            _ = self.CSP.over_time([sfh_fnc], [Z_fnc, Z_fnc], ["Ia"],100)
         with pytest.raises(ValueError):
-            _ = self.CSP.over_time([sfh_fnc],
-                                                  [Z_fnc],
-                                                  ["B"],
-                                                  100)
+            _ = self.CSP.over_time([sfh_fnc], [Z_fnc], ["B"], 100)
         with pytest.raises(HokiFormatError):
-            _ = self.CSP.over_time([sfh_fnc, sfh_fnc],
-                                                  [Z_fnc],
-                                                  ["B"],
-                                                  100)
+            _ = self.CSP.over_time([sfh_fnc, sfh_fnc], [Z_fnc], ["B"], 100)
 
     @patch("hoki.load.model_output")
     def test_input_over_time(self,mock_model_output):
@@ -103,11 +76,8 @@ class TestCSPEventRate():
         mock_model_output.return_value = self.data
         CSP = er.CSPEventRate(f"{data_path}", "imf135_300")
 
-        test_out, time_edges = CSP.over_time([sfh_fnc],
-                                             [Z_fnc],
-                                             ["Ia"],
-                                             100,
-                                             return_time_edges=True)
+        test_out, time_edges = CSP.over_time([sfh_fnc], [Z_fnc], ["Ia"],
+                                             100, return_time_edges=True)
 
 
     # Load model_output with a single supernova rate file
@@ -115,13 +85,8 @@ class TestCSPEventRate():
         mock_model_output.return_value = data
         CSP = er.CSPEventRate(f"{data_path}", "imf135_300")
 
-        test_out, time_edges = CSP.over_time([sfh_fnc],
-                                             [Z_fnc],
-                                             ["Ia"],
-                                             100,
-                                             return_time_edges=True)
-
-
+        test_out, time_edges = CSP.over_time([sfh_fnc], [Z_fnc], ["Ia"],
+                                             100, return_time_edges=True)
 
     def test_bins(self):
         assert np.isclose(self.time_edges,  np.linspace(0, HOKI_NOW, 101)).all(),\
@@ -150,10 +115,8 @@ class TestCSPEventRate():
             "The output of CSP.at_time is wrong."
 
     def test_vector_input(self):
-        assert np.isclose(self.CSP.at_time(
-                [vec_sfh], [vec_Z], ["Ia"], 0, sample_rate=-1)[0]["Ia"],
-                0.002034966495416449),\
-                    "Correct input is not taken."
+        assert np.isclose(self.CSP.at_time([vec_sfh], [vec_Z], ["Ia"], 0, sample_rate=-1)[0]["Ia"],
+                0.002034966495416449),"Correct input is not taken."
 
     def test_full_grid_over_time(self):
 

@@ -12,12 +12,10 @@ from hoki.constants import (DEFAULT_BPASS_VERSION, MODELS_PATH,
 import hoki.load
 import pandas as pd
 import re
+from os.path import isfile
 from hoki.utils.progressbar import print_progress_bar
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
 from hoki.utils.hoki_object import HokiObject
-
-
-bpass_input_z_list = ["z"+i for i in BPASS_METALLICITIES]
 
 class ModelDataCompiler(HokiObject):
     """
@@ -55,11 +53,11 @@ class ModelDataCompiler(HokiObject):
         ####### CHECKING INPUTS ######
 
         # Metalicity
-        wrong_z_keyword = set(z_list) - set(bpass_input_z_list)
+        wrong_z_keyword = set(z_list) - set(BPASS_METALLICITIES)
         if len(wrong_z_keyword) != 0:
             raise HokiFormatError(
                 f"Unknown metallicity keyword(dc): {wrong_z_keyword}\n\nDEBBUGGING ASSISTANT: "
-                f"Here is a list of valid metallicity keywords\n{bpass_input_z_list}")
+                f"Here is a list of valid metallicity keywords\n{BPASS_METALLICITIES}")
 
         # Columns
         assert isinstance(columns, list), "columns should be a list of strings"
@@ -265,7 +263,9 @@ class SpectraCompiler():
         # loop over all the metallicities and load all the spectra
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
-            spectra[num] = np.loadtxt(f"{spectra_folder}/spectra-{star}-{imf}.z{metallicity}.dat").T[1:, :]
+            assert isfile(f"{spectra_folder}/spectra-{star}-{imf}.{metallicity}.dat"),\
+                   "HOKI ERROR: This file does not exist, or its path is incorrect."
+            spectra[num] = np.loadtxt(f"{spectra_folder}/spectra-{star}-{imf}.{metallicity}.dat").T[1:, :]
 
         # pickle the datafile
         np.save(f"{output_folder}/all_spectra-{star}-{imf}", spectra)

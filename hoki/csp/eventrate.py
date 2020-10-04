@@ -66,7 +66,7 @@ class CSPEventRate(HokiObject, CSP):
 
     def __init__(self, data_path, imf, binary=True):
         self.bpass_rates = utils._normalise_rates(
-            load.all_rates(data_path, imf, binary=binary))
+            load.rates_all_z(data_path, imf, binary=binary))
 
         # Has the shape (8, 13, 51) [event_type, metallicity, time_bin]
         self._numpy_bpass_rates = self.bpass_rates[BPASS_EVENT_TYPES].T.to_numpy().reshape((len(BPASS_EVENT_TYPES),13, 51))

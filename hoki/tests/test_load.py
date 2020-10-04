@@ -137,23 +137,23 @@ class TestLoadAllRates(object):
     @patch("hoki.load.model_output")
     def test_load_rates(self, mock_model_output):
         mock_model_output.return_value = self.data
-        x = load.all_rates(f"{data_path}", "imf135_300"),\
+        x = load.rates_all_z(f"{data_path}", "imf135_300"),\
             "The rates cannot be initialised."
 
     # Load rates
     with patch("hoki.load.model_output") as mock_model_output:
         mock_model_output.return_value = data
-        x = load.all_rates(f"{data_path}", "imf135_300")
+        x = load.rates_all_z(f"{data_path}", "imf135_300")
 
     # Test wrong inputs
     def test_file_not_present(self):
         with pytest.raises(AssertionError):
-            _ = load.all_rates(f"{data_path}", "imf135_300"),\
+            _ = load.rates_all_z(f"{data_path}", "imf135_300"),\
                 "The file is not present, but the load function runs."
 
     def test_wrong_imf(self):
         with pytest.raises(HokiKeyError):
-            _ = load.all_rates(f"{data_path}", "i"),\
+            _ = load.rates_all_z(f"{data_path}", "i"),\
                 "An unsupported IMF is taken as an input."
 
     # Test output
@@ -181,12 +181,13 @@ class TestLoadAllsSpectra(object):
 
     # Patch the model_output function
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_compile_spectra(self, mock_model_output):
+    @patch("hoki.data_compilers.isfile")
+    def test_compile_spectra(self, mock_isfile, mock_model_output):
 
         # Set the model_output to the DataFrame
         mock_model_output.return_value = self.data.to_numpy()
 
-        spec = load.all_spectra(f"{data_path}", "imf135_300")
+        spec = load.spectra_all_z(f"{data_path}", "imf135_300")
 
         # Check if compiled file is created
         assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy"),\
@@ -201,7 +202,7 @@ class TestLoadAllsSpectra(object):
 
     def test_load_pickled_file(self):
 
-        spec = load.all_spectra(f"{data_path}", "imf135_300")
+        spec = load.spectra_all_z(f"{data_path}", "imf135_300")
 
         # Check output numpy array
         npt.assert_allclose(

@@ -28,7 +28,7 @@ BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100, 100)) + dt for dt in BPASS_TIM
 BPASS_LINEAR_TIME_EDGES = np.append([0.0], 10**np.arange(6.05, 11.15, 0.1))
 BPASS_LINEAR_TIME_INTERVALS = np.diff(BPASS_LINEAR_TIME_EDGES)
 
-BPASS_METALLICITIES = ["em5", "em4", "001","002", "003", "004", "006", "008", "010", "014", "020", "030", "040"]
+BPASS_METALLICITIES = ["zem5", "zem4", "z001","z002", "z003", "z004", "z006", "z008", "z010", "z014", "z020", "z030", "z040"]
 BPASS_NUM_METALLICITIES = np.array([0.00001, 0.0001, 0.001, 0.002, 0.003, 0.004, 0.006, 0.008, 0.010,
                                     0.014, 0.020, 0.030, 0.040])
 BPASS_METALLICITY_MID_POINTS = (BPASS_NUM_METALLICITIES[1:] + BPASS_NUM_METALLICITIES[:-1])/2

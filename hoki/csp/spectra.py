@@ -52,7 +52,7 @@ class CSPSpectra(HokiObject, CSP):
 
     def __init__(self, data_path, imf, binary=True):
         self.bpass_spectra = utils._normalise_spectrum(
-            load.all_spectra(data_path, imf, binary=binary))
+            load.spectra_all_z(data_path, imf, binary=binary))
 
     ###################
     # Function inputs #
