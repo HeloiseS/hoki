@@ -480,6 +480,7 @@ def calculate_distributions_dt_divided(obs_df, model):
     # We add the time bins in there because it can make plotting extra convenient.
     # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
 
+
     return likelihoods_df
 
 
@@ -490,7 +491,7 @@ def calculate_distributions_dt_divided(obs_df, model):
 
 def calculate_sample_pdf(distributions_df, not_you=None):
     """
-    Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
+    Multiplies together all the columns in given in DataFrame apart from the "time_axis" column
 
     Parameters
     ----------

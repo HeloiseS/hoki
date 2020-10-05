@@ -33,4 +33,3 @@ if LooseVersion(sys.version) < LooseVersion(__minimum_python_version__):
     #__all__ += ['module_input', 'module_output']
     # or you can keep everything from the subpackage with the following instead
     # __all__ += example_mod.__all__
-

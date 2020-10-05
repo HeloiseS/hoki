@@ -23,7 +23,23 @@ MODELS_PATH = settings['models_path']
 OUTPUTS_PATH = settings['outputs_path'] # This constant for dev purposes.
 BPASS_TIME_BINS = np.arange(6.0, 11.1, 0.1)
 BPASS_TIME_INTERVALS = np.array([10**(t+0.05) - 10**(t-0.05) for t in BPASS_TIME_BINS])
-BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100,100)) + dt for dt in BPASS_TIME_INTERVALS])
+BPASS_TIME_WEIGHT_GRID = np.array([np.zeros((100, 100)) + dt for dt in BPASS_TIME_INTERVALS])
+
+BPASS_LINEAR_TIME_EDGES = np.append([0.0], 10**np.arange(6.05, 11.15, 0.1))
+BPASS_LINEAR_TIME_INTERVALS = np.diff(BPASS_LINEAR_TIME_EDGES)
+
+BPASS_METALLICITIES = ["zem5", "zem4", "z001","z002", "z003", "z004", "z006", "z008", "z010", "z014", "z020", "z030", "z040"]
+BPASS_NUM_METALLICITIES = np.array([0.00001, 0.0001, 0.001, 0.002, 0.003, 0.004, 0.006, 0.008, 0.010,
+                                    0.014, 0.020, 0.030, 0.040])
+BPASS_METALLICITY_MID_POINTS = (BPASS_NUM_METALLICITIES[1:] + BPASS_NUM_METALLICITIES[:-1])/2
+
+BPASS_EVENT_TYPES = ["Ia", "IIP", "II", "Ib", "Ic", "LGRB", "PISNe", "low_mass"]
+HOKI_NOW = 13.799e9
+
+BPASS_IMFS = ["imf_chab100", "imf_chab300", "imf100_100", "imf100_300",
+              "imf135_100", "imf135_300", "imf135all_100", "imf170_100",
+              "imf170_300"]
+
 
 # Create a deprecation warning when using dummy_dict
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,
@@ -202,4 +218,3 @@ def set_default_bpass_version(version):
 
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
-
