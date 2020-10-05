@@ -10,7 +10,6 @@ from hoki.constants import (BPASS_IMFS, BPASS_METALLICITIES, BPASS_TIME_BINS,
                             BPASS_WAVELENGTHS)
 from hoki.utils.progressbar import print_progress_bar
 
-
 class _CompilerBase(abc.ABC):
     def __init__(self, input_folder, output_folder, imf, binary=True,
                  verbose=False):
@@ -31,8 +30,11 @@ class _CompilerBase(abc.ABC):
         # loop over all the metallicities and load all the spectra
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
+            # Check if file exists
+            assert isfile(f"{spectra_folder}/spectra-{star}-{imf}.{metallicity}.dat"),\
+                   "HOKI ERROR: This file does not exist, or its path is incorrect."
             output[num] = self._load_single(
-                f"{input_folder}/{self._input_name()}-{star}-{imf}.z{metallicity}.dat"
+                f"{input_folder}/{self._input_name()}-{star}-{imf}.{metallicity}.dat"
             )
 
         # pickle the datafile

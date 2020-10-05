@@ -177,11 +177,12 @@ class TestLoadAllSpectra(object):
 
     # Patch the model_output function
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_compile_spectra(self, mock_model_output):
+    @patch("hoki.data_compilers.isfile")
+    def test_compile_spectra(self, mock_isfile, mock_model_output):
 
         # Set the model_output to the DataFrame
         mock_model_output.return_value = self.data.to_numpy()
-
+        mock_isfile.return_value = True
         spec = load.all_spectra(f"{data_path}", "imf135_300")
 
         # Check if compiled file is created
@@ -218,11 +219,12 @@ class TestLoadAllEmissivities(object):
 
     # Patch the model_output function
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_compile_emissivities(self, mock_model_output):
+    @patch("hoki.data_compilers.isfile")
+    def test_compile_emissivities(self, mock_isfile, mock_model_output):
 
         # Set the model_output to the DataFrame
         mock_model_output.return_value = self.data.to_numpy()
-
+        mock_isfile.return_value = True
         res = load.all_emissivities(f"{data_path}", "imf135_300")
 
         # Check if compiled file is created

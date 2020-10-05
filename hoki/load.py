@@ -553,7 +553,7 @@ def all_spectra(data_path, imf, binary=True):
     return spectra
 
 
-def all_emissivities(data_path, imf, binary=True):
+def emissivities_all_z(data_path, imf, binary=True):
     """
     Load all BPASS emissivities from files.
 
@@ -605,16 +605,19 @@ def all_emissivities(data_path, imf, binary=True):
         raise HokiKeyError(
             f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
+    # check if data_path is a string
+    if not isinstance(data_path, str):
+         raise HokiTypeError("The folder location is expected to be a string.")
+
     # Check if compiled spectra are already present in data folder
-    try:
-        print("Trying to load precompiled file.")
+    if os.path.isfile(f"{data_path}/all_ionizing-{star}-{imf}.npy")
+        print("Load precompiled file.")
         emissivities = np.load(f"{data_path}/all_ionizing-{star}-{imf}.npy")
         print("Done Loading.")
 
-    # Compile the spectra for faster reading next time
-    except FileNotFoundError:
-        print("Failed")
-        print("Data will be compiled")
+    # Compile the spectra for faster reading next time otherwise
+    else:
+        print("Compiled file not found. Data will be compiled.")
         res = hoki.data_compilers.EmissivityCompiler(
             data_path, data_path, imf, binary=binary
         )

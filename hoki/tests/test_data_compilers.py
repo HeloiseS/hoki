@@ -25,10 +25,12 @@ class TestSpectraCompiler(object):
 
     # Patch the model_output function
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_compiler(self, mock_model_output):
+    @patch("hoki.data_compilers.isfile")
+    def test_compiler(self, mock_isfile, mock_model_output):
 
         # Set the model_output to the DataFrame
         mock_model_output.return_value = self.data.to_numpy()
+        mock_isfile.return_value = True
 
         spec = SpectraCompiler(f"{data_path}",
                                f"{data_path}",
@@ -57,11 +59,13 @@ class TestEmissivityCompiler(object):
 
     # Patch the model_output function
     @patch("hoki.data_compilers.np.loadtxt")
-    def test_compiler(self, mock_model_output):
+    @patch("hoki.data_compilers.isfile")
+    def test_compiler(self, mock_isfile, mock_model_output):
 
         # Set the model_output to the DataFrame
         mock_model_output.return_value = self.data.to_numpy()
-
+        mock_isfile.return_value = True
+        
         res = EmissivityCompiler(f"{data_path}",
                                  f"{data_path}",
                                  "imf135_300")
