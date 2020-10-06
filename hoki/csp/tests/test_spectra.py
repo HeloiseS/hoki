@@ -13,7 +13,6 @@ import pkg_resources
 from hoki.csp.spectra import CSPSpectra
 from hoki.load import model_output
 from hoki.constants import BPASS_NUM_METALLICITIES
-import itertools
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
 # Load Test spectra. Not an actual spectra.
