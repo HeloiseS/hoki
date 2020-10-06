@@ -3,8 +3,6 @@ This module implements the tools to easily load BPASS data.
 """
 
 import pandas as pd
-#from specutils import Spectrum1D
-import numpy as np
 import hoki.hrdiagrams as hr
 from hoki.constants import *
 import os
@@ -13,7 +11,8 @@ import io
 import pickle
 import pkg_resources
 import hoki.data_compilers
-from hoki.utils.exceptions import HokiKeyError
+import warnings
+from hoki.utils.exceptions import HokiDeprecationWarning, HokiKeyError
 
 # TODO: Should I allow people to chose to load the data into a numpy arrays as well or is the
 #       data frame good enough?
@@ -21,6 +20,7 @@ from hoki.utils.exceptions import HokiKeyError
 __all__ = ['model_input', 'model_output', 'set_models_path', 'unpickle']
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
+
 
 ########################
 # GENERAL LOAD HELPERS #
@@ -33,7 +33,7 @@ def unpickle(path):
     return pickle.load(open(path, 'rb'))
 
 
-# TODO: Make this a general function to change any setting of the yaml file?
+# TODO: Deprecation warning
 def set_models_path(path):
     """
     Changes the path to the stellar models in hoki's settings
@@ -50,6 +50,11 @@ def set_models_path(path):
     You are going to have to reload hoki for your new path to take effect.
 
     """
+    deprecation_msg = "set_models_path has been moved to the hoki.constants module -- In future versions of hoki" \
+                      "calling set_models_path from hoki.load will fail"
+
+    warnings.warn(deprecation_msg, HokiDeprecationWarning)
+
     assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
     path_to_settings = data_path+'/settings.yaml'
@@ -63,6 +68,18 @@ def set_models_path(path):
     print('Looks like everything went well! You can check the path was correctly updated by looking at this file:'
           '\n'+path_to_settings)
 
+
+########################
+#  LOAD DUMMY VARIABLE #
+########################
+
+
+def dummy_to_dataframe(filename, bpass_version=DEFAULT_BPASS_VERSION):
+    """Reads in dummy to df from a filename"""
+    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()}
+    cols = [inv_dict[key] if key in inv_dict.keys() else 'Nan'+str(key) for key in range(96)]
+    dummy = pd.read_csv(filename, names=cols, sep=r"\s+", engine='python')
+    return dummy
 
 #########################
 # MODEL INPUT FUNCTIONS #
@@ -83,7 +100,7 @@ def model_input(path):
     """
 
     assert isinstance(path, str), "The location of the file is expected to be a string."
-    assert os.path.isfile(path), "This file does not exist, or its path is incorrect."
+    assert os.path.isfile(path), f"File {path} does not exist, or its path is incorrect."
 
     lines = open(path).read().split("\n")
 
@@ -396,11 +413,11 @@ def _UV_nebular_lines(path):
 
 
 
-################################
-#  BPASS Load all metallicity  #
-################################
+#####################################
+#  BPASS Load over all metallicity  #
+#####################################
 
-def all_rates(data_path, imf, binary=True):
+def rates_all_z(data_path, imf, binary=True):
     """
     Loads the BPASS supernova event files.
 
@@ -408,38 +425,37 @@ def all_rates(data_path, imf, binary=True):
     -----
     The rates are just read from file and not normalised.
 
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
     Input
     -----
     data_path : `str`
         The filepath to the folder containing the BPASS data
+
     binary : `bool`
         Use the binary files or just the single stars. Default=True
+
     imf : `str`
         BPASS Identifier of the IMF to be used.
+        The accepted IMF identifiers are:
+        - `"imf_chab100"`
+        - `"imf_chab300"`
+        - `"imf100_100"`
+        - `"imf100_300"`
+        - `"imf135_100"`
+        - `"imf135_300"`
+        - `"imfall_300"`
+        - `"imf170_100"`
+        - `"imf170_300"`
 
     Returns
     -------
-    `pandas.DataFrame`
+    `pandas.DataFrame` (51, (8,13)) (log_age, (event_types, metallicity)
         A pandas MultiIndex dataframe containing the BPASS number of events
         per metallicity per type.
-        Usage: rates.loc[log_age, (type, metallicity)]
+        Usage:   rates.loc[log_age, (type, metallicity)]
+        Example: rates.loc[6.5, ("Ia", 0.02)]
 
 
-        Note
+        Notes
         -----
         This dataframe has the following structure.
         The index is the log_age as a float.
@@ -455,37 +471,39 @@ def all_rates(data_path, imf, binary=True):
 
     """
 
-    # This is repeated several times. Make a function?
-    if binary:
-        star = "bin"
-    else:
-        star = "sin"
+    # Check population type
+    star = "bin" if binary else "sin"
 
-    # Check IMF
+    # Check if the given IMF is in the accepted IMFs
     if imf not in BPASS_IMFS:
         raise HokiKeyError(
-            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.\n"\
+            "These can be found in the documentation of this function.")
 
-    # Create output DataFrame
+    # Create the output DataFrame
     arrays = [BPASS_NUM_METALLICITIES, BPASS_EVENT_TYPES]
     columns = pd.MultiIndex.from_product(
         arrays, names=["Metallicicty", "Event Type"])
-    rates = pd.DataFrame(index=np.linspace(6, 11, 51),
-                         columns=columns, dtype=np.float64)
+
+    rates = pd.DataFrame(index=BPASS_TIME_BINS,
+                         columns=columns,
+                         dtype=np.float64)
     rates.index.name = "log_age"
 
     # load supernova count files
     for num, metallicity in enumerate(BPASS_METALLICITIES):
         data = model_output(
-            f"{data_path}/supernova-{star}-{imf}.z{metallicity}.dat")
+            f"{data_path}/supernova-{star}-{imf}.{metallicity}.dat"
+        )
         data = data.loc[:, slice(BPASS_EVENT_TYPES[0], BPASS_EVENT_TYPES[-1])]
-        rates.loc[:, (BPASS_NUM_METALLICITIES[num],
-                      slice(None))] = data.to_numpy()
 
+        rates.loc[:, (BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
+
+    # swap metallicity and event type
     return rates.swaplevel(0, 1, axis=1)
 
 
-def all_spectra(data_path, imf, binary=True):
+def spectra_all_z(data_path, imf, binary=True):
     """
     Load all BPASS spectra from files.
 
@@ -499,29 +517,27 @@ def all_spectra(data_path, imf, binary=True):
     The spectra are just read from file and not normalised.
 
 
-    Notes
-    -----
-
-    The accepted IMF identifiers are:
-    - `"imf_chab100"`
-    - `"imf_chab300"`
-    - `"imf100_100"`
-    - `"imf100_300"`
-    - `"imf135_100"`
-    - `"imf135_300"`
-    - `"imfall_300"`
-    - `"imf170_100"`
-    - `"imf170_300"`
-
-
     Input
     -----
     data_path : `str`
         The path to the folder containing the BPASS spectra.
+
     binary : `bool`
         Use the binary files or just the single stars. Default=True
+
     imf : `str`
         BPASS Identifier of the IMF to be used.
+        The accepted IMF identifiers are:
+        - `"imf_chab100"`
+        - `"imf_chab300"`
+        - `"imf100_100"`
+        - `"imf100_300"`
+        - `"imf135_100"`
+        - `"imf135_300"`
+        - `"imfall_300"`
+        - `"imf170_100"`
+        - `"imf170_300"`
+
 
     Returns
     -------
@@ -532,32 +548,31 @@ def all_spectra(data_path, imf, binary=True):
                 (gives L_\\odot for Z=0.0001 and log_age=6.2 at 999 Angstrom)
 
     """
-    if binary:
-        star = "bin"
-    else:
-        star = "sin"
+    # Check population type
+    star = "bin" if binary else "sin"
 
     # check IMF key
     if imf not in BPASS_IMFS:
         raise HokiKeyError(
             f"{imf} is not a BPASS IMF. Please select a correct IMF.")
 
-    # Check if compiled spectra are already present in data folder
-    try:
-        print("Trying to load precompiled file.")
+    # check if data_path is a string
+    if not isinstance(data_path, str):
+         raise HokiTypeError("The folder location is expected to be a string.")
+
+    # check if compiled file exists
+    if os.path.isfile(f"{data_path}/all_spectra-{star}-{imf}.npy"):
+        print("Loading precompiled file.")
         spectra = np.load(f"{data_path}/all_spectra-{star}-{imf}.npy")
         print("Done Loading.")
-
-    # Compile the spectra for faster reading next time
-    except FileNotFoundError:
-        print("Failed")
-        print("Data will be compiled")
+    # Otherwise compile
+    else:
+        print("Compiled file not found. Data will be compiled")
         spec = hoki.data_compilers.SpectraCompiler(
             data_path, data_path, imf, binary=binary
         )
         spectra = spec.spectra
     return spectra
-
 
 
 #################

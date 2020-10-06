@@ -43,6 +43,10 @@ def test_model_output():
     del data
 
 
+#def test_dummy_to_dataframe():
+#    load.dummy_to_dataframe(data_path+"/NEWSINMODS/z020/sneplot-z020-11")
+
+
 def test_load_sn_rates():
     data = load._sn_rates(sn_file)
     assert data.shape[0] > 0, "The DataFrame is empty"
@@ -133,23 +137,23 @@ class TestLoadAllRates(object):
     @patch("hoki.load.model_output")
     def test_load_rates(self, mock_model_output):
         mock_model_output.return_value = self.data
-        x = load.all_rates(f"{data_path}", "imf135_300"),\
+        x = load.rates_all_z(f"{data_path}", "imf135_300"),\
             "The rates cannot be initialised."
 
     # Load rates
     with patch("hoki.load.model_output") as mock_model_output:
         mock_model_output.return_value = data
-        x = load.all_rates(f"{data_path}", "imf135_300")
+        x = load.rates_all_z(f"{data_path}", "imf135_300")
 
     # Test wrong inputs
     def test_file_not_present(self):
         with pytest.raises(AssertionError):
-            _ = load.all_rates(f"{data_path}", "imf135_300"),\
+            _ = load.rates_all_z(f"{data_path}", "imf135_300"),\
                 "The file is not present, but the load function runs."
 
     def test_wrong_imf(self):
         with pytest.raises(HokiKeyError):
-            _ = load.all_rates(f"{data_path}", "i"),\
+            _ = load.rates_all_z(f"{data_path}", "i"),\
                 "An unsupported IMF is taken as an input."
 
     # Test output
@@ -173,31 +177,38 @@ class TestLoadAllsSpectra(object):
     # Initialise model_output DataFrame
     # This reduces I/O readings
     data = load.model_output(
-        f"{data_path}/spectra-bin-imf135_300.z002.dat").loc[:, slice("6.0", "11.0")]
+        f"{data_path}/spectra-bin-imf135_300.z002.dat")
 
     # Patch the model_output function
-    @patch("hoki.data_compilers.pd.read_csv")
-    def test_compile_spectra(self, mock_model_output):
+    @patch("hoki.data_compilers.np.loadtxt")
+    @patch("hoki.data_compilers.isfile")
+    def test_compile_spectra(self, mock_isfile, mock_model_output):
 
         # Set the model_output to the DataFrame
-        mock_model_output.return_value = self.data
+        mock_model_output.return_value = self.data.to_numpy()
 
-        spec = load.all_spectra(f"{data_path}", "imf135_300")
+        spec = load.spectra_all_z(f"{data_path}", "imf135_300")
 
         # Check if compiled file is created
         assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy"),\
             "No compiled file is created."
 
         # Check output numpy array
-        npt.assert_allclose(spec[3], self.data.T,
-                            err_msg="Loading of files has failed.")
+        npt.assert_allclose(
+            spec[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Loading of files has failed."
+        )
 
     def test_load_pickled_file(self):
 
-        spec = load.all_spectra(f"{data_path}", "imf135_300")
+        spec = load.spectra_all_z(f"{data_path}", "imf135_300")
 
         # Check output numpy array
-        npt.assert_allclose(spec[3], self.data.T,
-                            err_msg="Loading of compiled file has failed.")
+        npt.assert_allclose(
+            spec[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Loading of compiled file has failed."
+        )
 
         os.remove(f"{data_path}/all_spectra-bin-imf135_300.npy")

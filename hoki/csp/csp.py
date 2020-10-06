@@ -5,7 +5,7 @@ Parent class of a complex stellar population
 """
 
 from hoki.csp.sfh import SFH
-from hoki.utils.exceptions import *
+from hoki.utils.exceptions import HokiTypeError, HokiFormatError
 from hoki.constants import HOKI_NOW
 
 
@@ -34,19 +34,24 @@ class CSP(object):
 
     def _type_check_histories(self, sfh, zeh):
         """
-        Function to make sure inputted stellar formation history functions and
-        metallicity histories are in the correct format.
+        Function to check sfh and zeh are the correct type and transform them
+        into a consistent format.
+
+        Notes
+        -----
+        sfh and zeh can either be a callable python function or a list of
+        callables.
 
         Input
         -----
         sfh
-            Object to check the type of
+            Stellar formation history
         zeh
-            Object to check the type of
+            Z evolution history
 
         Returns
         -------
-        `tuple` ([sfh], [zeh])
+        `tuple` ([sfh callables,], [zeh callables,])
             A tuple containing the sfh callables and zeh callables as arrays.
         """
         # Check sfh list

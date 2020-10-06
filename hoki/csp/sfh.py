@@ -114,7 +114,7 @@ class SFH(object):
         """
         return self._sfh_calculator(t)
 
-    def mass_per_bin(self, time_edges, sample_rate=100):
+    def mass_per_bin(self, time_edges, sample_rate=25):
         """
         Gives the mass per bin for the given edges in time.
 

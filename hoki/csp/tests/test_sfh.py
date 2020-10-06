@@ -1,5 +1,5 @@
 """
-Author: Max Briel
+Author: Max Briel & Heloise Stevance
 
 Test the stellar formation history object
 """
@@ -41,8 +41,8 @@ class TestSFHCustom(object):
     def test_mass_per_bin(self):
         mass_per_bin = np.loadtxt(
             f"{data_path}/csp_test_data/mass_per_bin.txt")
-        assert np.isclose(self.sfh.mass_per_bin(np.linspace(0, HOKI_NOW, 101)),
-                          mass_per_bin).all(),\
+        result = self.sfh.mass_per_bin(np.linspace(0, HOKI_NOW, 101), sample_rate=100)
+        assert np.allclose(result, mass_per_bin),\
             "The mass per bin is calculated incorrectly."
 
 
