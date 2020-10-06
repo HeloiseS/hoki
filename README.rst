@@ -1,8 +1,6 @@
 .. image:: black_text.png
     :height: 35px
 
-
-
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
@@ -13,8 +11,10 @@
 .. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   
     :alt: tests
     
+.. image:: https://img.shields.io/pypi/dm/hoki
+    
 Bridging the Gap Between Observation and Theory
-==============================================
+=================================================
 
 
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
@@ -30,7 +30,7 @@ Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing
 ----
    
 Installing hoki
-^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 You can pip install the **most recent stable release** from pip:
 
@@ -58,27 +58,29 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
-   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `pysynphot`, `numba`
+   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`, `numba`
 
 **Note:** Python 2 is not supported
 
 ----
 
 Read the docs
-^^^^^^^^^^^
+^^^^^^^^^^^^^^^
+
 
 `Click Here! Click Here! Click Here! <https://heloises.github.io/hoki/intro.html>`_
 
 ----
 
 Download Tutorials
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^
+
 Check out these Jupyter notebooks I made - you can find them on `this repo! <https://github.com/HeloiseS/hoki_tutorials>`__
 
 ---- 
 
 Paper and how to cite us!
-^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. image:: https://joss.theoj.org/papers/10.21105/joss.01987/status.svg
    :target: https://doi.org/10.21105/joss.01987
    
@@ -88,6 +90,17 @@ The paper is `available on ArXiv <https://arxiv.org/abs/2001.11069>`_ as publish
 
 **Please if you use `hoki` for your science, include us in your publications!** As you can imagine developing a tool and maintaining it for the community is very time consuming, and unfortunatly citations remain the most important metric. 
 
+If you use the following tools, please acknowledge the follwing publications:
+
+**AgeWizard**:
+
+.. image:: https://img.shields.io/badge/arxiv-2004.02883-red
+   :target: https://arxiv.org/abs/2004.02883
+
+**UnderlyingCountRatio**:
+
+.. image:: https://img.shields.io/badge/arxiv-2004.13040-red
+   :target: https://arxiv.org/abs/2004.13040
 
 **BIBTEX**
 
@@ -127,7 +140,7 @@ which is licensed under the BSD 3-clause licence.
 ----
 
 Contributing
-^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 If ANYTHING comes to mind, whether it be something in the tutorials, features you would like us to consider, BUGS, etc.. 
 **Please just drop it in an issue! Don't let your imposter syndrome talk you out of it ;)**

@@ -52,7 +52,7 @@ class CSPSpectra(HokiObject, CSP):
 
     def __init__(self, data_path, imf, binary=True):
         self.bpass_spectra = utils._normalise_spectrum(
-            load.all_spectra(data_path, imf, binary=binary))
+            load.spectra_all_z(data_path, imf, binary=binary))
 
     ###################
     # Function inputs #
@@ -178,7 +178,7 @@ class CSPSpectra(HokiObject, CSP):
         nr_sfh = len(SFH)
 
         # Initialise binning
-        time_edges = np.linspace(0, self.now, nr_time_bins + 1)
+        time_edges = np.linspace(0, self.now, nr_time_bins+1)
 
         # Calculate mass and average metallicity per bin
         mass_per_bin_list = np.array(
@@ -207,18 +207,20 @@ class CSPSpectra(HokiObject, CSP):
     # Public functions that take a 2D SFH split per metallicity (13, nr_time_points).
 
     def grid_at_time(self, SFH_list, time_points, t0, sample_rate=1000):
-        """Calculates spectra for the given SFH 2d grids
+        """
+        Calculates spectra for the given SFH 2D grids
         (over metallicity and per time_points) at `t0`
 
 
         Parameters
         ----------
         SFH_list : `numpy.ndarray` (N, 13, M) [nr_sfh, metalllicities, time_points]
-            A list of N stellar formation histories divided into BPASS metallicity bins,
-            over lookback time points with length M.
+            A list of N stellar formation histories divided into BPASS
+            metallicity bins, over lookback time points with length M.
 
         time_points : `numpy.ndarray` (M)
-            An array of the lookback time points of length N2 at which the SFH is given in the SFH_list.
+            An array of the lookback time points of length N2 at which
+            the SFH is given in the SFH_list.
 
         t0 : `float`
             The moment in lookback time, where to calculate the the event rate
@@ -248,9 +250,9 @@ class CSPSpectra(HokiObject, CSP):
         return output_spectra
 
     def grid_over_time(self, SFH_list, time_points, nr_time_bins, return_time_edges=False):
-        """Calculates spectra for the given 2D Stellar Formation Histories
-        over lookback time.
-
+        """
+        Calculates spectra for the given 2D Stellar Formation Histories
+        (over metallicity and per time_points) over lookback time.
 
         Parameters
         ----------
@@ -280,6 +282,7 @@ class CSPSpectra(HokiObject, CSP):
         nr_sfh = SFH_list.shape[0]
 
         output_spectra = np.zeros((nr_sfh, 13, nr_time_bins, 100000), dtype=np.float64)
+        time_edges = np.linspace(0, HOKI_NOW, nr_time_bins+1)
 
         for i in range(nr_sfh):
             print_progress_bar(i, nr_sfh)
@@ -301,7 +304,9 @@ class CSPSpectra(HokiObject, CSP):
     @staticmethod
     @numba.njit(parallel=True, cache=True)
     def _grid_rate_calculator_at_time(bpass_spectra, SFH, time_points, t0, sample_rate=1000):
-        """Calculates the spectra for the given spectra and 2D SFH at a specific time
+        """
+        Calculates the spectrum for the given 2D SFH at a specific time
+        split up per metallicity
 
         Parameters
         ----------
@@ -325,7 +330,7 @@ class CSPSpectra(HokiObject, CSP):
         Returns
         -------
         `numpy.ndarray` (13, 100000)
-            A numpy array containing the spectrum per metallicity (13)
+            Numpy array containing the spectrum per metallicity (13)
             per wavelength (100000) at the given time.
         """
 
@@ -353,12 +358,14 @@ class CSPSpectra(HokiObject, CSP):
     @staticmethod
     @numba.njit(parallel=True, cache=True)
     def _grid_rate_calculator_over_time(bpass_spectra, SFH, time_points, nr_time_bins):
-        """Calculates the spectra for a 2d grid SFH over time
+        """
+        Calculates the spectrum per metallicity for a 2D grid SFH over time
 
         Parameters
         ----------
         bpass_spectra : `numpy.ndarray` (13, 51, 100000) [metallicity, time_bin, wavelength]
-            Numpy array containing the BPASS spectra per metallicity, BPASS time bin, and wavelength.
+            Numpy array containing the BPASS spectra per metallicity,
+            BPASS time bin, and wavelength.
 
         SFH : `numpy.ndarray` (13, N) [metallicity, SFH_time_sampling_points]
             Gives the SFH for each metallicity at the time_points
@@ -367,12 +374,12 @@ class CSPSpectra(HokiObject, CSP):
             The time points at which the SFH is sampled (N)
 
         nr_time_bins : `int`
-            The number of time points in which to split the lookback time (final binning)
+            Bins of the final lookback time
 
         Returns
         -------
         `numpy.ndarray` (13, nr_time_bins, 100000)
-            A numpy array containing the spectra per metallicity (13)
+            Numpy array containing the spectra per metallicity (13)
             and per time bins.
 
         """
@@ -384,7 +391,7 @@ class CSPSpectra(HokiObject, CSP):
         for i in numba.prange(13):
             mass_per_bin_list[i] = utils._optimised_mass_per_bin(time_points, SFH[i], time_edges, sample_rate=25)
 
-        # Loop over the metallcities
+        # Loop over the metallicities
         for counter in numba.prange(13):
             spectrum = utils._over_time_spectrum(np.ones(nr_time_bins)*BPASS_NUM_METALLICITIES[counter],
                                           mass_per_bin_list[counter],

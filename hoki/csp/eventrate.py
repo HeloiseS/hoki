@@ -66,7 +66,7 @@ class CSPEventRate(HokiObject, CSP):
 
     def __init__(self, data_path, imf, binary=True):
         self.bpass_rates = utils._normalise_rates(
-            load.all_rates(data_path, imf, binary=binary))
+            load.rates_all_z(data_path, imf, binary=binary))
 
         # Has the shape (8, 13, 51) [event_type, metallicity, time_bin]
         self._numpy_bpass_rates = self.bpass_rates[BPASS_EVENT_TYPES].T.to_numpy().reshape((len(BPASS_EVENT_TYPES),13, 51))
@@ -269,7 +269,8 @@ class CSPEventRate(HokiObject, CSP):
     # Public functions that take a 2D SFH split per metallicity (13, nr_time_points).
 
     def grid_at_time(self, SFH_list, time_points, event_type_list, t0, sample_rate=1000):
-        """Calculates event rates for the given BPASS event types for the
+        """
+        Calculates event rates for the given BPASS event types for the
         given SFH in a 2D grid (over BPASS metallicity and time_points)
 
 
@@ -328,7 +329,8 @@ class CSPEventRate(HokiObject, CSP):
         return event_rate_list
 
     def grid_over_time(self, SFH_list, time_points, event_type_list, nr_time_bins, return_time_edges=False):
-        """Calculates event rates for the given BPASS event types for the
+        """
+        Calculates event rates for the given BPASS event types for the
         given Stellar Formation Histories
 
 
@@ -375,7 +377,7 @@ class CSPEventRate(HokiObject, CSP):
         nr_sfh = SFH_list.shape[0]
 
         nr_events = len(event_type_list)
-        time_edges = np.linspace(0,self.now, nr_time_bins)
+        time_edges = np.linspace(0,self.now, nr_time_bins+1)
         bpass_rates =  self._numpy_bpass_rates[[BPASS_EVENT_TYPES.index(i) for i in event_type_list]]
 
         event_rate_list = np.zeros((nr_sfh, 13, nr_events, nr_time_bins), dtype=np.float64)
@@ -395,22 +397,25 @@ class CSPEventRate(HokiObject, CSP):
     #########################
     # Grid rate calculators #
     #########################
-    # Private functions to calculate the rate using a 2D SFH split per metallicity (13, nr_time_points).
+    # Private functions to calculate the rate using a 2D SFH split per metallicity
+    # (13, nr_time_points). They use numba in a parallised manner to speed up
+    # the calculation.
 
     @staticmethod
     @numba.njit(parallel=True, cache=True)
     def _grid_rate_calculator_at_time(bpass_rates, SFH, time_points, t0, sample_rate=1000):
-        """Calculates the event rates for the given rates and 2D SFH.
+        """
+        Calculates the event rates for the given rates and 2D SFH at a time.
 
         Note
         ----
-        This function checks the bpass_rates for how many event rates have to
+        This function checks the `bpass_rates` for how many event rates have to
         be calculated, but does not know what the event types are.
-        Furthermore, the SFH is a 2D matrix of size 13xtime_points.
+        Furthermore, the SFH is a 2D matrix of size (13,time_points).
 
         Parameters
         ----------
-        bpass_rates : `numpy.ndarray` (M, 13, 51) (event_type, metallicity, time_bin)
+        bpass_rates : `numpy.ndarray` (M, 13, 51) [event_type, metallicity, time_bin]
             Numpy array containing the BPASS event rates per event type (M),
             metallicity (13) and BPASS time bins (51).
 
@@ -460,13 +465,14 @@ class CSPEventRate(HokiObject, CSP):
     @staticmethod
     @numba.njit(parallel=True, cache=True)
     def _grid_rate_calculator_over_time(bpass_rates, SFH, time_points, nr_time_bins):
-        """Calculates the event rates for specific BPASS rates
+        """
+        Calculates the event rates for specific BPASS rates over time
 
         Note
         ----
         This function checks the bpass_rates for how many event rates have to
         be calculated, but does not know what the event types are.
-        Furthermore, the SFH is a 2D matrix of size 13xtime_points.
+        Furthermore, the SFH is a 2D matrix of size (13, time_points).
 
         Parameters
         ----------
