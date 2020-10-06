@@ -40,6 +40,8 @@ BPASS_IMFS = ["imf_chab100", "imf_chab300", "imf100_100", "imf100_300",
               "imf135_100", "imf135_300", "imf135all_100", "imf170_100",
               "imf170_300"]
 
+# wavelengths at which spectra are given [angstrom]
+BPASS_WAVELENGTHS = np.arange(1, 100001)
 
 # Create a deprecation warning when using dummy_dict
 dummy_dict = {'timestep': 0, 'age': 1, 'log(R1)': 2, 'log(T1)': 3, 'log(L1)': 4, 'M1': 5, 'He_core1': 6, 'CO_core1': 7,

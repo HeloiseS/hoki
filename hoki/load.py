@@ -571,8 +571,80 @@ def spectra_all_z(data_path, imf, binary=True):
         spec = hoki.data_compilers.SpectraCompiler(
             data_path, data_path, imf, binary=binary
         )
-        spectra = spec.spectra
+        spectra = spec.output
     return spectra
+
+
+def emissivities_all_z(data_path, imf, binary=True):
+    """
+    Load all BPASS emissivities from files.
+
+    Notes
+    -----
+    The first time this function is run on a folder it will generate an npy
+    file containing all the BPASS emissivities for faster loading in the
+    future. It stores the file in the same folder with the name:
+    `all_ionizing-[bin/sin]-[imf].npy`.
+
+    The emissivities are just read from file and not normalised.
+
+
+    Input
+    -----
+    data_path : `str`
+        The path to the folder containing the BPASS files.
+
+    binary : `bool`
+        Use the binary files or just the single stars. Default=True
+
+    imf : `str`
+        BPASS Identifier of the IMF to be used.
+        The accepted IMF identifiers are:
+        - `"imf_chab100"`
+        - `"imf_chab300"`
+        - `"imf100_100"`
+        - `"imf100_300"`
+        - `"imf135_100"`
+        - `"imf135_300"`
+        - `"imfall_300"`
+        - `"imf170_100"`
+        - `"imf170_300"`
+
+    Returns
+    -------
+    emissivities : `numpy.ndarray` (N_Z, N_age, 4) [(metallicity, log_age, band)]
+        A 3D numpy array containing all the BPASS emissivities (Nion [1/s],
+        L_Halpha [ergs/s], L_FUV [ergs/s/A], L_NUV [ergs/s/A]) for a specific
+        imf and binary or single star population.
+        Usage: spectra[1][2][0]
+                (gives Nion for Z=0.0001 and log_age=6.2)
+    """
+    # Check population type
+    star = "bin" if binary else "sin"
+
+    # check IMF key
+    if imf not in BPASS_IMFS:
+        raise HokiKeyError(
+            f"{imf} is not a BPASS IMF. Please select a correct IMF.")
+
+    # check if data_path is a string
+    if not isinstance(data_path, str):
+         raise HokiTypeError("The folder location is expected to be a string.")
+
+    # Check if compiled spectra are already present in data folder
+    if os.path.isfile(f"{data_path}/all_ionizing-{star}-{imf}.npy"):
+        print("Load precompiled file.")
+        emissivities = np.load(f"{data_path}/all_ionizing-{star}-{imf}.npy")
+        print("Done Loading.")
+
+    # Compile the spectra for faster reading next time otherwise
+    else:
+        print("Compiled file not found. Data will be compiled.")
+        res = hoki.data_compilers.EmissivityCompiler(
+            data_path, data_path, imf, binary=binary
+        )
+        emissivities = res.output
+    return emissivities
 
 
 #################
