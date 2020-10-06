@@ -249,9 +249,9 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
     ----------
     data_path : `str`
         The path to the folder containing the BPASS spectra. See
-        `load.all_spectra`.
+        `load.spectra_all_z`.
     imf : `str`
-        BPASS Identifier of the IMF to be used. See `load.all_spectra`.
+        BPASS Identifier of the IMF to be used. See `load.spectra_all_z`.
     binary : `bool`, optional
         Use spectra including binaries or only single stars. Defaults to
         `True`.
@@ -285,7 +285,7 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
         self._wavelengths = lam[idx_min:idx_max].astype(
             dtype, copy=True)
 
-        self._spectra = load.all_spectra(
+        self._spectra = load.spectra_all_z(
             data_path, imf, binary=binary)[:, :, idx_min:idx_max].astype(
                 dtype, copy=True
             )

@@ -176,7 +176,7 @@ class TestSpectraInterpolator(TestCase):
             (self.metallicities, self.ages, np.float64)
         )
         self.mock_all_spectra = mock.patch(
-            'hoki.load.all_spectra',
+            'hoki.load.spectra_all_z',
             return_value=self.spectra
         )
         return
