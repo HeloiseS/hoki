@@ -35,10 +35,10 @@ class _CompilerBase(abc.ABC):
         output = np.empty(self._shape(), dtype=np.float64)
 
         # loop over all the metallicities and load all the spectra
-            print_progress_bar(num, 12)
         for num, metallicity in enumerate(BPASS_METALLICITIES):
+            print_progress_bar(num, 12)
             # Check if file exists
-            assert isfile(f"{spectra_folder}/spectra-{star}-{imf}.{metallicity}.dat"),\
+            assert isfile(f"{input_folder}/spectra-{star}-{imf}.{metallicity}.dat"),\
                    "HOKI ERROR: This file does not exist, or its path is incorrect."
             output[num] = self._load_single(
                 f"{input_folder}/{self._input_name()}-{star}-{imf}.{metallicity}.dat"

@@ -571,7 +571,7 @@ def spectra_all_z(data_path, imf, binary=True):
         spec = hoki.data_compilers.SpectraCompiler(
             data_path, data_path, imf, binary=binary
         )
-        spectra = spec.spectra
+        spectra = spec.output
     return spectra
 
 
@@ -632,7 +632,7 @@ def emissivities_all_z(data_path, imf, binary=True):
          raise HokiTypeError("The folder location is expected to be a string.")
 
     # Check if compiled spectra are already present in data folder
-    if os.path.isfile(f"{data_path}/all_ionizing-{star}-{imf}.npy")
+    if os.path.isfile(f"{data_path}/all_ionizing-{star}-{imf}.npy"):
         print("Load precompiled file.")
         emissivities = np.load(f"{data_path}/all_ionizing-{star}-{imf}.npy")
         print("Done Loading.")
