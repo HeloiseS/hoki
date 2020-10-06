@@ -23,6 +23,7 @@ class HokiDeprecationWarning(HokiWarning):
     A warning class to indicate a deprecated feature.
     """
 
+
 # Formatting
 
 
@@ -57,3 +58,4 @@ class HokiAttributeError(AttributeError):
     """
     Hoki Attribute error
     """
+

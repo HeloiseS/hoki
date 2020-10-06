@@ -23,6 +23,17 @@ data_path = pkg_resources.resource_filename('hoki', 'data')
 # Test Calculations per bin #
 #############################
 
+def test_optimised_trapezodial_rule():
+    x = np.linspace(0,100,101)
+    y = x
+    out = utils._optimised_trapezodial_rule(y,x)
+    assert np.isclose(out, (100**2)/2), "optimised trapezodial rule failed"
+
+def test_optimised_mass_per_bin():
+    x = np.linspace(0, 100, 101)
+    y = np.zeros(101) + 1
+    out = utils._optimised_mass_per_bin(x, y, np.linspace(0,10,11), 25)
+    assert np.allclose(out, np.zeros(10) + 1), "optmised mass calculation is wrong"
 
 def test_mass_per_bin():
     x = np.linspace(0, 100, 101)
@@ -31,7 +42,17 @@ def test_mass_per_bin():
     def sfh_func(i): return np.interp(i, x, y)
 
     mass_per_bin = utils.mass_per_bin(sfh_func, np.linspace(0, 10, 11))
-    assert np.isclose(mass_per_bin, np.zeros(10) + 1).all(),\
+    assert np.allclose(mass_per_bin, np.zeros(10) + 1),\
+        "mass_per_bin calculation wrong."
+
+def test_mass_per_bin_vector_input():
+    x = np.linspace(0, 100, 101)
+    y = np.zeros(101) + 1
+
+    def sfh_func(i): return np.zeros(len(i)) + 1
+
+    mass_per_bin = utils.mass_per_bin(sfh_func, np.linspace(0, 10, 11))
+    assert np.allclose(mass_per_bin, np.zeros(10) + 1),\
         "mass_per_bin calculation wrong."
 
 
@@ -87,7 +108,7 @@ class TestRateCalculations(object):
     edges = np.linspace(0, 10, 11)
     Z_values = np.zeros(10) + 0.00001
     mass_values = np.zeros(10) + 1
-    rates = np.zeros((1, 51)) + 1
+    rates = np.zeros((13, 51)) + 1
 
     def test_over_time(self):
         out = utils._over_time(self.Z_values,
@@ -120,7 +141,7 @@ class TestSpectraCalculations(object):
     mass_values = np.zeros(10) + 1
 
     def test_over_time(self):
-        spectra = np.zeros((1, 100000, 51)) + 1
+        spectra = np.zeros((13, 51, 100000)) + 1
         out = utils._over_time_spectrum(self.Z_values,
                                         self.mass_values,
                                         self.edges,
@@ -129,23 +150,23 @@ class TestSpectraCalculations(object):
                             err_msg="_over_time_spectra calculation has failed.")
 
     def test_at_time_now(self):
-        spectra = np.zeros((51, 1, 100000)) + 1
-        out = utils._at_time_spectrum(self.Z_values,
+        spectra = np.zeros((13, 51, 100000)) + 1
+        out = utils._at_time(self.Z_values,
                                       self.mass_values,
                                       self.edges,
                                       spectra)
         print(out)
         npt.assert_allclose(out, np.zeros(100000) + 10,
-                            err_msg="_at_time_spectra calculation has failed for the now.")
+                            err_msg="_at_time spectrum calculation has failed for the now.")
 
     def test_at_time_past(self):
-        spectra = np.zeros((51, 1, 100000)) + 1
-        out = utils._at_time_spectrum(self.Z_values[5:],
+        spectra = np.zeros((13, 51, 100000)) + 1
+        out = utils._at_time(self.Z_values[5:],
                                       self.mass_values[5:],
                                       self.edges[5:],
                                       spectra)
         npt.assert_allclose(out, np.zeros(100000) + 5,
-                            err_msg="_at_time_spectra calculation has failed for in the past.")
+                            err_msg="_at_time spectrum calculation has failed for in the past.")
 
 
 ###############################

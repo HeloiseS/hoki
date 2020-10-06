@@ -114,7 +114,7 @@ class SFH(object):
         """
         return self._sfh_calculator(t)
 
-    def mass_per_bin(self, time_edges, sample_rate=100):
+    def mass_per_bin(self, time_edges, sample_rate=25):
         """
         Gives the mass per bin for the given edges in time.
 
@@ -301,4 +301,3 @@ def lognormal(time_bins, tau, T0, factor=1):
     """
     return factor*((1/np.sqrt(2*np.pi*tau**2))*(1/tau)*
                    np.exp(-((np.log(time_bins)-T0)**2)/(2*tau**2) ))
-
