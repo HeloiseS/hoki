@@ -1,10 +1,10 @@
 """
-Tests for the utils.binning module.
+Tests for the `hoki.spec` module.
 
-Author: Martin Glatzle
+Authors: Martin Glatzle
 """
 from unittest import TestCase
-from hoki.utils import binning
+from hoki import spec
 import numpy as np
 
 
@@ -14,7 +14,7 @@ class TestBinwiseTrapz(TestCase):
         x = np.linspace(1, 10)
         y = np.ones_like(x).reshape((1, -1))
         bin_edges = np.array([4, 5])
-        y_new = binning._binwise_trapz_sorted(x, y, bin_edges)
+        y_new = spec._binwise_trapz_sorted(x, y, bin_edges)
         self.assertAlmostEqual(
             1.0, y_new[0, 0]
         )
@@ -26,7 +26,7 @@ class TestBinwiseTrapz(TestCase):
 
         # bin edges at ends of lam
         bin_edges = np.array([lam[0], (lam[0]+lam[-1])/2, lam[-1]])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         self.assertAlmostEqual(
             1.0, L_bin_int[0, 0]/np.diff(bin_edges)[0]
         )
@@ -36,21 +36,21 @@ class TestBinwiseTrapz(TestCase):
 
         # only one bin
         bin_edges = np.array([lam[0], lam[-1]])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         self.assertAlmostEqual(
             1.0, L_bin_int[0, 0]/np.diff(bin_edges)[0]
         )
 
         # one bin smaller than resolution
         bin_edges = np.array([lam[0], (lam[0]+lam[1])/2])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         self.assertAlmostEqual(
             1.0, L_bin_int[0, 0]/np.diff(bin_edges)[0]
         )
 
         # one bin covering neighbouring resolution elements
         bin_edges = np.array([lam[0], (lam[1]+lam[2])/2])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         self.assertAlmostEqual(
             1.0, L_bin_int[0, 0]/np.diff(bin_edges)[0]
         )
@@ -60,7 +60,7 @@ class TestBinwiseTrapz(TestCase):
         lam = np.linspace(1, 5, num=50)
         L_lam = np.random.random((4, len(lam)))
         bin_edges = np.array([lam[0], lam[-1]])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         for j, row in enumerate(L_lam):
             self.assertAlmostEqual(
                 np.trapz(row, x=lam), L_bin_int[j, 0]
@@ -71,7 +71,7 @@ class TestBinwiseTrapz(TestCase):
         lam = np.linspace(1, 5, num=50)
         L_lam = np.random.random((1, len(lam)))
         bin_edges = np.array([lam[0], (lam[0]+lam[-1])/2, lam[-1]])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         self.assertAlmostEqual(
             np.trapz(L_lam[0, :], x=lam),
             np.sum(L_bin_int)
@@ -82,7 +82,7 @@ class TestBinwiseTrapz(TestCase):
         lam = np.linspace(1, 5, num=50)
         L_lam = np.random.random((1, len(lam)))
         bin_edges = np.array([lam[4], lam[20]])
-        L_bin_int = binning._binwise_trapz_sorted(lam, L_lam, bin_edges)
+        L_bin_int = spec._binwise_trapz_sorted(lam, L_lam, bin_edges)
         self.assertAlmostEqual(
             np.trapz(L_lam[0, 4:21], x=lam[4:21]),
             L_bin_int[0, 0]
@@ -95,7 +95,7 @@ class TestBinSpectra(TestCase):
     def test_std(self):
         wl = np.linspace(1, 1000, num=2000)
         spectra = np.random.random((10, len(wl)))
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra
         )
 
@@ -107,7 +107,7 @@ class TestBinSpectra(TestCase):
         )
 
         bin_edges = np.linspace(100, 500, num=500)
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra, bin_edges
         )
 
@@ -127,7 +127,7 @@ class TestBinSpectra(TestCase):
         spectra = np.random.random((20, len(wl)))
         bin_edges = np.linspace(1, 1000, num=10, endpoint=True)
 
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra, bin_edges
         )
         self.assertTrue(
@@ -137,7 +137,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra
         )
         self.assertTrue(
@@ -147,7 +147,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra, 1
         )
         self.assertTrue(
@@ -164,7 +164,7 @@ class TestBinSpectra(TestCase):
         spectra = np.random.random((20, len(wl)))
 
         bin_edges = np.linspace(1000, 1, num=10, endpoint=True)
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra, bin_edges
         )
         self.assertTrue(
@@ -174,7 +174,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra
         )
         self.assertTrue(
@@ -184,7 +184,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_luminosity(
+        wl_new, spectra_new = spec.bin_luminosity(
             wl, spectra, 1
         )
         self.assertTrue(
@@ -202,14 +202,14 @@ class TestBinSpectra(TestCase):
         sed = np.empty((len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_luminosity(wl, sed, bin_edges)
+            spec.bin_luminosity(wl, sed, bin_edges)
 
         # incompatible shapes
         wl = np.linspace(1, 100)
         sed = np.empty((1, len(wl)-2))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_luminosity(wl, sed, bin_edges)
+            spec.bin_luminosity(wl, sed, bin_edges)
 
         # identical values in wl
         wl = np.hstack((
@@ -219,20 +219,20 @@ class TestBinSpectra(TestCase):
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_luminosity(wl, sed, bin_edges)
+            spec.bin_luminosity(wl, sed, bin_edges)
 
         # bins outside range
         wl = np.linspace(1, 100)
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_luminosity(wl, sed, bin_edges)
+            spec.bin_luminosity(wl, sed, bin_edges)
         bin_edges = np.array([2, 200])
         with self.assertRaises(ValueError):
-            binning.bin_luminosity(wl, sed, bin_edges)
+            spec.bin_luminosity(wl, sed, bin_edges)
         wl = np.linspace(100, 1)
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_luminosity(wl, sed, bin_edges)
+            spec.bin_luminosity(wl, sed, bin_edges)
         return
