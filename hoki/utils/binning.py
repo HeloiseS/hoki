@@ -8,7 +8,7 @@ from numba import jit
 import numbers
 
 
-def bin_spectra(wl, spectra, bins=10):
+def bin_luminosity(wl, spectra, bins=10):
     """
     Bin spectra conserving luminosity.
 

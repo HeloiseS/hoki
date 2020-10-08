@@ -95,7 +95,7 @@ class TestBinSpectra(TestCase):
     def test_std(self):
         wl = np.linspace(1, 1000, num=2000)
         spectra = np.random.random((10, len(wl)))
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra
         )
 
@@ -107,7 +107,7 @@ class TestBinSpectra(TestCase):
         )
 
         bin_edges = np.linspace(100, 500, num=500)
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra, bin_edges
         )
 
@@ -127,7 +127,7 @@ class TestBinSpectra(TestCase):
         spectra = np.random.random((20, len(wl)))
         bin_edges = np.linspace(1, 1000, num=10, endpoint=True)
 
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra, bin_edges
         )
         self.assertTrue(
@@ -137,7 +137,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra
         )
         self.assertTrue(
@@ -147,7 +147,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra, 1
         )
         self.assertTrue(
@@ -164,7 +164,7 @@ class TestBinSpectra(TestCase):
         spectra = np.random.random((20, len(wl)))
 
         bin_edges = np.linspace(1000, 1, num=10, endpoint=True)
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra, bin_edges
         )
         self.assertTrue(
@@ -174,7 +174,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra
         )
         self.assertTrue(
@@ -184,7 +184,7 @@ class TestBinSpectra(TestCase):
             )
         )
 
-        wl_new, spectra_new = binning.bin_spectra(
+        wl_new, spectra_new = binning.bin_luminosity(
             wl, spectra, 1
         )
         self.assertTrue(
@@ -202,14 +202,14 @@ class TestBinSpectra(TestCase):
         sed = np.empty((len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges)
+            binning.bin_luminosity(wl, sed, bin_edges)
 
         # incompatible shapes
         wl = np.linspace(1, 100)
         sed = np.empty((1, len(wl)-2))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges)
+            binning.bin_luminosity(wl, sed, bin_edges)
 
         # identical values in wl
         wl = np.hstack((
@@ -219,20 +219,20 @@ class TestBinSpectra(TestCase):
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges)
+            binning.bin_luminosity(wl, sed, bin_edges)
 
         # bins outside range
         wl = np.linspace(1, 100)
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges)
+            binning.bin_luminosity(wl, sed, bin_edges)
         bin_edges = np.array([2, 200])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges)
+            binning.bin_luminosity(wl, sed, bin_edges)
         wl = np.linspace(100, 1)
         sed = np.empty((1, len(wl)))
         bin_edges = np.array([0.5, 20])
         with self.assertRaises(ValueError):
-            binning.bin_spectra(wl, sed, bin_edges)
+            binning.bin_luminosity(wl, sed, bin_edges)
         return
