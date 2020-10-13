@@ -197,6 +197,10 @@ def _find_hrd_coordinates(obs_df, myhrd):
             T = float(T)
             # Finds the index that is at the minimum distance in Temperature space and adds it to the list
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
+
+        except TypeError:
+            T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0][0]))
+
         except ValueError:
             warnings.warn("T=" + str(T) + " cannot be converted to a float", HokiUserWarning)
             T_i.append(np.nan)
@@ -205,6 +209,10 @@ def _find_hrd_coordinates(obs_df, myhrd):
             L = float(L)
             # Finds the index that is at the minimum distance in Luminosity space and adds it to the list
             L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0]))
+
+        except TypeError:
+            L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0][0]))
+
         except ValueError:
             warnings.warn("L=" + str(L) + " cannot be converted to a float", HokiUserWarning)
             L_i.append(np.nan)
@@ -254,6 +262,10 @@ def _find_cmd_coordinates(obs_df, mycmd):
             col = float(col)
             # Finds the index that is at the minimum distance in Colour space and adds it to the list
             col_i.append(int((np.where(abs(mycmd.col_range - col) == abs(mycmd.col_range - col).min()))[0]))
+
+        except TypeError:
+            col_i.append(int((np.where(abs(mycmd.col_range - col) == abs(mycmd.col_range - col).min()))[0][0]))
+
         except ValueError:
             warnings.warn("Colour=" + str(col) + " cannot be converted to a float", HokiUserWarning)
             col_i.append(np.nan)
@@ -262,6 +274,10 @@ def _find_cmd_coordinates(obs_df, mycmd):
             mag = float(mag)
             # Finds the index that is at the minimum distance in Magnitude space and adds it to the list
             mag_i.append(int((np.where(abs(mycmd.mag_range - mag) == abs(mycmd.mag_range - mag).min()))[0]))
+
+        except TypeError:
+            mag_i.append(int((np.where(abs(mycmd.mag_range - mag) == abs(mycmd.mag_range - mag).min()))[0][0]))
+
         except ValueError:
             warnings.warn("Magnitude=" + str(mag) + " cannot be converted to a float", HokiUserWarning)
             mag_i.append(np.nan)
@@ -288,6 +304,9 @@ def calculate_individual_pdfs(obs_df, model, test=None):
     pdfs = []
     for col in likelihoods.columns:
         pdfs.append(normalise_1d(likelihoods[col].values))
+
+    #print(pdfs)
+    #print(np.array(pdfs).shape)
     return pd.DataFrame(np.array(pdfs).T, columns=likelihoods.columns)
 
 
