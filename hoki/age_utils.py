@@ -435,7 +435,7 @@ def calculate_distributions_normalised(obs_df, model):
 
 def calculate_sample_pdf(distributions_df, not_you=None):
     """
-    Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
+    Adds together all the columns in given in DataFrame apart from the "time_bins" column
 
     Parameters
     ----------
