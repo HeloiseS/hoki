@@ -57,7 +57,7 @@ class TestAgeWizard(object):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
         wiz.calculate_sample_pdf(not_you=['star1'])
         cpdf = wiz.sample_pdf.pdf
-        assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0, 0.774602971512809])) == 2, "combined pdf is not right"
+        assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0,  0.7231526323765232])) == 2, "combined pdf is not right"
 
     def test_most_likely_age(self):
         wiz = au.AgeWizard(obs_df=fake_hrd_input, model=hr_file)
@@ -71,7 +71,7 @@ class TestAgeWizard(object):
     def test_combine_pdfs(self):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
         wiz.calculate_sample_pdf()
-        assert np.isclose(wiz.sample_pdf.pdf[9], 0.2715379752638662), "Something is wrong with the combined_Age PDF"
+        assert np.isclose(wiz.sample_pdf.pdf[9],0.551756734145878), "Something is wrong with the combined_Age PDF"
 
     def test_calculate_p_given_age_range(self):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)

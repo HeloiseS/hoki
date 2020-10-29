@@ -139,11 +139,14 @@ class HRDiagram(HokiObject):
         self._all_H = self.low_H + self.medium_H + self.high_H
 
         # Initialise attributes for later
+        self.reset_stack()
 
+    def reset_stack(self):
         self.high_H_stacked, self.medium_H_stacked, self.low_H_stacked = np.zeros((100, 100)), \
-                                                                         np.zeros((100, 100)),\
+                                                                         np.zeros((100, 100)), \
                                                                          np.zeros((100, 100))
         self.all_stacked = None
+        print("Stack has been reset")
 
     def stack(self, log_age_min=None, log_age_max=None):
         """
@@ -164,6 +167,7 @@ class HRDiagram(HokiObject):
             self.medium_H_stacked, self.low_H_stacked and self.all_stacked.
 
         """
+        self.reset_stack()
 
         if log_age_min is None and log_age_max is not None:
             log_age_min = self.t[0]
@@ -259,6 +263,7 @@ class HRDiagram(HokiObject):
 
 
         """
+
         #assert abundances != (0, 0, 0), "HOKI ERROR: abundances cannot be (0, 0, 0) - You're plotting nothing."
         if abundances == (0, 0, 0):
             raise HokiFatalError("Abundances cannot be (0, 0, 0) - You're plotting nothing.")
@@ -299,15 +304,14 @@ class HRDiagram(HokiObject):
 
             return hr_plot
 
+        elif age_range is not None and log_age is not None:
+            error_message = "You provided an age range as well as an age. The former takes " \
+                            "precedent. If you wanted to plot a single age, this will be WRONG."
+            warnings.warn(error_message, HokiUserWarning)
+
         # Case where an age or age_range is given
 
-        if log_age:
-            if not isinstance(log_age, int) and not isinstance(log_age, float):
-                raise HokiFormatError("Age should be an int or float")
-
-            all_hr, high_hr, medium_hr, low_hr = self.at_log_age(log_age)
-
-        elif age_range:
+        if age_range is not None:
             if not isinstance(age_range, list) and not isinstance(age_range, tuple):
                 raise HokiFormatError("Age range should be a list or a tuple")
 
@@ -315,10 +319,13 @@ class HRDiagram(HokiObject):
             all_hr, high_hr, medium_hr, low_hr = self.all_stacked, self.high_H_stacked, \
                                                  self.medium_H_stacked, self.low_H_stacked
 
-        elif age_range and log_age:
-            error_message = "You provided an age range as well as an age. The former takes "\
-                            "precedent. If you wanted to plot a single age, this will be WRONG."
-            warnings.warn(error_message, HokiUserWarning)
+        elif log_age is not None:
+            if not isinstance(log_age, int) and not isinstance(log_age, float):
+                raise HokiFormatError("Age should be an int or float")
+
+            all_hr, high_hr, medium_hr, low_hr = self.at_log_age(log_age)
+
+
 
         if abundances == (1, 1, 1):
             hr_plot = plot_hrdiagram(all_hr, kind=self.type, **kwargs)
