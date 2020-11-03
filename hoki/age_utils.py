@@ -2,10 +2,11 @@ import pandas as pd
 import hoki.hrdiagrams
 import hoki.cmd
 import hoki.load as load
-from hoki.constants import *
+from hoki.constants import BPASS_TIME_BINS
 import warnings
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning
 from hoki.utils.hoki_object import HokiObject
+import numpy as np
 
 
 class AgeWizard(HokiObject):
@@ -324,7 +325,8 @@ def calculate_individual_pdfs(obs_df, model):
 def calculate_distributions(obs_df, model):
     """
     Given observations and an HR Diagram, calculates the distribution across ages (not normalised)
-
+    Note to self: KEEP THIS I NEED IT 
+    
     Parameters
     ----------
     obs_df: pandas.DataFrame
@@ -445,6 +447,40 @@ def calculate_distributions_normalised(obs_df, model):
     return likelihoods_df
 
 
+def calculate_distributions_normalised_with_gaussian_sampling(obs_df_with_errs, model, nsamples=100):
+    """what it says on the tin - shoudl work fro both HRD and CMD but still needs testing on CMD"""
+    obs_df_with_errs.index=obs_df_with_errs.name
+    main=pd.DataFrame(np.zeros((obs_df_with_errs.name.shape[0], 51)).T, 
+                      columns = obs_df_with_errs.name.values)
+    
+    #### SAMPLING SYMMETRICAL ERRORS
+    df_Ls= pd.DataFrame(np.zeros((nsamples, obs_df_with_errs.name.shape[0])).T, index=obs_df_with_errs.name.values)
+    df_Ts= df_Ls.copy()
+
+    for col in main.columns:
+        # For each star (column in main) we sample n times
+        df_Ls.loc[col] = np.random.normal(stars.loc[col].logL, stars.loc[col].logL_err, nsamples)
+        df_Ts.loc[col] = np.random.normal(stars.loc[col].logT, stars.loc[col].logT_err, nsamples)
+        
+    # We're going to need to create temprary 'obs_df' that fit in pre-existing functions
+    # This is the 'template' dataframe we're going to modify in every loop
+    obs_df = obs_df_with_errs.copy().drop(['logL_err', 'logT_err'], axis=1)
+
+    for i in range(nsamples):
+        obs_df.logL = df_Ls[i]
+        obs_df.logT = df_Ts[i]
+
+        distribs_i = calculate_distributions(obs_df, model)
+        main+=distribs_i
+        
+    # and now that we've got our distributions all added up we normalise them!
+    for col in main.columns:
+        main[col]=normalise_1d(main[col].values, crop_the_future=False)
+        
+    # this "main" dataframe can then just be fed into calculate_sample_pdf as distributions_df
+    return main
+
+
 def calculate_sample_pdf(distributions_df, not_you=None):
     """
     Adds together all the columns in given in DataFrame apart from the "time_bins" column
@@ -474,7 +510,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
             message = 'FEATURE DISABLED' + '\nKeyError' + str(
                 e) + '\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
                      'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
-                     'Make sure the labels your listed are spelled correctly:)'
+                     'Make sure the labels you listed are spelled correctly:)'
             warnings.warn(message, HokiUserWarning)
 
     # We also must be careful not to multiply the time bin column in there so we have a list of the column names
@@ -517,4 +553,5 @@ def calculate_p_given_age_range(pdfs, age_range=None):
     probability = pdfs[(np.round(BPASS_TIME_BINS, 2) >= min(age_range))
                        & (np.round(BPASS_TIME_BINS, 2) <= max(age_range))].sum()
 
+    return probability
     return probability
