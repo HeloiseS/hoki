@@ -4,9 +4,20 @@ import hoki.cmd
 import hoki.load as load
 from hoki.constants import BPASS_TIME_BINS
 import warnings
-from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning, HokiDeprecationWarning
 from hoki.utils.hoki_object import HokiObject
 import numpy as np
+import warnings
+
+Dialogue = HokiDialogue()
+
+deprecation='\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' \
+            '\nThis is an obsolete version of AgeWizard - only here for backwards ' \
+            'compatibility.\nYOU SHOULD USE THE hoki.age SUBPACKAGE AND MODULES WITHIN. ' \
+            '\ne.g. from hoki.age.wizard import AgeWizard' \
+            '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n'
+            
+warnings.warn(HokiDeprecationWarning(deprecation))
 
 
 class AgeWizard(HokiObject):
@@ -554,4 +565,4 @@ def calculate_p_given_age_range(pdfs, age_range=None):
                        & (np.round(BPASS_TIME_BINS, 2) <= max(age_range))].sum()
 
     return probability
-    return probability
+
