@@ -18,6 +18,7 @@ Dialogue = HokiDialogue()
 # MISC  #
 #########
 
+
 def normalise_1d(distribution, crop_the_future=False):
     """
     Simple function that devides by the sum of the 1D array or DataFrame given.
@@ -36,17 +37,24 @@ def _crop_the_future(distribution):
 
 
 # TODO: Write this docstring
-def fit_lognorm_params(c, m, p, cdf=np.array([0.16, 0.5, 0.84]), p0=1):
+# TODO: Write test
+def fit_lognorm_params(c, m, p, percentiles=np.array([0.16, 0.5, 0.84]), p0=1):
     """
     Fits the CDF of a log normal distribution to the percentiles and offset values of a parameter
 
     Parameters
     ----------
-    c
-    m
-    p
-    cdf
-    p0
+    c: numpy.array
+        50th percentile, a.k.a median (c for center) 
+    m: numpy.array
+        Lower error - 1 sigma (m for minus, because this value would be subtracted to the median to retrieve 
+        the Xth percentile). Please provide the absolute value.  
+    p: numpy.array
+        Upper error - 1 sigma (p for plus, because these values would be added to the median to create 
+        the Yth percentile)
+    percentiles: numpy.array
+           
+    p0: numpy.array
 
     Returns
     -------
@@ -56,12 +64,18 @@ def fit_lognorm_params(c, m, p, cdf=np.array([0.16, 0.5, 0.84]), p0=1):
     bs = c-ones
     xs = np.array([ones-m, ones, ones+p]).T
 
+
     ss, serrs= [], []
     for x in xs:
-        s, serr = optimize.curve_fit(stats.lognorm.cdf, x, cdf, p0=p0)
+        s, serr = optimize.curve_fit(stats.lognorm.cdf, x, percentiles, p0=p0)
         ss.append(s)
         serrs.append(serr)
 
+    # bizarre data format - fix
+    ss = np.array(ss)
+    ss = ss.reshape(ss.shape[0])
+    serrs = np.array(serrs).astype(float)
+    serrs = serrs.reshape(serrs.shape[0])
     return bs, ss, serrs
 
 
@@ -70,23 +84,23 @@ def _error_flag(obs_df):
 
     error_flag = None
 
-    # joins all the caracters of the columns
+    # joins all the characters of the columns
     concat_columns = ''.join(map(str, obs_df.columns.to_list()[1:]))
 
-    if 'err' in concat_columns:
+    if '_err' in concat_columns:
         error_flag = 'SYM'
         print(f'{Dialogue.info()} ERROR_FLAG=SYM / Strictily symmetric errors detected')
 
-    elif 'm' in concat_columns and 'p' in concat_columns:
+    elif '_m' in concat_columns and '_p' in concat_columns:
         error_flag = 'NOTSYM'
         print(f'{Dialogue.info()} ERROR_FLAG=NOTSYM / Asymmetric errors detected')
 
-    elif 'm' in concat_columns and 'p' not in concat_columns:
+    elif '_m' in concat_columns and '_p' not in concat_columns:
         debug_message = f"A column '*_m' was found but not column '*_p'.\n\
     {Dialogue.debugger()}  If your errors are symmetric you can use the _err tag. See manual and tutorials for more info"
         raise (HokiFormatError(debug_message))
 
-    elif 'm' not in concat_columns and 'p' in concat_columns:
+    elif '_m' not in concat_columns and '_p' in concat_columns:
         debug_message = f"A column '*_p' was found but not column '*_m'.\n\
     {Dialogue.debugger()}  If your errors are symmetric you can use the _err tag. See manual and tutorials for more info"
         raise (HokiFormatError(debug_message))
@@ -128,8 +142,6 @@ def find_coordinates(obs_df, model):
 
     else:
         raise HokiFormatError("The model should be an instance of hoki.hrdiagrams.HRDiagrams or hoki.cmd.CMD")
-
-    print(f'{Dialogue.info()} Matching data to the model - find_coordinates()')
 
 
 def _find_hrd_coordinates(obs_df, myhrd):
@@ -261,9 +273,6 @@ def _find_cmd_coordinates(obs_df, mycmd):
     return col_i, mag_i
 
 
-
-
-
 ###############################
 # CALCULATING INDIVIDUAL PDFS #
 ###############################
@@ -287,7 +296,7 @@ def calculate_individual_pdfs(obs_df, model, nsamples=500):
     if flag is None:
         pdfs = calculate_individual_pdfs_None(obs_df, model)
 
-    # TO DO: WILL NEED TO TAKE CARE OF CMDs too
+    # TODO: WILL NEED TO TAKE CARE OF CMDs too
 
     elif flag == 'SYM':
         pdfs = calculate_individual_pdfs_SYM_HRD(obs_df, model)
@@ -316,18 +325,13 @@ def calculate_distributions(obs_df, model):
 
     """
     # Checking whether it;s HRD or CMD
+
     if isinstance(model, hoki.hrdiagrams.HRDiagram):
         x_coord, y_coord = find_coordinates(obs_df, model)
     if isinstance(model, hoki.cmd.CMD):
         y_coord, x_coord = find_coordinates(obs_df, model)  # yeah it's reversed... -_-
 
-    # If source names not given we make our own
-    try:
-        source_names = obs_df.name
-    except AttributeError:
-        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
-        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
-
+    source_names = obs_df.name
     distributions = []
 
     # Time to calcualte the pdfs
@@ -362,11 +366,22 @@ def calculate_distributions(obs_df, model):
 
 #### ASYMMETRIC ERROR OR MIX
 
-
 def add_error_flag_column_hrd(obs_df):
-    """Flagging which errors are symmetric and which are not FOR HRD """
-    xerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.logT_p-obs_df.logT_m).values]
-    yerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.logL_p-obs_df.logL_m).values]
+    """ Flagging which errors are symmetric and which are not FOR HRD """
+    error_message = f"{Dialogue.debugger} I will assume this quantity has no errors. If I am wrong, make sure " \
+                    f"your observation dataframe contains all the columns necessary"
+    try:
+        xerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.logT_p-obs_df.logT_m).values]
+    except AttributeError as e:
+        print(f"{e}")
+        print(error_message)
+        xerr_flag = "None"
+    try:
+        yerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.logL_p-obs_df.logL_m).values]
+    except AttributeError as e:
+        print(f"{e}")
+        print(error_message)
+        yerr_flag = "None"
 
     obs_df['xerr_flag'] = xerr_flag
     obs_df['yerr_flag'] = yerr_flag
@@ -386,6 +401,14 @@ def add_error_flag_column_cmd(obs_df):
 # TODO: make a CMD version of NOTSYM
 def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
 
+    # If source names not given we make our own
+    try:
+        source_names = obs_df.name
+    except AttributeError:
+        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
+        obs_df['name']=source_names
+
     add_error_flag_column_hrd(obs_df)
     obs_df.index = obs_df.name
 
@@ -402,10 +425,22 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
 
     # lists for symetric and asymmetric errors
 
-    xobs_sym_ls, xobs_notsym_ls = obs_df[obs_df.xerr_flag=='SYM'].name.tolist(), \
-                                  obs_df[obs_df.xerr_flag=='NOTSYM'].name.tolist()
-    yobs_sym_ls, yobs_notsym_ls = obs_df[obs_df.yerr_flag=='SYM'].name.tolist(), \
-                                  obs_df[obs_df.yerr_flag=='NOTSYM'].name.tolist()
+    xobs_sym_ls, xobs_notsym_ls, xobs_none_ls = obs_df[obs_df.xerr_flag=='SYM'].name.tolist(), \
+                                                obs_df[obs_df.xerr_flag=='NOTSYM'].name.tolist(), \
+                                                obs_df[obs_df.xerr_flag=='None'].name.tolist()
+
+    yobs_sym_ls, yobs_notsym_ls, yobs_none_ls = obs_df[obs_df.yerr_flag=='SYM'].name.tolist(), \
+                                                obs_df[obs_df.yerr_flag=='NOTSYM'].name.tolist(), \
+                                                obs_df[obs_df.yerr_flag=='None'].name.tolist()
+
+    # NO ERRORS
+    for colx in xobs_none_ls:
+        # For each star (column in main) we sample n times
+        df_Ts.loc[colx] = [obs_df.loc[colx].logT]*nsamples
+
+    for coly in yobs_none_ls:
+        df_Ls.loc[coly] = [obs_df.loc[coly].logL]*nsamples
+
 
     # SYMMETRIC ERRORS
     # need to do it separately if not the same of symmetrical errors in T and L
@@ -422,35 +457,53 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
     # ASYMMETRIC ERRORS
 
     # extract values to feed to fit_lognorm_params
-    cL, mL, pL, = obs_df.loc[yobs_notsym_ls].logL.values, \
-                  obs_df.loc[yobs_notsym_ls].logL_m.values, \
-                  obs_df.loc[yobs_notsym_ls].logL_p.values
-    cT, mT, pT, = obs_df.loc[xobs_notsym_ls].logT.values, \
-                  obs_df.loc[xobs_notsym_ls].logT_m.values, \
-                  obs_df.loc[xobs_notsym_ls].logT_p.values
 
-    print(f"{Dialogue.info()} Fitting Lognormal Parameters")
-    # Fit lognorm parameters
-    B_L, S_L, Serr_L = fit_lognorm_params(cL, mL, pL)
-    B_T, S_T, Serr_T = fit_lognorm_params(cT, mT, pT)
+    # LUMINOSITY
+    try:
+       cL, mL, pL, = obs_df.loc[yobs_notsym_ls].logL.values, \
+                     obs_df.loc[yobs_notsym_ls].logL_m.values, \
+                     obs_df.loc[yobs_notsym_ls].logL_p.values
 
+       # Fit lognorm parameters
+       B_L, S_L, Serr_L = fit_lognorm_params(cL, mL, pL)
 
-    print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
-    # Need to sample L abd
-    i=0
-    for colx in xobs_notsym_ls:
-        df_Ts.loc[colx] = stats.lognorm.rvs(s=S_T[i], size=nsamples)+B_T[i]
-        i+=1
+       #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
+       # Need to sample L abd
+       i=0
+       for coly in yobs_notsym_ls:
+           df_Ls.loc[coly] = stats.lognorm.rvs(s=S_L[i], size=nsamples)+B_L[i]
+           i+=1
 
-    i=0
-    for coly in yobs_notsym_ls:
-        df_Ls.loc[coly] = stats.lognorm.rvs(s=S_L[i], size=nsamples)+B_L[i]
-        i+=1
+    except AttributeError as e:
+       print(f"{Dialogue.info()} No errors on L")
+       pass
+
+    #print(f"{Dialogue.info()} Fitting Lognormal Parameters")
+
+    # TEMPERATURE
+    try:
+        cT, mT, pT, = obs_df.loc[xobs_notsym_ls].logT.values,   \
+                      obs_df.loc[xobs_notsym_ls].logT_m.values,\
+                      obs_df.loc[xobs_notsym_ls].logT_p.values
+
+        B_T, S_T, Serr_T = fit_lognorm_params(cT, mT, pT)
+
+        #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
+        # Need to sample L abd
+        i=0
+        for colx in xobs_notsym_ls:
+            df_Ts.loc[colx] = stats.lognorm.rvs(s=S_T[i], size=nsamples)+B_T[i]
+            i+=1
+
+    except AttributeError:
+        print(f"{Dialogue.info()} No errors on T")
+        pass
+
     print(f"{Dialogue.complete()} Sampling asymmetric errors (Lognormal)")
 
     # We're going to need to create temprary 'obs_df' that fit in pre-existing functions
     # This is the 'template' dataframe we're going to modify in every loop
-    obs_df_temp = obs_df.copy().drop(['logL_m', 'logL_p', 'logT_m', 'logT_p'], axis=1)
+    obs_df_temp = obs_df.copy()[['name', 'logT', 'logL']]
 
     for i in range(nsamples):
         obs_df_temp.logL = df_Ls[i]
@@ -476,6 +529,15 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
 
 # TODO: make a CMD version of SYM
 def calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=100, p0=1):
+    # If source names not given we make our own
+    try:
+        source_names = obs_df.name
+    except AttributeError:
+        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
+        obs_df['name']=source_names
+
+
     obs_df.index=obs_df.name
     pdfs=pd.DataFrame(np.zeros((obs_df.name.shape[0], 51)).T,
                       columns = obs_df.name.values)
@@ -486,12 +548,23 @@ def calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=100, p0=1):
 
     for col in pdfs.columns:
         # For each star (column in main) we sample n times
-        df_Ls.loc[col] = np.random.normal(obs_df.loc[col].logL, obs_df.loc[col].logL_err, nsamples)
-        df_Ts.loc[col] = np.random.normal(obs_df.loc[col].logT, obs_df.loc[col].logT_err, nsamples)
+        message = None
+        try:
+            df_Ls.loc[col] = np.random.normal(obs_df.loc[col].logL, obs_df.loc[col].logL_err, nsamples)
+        except AttributeError:
+            message=f"{Dialogue.info()} No error on L"
+            df_Ls.loc[col] = [obs_df.loc[col].logL]*nsamples
+        try:
+            df_Ts.loc[col] = np.random.normal(obs_df.loc[col].logT, obs_df.loc[col].logT_err, nsamples)
+        except AttributeError:
+            message=f"{Dialogue.info()} No error on T"
+            df_Ts.loc[col] = [obs_df.loc[col].logT]*nsamples
+
+    print(message)
 
     # We're going to need to create temprary 'obs_df' that fit in pre-existing functions
     # This is the 'template' dataframe we're going to modify in every loop
-    obs_df_temp = obs_df.copy().drop(['logL_err', 'logT_err'], axis=1)
+    obs_df_temp = obs_df.copy()[['name', 'logT', 'logL']]
 
     for i in range(nsamples):
         obs_df_temp.logL = df_Ls[i]
@@ -511,9 +584,16 @@ def calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=100, p0=1):
     return pdfs
 
 
-##### NO ERRORS
+# #### NO ERRORS
 
 def calculate_individual_pdfs_None(obs_df, model, nsamples=100, p0=1):
+    # If source names not given we make our own
+    try:
+        source_names = obs_df.name
+    except AttributeError:
+        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
+        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
+        obs_df['name'] = source_names
 
     obs_df.index = obs_df.name
 
@@ -526,3 +606,82 @@ def calculate_individual_pdfs_None(obs_df, model, nsamples=100, p0=1):
     print(f"{Dialogue.info()} Distributions Normalised to PDFs Successfully")
     # this "main" dataframe can then just be fed into calculate_sample_pdf as distributions_df
     return pdfs
+
+#####################################
+# PUTTING PDFS TOGETHER IN SOME WAY #
+#####################################
+
+
+def calculate_sample_pdf(distributions_df, not_you=None):
+    """
+    Adds together all the columns in given in DataFrame apart from the "time_bins" column
+
+    Parameters
+    ----------
+    distributions_df: pandas.DataFrame
+        DataFrame containing probability distribution functions
+    not_you: list, optional
+        List of the column names to ignore. Default is None so all the pdfs are multiplied
+
+    Returns
+    -------
+    Combined Probability Distribution Function in a pandas.DataFrame.
+    """
+    assert isinstance(distributions_df, pd.DataFrame)
+
+    # We start our combined pdf with a list of 1s. We'll the multiply each pdf in sequence.
+
+    combined_pdf = [0] * distributions_df.shape[0]
+
+    # We want to allow the user to exclude certain columns -- we drop them here.
+    if not_you:
+        try:
+            distributions_df = distributions_df.drop(labels=not_you, axis=1)
+        except KeyError as e:
+            message = 'FEATURE DISABLED' + '\nKeyError' + str(
+                e) + '\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
+                     'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
+                     'Make sure the labels you listed are spelled correctly:)'
+            warnings.warn(message, HokiUserWarning)
+
+    # We also must be careful not to multiply the time bin column in there so we have a list of the column names
+    # that remain after the "not_you" exclusion minus the time_bins column.
+    # columns = [col for col in distributions_df.columns if "time_bins" not in col]
+
+    columns = []
+    if "time_bins" not in distributions_df.columns:
+        for col in distributions_df.columns:
+            columns.append(col)
+
+    for col in columns:
+        # for col in distributions_df.columns:
+        combined_pdf += distributions_df[col].values
+
+    combined_df = pd.DataFrame(normalise_1d(combined_pdf))
+    combined_df.columns = ['pdf']
+
+    return combined_df
+
+
+def calculate_p_given_age_range(pdfs, age_range=None):
+    """
+    Calculates the probability that each source has age within age_range
+
+    Parameters
+    ----------
+    pdfs: pandas.DataFrame
+        Age Probability Distributions Functions
+    age_range: list or tuple of 2 values
+        Minimum and Maximum age to consider (inclusive).
+
+    Returns
+    -------
+    numpy.array containing the probabilities.
+
+    """
+    # Selects only the rows corresponding to the range age_range[0] to age_range[1] (inclusive)
+    # and then we sum the probabilities up for each column.
+    probability = pdfs[(np.round(BPASS_TIME_BINS, 2) >= min(age_range))
+                       & (np.round(BPASS_TIME_BINS, 2) <= max(age_range))].sum()
+
+    return probability
