@@ -6,6 +6,7 @@ from hoki.constants import BPASS_TIME_BINS
 import warnings
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning, HokiDeprecationWarning
 from hoki.utils.hoki_object import HokiObject
+from hoki.utils.hoki_dialogue import HokiDialogue
 import numpy as np
 import warnings
 

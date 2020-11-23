@@ -64,7 +64,6 @@ def fit_lognorm_params(c, m, p, percentiles=np.array([0.16, 0.5, 0.84]), p0=1):
     bs = c-ones
     xs = np.array([ones-m, ones, ones+p]).T
 
-
     ss, serrs= [], []
     for x in xs:
         s, serr = optimize.curve_fit(stats.lognorm.cdf, x, percentiles, p0=p0)
@@ -408,6 +407,10 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
         warnings.warn("No source names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
         obs_df['name']=source_names
+    # If duplicates in source names
+    if obs_df.name.unique().shape[0] - obs_df.name.shape[0] != 0.0:
+        raise HokiFormatError(f"Duplicate names detected\n{Dialogue.debugger()} "
+                              f"Please make sure the names of your sources are unique.")
 
     add_error_flag_column_hrd(obs_df)
     obs_df.index = obs_df.name
@@ -455,7 +458,7 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
     print(f"{Dialogue.complete()} Sampling symmetric errors (Gaussian) -- {nsamples} SAMPLES per star")
 
     # ASYMMETRIC ERRORS
-
+    print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal)")
     # extract values to feed to fit_lognorm_params
 
     # LUMINOSITY
@@ -536,6 +539,10 @@ def calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=100, p0=1):
         warnings.warn("No source names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
         obs_df['name']=source_names
+    # If duplicates in source names
+    if obs_df.name.unique().shape[0] - obs_df.name.shape[0] != 0.0:
+        raise HokiFormatError(f"Duplicate names detected\n{Dialogue.debugger()} "
+                              f"Please make sure the names of your sources are unique.")
 
 
     obs_df.index=obs_df.name
@@ -593,7 +600,11 @@ def calculate_individual_pdfs_None(obs_df, model, nsamples=100, p0=1):
     except AttributeError:
         warnings.warn("No source names given so I'll make my own", HokiUserWarning)
         source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
-        obs_df['name'] = source_names
+        obs_df['name']=source_names
+    # If duplicates in source names
+    if obs_df.name.unique().shape[0] - obs_df.name.shape[0] != 0.0:
+        raise HokiFormatError(f"Duplicate names detected\n{Dialogue.debugger()} "
+                              f"Please make sure the names of your sources are unique.")
 
     obs_df.index = obs_df.name
 
