@@ -301,6 +301,17 @@ def calculate_individual_pdfs(obs_df, model, nsamples=500):
         pdfs = calculate_individual_pdfs_SYM_HRD(obs_df, model)
 
     elif flag == 'NOTSYM':
+        # will brak with CMDs
+        try:
+            obs_df.logL_m = np.abs(obs_df.logL_m)
+        except AttributeError:
+            pass
+
+        try:
+            obs_df.logT_m = np.abs(obs_df.logT_m)
+        except AttributeError:
+            pass
+
         pdfs = calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=nsamples) #self.nsamples
 
     return pdfs
@@ -461,25 +472,26 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
     print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal)")
     # extract values to feed to fit_lognorm_params
 
+    frac_err_L, frac_err_T = None, None
     # LUMINOSITY
     try:
-       cL, mL, pL, = obs_df.loc[yobs_notsym_ls].logL.values, \
+        cL, mL, pL, = obs_df.loc[yobs_notsym_ls].logL.values, \
                      obs_df.loc[yobs_notsym_ls].logL_m.values, \
                      obs_df.loc[yobs_notsym_ls].logL_p.values
 
-       # Fit lognorm parameters
-       B_L, S_L, Serr_L = fit_lognorm_params(cL, mL, pL)
-
-       #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
-       # Need to sample L abd
-       i=0
-       for coly in yobs_notsym_ls:
-           df_Ls.loc[coly] = stats.lognorm.rvs(s=S_L[i], size=nsamples)+B_L[i]
-           i+=1
+        # Fit lognorm parameters
+        B_L, S_L, Serr_L = fit_lognorm_params(cL, mL, pL)
+        frac_err_L = Serr_L/S_L
+        #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
+        # Need to sample L abd
+        i=0
+        for coly in yobs_notsym_ls:
+            df_Ls.loc[coly] = stats.lognorm.rvs(s=S_L[i], size=nsamples)+B_L[i]
+            i+=1
 
     except AttributeError as e:
-       print(f"{Dialogue.info()} No errors on L")
-       pass
+        print(f"{Dialogue.info()} No errors on L")
+        pass
 
     #print(f"{Dialogue.info()} Fitting Lognormal Parameters")
 
@@ -490,7 +502,7 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
                       obs_df.loc[xobs_notsym_ls].logT_p.values
 
         B_T, S_T, Serr_T = fit_lognorm_params(cT, mT, pT)
-
+        frac_err_T = Serr_T/S_T
         #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
         # Need to sample L abd
         i=0
@@ -501,6 +513,19 @@ def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
     except AttributeError:
         print(f"{Dialogue.info()} No errors on T")
         pass
+
+    ### WARNING IF FRAC ERROR TOO LARGE
+    if frac_err_L is not None:
+        warning_flag=frac_err_L>1e-3
+        bad_stars = [obs_df.name[i] for i in range(len(warning_flag)) if warning_flag[i]]
+        warnings.warn(HokiUserWarning(f'The Luminosity error lognormal fits for the following stars havea fractional error >1e-3'
+                                      f'{bad_stars} \nIT IS RECOMMENDED YOU CHECK THEM OUT'))
+    if frac_err_T is not None:
+        warning_flag=frac_err_T>1e-3
+        bad_stars = [obs_df.name[i] for i in range(len(warning_flag)) if warning_flag[i]]
+        warnings.warn(HokiUserWarning(f'The Temperature error lognormal fits for the following stars havea fractional error >1e-3'
+                                      f'{bad_stars} \nIT IS RECOMMENDED YOU CHECK THEM OUT'))
+
 
     print(f"{Dialogue.complete()} Sampling asymmetric errors (Lognormal)")
 
