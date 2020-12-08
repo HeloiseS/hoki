@@ -87,22 +87,8 @@ def _error_flag(obs_df):
     concat_columns = ''.join(map(str, obs_df.columns.to_list()[1:]))
 
     if '_err' in concat_columns:
-        error_flag = 'SYM'
+        error_flag = 'ERR'
         print(f'{Dialogue.info()} ERROR_FLAG=SYM / Strictily symmetric errors detected')
-
-    elif '_m' in concat_columns and '_p' in concat_columns:
-        error_flag = 'NOTSYM'
-        print(f'{Dialogue.info()} ERROR_FLAG=NOTSYM / Asymmetric errors detected')
-
-    elif '_m' in concat_columns and '_p' not in concat_columns:
-        debug_message = f"A column '*_m' was found but not column '*_p'.\n\
-    {Dialogue.debugger()}  If your errors are symmetric you can use the _err tag. See manual and tutorials for more info"
-        raise (HokiFormatError(debug_message))
-
-    elif '_m' not in concat_columns and '_p' in concat_columns:
-        debug_message = f"A column '*_p' was found but not column '*_m'.\n\
-    {Dialogue.debugger()}  If your errors are symmetric you can use the _err tag. See manual and tutorials for more info"
-        raise (HokiFormatError(debug_message))
 
     else:
         print(f'{Dialogue.info()} ERROR_FLAG=None / No errors detected')
@@ -295,24 +281,8 @@ def calculate_individual_pdfs(obs_df, model, nsamples=500):
     if flag is None:
         pdfs = calculate_individual_pdfs_None(obs_df, model)
 
-    # TODO: WILL NEED TO TAKE CARE OF CMDs too
-
-    elif flag == 'SYM':
+    elif flag == 'ERR':
         pdfs = calculate_individual_pdfs_SYM_HRD(obs_df, model)
-
-    elif flag == 'NOTSYM':
-        # will brak with CMDs
-        try:
-            obs_df.logL_m = np.abs(obs_df.logL_m)
-        except AttributeError:
-            pass
-
-        try:
-            obs_df.logT_m = np.abs(obs_df.logT_m)
-        except AttributeError:
-            pass
-
-        pdfs = calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=nsamples) #self.nsamples
 
     return pdfs
 
@@ -373,185 +343,6 @@ def calculate_distributions(obs_df, model):
     # distributions_df['time_bins'] = hoki.constants.BPASS_TIME_BINS
 
     return distributions_df
-
-#### ASYMMETRIC ERROR OR MIX
-
-def add_error_flag_column_hrd(obs_df):
-    """ Flagging which errors are symmetric and which are not FOR HRD """
-    error_message = f"{Dialogue.debugger} I will assume this quantity has no errors. If I am wrong, make sure " \
-                    f"your observation dataframe contains all the columns necessary"
-    try:
-        xerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.logT_p-obs_df.logT_m).values]
-    except AttributeError as e:
-        print(f"{e}")
-        print(error_message)
-        xerr_flag = "None"
-    try:
-        yerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.logL_p-obs_df.logL_m).values]
-    except AttributeError as e:
-        print(f"{e}")
-        print(error_message)
-        yerr_flag = "None"
-
-    obs_df['xerr_flag'] = xerr_flag
-    obs_df['yerr_flag'] = yerr_flag
-    return f"{Dialogue.info()} Flags Added Successfully"
-
-
-def add_error_flag_column_cmd(obs_df):
-    """Flagging which errors are symmetric and which are not FOR CMD"""
-    xerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.col_p-obs_df.col_m).values]
-    yerr_flag = ['NOTSYM' if res!=0.0 else 'SYM' for res in (obs_df.mag_p-obs_df.mag_m).values]
-
-    obs_df['xerr_flag'] = xerr_flag
-    obs_df['yerr_flag'] = yerr_flag
-    return f"{Dialogue.info()} Flags Added Successfully"
-
-
-# TODO: make a CMD version of NOTSYM
-def calculate_individual_pdfs_NOTSYM_HRD(obs_df, model, nsamples=500, p0=1):
-
-    # If source names not given we make our own
-    try:
-        source_names = obs_df.name
-    except AttributeError:
-        warnings.warn("No source names given so I'll make my own", HokiUserWarning)
-        source_names = ["s" + str(i) for i in range(obs_df.shape[0])]
-        obs_df['name']=source_names
-    # If duplicates in source names
-    if obs_df.name.unique().shape[0] - obs_df.name.shape[0] != 0.0:
-        raise HokiFormatError(f"Duplicate names detected\n{Dialogue.debugger()} "
-                              f"Please make sure the names of your sources are unique.")
-
-    add_error_flag_column_hrd(obs_df)
-    obs_df.index = obs_df.name
-
-    pdfs = pd.DataFrame(np.zeros((obs_df.name.shape[0], 51)).T,
-                      columns = obs_df.name.values)
-
-    # dataframes that will contain the individual sampled LOCATIONS
-    # size: number of samples * number of stars
-    df_Ls = pd.DataFrame(np.zeros((nsamples, obs_df.name.shape[0])).T, index=obs_df.name.values)
-    df_Ts = df_Ls.copy()
-
-
-
-
-    # lists for symetric and asymmetric errors
-
-    xobs_sym_ls, xobs_notsym_ls, xobs_none_ls = obs_df[obs_df.xerr_flag=='SYM'].name.tolist(), \
-                                                obs_df[obs_df.xerr_flag=='NOTSYM'].name.tolist(), \
-                                                obs_df[obs_df.xerr_flag=='None'].name.tolist()
-
-    yobs_sym_ls, yobs_notsym_ls, yobs_none_ls = obs_df[obs_df.yerr_flag=='SYM'].name.tolist(), \
-                                                obs_df[obs_df.yerr_flag=='NOTSYM'].name.tolist(), \
-                                                obs_df[obs_df.yerr_flag=='None'].name.tolist()
-
-    # NO ERRORS
-    for colx in xobs_none_ls:
-        # For each star (column in main) we sample n times
-        df_Ts.loc[colx] = [obs_df.loc[colx].logT]*nsamples
-
-    for coly in yobs_none_ls:
-        df_Ls.loc[coly] = [obs_df.loc[coly].logL]*nsamples
-
-
-    # SYMMETRIC ERRORS
-    # need to do it separately if not the same of symmetrical errors in T and L
-    print(f"{Dialogue.running()} Sampling symmetric errors (Gaussian)")
-    for colx in xobs_sym_ls:
-        # For each star (column in main) we sample n times
-        df_Ts.loc[colx] = np.random.normal(obs_df.loc[colx].logT, obs_df.loc[colx].logT_p, nsamples) #doesn't matter is p or not
-
-    for coly in yobs_sym_ls:
-        df_Ls.loc[coly] = np.random.normal(obs_df.loc[coly].logL, obs_df.loc[coly].logL_p, nsamples)
-
-    print(f"{Dialogue.complete()} Sampling symmetric errors (Gaussian) -- {nsamples} SAMPLES per star")
-
-    # ASYMMETRIC ERRORS
-    print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal)")
-    # extract values to feed to fit_lognorm_params
-
-    frac_err_L, frac_err_T = None, None
-    # LUMINOSITY
-    try:
-        cL, mL, pL, = obs_df.loc[yobs_notsym_ls].logL.values, \
-                     obs_df.loc[yobs_notsym_ls].logL_m.values, \
-                     obs_df.loc[yobs_notsym_ls].logL_p.values
-
-        # Fit lognorm parameters
-        B_L, S_L, Serr_L = fit_lognorm_params(cL, mL, pL)
-        frac_err_L = Serr_L/S_L
-        #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
-        # Need to sample L abd
-        i=0
-        for coly in yobs_notsym_ls:
-            df_Ls.loc[coly] = stats.lognorm.rvs(s=S_L[i], size=nsamples)+B_L[i]
-            i+=1
-
-    except AttributeError as e:
-        print(f"{Dialogue.info()} No errors on L")
-        pass
-
-    #print(f"{Dialogue.info()} Fitting Lognormal Parameters")
-
-    # TEMPERATURE
-    try:
-        cT, mT, pT, = obs_df.loc[xobs_notsym_ls].logT.values,   \
-                      obs_df.loc[xobs_notsym_ls].logT_m.values,\
-                      obs_df.loc[xobs_notsym_ls].logT_p.values
-
-        B_T, S_T, Serr_T = fit_lognorm_params(cT, mT, pT)
-        frac_err_T = Serr_T/S_T
-        #print(f"{Dialogue.running()} Sampling asymmetric errors (Lognormal) -- {nsamples} SAMPLES per star")
-        # Need to sample L abd
-        i=0
-        for colx in xobs_notsym_ls:
-            df_Ts.loc[colx] = stats.lognorm.rvs(s=S_T[i], size=nsamples)+B_T[i]
-            i+=1
-
-    except AttributeError:
-        print(f"{Dialogue.info()} No errors on T")
-        pass
-
-    ### WARNING IF FRAC ERROR TOO LARGE
-    if frac_err_L is not None:
-        warning_flag=frac_err_L>1e-3
-        bad_stars = [obs_df.name[i] for i in range(len(warning_flag)) if warning_flag[i]]
-        warnings.warn(HokiUserWarning(f'The Luminosity error lognormal fits for the following stars havea fractional error >1e-3'
-                                      f'{bad_stars} \nIT IS RECOMMENDED YOU CHECK THEM OUT'))
-    if frac_err_T is not None:
-        warning_flag=frac_err_T>1e-3
-        bad_stars = [obs_df.name[i] for i in range(len(warning_flag)) if warning_flag[i]]
-        warnings.warn(HokiUserWarning(f'The Temperature error lognormal fits for the following stars havea fractional error >1e-3'
-                                      f'{bad_stars} \nIT IS RECOMMENDED YOU CHECK THEM OUT'))
-
-
-    print(f"{Dialogue.complete()} Sampling asymmetric errors (Lognormal)")
-
-    # We're going to need to create temprary 'obs_df' that fit in pre-existing functions
-    # This is the 'template' dataframe we're going to modify in every loop
-    obs_df_temp = obs_df.copy()[['name', 'logT', 'logL']]
-
-    for i in range(nsamples):
-        obs_df_temp.logL = df_Ls[i]
-        obs_df_temp.logT = df_Ts[i]
-
-        # For each sampled HRD/CMD location we calculate the distribution
-        distribs_i = calculate_distributions(obs_df_temp, model)
-
-        # ... and add it to the Final dataframe
-        pdfs+=distribs_i
-
-    print(f"{Dialogue.info()} Distributions Calculated Successfully")
-
-    # and now that we've got our distributions all added up we normalise them!
-    for col in pdfs.columns:
-        pdfs[col]=normalise_1d(pdfs[col].values, crop_the_future=False)
-
-    print(f"{Dialogue.info()} Distributions Normalised to PDFs Successfully")
-
-    return pdfs
 
 ##### SYMMETRIC ERROR ONLY
 

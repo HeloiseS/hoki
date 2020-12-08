@@ -19,7 +19,7 @@ class AgeWizard(HokiObject):
     AgeWizard object
     """
 
-    def __init__(self, obs_df, model, nsamples=500):
+    def __init__(self, obs_df, model):
         """
         Initialisation of the AgeWizard object
 
@@ -79,7 +79,7 @@ class AgeWizard(HokiObject):
         # This line is obsolete but might need revival if we ever want to add the not normalised distributions again
         # self._distributions = calculate_distributions_normalised(self.obs_df, self.model)
 
-        self.pdfs = au.calculate_individual_pdfs(self.obs_df, self.model, nsamples=nsamples).fillna(0)
+        self.pdfs = au.calculate_individual_pdfs(self.obs_df, self.model).fillna(0)
         self.sources = self.pdfs.columns.to_list()
         self.sample_pdf = None
         self._most_likely_age = None

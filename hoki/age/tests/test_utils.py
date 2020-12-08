@@ -58,31 +58,6 @@ stars_SYM_T_err_missing = pd.DataFrame.from_dict({'name': np.array(['118-1', '11
                                     'logT_err': np.array([0.1, 0.2, 0.1, 0.1]),
                                     })
 
-
-
-stars_NOTSYM = pd.DataFrame.from_dict({'name': np.array(['118-1', '118-2', '118-3', '118-4']),
-                                       'logL': np.array([5.0, 5.1, 4.9, 5.9]),
-                                       'logL_m': np.array([0.1, 0.2, 0.1, 0.1, ]),
-                                       'logL_p': np.array([0.1, 0.23, 0.1, 0.1]),
-                                       'logT': np.array([4.48, 4.45, 4.46, 4.47]),
-                                       'logT_m': np.array([0.1, 0.2, 0.1, 0.1]),
-                                       'logT_p': np.array([0.1, 0.23, 0.1, 0.1]),
-                                       })
-stars_NOTSYM_T_err_missing = pd.DataFrame.from_dict({'name': np.array(['118-1', '118-2', '118-3', '118-4']),
-                                       'logL': np.array([5.0, 5.1, 4.9, 5.9]),
-                                       'logL_m': np.array([0.1, 0.2, 0.1, 0.1, ]),
-                                       'logL_p': np.array([0.1, 0.23, 0.1, 0.1]),
-                                       'logT': np.array([4.48, 4.45, 4.46, 4.47]),
-                                       })
-
-
-
-# asymmetric errors test
-m = np.array([0.1, .17, 0.13])
-c = np.array([6.33, 6.25, 6.35])
-p = np.array([0.12, 0.18, 0.15])
-cdf = np.array([0.16, 0.5, 0.84])
-
 #########
 # MISC  #
 #########
@@ -96,22 +71,13 @@ class TestNormalise1D(object):
         assert norm[2] == 1, 'Normalisation done wrong'
         assert sum(norm) == 1, "Normalisaton done wrong"
 
-
-class TestFitLognormParams(object):
-    def test_it_runs(self):
-        bs, ss, serrs = au.fit_lognorm_params(c, m, p)
-        assert np.sum(np.isclose(bs, np.array([5.33, 5.25, 5.35]), atol=1e-2)) == 3,  f"{bs}"
-
-
 class TestErrorFlag(object):
     def test_no_err(self):
         assert au._error_flag(stars_none) is None, "Error Flag should be None"
 
-    def test_SYM(self):
-        assert au._error_flag(stars_SYM) == 'SYM', "Error Flag should be SYM"
+    def test_ERR(self):
+        assert au._error_flag(stars_SYM) == 'ERR', "Error Flag should be ERR"
 
-    def test_NOTSYM(self):
-        assert au._error_flag(stars_NOTSYM) == 'NOTSYM', "Error Flag should be SYM"
 
 #######################
 # FINDING COORDINATES #
@@ -192,34 +158,6 @@ class TestCalculatePDFs(object):
     def test_symmetric_errors(self):
         pdf_df = au.calculate_individual_pdfs(stars_SYM, myhrd)
         assert not np.isnan(sum(pdf_df['118-4'])), "something went wrong with symmetric errors"
-
-    def test_asymmetric_errors(self):
-        pdf_df = au.calculate_individual_pdfs(stars_NOTSYM, myhrd)
-        assert not np.isnan(sum(pdf_df['118-4'])), "something went wrong with asymmetric errors"
-
-####  Asymmetric errors
-
-class TestAddErrorFlagColumnHRD(object):
-    def test_basic(self):
-        df = stars_NOTSYM.copy()
-        au.add_error_flag_column_hrd(df)
-        assert df.xerr_flag[1] == 'NOTSYM', "Incorrect flag"
-        del df
-
-    def test_T_err_missing(self):
-        df = stars_NOTSYM_T_err_missing.copy()
-        au.add_error_flag_column_hrd(df)
-        assert df.xerr_flag[1] == 'None', "Incorrect flag"
-
-    # Because of randomness I can't check the accuracy of the value, but at least I can make sure
-    # it runs to give us a value.
-    def test_SYM_T_err_missing(self):
-        pdfs = au.calculate_individual_pdfs(stars_SYM_T_err_missing, myhrd)
-        assert isinstance(pdfs['118-4'][5], float), "Not producing values with SYM_T_err_missing"
-
-    def test_NOTSYM_T_err_missing(self):
-        pdfs = au.calculate_individual_pdfs(stars_NOTSYM_T_err_missing, myhrd)
-        assert isinstance(pdfs['118-4'][5], float),"Not producing values with NOTSYM_T_err_missing"
 
 #####################################
 # PUTTING PDFS TOGETHER IN SOME WAY #
