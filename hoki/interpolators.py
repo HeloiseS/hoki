@@ -33,7 +33,7 @@ class GridInterpolator():
         array of BPASS output metallicities.
     ages : `numpy.ndarray` (N_a,), optional
         The ages at which `grid` is evaluated. Defaults to the full array of
-        BPASS output ages in log scale.
+        BPASS output ages [yr] in log scale.
     dtype : `type`, optional
         The data type to be used by an instance of this class. Defaults to
         `numpy.float64`. Can be used to reduce memory footprint.
@@ -173,7 +173,7 @@ class GridInterpolatorMassScaled(GridInterpolator):
         array of BPASS output metallicities.
     ages : `numpy.ndarray` (N_a,), optional
         The ages at which `grid` is evaluated. Defaults to the full array of
-        BPASS output ages in log scale.
+        BPASS output ages [yr] in log scale.
     dtype : `type`, optional
         The data type to be used by an instance of this class. Defaults to
         `numpy.float64`. Can be used to reduce memory footprint.
@@ -248,10 +248,9 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
     Parameters
     ----------
     data_path : `str`
-        The path to the folder containing the BPASS spectra. See
-        `load.spectra_all_z`.
+        The path to the folder containing the BPASS spectra files.
     imf : `str`
-        BPASS Identifier of the IMF to be used. See `load.spectra_all_z`.
+        BPASS Identifier of the IMF to be used, e.g. `"imf_chab100"`.
     binary : `bool`, optional
         Use spectra including binaries or only single stars. Defaults to
         `True`.
@@ -288,7 +287,7 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
         self._spectra = load.spectra_all_z(
             data_path, imf, binary=binary)[:, :, idx_min:idx_max].astype(
                 dtype, copy=True
-            )
+        )
 
         if len(self._wavelengths) != self._spectra.shape[2]:
             raise ValueError(
