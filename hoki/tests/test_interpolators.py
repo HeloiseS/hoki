@@ -6,7 +6,7 @@ Author: Martin Glatzle
 from unittest import TestCase, mock
 from hoki import interpolators
 from hoki.constants import (
-    BPASS_NUM_METALLICITIES, BPASS_TIME_BINS, BPASS_WAVELENGTHS
+    BPASS_NUM_METALLICITIES, BPASS_TIME_BINS
 )
 import numpy as np
 
