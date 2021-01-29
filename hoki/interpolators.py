@@ -298,7 +298,7 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
 
         return
 
-    def interpolate(self, metallicities, ages, masses=1):
+    def __call__(self, metallicities, ages, masses=1):
         """
         Perform interpolation on this instance's spectrum grid.
 
@@ -357,7 +357,7 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
 
         return
 
-    def interpolate(self, metallicities, ages, masses=1):
+    def __call__(self, metallicities, ages, masses=1):
         """
         Perform interpolation on this instance's emissivities grid.
 

@@ -218,16 +218,16 @@ class TestSpectraInterpolator(TestCase):
             )
 
         # simple case
-        res = interp.interpolate(1., 1.)
+        res = interp(1., 1.)
         self.assertEqual(
             len(res[0]), len(res[1])
         )
 
         # with mass value
-        res = interp.interpolate(1., 1., 1.)
+        res = interp(1., 1., 1.)
 
         # multiple values
-        res = interp.interpolate(
+        res = interp(
             np.array([3., 3.]),
             np.array([2., 2.]),
             np.array([1., 2.])
@@ -276,15 +276,15 @@ class TestEmissivitiesInterpolator(TestCase):
             )
 
         # simple case
-        res = interp.interpolate(1., 1.)
+        res = interp(1., 1.)
         self.assertEqual(4, len(res))
 
         # with mass value
-        res = interp.interpolate(1., 1., 1.)
+        res = interp(1., 1., 1.)
         self.assertEqual(4, len(res))
 
         # multiple values
-        res = interp.interpolate(
+        res = interp(
             np.array([3., 3.]),
             np.array([2., 2.]),
             np.array([1., 2.])
