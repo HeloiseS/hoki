@@ -323,3 +323,68 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
         """
         return self._wavelengths, \
             self._interpolate(metallicities, ages, masses)
+
+
+class EmissivitiesInterpolator(GridInterpolatorMassScaled):
+    """
+    Interpolate BPASS SSP emissivities on a metallicity-age grid.
+
+    Interpolate a grid of emissivities for single stellar populations (SSPs)
+    with fixed IMF provided by BPASS over its metallicity-age grid.
+
+    Parameters
+    ----------
+    data_path : `str`
+        The path to the folder containing the BPASS emissivity files.
+    imf : `str`
+        BPASS Identifier of the IMF to be used, e.g. `"imf_chab100"`.
+    binary : `bool`, optional
+        Use spectra including binaries or only single stars. Defaults to
+        `True`.
+    dtype : `type`, optional
+        The data type to be used by an instance of this class. Defaults to
+        `numpy.float64`. Can be used to reduce memory footprint.
+    """
+
+    def __init__(self, data_path, imf, binary=True,
+                 dtype=np.float64):
+
+        self._emissivities = load.emissivities_all_z(
+            data_path, imf, binary=binary
+        ).astype(dtype, copy=True)
+
+        super().__init__(self._emissivities, dtype=dtype)
+
+        return
+
+    def interpolate(self, metallicities, ages, masses=1):
+        """
+        Perform interpolation on this instance's emissivities grid.
+
+        Parameters
+        ----------
+        metallicities : `numpy.ndarray` (N,)
+            Absolute initial stellar metallicities at which to
+            interpolate.
+        ages : `numpy.ndarray` (N,)
+            Stellar ages (in log scale) at which to interpolate.
+        masses : `numpy.ndarray` (N,) or `float`, optional
+            Stellar population masses in units of 1e6 M_\\odot. Used to scale
+            the interpolation result. Defaults to unity.
+
+        Returns
+        -------
+         : `numpy.ndarray` (N, 4)
+            Interpolated emissivities:
+
+            Nion in 1/s:
+                ionizing photon production rate
+            L_Halpha in ergs/s:
+                Balmer H line luminosity, assuming =log(Nion/s)-11.87
+            L_FUV in ergs/s/A:
+                luminosity in the FUV band (mean flux from 1556 to 1576A)
+            L_NUV in ergs/s/A:
+                luminosity in the NUV band (mean flux from 2257 to 2277A)
+
+        """
+        return self._interpolate(metallicities, ages, masses)

@@ -242,3 +242,54 @@ class TestSpectraInterpolator(TestCase):
             np.allclose(2*res[1][0, :], res[1][1, :])
         )
         return
+
+
+class TestEmissivitiesInterpolator(TestCase):
+
+    def setUp(self):
+        # simulate 4 emssivities evaluated at 5 metallicity values and 10 age
+        # values
+        self.emissivities = np.random.random((5, 10, 4))
+        self.metallicities = np.linspace(1, 10, num=5)
+        self.ages = np.linspace(1, 10, num=10)
+
+        self.mock_constructor_defaults = mock.patch(
+            'hoki.interpolators.GridInterpolator.__init__.__defaults__',
+            (self.metallicities, self.ages, np.float64)
+        )
+        self.mock_all_emissivities = mock.patch(
+            'hoki.load.emissivities_all_z',
+            return_value=self.emissivities
+        )
+        return
+
+    def test_init(self):
+        with self.mock_constructor_defaults, self.mock_all_emissivities:
+            # standard
+            interpolators.EmissivitiesInterpolator('', '')
+        return
+
+    def test_interpolate(self):
+        with self.mock_constructor_defaults, self.mock_all_emissivities:
+            interp = interpolators.EmissivitiesInterpolator(
+                '', '',
+            )
+
+        # simple case
+        res = interp.interpolate(1., 1.)
+        self.assertEqual(4, len(res))
+
+        # with mass value
+        res = interp.interpolate(1., 1., 1.)
+        self.assertEqual(4, len(res))
+
+        # multiple values
+        res = interp.interpolate(
+            np.array([3., 3.]),
+            np.array([2., 2.]),
+            np.array([1., 2.])
+        )
+        self.assertTrue(
+            np.allclose(2*res[0, :], res[1, :])
+        )
+        return
