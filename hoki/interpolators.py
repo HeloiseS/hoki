@@ -308,7 +308,7 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
             Absolute initial stellar metallicities at which to
             interpolate.
         ages : `numpy.ndarray` (N,)
-            Stellar ages (in log scale) at which to interpolate.
+            Stellar ages [yr] in log scale at which to interpolate.
         masses : `numpy.ndarray` (N,) or `float`, optional
             Stellar population masses in units of 1e6 M_\\odot. Used to scale
             the interpolation result. Defaults to unity.
@@ -367,7 +367,7 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
             Absolute initial stellar metallicities at which to
             interpolate.
         ages : `numpy.ndarray` (N,)
-            Stellar ages (in log scale) at which to interpolate.
+            Stellar ages [yr] in log scale at which to interpolate.
         masses : `numpy.ndarray` (N,) or `float`, optional
             Stellar population masses in units of 1e6 M_\\odot. Used to scale
             the interpolation result. Defaults to unity.
