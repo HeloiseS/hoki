@@ -375,7 +375,7 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
         Returns
         -------
          : `numpy.ndarray` (N, 4)
-            Interpolated emissivities:
+            Log of interpolated emissivities:
 
             Nion in 1/s:
                 ionizing photon production rate
