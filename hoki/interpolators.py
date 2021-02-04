@@ -143,7 +143,7 @@ class GridInterpolator():
            np.amin(ages) < self._aMin:
             warnings.warn(
                 "Input ages for interpolation outside of available "
-                f"range {self._aMin} -- {self._aMax} provided. "
+                f"log range {self._aMin} -- {self._aMax} [yr] provided. "
                 "They will be clipped.",
                 UserWarning
             )
@@ -375,7 +375,7 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
         Returns
         -------
          : `numpy.ndarray` (N, 4)
-            Interpolated emissivities:
+            Log of interpolated emissivities:
 
             Nion in 1/s:
                 ionizing photon production rate
