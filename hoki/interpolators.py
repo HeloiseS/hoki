@@ -385,6 +385,5 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
                 luminosity in the FUV band (mean flux from 1556 to 1576A)
             L_NUV in ergs/s/A:
                 luminosity in the NUV band (mean flux from 2257 to 2277A)
-
         """
         return self._interpolate(metallicities, ages, masses)

@@ -265,7 +265,6 @@ class TestEmissivitiesInterpolator(TestCase):
 
     def test_init(self):
         with self.mock_constructor_defaults, self.mock_all_emissivities:
-            # standard
             interpolators.EmissivitiesInterpolator('', '')
         return
 
