@@ -277,10 +277,12 @@ class TestEmissivitiesInterpolator(TestCase):
         # simple case
         res = interp(1., 1.)
         self.assertEqual(4, len(res))
+        self.assertTrue(np.allclose(10**self.emissivities[0, 0, :], res))
 
         # with mass value
-        res = interp(1., 1., 1.)
+        res = interp(1., 1., 2.)
         self.assertEqual(4, len(res))
+        self.assertTrue(np.allclose(2*10**self.emissivities[0, 0, :], res))
 
         # multiple values
         res = interp(

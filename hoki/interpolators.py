@@ -349,8 +349,8 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
     def __init__(self, data_path, imf, binary=True,
                  dtype=np.float64):
 
-        self._emissivities = load.emissivities_all_z(
-            data_path, imf, binary=binary
+        self._emissivities = 10**(
+            load.emissivities_all_z(data_path, imf, binary=binary)
         ).astype(dtype, copy=True)
 
         super().__init__(self._emissivities, dtype=dtype)
@@ -375,7 +375,7 @@ class EmissivitiesInterpolator(GridInterpolatorMassScaled):
         Returns
         -------
          : `numpy.ndarray` (N, 4)
-            Log of interpolated emissivities:
+            Interpolated emissivities:
 
             Nion in 1/s:
                 ionizing photon production rate
