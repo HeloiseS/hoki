@@ -24,3 +24,6 @@ class HokiDialogue(object):
 
     def error(self):
         return f'{self.RED}HOKI ERROR:{self.ENDC}'
+
+
+dialogue = HokiDialogue()

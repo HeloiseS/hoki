@@ -168,6 +168,7 @@ def _find_hrd_coordinates(obs_df, myhrd):
 
         try:
             T = float(T)
+            #print(T, (np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0])
             # Finds the index that is at the minimum distance in Temperature space and adds it to the list
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
 
