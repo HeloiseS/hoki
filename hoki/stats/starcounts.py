@@ -190,7 +190,7 @@ class UnderlyingCountRatio(HokiObject):
         self.sampler.run_mcmc(p1, nsteps)
         self.samples = self.sampler.get_chain(flat=True)  # emcee v2 not v3 be careful to updates
 
-        self.R_hat, self.n2_hat = map(lambda v: (v[1], v[2] - v[1], v[1] - v[0]),
+        self.R_hat, self.n2_hat = map(lambda v: (v[0], v[1], v[2]),
                                       zip(*np.percentile(self.samples,
                                                          [50 - self.ci_width / 2, 50, 50 + self.ci_width / 2],
                                                          axis=0)))
