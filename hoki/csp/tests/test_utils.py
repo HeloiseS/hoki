@@ -80,13 +80,6 @@ def test_normalise_rates():
     assert np.isclose(out, expected).all(), "Rate normalisation failed"
 
 
-def test_normalise_spectrum():
-    spectrum = pd.DataFrame(np.linspace(0, 100, 51))
-    out = utils._normalise_spectrum(spectrum)
-    expected = pd.DataFrame(np.linspace(0, 1e-4, 51))
-    npt.assert_allclose(out, expected, err_msg="Spectrum is not normalised")
-
-
 ################################
 #   Test BPASS Metallicities   #
 ################################
@@ -132,41 +125,6 @@ class TestRateCalculations(object):
                              self.rates)
         npt.assert_allclose(
             8, out, err_msg="_at_time has failed for a past time.")
-
-
-class TestSpectraCalculations(object):
-
-    edges = np.linspace(0, 10, 11)
-    Z_values = np.zeros(10) + 0.00001
-    mass_values = np.zeros(10) + 1
-
-    def test_over_time(self):
-        spectra = np.zeros((13, 51, 100000)) + 1
-        out = utils._over_time_spectrum(self.Z_values,
-                                        self.mass_values,
-                                        self.edges,
-                                        spectra)
-        npt.assert_allclose(out[4], np.zeros(100000) + 6,
-                            err_msg="_over_time_spectra calculation has failed.")
-
-    def test_at_time_now(self):
-        spectra = np.zeros((13, 51, 100000)) + 1
-        out = utils._at_time(self.Z_values,
-                                      self.mass_values,
-                                      self.edges,
-                                      spectra)
-        print(out)
-        npt.assert_allclose(out, np.zeros(100000) + 10,
-                            err_msg="_at_time spectrum calculation has failed for the now.")
-
-    def test_at_time_past(self):
-        spectra = np.zeros((13, 51, 100000)) + 1
-        out = utils._at_time(self.Z_values[5:],
-                                      self.mass_values[5:],
-                                      self.edges[5:],
-                                      spectra)
-        npt.assert_allclose(out, np.zeros(100000) + 5,
-                            err_msg="_at_time spectrum calculation has failed for in the past.")
 
 
 ###############################

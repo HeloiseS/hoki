@@ -221,22 +221,6 @@ def _normalise_rates(rates):
     """
     return rates / (1e6 * BPASS_LINEAR_TIME_INTERVALS[:, None])
 
-def _normalise_spectrum(spectra):
-    """
-    Normalises the BPASS spectra.
-
-    Input
-    -----
-    spectra : `numpy.ndarray`
-        Numpy array containing the spectra for a 1e6 M_\\odot population.
-
-    Returns
-    -------
-    `numpy.ndarray`
-        Numpy array containing the spectra per mass (L_\\odot/M_\\odot).
-    """
-    return spectra*1e-6
-
 
 ###########################
 #   BPASS Metallicities   #
@@ -357,53 +341,6 @@ def _over_time(Z_per_bin, mass_per_bin, time_edges, bpass_rates):
                                    BPASS_LINEAR_TIME_INTERVALS)
             event_rate[j] += bin_events * mass_per_bin[count]
     return event_rate
-
-@numba.njit(cache=True)
-def _over_time_spectrum(Z_per_bin, mass_per_bin, time_edges, bpass_spectra):
-    """
-    Calculates the spectra per bin over the given bin edges.
-
-    Parameters
-    ----------
-    Z_per_bin : `numpy.ndarray` (N)
-        An array containing the metallicity values at each bin.
-
-    mass_per_bin : `numpy.ndarray` (N)
-        An array containig the amount of mass per bin in the final binning.
-
-    time_edges : `numpy.ndarray` (N+1)
-        The bin edges of the Z_per_bin and mass_per_bin
-
-    bpass_spectra : `numpy.ndarray` (13, 51, 100000) [metallicities, log_ages, wavelength]
-        A 3D array containig the BPASS spectra luminosities per solar mass for
-        the BPASS metallicities and time bins.
-        Usage: `bpass_spectra[0][1][99]` or `bpass_spectra[0, 1, 99]`
-                (gives the L_\\odot/M_\\odot at Z=0.00001, 100 Angstrom at
-                log_age 6.1)
-
-    Returns
-    -------
-    `numpy.ndarray` (N, 100000)
-        Numpy array containing a spectrum per time bin.
-    """
-    Z_index_per_bin = np.array(
-        [np.argmin(np.abs(i - BPASS_NUM_METALLICITIES)) for i in Z_per_bin])
-    output_spectra = np.zeros((len(mass_per_bin), 100000))
-
-    for count in range(len(mass_per_bin)):
-        t = time_edges[count + 1]
-        for j in range(0, count + 1):
-            p1 = t - time_edges[j]
-            p2 = t - time_edges[j + 1]
-            for wl in np.arange(100000):
-                bin_events = _integral(p2,
-                                       p1,
-                                       BPASS_LINEAR_TIME_EDGES,
-                                       bpass_spectra[Z_index_per_bin[count], :, wl],
-                                       BPASS_LINEAR_TIME_INTERVALS)
-                output_spectra[j][wl] += bin_events * mass_per_bin[count]
-    return output_spectra
-
 
 ##########################
 #    HELPER FUNCTIONS    #
