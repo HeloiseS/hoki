@@ -13,8 +13,8 @@ import warnings
 Dialogue = HokiDialogue()
 
 deprecation='\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' \
-            '\nThis is an obsolete version of AgeWizard - only here for backwards ' \
-            'compatibility.\nYOU SHOULD USE THE hoki.age SUBPACKAGE AND MODULES WITHIN. ' \
+            '\nDeprecated since hoki v1.6 ' \
+            '\nPLEASE USE THE hoki.age SUBPACKAGE AND MODULES WITHIN. ' \
             '\ne.g. from hoki.age.wizard import AgeWizard' \
             '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n'
             

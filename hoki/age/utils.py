@@ -9,7 +9,6 @@ from hoki.utils.hoki_object import HokiObject
 from hoki.utils.hoki_dialogue import HokiDialogue
 import numpy as np
 from scipy import stats, optimize
-import hoki.age.utils as au
 
 
 Dialogue = HokiDialogue()
@@ -262,16 +261,21 @@ def _find_cmd_coordinates(obs_df, mycmd):
 ###############################
 # CALCULATING INDIVIDUAL PDFS #
 ###############################
-
-# TODO: Write this docstring
-def calculate_individual_pdfs(obs_df, model, nsamples=500):
+def calculate_individual_pdfs(obs_df, model, nsamples=100):
     """
+    Calculates the individual age PDFs for each star
 
     Parameters
     ----------
-    obs_df
-    model
-    nsamples
+    obs_df: pandas.DataFrame
+        Observational data. MUST contain a logT and logL column (for HRD comparison) or a col and mag column
+        (for CMD comparison)
+    model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
+        Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
+        path to an HR Diagram file or a pickled CMD.
+    nsamples: int, optional
+        Number of times each data point should be sampled from its error distribution. Default is 100.
+        This only matters if you are taking errors into account.
 
     Returns
     -------
@@ -283,7 +287,7 @@ def calculate_individual_pdfs(obs_df, model, nsamples=500):
         pdfs = calculate_individual_pdfs_None(obs_df, model)
 
     elif flag == 'ERR':
-        pdfs = calculate_individual_pdfs_SYM_HRD(obs_df, model)
+        pdfs = calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=nsamples)
 
     return pdfs
 
@@ -348,7 +352,7 @@ def calculate_distributions(obs_df, model):
 ##### SYMMETRIC ERROR ONLY
 
 # TODO: make a CMD version of SYM
-def calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=100, p0=1):
+def calculate_individual_pdfs_SYM_HRD(obs_df, model, nsamples=100):
     # If source names not given we make our own
     try:
         source_names = obs_df.name

@@ -176,20 +176,3 @@ class TestCalculateSamplePDF(object):
         assert np.isclose(combined.pdf[9], 0.774602971512809), "combined PDF not right"
 
 
-"""
-class TestMultiplyPDFs(object):
-    def test_basic(self):
-        pdfs_good = au.calculate_pdfs(fake_hrd_input, myhrd)
-        combined = au.multiply_pdfs(pdfs_good)
-        assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
-
-    def test_drop_bad(self):
-        pdfs_good = au.calculate_pdfs(fake_hrd_input, myhrd)
-        combined = au.multiply_pdfs(pdfs_good, not_you=[3])
-        assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
-
-    def test_drop_good(self):
-        pdfs_good = au.calculate_pdfs(fake_hrd_input, myhrd)
-        combined = au.multiply_pdfs(pdfs_good, not_you=['star1'])
-        assert np.isclose(combined.pdf[9], 0.878162355350702), "combined PDF not right"
-"""

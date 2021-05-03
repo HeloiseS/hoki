@@ -38,6 +38,13 @@ bad_cmd_input = pd.DataFrame.from_dict({'col': np.array(['bla']),
                                         'mag': np.array([-5])})
 
 
+stars_SYM = pd.DataFrame.from_dict({'name': np.array(['118-1', '118-2', '118-3', '118-4']),
+                                    'logL': np.array([5.0, 5.1, 4.9, 5.9]),
+                                    'logL_err': np.array([0.1, 0.2, 0.1, 0.1]),
+                                    'logT': np.array([4.48, 4.45, 4.46, 4.47]),
+                                    'logT_err': np.array([0.1, 0.2, 0.1, 0.1]),
+                                    })
+
 class TestAgeWizardBasic(object):
     def test_init_basic(self):
         assert AgeWizard(obs_df=fake_hrd_input, model=hr_file), "Loading HRD file path failed"
@@ -78,3 +85,11 @@ class TestAgeWizardBasic(object):
         assert np.sum(np.isclose([probas[0], probas[1], probas[2]],
                                  [0.515233714952414, 0.7920611550946726, 0.6542441096583737])) == 3, \
             "probability given age range is messed up"
+
+
+class TestAgeWizardErrors(object):
+    def test_agewizard_with_errors_runs(self):
+        wiz = AgeWizard(stars_SYM, myhrd, nsamples=200)
+        wiz.calculate_sample_pdf()
+
+

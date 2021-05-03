@@ -19,7 +19,7 @@ class AgeWizard(HokiObject):
     AgeWizard object
     """
 
-    def __init__(self, obs_df, model):
+    def __init__(self, obs_df, model, nsamples=100):
         """
         Initialisation of the AgeWizard object
 
@@ -31,6 +31,9 @@ class AgeWizard(HokiObject):
         model: str or hoki.hrdiagrams.HRDiagrams() hoki.cmd.CMD()
             Location of the modeled HRD or CMD. This can be an already instanciated HRDiagram or CMD() object, or a
             path to an HR Diagram file or a pickled CMD.
+        nsamples: int, optional
+            Number of times each data point should be sampled from its error distribution. Default is 100.
+            This only matters if you are taking errors into account.
         """
 
         print(f"{Dialogue.info()} AgeWizard Starting")
@@ -79,7 +82,7 @@ class AgeWizard(HokiObject):
         # This line is obsolete but might need revival if we ever want to add the not normalised distributions again
         # self._distributions = calculate_distributions_normalised(self.obs_df, self.model)
 
-        self.pdfs = au.calculate_individual_pdfs(self.obs_df, self.model).fillna(0)
+        self.pdfs = au.calculate_individual_pdfs(self.obs_df, self.model, nsamples=nsamples).fillna(0)
         self.sources = self.pdfs.columns.to_list()
         self.sample_pdf = None
         self._most_likely_age = None
