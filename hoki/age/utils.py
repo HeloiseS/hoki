@@ -10,7 +10,6 @@ from hoki.utils.hoki_dialogue import HokiDialogue
 import numpy as np
 from scipy import stats, optimize
 
-
 Dialogue = HokiDialogue()
 
 #########
@@ -44,15 +43,15 @@ def fit_lognorm_params(c, m, p, percentiles=np.array([0.16, 0.5, 0.84]), p0=1):
     Parameters
     ----------
     c: numpy.array
-        50th percentile, a.k.a median (c for center) 
+        50th percentile, a.k.a median (c for center)
     m: numpy.array
-        Lower error - 1 sigma (m for minus, because this value would be subtracted to the median to retrieve 
-        the Xth percentile). Please provide the absolute value.  
+        Lower error - 1 sigma (m for minus, because this value would be subtracted to the median to retrieve
+        the Xth percentile). Please provide the absolute value.
     p: numpy.array
-        Upper error - 1 sigma (p for plus, because these values would be added to the median to create 
+        Upper error - 1 sigma (p for plus, because these values would be added to the median to create
         the Yth percentile)
     percentiles: numpy.array
-           
+
     p0: numpy.array
 
     Returns
