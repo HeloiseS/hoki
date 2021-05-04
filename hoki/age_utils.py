@@ -85,7 +85,6 @@ class AgeWizard(HokiObject):
         self._most_likely_age = None
 
     def calculate_sample_pdf(self, not_you=None, return_df=False):
-        # self.sample_pdf = calculate_sample_pdf(self._distributions, not_you=not_you)
         self.sample_pdf = calculate_sample_pdf(self.pdfs, not_you=not_you)
         if return_df: return self.sample_pdf
 
@@ -337,8 +336,7 @@ def calculate_individual_pdfs(obs_df, model):
 def calculate_distributions(obs_df, model):
     """
     Given observations and an HR Diagram, calculates the distribution across ages (not normalised)
-    Note to self: KEEP THIS I NEED IT 
-    
+
     Parameters
     ----------
     obs_df: pandas.DataFrame
@@ -504,7 +502,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
         # for col in distributions_df.columns:
         combined_pdf += distributions_df[col].values
 
-    combined_df = pd.DataFrame(normalise_1d(combined_pdf))
+    combined_df = pd.DataFrame(normalise_1d(combined_pdf) )
     combined_df.columns = ['pdf']
 
     return combined_df
