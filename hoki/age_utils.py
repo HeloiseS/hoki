@@ -2,10 +2,23 @@ import pandas as pd
 import hoki.hrdiagrams
 import hoki.cmd
 import hoki.load as load
-from hoki.constants import *
+from hoki.constants import BPASS_TIME_BINS
 import warnings
-from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning, HokiDeprecationWarning
 from hoki.utils.hoki_object import HokiObject
+from hoki.utils.hoki_dialogue import HokiDialogue
+import numpy as np
+import warnings
+
+Dialogue = HokiDialogue()
+
+deprecation='\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' \
+            '\nDeprecated since hoki v1.6 ' \
+            '\nPLEASE USE THE hoki.age SUBPACKAGE AND MODULES WITHIN. ' \
+            '\ne.g. from hoki.age.wizard import AgeWizard' \
+            '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n'
+            
+warnings.warn(HokiDeprecationWarning(deprecation))
 
 
 class AgeWizard(HokiObject):
@@ -72,7 +85,6 @@ class AgeWizard(HokiObject):
         self._most_likely_age = None
 
     def calculate_sample_pdf(self, not_you=None, return_df=False):
-        #self.sample_pdf = calculate_sample_pdf(self._distributions, not_you=not_you)
         self.sample_pdf = calculate_sample_pdf(self.pdfs, not_you=not_you)
         if return_df: return self.sample_pdf
 
@@ -191,6 +203,10 @@ def _find_hrd_coordinates(obs_df, myhrd):
             T = float(T)
             # Finds the index that is at the minimum distance in Temperature space and adds it to the list
             T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0]))
+
+        except TypeError:
+            T_i.append(int((np.where(abs(myhrd.T_coord - T) == abs(myhrd.T_coord - T).min()))[0][0]))
+
         except ValueError:
             warnings.warn("T=" + str(T) + " cannot be converted to a float", HokiUserWarning)
             T_i.append(np.nan)
@@ -199,6 +215,10 @@ def _find_hrd_coordinates(obs_df, myhrd):
             L = float(L)
             # Finds the index that is at the minimum distance in Luminosity space and adds it to the list
             L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0]))
+
+        except TypeError:
+            L_i.append(int((np.where(abs(myhrd.L_coord - L) == abs(myhrd.L_coord - L).min()))[0][0]))
+
         except ValueError:
             warnings.warn("L=" + str(L) + " cannot be converted to a float", HokiUserWarning)
             L_i.append(np.nan)
@@ -248,6 +268,10 @@ def _find_cmd_coordinates(obs_df, mycmd):
             col = float(col)
             # Finds the index that is at the minimum distance in Colour space and adds it to the list
             col_i.append(int((np.where(abs(mycmd.col_range - col) == abs(mycmd.col_range - col).min()))[0]))
+
+        except TypeError:
+            col_i.append(int((np.where(abs(mycmd.col_range - col) == abs(mycmd.col_range - col).min()))[0][0]))
+
         except ValueError:
             warnings.warn("Colour=" + str(col) + " cannot be converted to a float", HokiUserWarning)
             col_i.append(np.nan)
@@ -256,6 +280,10 @@ def _find_cmd_coordinates(obs_df, mycmd):
             mag = float(mag)
             # Finds the index that is at the minimum distance in Magnitude space and adds it to the list
             mag_i.append(int((np.where(abs(mycmd.mag_range - mag) == abs(mycmd.mag_range - mag).min()))[0]))
+
+        except TypeError:
+            mag_i.append(int((np.where(abs(mycmd.mag_range - mag) == abs(mycmd.mag_range - mag).min()))[0][0]))
+
         except ValueError:
             warnings.warn("Magnitude=" + str(mag) + " cannot be converted to a float", HokiUserWarning)
             mag_i.append(np.nan)
@@ -276,8 +304,8 @@ def normalise_1d(distribution, crop_the_future=False):
 
 def _crop_the_future(distribution):
     # Anything about 10.1 is the future -  time bin 42 and above must have proba == 0
-    array_that_erases_the_future = np.array([1]*42+[0]*9)
-    return np.array(distribution)*array_that_erases_the_future
+    array_that_erases_the_future = np.array([1] * 42 + [0] * 9)
+    return np.array(distribution) * array_that_erases_the_future
 
 
 def calculate_individual_pdfs(obs_df, model):
@@ -431,7 +459,7 @@ def calculate_distributions_normalised(obs_df, model):
 
 def calculate_sample_pdf(distributions_df, not_you=None):
     """
-    Multiplies together all the columns in given in DataFrame apart from the "time_bins" column
+    Adds together all the columns in given in DataFrame apart from the "time_bins" column
 
     Parameters
     ----------
@@ -458,18 +486,18 @@ def calculate_sample_pdf(distributions_df, not_you=None):
             message = 'FEATURE DISABLED' + '\nKeyError' + str(
                 e) + '\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
                      'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
-                     'Make sure the labels your listed are spelled correctly:)'
+                     'Make sure the labels you listed are spelled correctly:)'
             warnings.warn(message, HokiUserWarning)
 
     # We also must be careful not to multiply the time bin column in there so we have a list of the column names
     # that remain after the "not_you" exclusion minus the time_bins column.
-    #columns = [col for col in distributions_df.columns if "time_bins" not in col]
+    # columns = [col for col in distributions_df.columns if "time_bins" not in col]
 
     columns = []
     if "time_bins" not in distributions_df.columns:
         for col in distributions_df.columns:
-            columns.append(col) 
-            
+            columns.append(col)
+
     for col in columns:
         # for col in distributions_df.columns:
         combined_pdf += distributions_df[col].values
@@ -502,3 +530,4 @@ def calculate_p_given_age_range(pdfs, age_range=None):
                        & (np.round(BPASS_TIME_BINS, 2) <= max(age_range))].sum()
 
     return probability
+

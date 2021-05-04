@@ -63,3 +63,5 @@ hoki/version.py
 
 # Mac OSX
 .DS_Store
+
+corner_plot.png

@@ -49,8 +49,14 @@ class HokiKeyError(KeyError):
     Hoki Key error
     """
 
-class HokiTypeError(KeyError):
+
+class HokiTypeError(TypeError):
     """
     Hoki Type error
+    """
+
+class HokiAttributeError(AttributeError):
+    """
+    Hoki Attribute error
     """
 

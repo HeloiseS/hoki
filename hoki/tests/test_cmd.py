@@ -18,7 +18,8 @@ class TestCMD(object):
         del myplot
         del cmd
 
-    cmd = CMD(data_path+'/input_bpass_z020_bin_imf135_300')
+    cmd = CMD(data_path+'/input_bpass_z020_bin_imf135_300',
+              models_path=data_path+"/")#+"/sample_stellar_models/")
 
     def test_init_(self):
         #print(os.listdir(data_path))

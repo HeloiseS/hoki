@@ -1,5 +1,13 @@
 from hoki import load
 import pkg_resources
+from unittest.mock import patch
+import numpy.testing as npt
+import pytest
+import pandas as pd
+import numpy as np
+from hoki.constants import *
+from hoki.utils.exceptions import HokiFormatError, HokiKeyError, HokiTypeError
+
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
@@ -33,6 +41,10 @@ def test_model_output():
     data = load.model_output(hr_file, hr_type='Tg')
     data = load.model_output(hr_file, hr_type='TTG')
     del data
+
+
+#def test_dummy_to_dataframe():
+#    load.dummy_to_dataframe(data_path+"/NEWSINMODS/z020/sneplot-z020-11")
 
 
 def test_load_sn_rates():
@@ -109,3 +121,136 @@ def test_nebular_emission_lines():
     assert data.shape == (3087,24), "The DataFrame doesn't have the right shape something happened"
     data = load.nebular_lines(UV_em_lines_path)
     assert data.shape == (3087, 26)
+
+#############################
+#  Test BPASS File Loading  #
+#############################
+
+
+class TestLoadAllRates(object):
+
+    # Setup files to load
+    data = load.model_output(
+        f"{data_path}/supernova-bin-imf135_300.zem5.dat")
+
+    # Check if function loads rates
+    @patch("hoki.load.model_output")
+    def test_load_rates(self, mock_model_output):
+        mock_model_output.return_value = self.data
+        x = load.rates_all_z(f"{data_path}", "imf135_300"),\
+            "The rates cannot be initialised."
+
+    # Load rates
+    with patch("hoki.load.model_output") as mock_model_output:
+        mock_model_output.return_value = data
+        x = load.rates_all_z(f"{data_path}", "imf135_300")
+
+    # Test wrong inputs
+    def test_file_not_present(self):
+        with pytest.raises(AssertionError):
+            _ = load.rates_all_z(f"{data_path}", "imf135_300"),\
+                "The file is not present, but the load function runs."
+
+    def test_wrong_imf(self):
+        with pytest.raises(HokiKeyError):
+            _ = load.rates_all_z(f"{data_path}", "i"),\
+                "An unsupported IMF is taken as an input."
+
+    # Test output
+    def test_output_shape(self):
+        assert type(self.x) == pd.DataFrame
+        assert (self.x.columns.get_level_values(0).unique() ==
+                np.array(BPASS_EVENT_TYPES)).all(),\
+            "wrong headers read from the file."
+        assert (self.x.columns.get_level_values(1).unique() ==
+                np.array(BPASS_NUM_METALLICITIES)).all(),\
+            "wrong metallicity header"
+
+    def test_output(self):
+        assert np.isclose(self.x.loc[:, ("Ia", 0.00001)],
+                          self.data["Ia"]).all(),\
+            "Models are not loaded correctly."
+
+
+class TestLoadAllSpectra(object):
+
+    # Initialise model_output DataFrame
+    # This reduces I/O readings
+    data = load.model_output(
+        f"{data_path}/spectra-bin-imf135_300.z002.dat")
+
+    # Patch the model_output function
+    @patch("hoki.data_compilers.np.loadtxt")
+    @patch("hoki.data_compilers.isfile")
+    def test_compile_spectra(self, mock_isfile, mock_model_output):
+
+        # Set the model_output to the DataFrame
+        mock_model_output.return_value = self.data.to_numpy()
+        mock_isfile.return_value = True
+        spec = load.spectra_all_z(f"{data_path}", "imf135_300")
+
+        # Check if compiled file is created
+        assert os.path.isfile(f"{data_path}/all_spectra-bin-imf135_300.npy"),\
+            "No compiled file is created."
+
+        # Check output numpy array
+        npt.assert_allclose(
+            spec[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Loading of files has failed."
+        )
+
+    def test_load_pickled_file(self):
+
+        spec = load.spectra_all_z(f"{data_path}", "imf135_300")
+
+        # Check output numpy array
+        npt.assert_allclose(
+            spec[3],
+            self.data.loc[:, slice("6.0", "11.0")].T.to_numpy(),
+            err_msg="Loading of compiled file has failed."
+        )
+
+        os.remove(f"{data_path}/all_spectra-bin-imf135_300.npy")
+
+
+class TestLoadAllEmissivities(object):
+
+    # Initialise model_output DataFrame
+    # This reduces I/O readings
+    data = load.model_output(
+        f"{data_path}/ionizing-bin-imf135_300.z002.dat")
+
+    # Patch the model_output function
+    @patch("hoki.data_compilers.np.loadtxt")
+    @patch("hoki.data_compilers.isfile")
+    def test_compile_emissivities(self, mock_isfile, mock_model_output):
+
+        # Set the model_output to the DataFrame
+        mock_model_output.return_value = self.data.to_numpy()
+        mock_isfile.return_value = True
+        res = load.emissivities_all_z(f"{data_path}", "imf135_300")
+
+        # Check if compiled file is created
+        assert os.path.isfile(f"{data_path}/all_ionizing-bin-imf135_300.npy"),\
+            "No compiled file is created."
+
+        # Check output numpy array
+        npt.assert_allclose(
+            res[3],
+            self.data.drop(columns='log_age').to_numpy(),
+            err_msg="Loading of files has failed."
+        )
+
+    def test_load_pickled_file(self):
+
+        res = load.emissivities_all_z(f"{data_path}", "imf135_300")
+
+        # Check output numpy array
+        npt.assert_allclose(
+            res[3],
+            self.data.drop(columns='log_age').to_numpy(),
+            err_msg="Loading of compiled file has failed."
+        )
+
+        os.remove(f"{data_path}/all_ionizing-bin-imf135_300.npy")
