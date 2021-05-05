@@ -3,10 +3,10 @@ What is Hoki?
 #############
 
 .. version:: 
-   `v1.50 <https://github.com/HeloiseS/hoki>`__!
+   `v1.60 <https://github.com/HeloiseS/hoki>`__!
 
 .. note:: 
-   NEW FEATURES: Check out AgeWizard - A pipeline to systematically age any resolved stellar population!
+   HOKI 1.6 IS OUT! AgeWizard now takes errors into account - You can make Complex Stellar Populations - You can search through the stellar libraries more easily than ever!
 
 *************************************************
 Bridging the gap between theory and observations 
@@ -20,7 +20,7 @@ Bridging the gap between theory and observations
 
 Historically, theoretical models have been released to the community with the expectation that users would create their own data handling scripts as they perform the analysis. This was in line with a research culture where most people had their own code, resulting in a duplication of effort and creating the potential for a reproducibility crisis, as most personal scripts are not shared with the community.  
 
-In order to facilitate the application of BPASS to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in a stream-lined, intuitive manner. 
+In order to facilitate the application of BPASS to a wide range of scientific investigations, we have developed the tools necessary for observers to take full advantage of our models in a stream-lined, intuitive manner. 
 
     | **Hoki is a dedicated python package designed to provide a user friendly interface to the BPASS models in order to bridge the gap between theory and observations.**
 

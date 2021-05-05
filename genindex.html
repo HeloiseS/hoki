@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Index &mdash; hoki v1.5 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
   
+
   
+  
+
   
 
   
@@ -31,10 +34,7 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -54,7 +54,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
+            <a href="index.html" class="icon icon-home"> hoki
           
 
           
@@ -101,14 +101,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -154,6 +159,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -165,7 +172,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
         
       </li>
     
@@ -186,10 +193,14 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -207,6 +218,8 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.age.wizard.AgeWizard">AgeWizard (class in hoki.age.wizard)</a>
+</li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.all_stacked">all_stacked (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
   </ul></td>
@@ -217,6 +230,8 @@
         <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.at_log_age">(hoki.hrdiagrams.HRDiagram method)</a>
 </li>
       </ul></li>
+      <li><a href="manual.html#hoki.csp.eventrate.CSPEventRate.at_time">at_time() (hoki.csp.eventrate.CSPEventRate method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -226,22 +241,52 @@
       <li><a href="manual.html#hoki.cmd.CMD.self.bpass_input">bpass_input (hoki.cmd.CMD.self attribute)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.eventrate.CSPEventRate.bpass_rates">bpass_rates (hoki.csp.eventrate.CSPEventRate attribute)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.sfh.burst_sfh">burst_sfh() (in module hoki.csp.sfh)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="manual.html#hoki.cmd.CMD">CMD (class in hoki.cmd)</a>
+      <li><a href="manual.html#hoki.age.utils.calculate_distributions">calculate_distributions() (in module hoki.age.utils)</a>
+</li>
+      <li><a href="manual.html#hoki.age.utils.calculate_individual_pdfs">calculate_individual_pdfs() (in module hoki.age.utils)</a>
+</li>
+      <li><a href="manual.html#hoki.age.wizard.AgeWizard.calculate_p_given_age_range">calculate_p_given_age_range() (hoki.age.wizard.AgeWizard method)</a>
+
+      <ul>
+        <li><a href="manual.html#hoki.age.utils.calculate_p_given_age_range">(in module hoki.age.utils)</a>
+</li>
+      </ul></li>
+      <li><a href="manual.html#hoki.age.utils.calculate_sample_pdf">calculate_sample_pdf() (in module hoki.age.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.cmd.CMD">CMD (class in hoki.cmd)</a>
+</li>
       <li><a href="manual.html#hoki.cmd.CMD.self.col_range">col_range (hoki.cmd.CMD.self attribute)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.sfh.constant_sfh">constant_sfh() (in module hoki.csp.sfh)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.csp.CSP">CSP (class in hoki.csp.csp)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.eventrate.CSPEventRate">CSPEventRate (class in hoki.csp.eventrate)</a>
 </li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.sfh.dble_pwr_law">dble_pwr_law() (in module hoki.csp.sfh)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.sfh.delayed_exp_sfh">delayed_exp_sfh() (in module hoki.csp.sfh)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="manual.html#hoki.cmd.CMD.self.dt">dt (hoki.cmd.CMD.self attribute)</a>
 
@@ -252,10 +297,36 @@
   </ul></td>
 </tr></table>
 
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.sfh.exp_sfh">exp_sfh() (in module hoki.csp.sfh)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.age.utils.find_coordinates">find_coordinates() (in module hoki.age.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.age.utils.fit_lognorm_params">fit_lognorm_params() (in module hoki.age.utils)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="manual.html#hoki.cmd.CMD.self.grid">grid (hoki.cmd.CMD.self attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.eventrate.CSPEventRate.grid_at_time">grid_at_time() (hoki.csp.eventrate.CSPEventRate method)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.eventrate.CSPEventRate.grid_over_time">grid_over_time() (hoki.csp.eventrate.CSPEventRate method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -270,6 +341,20 @@
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.high_H_stacked">high_H_stacked (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
       <li>
+    hoki.age.utils
+
+      <ul>
+        <li><a href="manual.html#module-hoki.age.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    hoki.age.wizard
+
+      <ul>
+        <li><a href="manual.html#module-hoki.age.wizard">module</a>
+</li>
+      </ul></li>
+      <li>
     hoki.cmd
 
       <ul>
@@ -283,8 +368,36 @@
         <li><a href="manual.html#module-hoki.constants">module</a>
 </li>
       </ul></li>
+      <li>
+    hoki.csp.csp
+
+      <ul>
+        <li><a href="manual.html#module-hoki.csp.csp">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    hoki.csp.eventrate
+
+      <ul>
+        <li><a href="manual.html#module-hoki.csp.eventrate">module</a>
+</li>
+      </ul></li>
+      <li>
+    hoki.csp.sfh
+
+      <ul>
+        <li><a href="manual.html#module-hoki.csp.sfh">module</a>
+</li>
+      </ul></li>
+      <li>
+    hoki.csp.utils
+
+      <ul>
+        <li><a href="manual.html#module-hoki.csp.utils">module</a>
+</li>
+      </ul></li>
       <li>
     hoki.hrdiagrams
 
@@ -307,6 +420,8 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.sfh.lognormal">lognormal() (in module hoki.csp.sfh)</a>
+</li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.low_H">low_H (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
   </ul></td>
@@ -325,31 +440,75 @@
 </li>
       <li><a href="manual.html#hoki.cmd.CMD.make">make() (hoki.cmd.CMD method)</a>
 </li>
+      <li><a href="manual.html#hoki.csp.sfh.SFH.mass_per_bin">mass_per_bin() (hoki.csp.sfh.SFH method)</a>
+
+      <ul>
+        <li><a href="manual.html#hoki.csp.utils.mass_per_bin">(in module hoki.csp.utils)</a>
+</li>
+      </ul></li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.medium_H">medium_H (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.medium_H_not_weighted">medium_H_not_weighted (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.medium_H_stacked">medium_H_stacked (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
+      <li><a href="manual.html#hoki.csp.utils.metallicity_per_bin">metallicity_per_bin() (in module hoki.csp.utils)</a>
+</li>
       <li><a href="manual.html#hoki.load.model_input">model_input() (in module hoki.load)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="manual.html#hoki.load.model_output">model_output() (in module hoki.load)</a>
 </li>
       <li>
     module
 
       <ul>
+        <li><a href="manual.html#module-hoki.age.utils">hoki.age.utils</a>
+</li>
+        <li><a href="manual.html#module-hoki.age.wizard">hoki.age.wizard</a>
+</li>
         <li><a href="manual.html#module-hoki.cmd">hoki.cmd</a>
 </li>
         <li><a href="manual.html#module-hoki.constants">hoki.constants</a>
+</li>
+        <li><a href="manual.html#module-hoki.csp.csp">hoki.csp.csp</a>
+</li>
+        <li><a href="manual.html#module-hoki.csp.eventrate">hoki.csp.eventrate</a>
+</li>
+        <li><a href="manual.html#module-hoki.csp.sfh">hoki.csp.sfh</a>
+</li>
+        <li><a href="manual.html#module-hoki.csp.utils">hoki.csp.utils</a>
 </li>
         <li><a href="manual.html#module-hoki.hrdiagrams">hoki.hrdiagrams</a>
 </li>
         <li><a href="manual.html#module-hoki.load">hoki.load</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.age.wizard.AgeWizard.most_likely_age">most_likely_age() (hoki.age.wizard.AgeWizard property)</a>
+</li>
+      <li><a href="manual.html#hoki.age.wizard.AgeWizard.most_likely_ages">most_likely_ages() (hoki.age.wizard.AgeWizard property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.age.utils.normalise_1d">normalise_1d() (in module hoki.age.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.csp.CSP.now">now (hoki.csp.csp.CSP attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.eventrate.CSPEventRate.over_time">over_time() (hoki.csp.eventrate.CSPEventRate method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -384,6 +543,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.constants.set_outputs_path">set_outputs_path() (in module hoki.constants)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.sfh.SFH">SFH (class in hoki.csp.sfh)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.sfh.sfherrormessage">sfherrormessage() (in module hoki.csp.sfh)</a>
+</li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.stack">stack() (hoki.hrdiagrams.HRDiagram method)</a>
 </li>
   </ul></td>
@@ -400,6 +565,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.csp.sfh.SFH.time_axis">time_axis (hoki.csp.sfh.SFH attribute)</a>
+</li>
+      <li><a href="manual.html#hoki.csp.utils.trapz_loop">trapz_loop() (in module hoki.csp.utils)</a>
+</li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.type">type (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
   </ul></td>
@@ -419,28 +588,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, heloise stevance
+        &#169; Copyright 2020, heloise stevance.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

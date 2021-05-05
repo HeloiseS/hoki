@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Spectra &mdash; hoki v1.5 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
   
+
   
+  
+
   
 
   
@@ -31,7 +34,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -56,7 +58,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
+            <a href="index.html" class="icon icon-home"> hoki
           
 
           
@@ -114,19 +116,24 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Doing-operations-on-Spectra">Doing operations on Spectra</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#It's-your-turn-now!">It’s your turn now!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#It’s-your-turn-now!">It’s your turn now!</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -172,6 +179,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -183,7 +192,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/Spectra.ipynb.txt" rel="nofollow"> View page source</a>
           
         
@@ -202,21 +211,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -317,7 +340,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -383,6 +406,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -462,12 +486,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
-<span class="kn">from</span> <span class="nn">hoki.spec</span> <span class="kn">import</span> <span class="n">dopcor</span>
+<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="k">import</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">hoki.spec</span> <span class="k">import</span> <span class="n">dopcor</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
@@ -1062,7 +1086,7 @@ Text(0.5, 1.0, &#39;NGC 4993&#39;)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+<span></span><span class="kn">from</span> <span class="nn">astropy.io</span> <span class="k">import</span> <span class="n">fits</span>
 
 <span class="k">def</span> <span class="nf">extract_sdss_spectrum</span><span class="p">(</span><span class="n">dataloc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1262,8 +1286,8 @@ Text(0.5, 1.0, &#39;NGC 4993&#39;)
 </div>
 </div>
 </div>
-<div class="section" id="It's-your-turn-now!">
-<h2>It’s your turn now!<a class="headerlink" href="#It's-your-turn-now!" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="It’s-your-turn-now!">
+<h2>It’s your turn now!<a class="headerlink" href="#It’s-your-turn-now!" title="Permalink to this headline">¶</a></h2>
 <p>Remember the random galaxy with the naughty nebular line that messed with the effectivnes of our normalisation?</p>
 <p>Let’s go back to it!</p>
 <p><strong>You now know how to select different synthetic spectra and how to scale them, now go ahead and find the best synthetic spectrum and scale factor combination!</strong></p>
@@ -1290,37 +1314,29 @@ Text(0.5, 1.0, &#39;NGC 4993&#39;)
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="CMDs.html" class="btn btn-neutral float-right" title="Colour Magnitude Diagrams" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="HR_diagrams.html" class="btn btn-neutral float-left" title="HR diagrams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="CMDs.html" class="btn btn-neutral float-right" title="Colour Magnitude Diagrams" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="HR_diagrams.html" class="btn btn-neutral float-left" title="HR diagrams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, heloise stevance
+        &#169; Copyright 2020, heloise stevance.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

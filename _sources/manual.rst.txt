@@ -9,7 +9,11 @@ Here is a list of dependencies for `hoki`. If you choose to `pip` install it, th
 - pandas
 - matplotlib
 - pyyaml
-
+- wheel
+- numba
+- emcee
+- corner
+- scipy
 
 ################
 **hoki.cmd**
@@ -47,6 +51,15 @@ BPASS_TIME_WEIGHT_GRID
 dummy_dict
    Dictionary linking column number to column name for the large BPASS array traditionally called dummy. See the BPASS manual for a text version of the numner/name correspondance. 
 
+################
+**hoki.load**
+################
+
+
+.. automodule:: hoki.load
+    :members:
+    
+
 
 ####################
 **hoki.hrdiagrams**
@@ -56,12 +69,31 @@ dummy_dict
 .. automodule:: hoki.hrdiagrams
     :members:
 
+    
+####################
+**hoki.age**
+####################
 
-################
-**hoki.load**
-################
+.. automodule:: hoki.age.wizard
+    :members:
+    
+    
+.. automodule:: hoki.age.utils
+    :members:
+    
+####################
+**hoki.csp**
+####################
 
+.. automodule:: hoki.csp.csp
+    :members:
+   
+.. automodule:: hoki.csp.eventrate
+    :members:
+   
+.. automodule:: hoki.csp.sfh
+    :members:
 
-.. automodule:: hoki.load
+.. automodule:: hoki.csp.utils
     :members:
 

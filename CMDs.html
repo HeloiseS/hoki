@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Colour Magnitude Diagrams &mdash; hoki v1.5 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
   
+
   
+  
+
   
 
   
@@ -31,7 +34,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -56,7 +58,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
+            <a href="index.html" class="icon icon-home"> hoki
           
 
           
@@ -114,7 +116,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Plotting-the-CMDs">Plotting the CMDs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Pickle-CMDs---don't-make-them-twice!">Pickle CMDs - don’t make them twice!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Pickle-CMDs---don’t-make-them-twice!">Pickle CMDs - don’t make them twice!</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Loading-a-pickled-CMD-file">Loading a pickled CMD file</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Pickling-a-CMD-file">Pickling a CMD file</a></li>
 </ul>
@@ -123,14 +125,19 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -176,6 +183,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -187,7 +196,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/CMDs.ipynb.txt" rel="nofollow"> View page source</a>
           
         
@@ -206,21 +215,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -321,7 +344,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -387,6 +410,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -467,8 +491,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">hoki.cmd</span> <span class="kn">import</span> <span class="n">CMD</span>
-<span class="kn">from</span> <span class="nn">hoki.load</span> <span class="kn">import</span> <span class="n">unpickle</span>
+<span class="kn">from</span> <span class="nn">hoki.cmd</span> <span class="k">import</span> <span class="n">CMD</span>
+<span class="kn">from</span> <span class="nn">hoki.load</span> <span class="k">import</span> <span class="n">unpickle</span>
 <span class="kn">import</span> <span class="nn">hoki.constants</span> <span class="k">as</span> <span class="nn">hc</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -483,9 +507,9 @@ div.rendered_html tbody tr:hover {
 <h2>Quick set-up things<a class="headerlink" href="#Quick-set-up-things" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="Getting-the-Stellar-models-and-input-files">
 <h3>Getting the Stellar models and input files<a class="headerlink" href="#Getting-the-Stellar-models-and-input-files" title="Permalink to this headline">¶</a></h3>
-<p>Colour Magnitude Diagrams (CMDs) are created by reading in the <a class="reference external" href="https://bpass.auckland.ac.nz/9.html">BPASS</a> stellar models listed in the <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files that can be found in the BPASS output folders (e.g. <em>bpass_v2.2.1_imf135_300</em>). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.</p>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>NOTE: You will be able to run the cells in the section “Loading a pickled CMD file” even if you can’t download the full set of stellar models **</p>
-<p>The stellar models and input files can be downloaded from <a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">the google drive</a> (<em>bpass-v2.2-newmodels</em> for the models and e.g. <em>bpass_v2.2.1_imf135_300</em> to get the required <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files). Then you will have to change the path to the models in the <code class="docutils literal notranslate"><span class="pre">settings.yaml</span></code> file – this can be done using the <code class="docutils literal notranslate"><span class="pre">set_models_path</span></code> function contained in the <code class="docutils literal notranslate"><span class="pre">hoki.load</span></code> module:</p>
+<p>Colour Magnitude Diagrams (CMDs) are created by reading in the <a class="reference external" href="https://bpass.auckland.ac.nz/9.html">BPASS</a> stellar models listed in the <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files that can be found in the BPASS output folders (e.g. <em>bpass_v2.2.1_imf135_300</em>). These stellar models are in a separate directory (because it is absolutely massive), so you will have to download it separately if you want to run the following cells or make your own CMDs.</p>
+<p><strong>NOTE: You will be able to run the cells in the section “Loading a pickled CMD file” even if you can’t download the full set of stellar models</strong></p>
+<p>The stellar models and input files can be downloaded from <a class="reference external" href="https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl">the google drive</a> (<em>bpass-v2.2-newmodels</em> for the models and e.g. <em>bpass_v2.2.1_imf135_300</em> to get the required <code class="docutils literal notranslate"><span class="pre">model_input</span></code> files). Then you will have to change the path to the models in the <code class="docutils literal notranslate"><span class="pre">settings.yaml</span></code> file – this can be done using the <code class="docutils literal notranslate"><span class="pre">set_models_path</span></code> function contained in the <code class="docutils literal notranslate"><span class="pre">hoki.load</span></code> module:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -545,7 +569,7 @@ Looks like everything went well! You can check the path was correctly updated by
 <h3>Making the CMDs<a class="headerlink" href="#Making-the-CMDs" title="Permalink to this headline">¶</a></h3>
 <p>To create a synthetic CMD, <code class="docutils literal notranslate"><span class="pre">hoki</span></code> creates a grid in colour-magnitude space and then consults the entire set of stellar models to fill that grid. It is basically a histogram - the value of each cell/bin increases according to the proportion of the stellar population that falls into that bin. You could just plot this grid with a colour-map like an image, but we traditionally create contour plots for visualisation.</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">hoki</span></code> you will be creating a <code class="docutils literal notranslate"><span class="pre">CMD()</span></code> object instanciated with a model of your choosing (a particular IMF and metallicity)- for this you need to provide the <strong>location of a BPASS input file</strong>.</p>
-<p>To know WHAT to do with this information, we also need to give the <strong>two broad-band filters</strong> we are interested in to make the plot filter2 Vs filter1-filter2 (e.g. V Vs B-V). This is given in the <code class="docutils literal notranslate"><span class="pre">CMD.make()</span></code> method, which actually creates and fills the CMD grids.</p>
+<p>To know WHAT to do with this information, we also need to give the <strong>two broad-band filters</strong> we are interested in to make the plot filter2 Vs filter1-filter2 (e.g. V Vs B-V). This is given in the <code class="docutils literal notranslate"><span class="pre">CMD.make()</span></code> method, which actually creates and fills the CMD grids.</p>
 <p><strong>NOTE: This step is the most time consuming because there are thousands and thousands of models to look at. For that reason it also take much longer for the binary stellar models than the single star models to make a CMD. In the next section we will show you how to avoid having to go repeat his step in the future</strong></p>
 <p>The good news is that <strong>once you have instanciated and ‘made’ the CMD object, plotting it is VERY fast</strong> and you have a CMD for <strong>each time bin</strong>, which are also trivial and quick to access.</p>
 <div class="nbinput docutils container">
@@ -576,7 +600,7 @@ Looks like everything went well! You can check the path was correctly updated by
 </pre></div></div>
 </div>
 <p>Below is a summary illustration of what the synthetic CMDs are and what a <code class="docutils literal notranslate"><span class="pre">CMD()</span></code> instance is.</p>
-<p><img alt="Drawing" src="./images/CMDs.png" /></p>
+<p><img alt="Drawing" src="_images/CMDs.png" /></p>
 <p>You can easily access the grid by simply calling the attribute <code class="docutils literal notranslate"><span class="pre">CMD.grid</span></code></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -817,8 +841,8 @@ Text(0.5, 1.0, &#39;Low resolution&#39;)
 </div>
 </div>
 </div>
-<div class="section" id="Pickle-CMDs---don't-make-them-twice!">
-<h2>Pickle CMDs - don’t make them twice!<a class="headerlink" href="#Pickle-CMDs---don't-make-them-twice!" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Pickle-CMDs---don’t-make-them-twice!">
+<h2>Pickle CMDs - don’t make them twice!<a class="headerlink" href="#Pickle-CMDs---don’t-make-them-twice!" title="Permalink to this headline">¶</a></h2>
 <p>Because it is a little time consuming to create the synthetic CMDs, we actually recommend you <a class="reference external" href="https://www.datacamp.com/community/tutorials/pickle-python-tutorial">pickle</a> your CMD objects. This will allow you to re-use them in the future and plot them virtually instantly, by-passing the <code class="docutils literal notranslate"><span class="pre">CMD.make()</span></code> step.</p>
 <div class="section" id="Loading-a-pickled-CMD-file">
 <h3>Loading a pickled CMD file<a class="headerlink" href="#Loading-a-pickled-CMD-file" title="Permalink to this headline">¶</a></h3>
@@ -1044,37 +1068,29 @@ Text(0.5, 0, &#39;USco\nZ=0.020\nlog(age)=6.8 yrs&#39;)
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="AgeWizard.html" class="btn btn-neutral float-right" title="Age Wizard" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="Spectra.html" class="btn btn-neutral float-left" title="Spectra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="AgeWizard.html" class="btn btn-neutral float-right" title="Age Wizard" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Spectra.html" class="btn btn-neutral float-left" title="Spectra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, heloise stevance
+        &#169; Copyright 2020, heloise stevance.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

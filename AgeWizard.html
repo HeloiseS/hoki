@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Age Wizard &mdash; hoki v1.5 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
   
+
   
+  
+
   
 
   
@@ -31,7 +34,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -41,7 +43,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Dependencies" href="manual.html" />
+    <link rel="next" title="Model Data Compiler" href="ModelDataCompiler.html" />
     <link rel="prev" title="Colour Magnitude Diagrams" href="CMDs.html" /> 
 </head>
 
@@ -56,7 +58,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
+            <a href="index.html" class="icon icon-home"> hoki
           
 
           
@@ -121,17 +123,36 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Plotting-Aggregate-Ages">Plotting Aggregate Ages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Probability-given-an-age-range">Probability given an age range</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Ages-from-Colour-Magnitude-Diagram">Ages from Colour-Magnitude Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Errors-on-L-and-T">Errors on L and T</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#How-are-the-errors-taken-into-account?">How are the errors taken into account?</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#Ages-from-Colour-Magnitude-Diagram">Ages from Colour-Magnitude Diagram</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Loading-data">Loading data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Putting-constraints-on-the-age-of-a-population-using-AgeWizard">Putting constraints on the age of a population using AgeWizard</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Luminosity-cut-off">Luminosity cut-off</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#AgeWizard">AgeWizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Combine-the-PDFs-from-the-two-CMDs">Combine the PDFs from the two CMDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Age-constraint">Age constraint</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -177,6 +198,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -188,7 +211,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/AgeWizard.ipynb.txt" rel="nofollow"> View page source</a>
           
         
@@ -207,21 +230,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -322,7 +359,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -388,6 +425,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -459,7 +497,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Age-Wizard">
 <h1>Age Wizard<a class="headerlink" href="#Age-Wizard" title="Permalink to this headline">¶</a></h1>
-<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">https://github.com/HeloiseS/hoki_tutorials</a></p>
+<p>Download all the Jupyter notebooks from: <a class="reference external" href="https://github.com/HeloiseS/hoki/tree/master/tutorials">https://github.com/HeloiseS/hoki/tree/master/tutorials</a></p>
 <div class="section" id="Initial-imports">
 <h2>Initial imports<a class="headerlink" href="#Initial-imports" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
@@ -467,11 +505,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">hoki.age_utils</span> <span class="kn">import</span> <span class="n">AgeWizard</span>
+<span></span><span class="kn">from</span> <span class="nn">hoki.age.wizard</span> <span class="k">import</span> <span class="n">AgeWizard</span>
 <span class="kn">import</span> <span class="nn">hoki</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">hoki.load</span> <span class="k">import</span> <span class="n">unpickle</span>
+<span class="kn">import</span> <span class="nn">hoki.constants</span> <span class="k">as</span> <span class="nn">hc</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;tuto.mplstyle&#39;</span><span class="p">)</span>
@@ -494,10 +534,11 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="How-it-works">
 <h3>How it works<a class="headerlink" href="#How-it-works" title="Permalink to this headline">¶</a></h3>
-<p>By matching the observed properties of your sources to the BPASS models you can find the <strong>most likely age</strong> of a <strong>location on the HRD/CMD</strong>.</p>
-<p><img alt="Drawing" src="./images/age_method.png" /></p>
+<p>By matching the observed properties of your sources to the BPASS models you can find the <strong>most likely age</strong> of a <strong>location on |the HRD/CMD</strong>.</p>
+<p><img alt="Drawing" src="_images/age_method.png" /></p>
 <p>If all your sources belong to the same region, you can then combine the PDFs of your individual sources to find the age PDF of the whole cluster.</p>
-<p><code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> is a pipeline that takes in the observed data, loads in the models and calculates the individual age PDFs of easch source. It also allows the rapid calculation of the age PDF of the sample and gives the user the choice to exclude specific targets (e.g. outliers).</p>
+<p>All of this can be done step by step using the chain <code class="docutils literal notranslate"><span class="pre">find_coordinates()</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">calculate_pdfs</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">multiply_pdfs()</span></code>, or you could simply use <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> which handles this pipeline and facilitates loading in the models.</p>
+<p>Note: In this tutorial we will focus on <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code>.</p>
 </div>
 <div class="section" id="Remember-to-exercise-caution-in-your-interpretation">
 <h3>Remember to exercise caution in your interpretation<a class="headerlink" href="#Remember-to-exercise-caution-in-your-interpretation" title="Permalink to this headline">¶</a></h3>
@@ -510,7 +551,7 @@ div.rendered_html tbody tr:hover {
 <p>First, we need some observational data to compare to our models.</p>
 <p><code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> expects a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. If you want to use the HRD capabilities you will need to provide a <code class="docutils literal notranslate"><span class="pre">logT</span></code> and a <code class="docutils literal notranslate"><span class="pre">logL</span></code> column: * logT: log10 of the stellar effective temperature * logL: log10 of the stellar luminosity <strong>in units of Solar Luminosities</strong></p>
 <p>Additionally, your DataFrame will ideally contain a <code class="docutils literal notranslate"><span class="pre">name</span></code> column with the name of the sources you’re working on. If you don’t provide one, <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> will make it’s own sources names: source1, source2, etc…</p>
-<p><em>Data source: McLeod et al. 2019, Stevance et al. in prep.</em></p>
+<p><em>Data source: McLeod et al. 2019, Stevance et al. in prep.</em></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -527,9 +568,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<p>Now we initialise our <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code>. Each instance corresponds to one model and one model only: i.e. 1 IMF and 1 metalicity.</p>
+<p>Now we initialise our <code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code>. Each instance corresponds to one model and one model only: i.e. 1 IMF and 1 metalicity.</p>
 <p>If we want to have a look at 2 different metallicities for example, we can just instanciate <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code> twice:</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -538,6 +579,27 @@ div.rendered_html tbody tr:hover {
 <span class="n">agewiz008</span> <span class="o">=</span> <span class="n">AgeWizard</span><span class="p">(</span><span class="n">obs_df</span><span class="o">=</span><span class="n">stars</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z008.dat&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> AgeWizard Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+Stack has been reset
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Initial Checks
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> ERROR_FLAG=None / No errors detected
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Calculated Successfully
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Normalised to PDFs Successfully
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> AgeWizard Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+Stack has been reset
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Initial Checks
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> ERROR_FLAG=None / No errors detected
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Calculated Successfully
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Normalised to PDFs Successfully
+</pre></div></div>
 </div>
 <p>During instanciation, the observations and models are matched and the age PDFs are calculated. They are summarised in a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> that you can access as follows.</p>
 <div class="nbinput docutils container">
@@ -923,7 +985,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/AgeWizard_13_0.png" src="_images/AgeWizard_13_0.png" />
+<img alt="_images/AgeWizard_14_0.png" src="_images/AgeWizard_14_0.png" />
 </div>
 </div>
 </div>
@@ -942,7 +1004,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/AgeWizard_15_0.png" src="_images/AgeWizard_15_0.png" />
+<img alt="_images/AgeWizard_16_0.png" src="_images/AgeWizard_16_0.png" />
 </div>
 </div>
 </div>
@@ -1130,7 +1192,7 @@ array([6.9, 6.7, 6.8, 6.5, 6.9, 6.7, 6.8, 6.7, 6.9, 7.3, 6.8, 6.9, 6.8,
 <li><p>Star 10 has a higher (most likely) age than the rest of the sample</p></li>
 <li><p>The WR PDFs show peaks beyond log(age/years) - which souldn’t be possible for WR stars.</p></li>
 </ul>
-<p>All of these are discussed an interpreted in details in Stevance et al. (in prep). Star 4 is an example of a star that is probably the result of a merger and rejuvination, Star 10 is more likely to be on the young tail of the distribution and not as old as the most likley age implies, and the WR stars share their HRD locations with helium stars which appear at later times, which populate the later peak.</p>
+<p>All of these are discussed an interpreted in details in Stevance et al. (in prep). Star 4 is an example of a star that is probably the result of a merger and rejuvination, Star 10 is more likely to be on the young tail of the distribution and not as old as the most likley age implies, and the WR stars share their HRD locations with helium stars which appear at later times, which populate the later peak.</p>
 </div>
 </div>
 <div class="section" id="Plotting-Aggregate-Ages">
@@ -1358,7 +1420,7 @@ array([6.8])
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1391,7 +1453,7 @@ array([6.8])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1410,19 +1472,19 @@ array([6.8])
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x7fd28e3f8d90&gt;
+&lt;matplotlib.legend.Legend at 0x7f6ee56b3fd0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/AgeWizard_31_1.png" src="_images/AgeWizard_31_1.png" />
+<img alt="_images/AgeWizard_32_1.png" src="_images/AgeWizard_32_1.png" />
 </div>
 </div>
 </div>
@@ -1433,7 +1495,7 @@ array([6.8])
 <p>Another interesting measure is the probability that the age of your star falls into a chosen age range. In this case our aggregate age is most likely to be between 6.7-6.9, so let’s investigate how likely it is for each individual star to fall in that range.</p>
 <p>For that we use <code class="docutils literal notranslate"><span class="pre">AgeWizard.calculate_p_given_age_range()</span></code> which returns a Series containing the probabilities corresponding to each source.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1442,7 +1504,7 @@ array([6.8])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1469,7 +1531,7 @@ dtype: float64
 </div>
 <p>We can collate those in one single DataFrame</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1480,7 +1542,7 @@ dtype: float64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1489,7 +1551,7 @@ dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1623,23 +1685,446 @@ dtype: float64
 </table>
 </div></div>
 </div>
-<p>To learn more about how we use and interpret this statistic, you can checkout Stevance et al. in prep an the associated Jupyter Notebook (link)</p>
+<p>To learn more about how we use and interpret this statistic, you can checkout <a class="reference external" href="https://ui.adsabs.harvard.edu/#abs/2020MNRAS.498.1347S/abstract">Stevance et al 2020</a></p>
 </div>
-<div class="section" id="Ages-from-Colour-Magnitude-Diagram">
-<h2>Ages from Colour-Magnitude Diagram<a class="headerlink" href="#Ages-from-Colour-Magnitude-Diagram" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">AgeWizard()</span></code> also accepts <code class="docutils literal notranslate"><span class="pre">hoki</span></code> CMDs (or the path to <code class="docutils literal notranslate"><span class="pre">hoki</span></code> CMD).</p>
-<p>A more detailed recipe will come soon but it should follow the exact same steps as above (except for the initialisations with a CMD instead of an HRD).</p>
-<p>Watch this space ;)</p>
-<hr class="docutils" />
-<p><strong>YOU’RE ALL SET!</strong></p>
-<p>I hope you found this tutorial useful. If you encountered any problems, or would like to make a suggestion, feel free to open an issue on <code class="docutils literal notranslate"><span class="pre">hoki</span></code> GitHub page <a class="reference external" href="https://github.com/HeloiseS/hoki">here</a> or on the <code class="docutils literal notranslate"><span class="pre">hoki_tutorials</span></code> GitHub <a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">there</a>.</p>
+<div class="section" id="Errors-on-L-and-T">
+<h2>Errors on L and T<a class="headerlink" href="#Errors-on-L-and-T" title="Permalink to this headline">¶</a></h2>
+<p>But what if my luminosity and temperature values have errors?</p>
+<p>AgeWizard in the <code class="docutils literal notranslate"><span class="pre">hoki.age.wizard</span></code> subpackage (in <code class="docutils literal notranslate"><span class="pre">hoki</span> <span class="pre">v1.6</span></code>) can take care of that. The legacy version cannot.</p>
+<p>To show you how it runs we’re going to use a <strong>made up</strong> example (these are the numbers I use in the unitest). The <strong>errors have to be given in the following columns ``logL_err`` and ``logT_err``</strong>.</p>
+<ul class="simple">
+<li><p><strong>GIVE THE 1 SIGMA ERRORS</strong></p></li>
+<li><p>If your errors are asymmetric – pick the largest value.</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
+<span></span><span class="n">stars_SYM</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;118-1&#39;</span><span class="p">,</span> <span class="s1">&#39;118-2&#39;</span><span class="p">,</span> <span class="s1">&#39;118-3&#39;</span><span class="p">,</span> <span class="s1">&#39;118-4&#39;</span><span class="p">]),</span>
+                                    <span class="s1">&#39;logL&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">,</span> <span class="mf">5.9</span><span class="p">]),</span>
+                                    <span class="s1">&#39;logL_err&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]),</span>
+                                    <span class="s1">&#39;logT&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.48</span><span class="p">,</span> <span class="mf">4.45</span><span class="p">,</span> <span class="mf">4.46</span><span class="p">,</span> <span class="mf">4.47</span><span class="p">]),</span>
+                                    <span class="s1">&#39;logT_err&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]),</span>
+                                    <span class="p">})</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="How-are-the-errors-taken-into-account?">
+<h3>How are the errors taken into account?<a class="headerlink" href="#How-are-the-errors-taken-into-account?" title="Permalink to this headline">¶</a></h3>
+<p>Basically bootstrapping. Each data point is thought of as a gaussian distribution centered on the value with standard deviation the error your gave (that is why I ask you to give AgeWizard the 1 sigma level).</p>
+<p>Then for each data point is drawn from that distribution and the individual age PDFs are calculated as usual. This process is repeated <code class="docutils literal notranslate"><span class="pre">n_samples</span></code> times and the individual pdfs are then combined.</p>
+<p>Finally you can get the age PDF of the whole cluster (or sample) by doinmg the usual <code class="docutils literal notranslate"><span class="pre">AgeWizard.calculate_sample_pdf()</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">errwiz</span> <span class="o">=</span> <span class="n">AgeWizard</span><span class="p">(</span><span class="n">stars_SYM</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;./data/hrs-bin-imf135_300.z006.dat&#39;</span><span class="p">,</span> <span class="n">nsamples</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">errwiz</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> AgeWizard Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+Stack has been reset
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Initial Checks
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> ERROR_FLAG=SYM / Strictily symmetric errors detected
+None
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Calculated Successfully
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Normalised to PDFs Successfully
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">errwiz</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">errwiz</span><span class="o">.</span><span class="n">sample_pdf</span><span class="o">.</span><span class="n">pdf</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;log(age)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;PDF&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mf">8.5</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;And you can plot it as usual</span><span class="se">\n</span><span class="s2">It&#39;s just broader now :)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#34;And you can plot it as usual\nIt&#39;s just broader now :)&#34;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_43_1.png" src="_images/AgeWizard_43_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Ages-from-Colour-Magnitude-Diagram">
+<h2>Ages from Colour-Magnitude Diagram<a class="headerlink" href="#Ages-from-Colour-Magnitude-Diagram" title="Permalink to this headline">¶</a></h2>
+<p>In this section we will see how we can use <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code> on a Colour-Magnitude Diagram (CMD). <strong>It is essentially the same as for the HR Diagrams</strong> but you will be giving <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code> a <code class="docutils literal notranslate"><span class="pre">hoki.CMD</span></code> object instead of a <code class="docutils literal notranslate"><span class="pre">hoki.HRDiagram</span></code> object.</p>
+<p>This example is taken from <a class="reference external" href="https://arxiv.org/abs/2102.09576">Brennan et al. 2021b</a> where we look at the neighbourhood of AT2016jbu to try and infer the age.</p>
+<div class="section" id="Loading-data">
+<h3>Loading data<a class="headerlink" href="#Loading-data" title="Permalink to this headline">¶</a></h3>
+<p>To help you we’ve attached a couple of pre-made CMDs. You can make your own following the <code class="docutils literal notranslate"><span class="pre">CMD.ipynb</span></code> tutorial, or if you don’t want to download 50GB of stellar models you can send me an email and for the low price of adding me to your author list I will make them for you.</p>
+<p>In addition to the models we need to download the data and turn observed magnitudes into absolute magnitudes by removing the distance modulus and the extinction.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The BPASS synthetic CMDs</span>
+<span class="n">f435cmd</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./data/F435_F555.pckl&#39;</span><span class="p">)</span>
+<span class="n">f555cmd</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;./data/F555_F814.pckl&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># The observed data</span>
+<span class="n">cmd_obs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./data/phot_150pc.dat&#39;</span><span class="p">)</span>
+<span class="n">cmd_obs</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="mf">99.999</span><span class="p">,</span> <span class="mf">9.999</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># cleaning up bad values</span>
+
+<span class="c1"># Absolute magnitudes</span>
+<span class="c1"># - 31.6 is the distance modulus to NGC242 and the other value is extinction see Brennan et al. 2021</span>
+<span class="n">F435</span> <span class="o">=</span> <span class="n">cmd_obs</span><span class="o">.</span><span class="n">F435W</span> <span class="o">-</span> <span class="mf">31.6</span> <span class="o">-</span> <span class="mf">0.732</span>
+<span class="n">F555</span> <span class="o">=</span> <span class="n">cmd_obs</span><span class="o">.</span><span class="n">F555W</span> <span class="o">-</span> <span class="mf">31.6</span> <span class="o">-</span> <span class="mf">0.579</span>
+<span class="n">F814</span> <span class="o">=</span> <span class="n">cmd_obs</span><span class="o">.</span><span class="n">F814W</span> <span class="o">-</span> <span class="mf">31.6</span> <span class="o">-</span> <span class="mf">0.309</span>
+
+<span class="c1"># we add teh absolute magnitudes to the dataframe, it&#39;ll be useful later</span>
+<span class="n">cmd_obs</span><span class="p">[</span><span class="s1">&#39;abs_F435&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F435</span>
+<span class="n">cmd_obs</span><span class="p">[</span><span class="s1">&#39;abs_F555&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F555</span>
+<span class="n">cmd_obs</span><span class="p">[</span><span class="s1">&#39;abs_F814&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F814</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">F435</span><span class="o">-</span><span class="n">F555</span><span class="p">,</span> <span class="n">F435</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">5.0</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;F435-F555&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;F435&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">F555</span><span class="o">-</span><span class="n">F814</span><span class="p">,</span> <span class="n">F555</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;F555-F814&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;F555&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Stars 150pc around AT 2016jbu&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 0.98, &#39;Stars 150pc around AT 2016jbu&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_46_1.png" src="_images/AgeWizard_46_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Putting-constraints-on-the-age-of-a-population-using-AgeWizard">
+<h2>Putting constraints on the age of a population using AgeWizard<a class="headerlink" href="#Putting-constraints-on-the-age-of-a-population-using-AgeWizard" title="Permalink to this headline">¶</a></h2>
+<p>The CMDs are very scattered and it might seem like there isn’t much we can do, but trust the process… Let’s take a look at them with some BPASS CMDs plotted underneath</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">myplot</span> <span class="o">=</span> <span class="n">f435cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">7.5</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Here you can chose the time bin you want to plot.</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">F435</span><span class="o">-</span><span class="n">F555</span><span class="p">,</span> <span class="n">F435</span><span class="p">)</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">5.0</span><span class="p">])</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
+
+<span class="n">myplot</span> <span class="o">=</span> <span class="n">f555cmd</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_age</span><span class="o">=</span><span class="mf">7.5</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># Here you can chose the time bin you want to plot.</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">F555</span><span class="o">-</span><span class="n">F814</span><span class="p">,</span> <span class="n">F555</span><span class="p">)</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">myplot</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">11</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/fste075/hoki/hoki/cmd.py:348: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&#34;Greys&#34;))
+  colMap.set_under(color=&#39;white&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(2.0, -11.0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_48_2.png" src="_images/AgeWizard_48_2.png" />
+</div>
+</div>
+<p>The scatter will make it hard (impossible) to get a neat and precise age estimate, but we can put constraints on the age and exclude age ranges that really don’t fit the data. Creating the age pdf is very useful for that.</p>
+<p>The first thing we will do is cut-off some of the more dificult data - we see that below an absolute mag of -4 the data slides unexpectedly to the right. That horizontal displacement is not from stellar evolution so we’re going to <strong>apply a luminosity cut-off and only pick the stars brighter than -4.</strong></p>
+<div class="section" id="Luminosity-cut-off">
+<h3>Luminosity cut-off<a class="headerlink" href="#Luminosity-cut-off" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">## we crop our dataframe based on the absolute magnitude and the cut-off we chose</span>
+<span class="n">cmd_obs_crop</span><span class="o">=</span><span class="n">cmd_obs</span><span class="p">[(</span><span class="n">cmd_obs</span><span class="o">.</span><span class="n">abs_F435</span><span class="o">&lt;-</span><span class="mi">4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cmd_obs</span><span class="o">.</span><span class="n">abs_F555</span><span class="o">&lt;-</span><span class="mi">4</span><span class="p">)]</span>
+
+<span class="c1"># we can also create columns for the colours.</span>
+<span class="n">cmd_obs_crop</span><span class="p">[</span><span class="s1">&#39;F555-F814&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmd_obs_crop</span><span class="o">.</span><span class="n">abs_F555</span><span class="o">-</span><span class="n">cmd_obs_crop</span><span class="o">.</span><span class="n">abs_F814</span>
+<span class="n">cmd_obs_crop</span><span class="p">[</span><span class="s1">&#39;F435-F555&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cmd_obs_crop</span><span class="o">.</span><span class="n">abs_F435</span><span class="o">-</span><span class="n">cmd_obs_crop</span><span class="o">.</span><span class="n">abs_F555</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-28-93413fe7f498&gt;:5: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  cmd_obs_crop[&#39;F555-F814&#39;] = cmd_obs_crop.abs_F555-cmd_obs_crop.abs_F814
+&lt;ipython-input-28-93413fe7f498&gt;:6: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  cmd_obs_crop[&#39;F435-F555&#39;] = cmd_obs_crop.abs_F435-cmd_obs_crop.abs_F555
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="AgeWizard">
+<h3>AgeWizard<a class="headerlink" href="#AgeWizard" title="Permalink to this headline">¶</a></h3>
+<p>Now we can give all that to <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code>! We need to create <strong>two instances</strong> one for each CMD. We can then combine their results later.</p>
+<p><strong>NOTE: ``AgeWizard`` expects the observational data to have at least two columns with names ``mag`` and ``col``</strong>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##### CMD1 - F555 F814</span>
+<span class="c1"># we drop the NaN values we used to mark the bad measurements</span>
+<span class="n">obs_df1</span><span class="o">=</span><span class="n">cmd_obs_crop</span><span class="p">[[</span><span class="s1">&#39;abs_F555&#39;</span><span class="p">,</span><span class="s1">&#39;F555-F814&#39;</span> <span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+<span class="c1"># AgeWizard needs specific column names</span>
+<span class="n">obs_df1</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">,</span><span class="s1">&#39;col&#39;</span><span class="p">]</span>
+<span class="n">agewiz1</span> <span class="o">=</span> <span class="n">AgeWizard</span><span class="p">(</span><span class="n">obs_df1</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">f555cmd</span><span class="p">)</span>
+
+<span class="c1"># Calculate the Age PDF of the whole sample from the individual age pdfs</span>
+<span class="n">agewiz1</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> AgeWizard Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Initial Checks
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> ERROR_FLAG=None / No errors detected
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Calculated Successfully
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Normalised to PDFs Successfully
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/fste075/hoki/hoki/age/wizard.py:47: HokiFormatWarning: We expect the name of sources to be given in the &#39;name&#39; column. If I can&#39;t find names I&#39;ll make my own ;)
+  warnings.warn(&#34;We expect the name of sources to be given in the &#39;name&#39; column. &#34;
+/home/fste075/hoki/hoki/age/utils.py:421: HokiUserWarning: No source names given so I&#39;ll make my own
+  warnings.warn(&#34;No source names given so I&#39;ll make my own&#34;, HokiUserWarning)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##### CMD2 - F435 F555</span>
+<span class="n">obs_df2</span><span class="o">=</span><span class="n">cmd_obs_crop</span><span class="p">[[</span><span class="s1">&#39;abs_F435&#39;</span><span class="p">,</span><span class="s1">&#39;F435-F555&#39;</span> <span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">obs_df2</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">,</span><span class="s1">&#39;col&#39;</span><span class="p">]</span>
+<span class="n">agewiz2</span> <span class="o">=</span> <span class="n">AgeWizard</span><span class="p">(</span><span class="n">obs_df2</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">f435cmd</span><span class="p">)</span>
+
+<span class="c1"># Calculate the Age PDF of the whole sample from the individual age pdfs</span>
+<span class="n">agewiz2</span><span class="o">.</span><span class="n">calculate_sample_pdf</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> AgeWizard Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Initial Checks
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> ERROR_FLAG=None / No errors detected
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Calculated Successfully
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Distributions Normalised to PDFs Successfully
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/fste075/hoki/hoki/age/wizard.py:47: HokiFormatWarning: We expect the name of sources to be given in the &#39;name&#39; column. If I can&#39;t find names I&#39;ll make my own ;)
+  warnings.warn(&#34;We expect the name of sources to be given in the &#39;name&#39; column. &#34;
+/home/fste075/hoki/hoki/age/utils.py:421: HokiUserWarning: No source names given so I&#39;ll make my own
+  warnings.warn(&#34;No source names given so I&#39;ll make my own&#34;, HokiUserWarning)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">agewiz1</span><span class="o">.</span><span class="n">t</span><span class="p">[:</span><span class="mi">42</span><span class="p">],</span> <span class="n">agewiz1</span><span class="o">.</span><span class="n">sample_pdf</span><span class="p">[:</span><span class="mi">42</span><span class="p">],</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CMD F555-F814&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">agewiz2</span><span class="o">.</span><span class="n">t</span><span class="p">[:</span><span class="mi">42</span><span class="p">],</span> <span class="n">agewiz2</span><span class="o">.</span><span class="n">sample_pdf</span><span class="p">[:</span><span class="mi">42</span><span class="p">],</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span>  <span class="n">label</span><span class="o">=</span><span class="s1">&#39;CMD F435-F555&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probability&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;log(age)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 0, &#39;log(age)&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_54_1.png" src="_images/AgeWizard_54_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Combine-the-PDFs-from-the-two-CMDs">
+<h3>Combine the PDFs from the two CMDs<a class="headerlink" href="#Combine-the-PDFs-from-the-two-CMDs" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># creates a new data frame with the final, combined, age pdf</span>
+<span class="n">combined_pdf</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">agewiz1</span><span class="o">.</span><span class="n">sample_pdf</span><span class="o">+</span><span class="n">agewiz2</span><span class="o">.</span><span class="n">sample_pdf</span><span class="p">)</span>
+<span class="c1"># adds the time axis (x axis) to the index instead of having a range from 0 to 51 - eases plotting.</span>
+<span class="n">combined_pdf</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">agewiz2</span><span class="o">.</span><span class="n">t</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">combined_pdf</span><span class="o">.</span><span class="n">index</span> <span class="p">,</span> <span class="n">combined_pdf</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;crimson&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">combined_pdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">combined_pdf</span><span class="o">.</span><span class="n">pdf</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;crimson&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mf">9.3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.000001</span><span class="p">,</span><span class="mf">0.16</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probability&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;log(age)&#39;</span><span class="p">)</span>
+<span class="c1">#plt.savefig(&#39;pdf_AgeWizard&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 0, &#39;log(age)&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/AgeWizard_57_1.png" src="_images/AgeWizard_57_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Age-constraint">
+<h3>Age constraint<a class="headerlink" href="#Age-constraint" title="Permalink to this headline">¶</a></h3>
+<p>The PDF is very broad because the data is very scattered <strong>but</strong> the young ages are in a very low probably region.</p>
+<p>We can quantify this by adding up the first 10 bins (10 Million years) and see how much probability is in it:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">proba_less_than_10Myr</span> <span class="o">=</span> <span class="n">combined_pdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="s2">&quot;The probability that this population is less than 10 Myrs if {round(proba_less_than_10Myr,2)} percent&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;The probability that this population is less than 10 Myrs if 4.37 percent&#39;
+</pre></div></div>
 </div>
 </div>
 </div>
@@ -1650,37 +2135,29 @@ dtype: float64
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="manual.html" class="btn btn-neutral float-right" title="Dependencies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="CMDs.html" class="btn btn-neutral float-left" title="Colour Magnitude Diagrams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="ModelDataCompiler.html" class="btn btn-neutral float-right" title="Model Data Compiler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="CMDs.html" class="btn btn-neutral float-left" title="Colour Magnitude Diagrams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, heloise stevance
+        &#169; Copyright 2020, heloise stevance.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>HR diagrams &mdash; hoki v1.5 documentation</title>
   
@@ -18,7 +18,10 @@
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
   
+
   
+  
+
   
 
   
@@ -31,7 +34,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -56,7 +58,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> hoki
+            <a href="index.html" class="icon icon-home"> hoki
           
 
           
@@ -105,7 +107,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Loading-in-the-data">Loading in the data</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#About-the-tools-you're-about-to-use.">About the tools you’re about to use.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#About-the-tools-you’re-about-to-use.">About the tools you’re about to use.</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Loading-the-HR-diagrams">Loading the HR diagrams</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Loading-some-observational-data">Loading some observational data</a></li>
 </ul>
@@ -124,14 +126,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -177,6 +184,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -188,7 +197,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/HR_diagrams.ipynb.txt" rel="nofollow"> View page source</a>
           
         
@@ -207,21 +216,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -322,7 +345,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -388,6 +411,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -467,7 +491,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
+<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="k">import</span> <span class="n">load</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -489,13 +513,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Loading-in-the-data">
 <h2>Loading in the data<a class="headerlink" href="#Loading-in-the-data" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="About-the-tools-you're-about-to-use.">
-<h3>About the tools you’re about to use.<a class="headerlink" href="#About-the-tools-you're-about-to-use." title="Permalink to this headline">¶</a></h3>
+<div class="section" id="About-the-tools-you’re-about-to-use.">
+<h3>About the tools you’re about to use.<a class="headerlink" href="#About-the-tools-you’re-about-to-use." title="Permalink to this headline">¶</a></h3>
 <p>HR diagram data can be loaded using the <code class="docutils literal notranslate"><span class="pre">hoki.load.model_output()</span></code> function. This function will automatically know that you are trying to load an HR diagram from the name of the text file.</p>
 <p><strong>Important</strong>: You should note that when loading an HR diagram you need to specify what type of HR diagram you want to load form the file. The HR diagram files are large and quite complex - see left hand side of the diagam below - so we’ll be loading in one type of HR diagram at a time.</p>
 <p>You can choose from 3 options: - <code class="docutils literal notranslate"><span class="pre">'TL'</span></code>: For a temperature/Luminosity HR diagram - <code class="docutils literal notranslate"><span class="pre">'Tg'</span></code>: For a temperature/surface gravity HR diagram - <code class="docutils literal notranslate"><span class="pre">'TTG'</span></code>: For a temperature/(temperature**4/surface gravity) HR diagram</p>
 <p>These options are there for 2 reasons: * 1.They tell the object which segment of the text file to load in * 2.They tell the plotting function what grid to create in order to plot the contours (also picks the right axis labels).</p>
-<p><img alt="mynewimage" src="HRD_data.png" /></p>
+<p><img alt="mynewimage" src="_images/HRD_data.png" /></p>
 </div>
 <div class="section" id="Loading-the-HR-diagrams">
 <h3>Loading the HR diagrams<a class="headerlink" href="#Loading-the-HR-diagrams" title="Permalink to this headline">¶</a></h3>
@@ -782,7 +806,7 @@ Text(0.5, 1.0, &#39;Single stars&#39;)
 </div>
 <div class="section" id="Creating-a-publication-ready-figure">
 <h2>Creating a publication-ready figure<a class="headerlink" href="#Creating-a-publication-ready-figure" title="Permalink to this headline">¶</a></h2>
-<p>In this last section, we will reproduce with <code class="docutils literal notranslate"><span class="pre">hoki</span></code> Figure 23 of Eldirdge, Stanway et al. (2018). This will show you how you can create a publication ready figure just using <code class="docutils literal notranslate"><span class="pre">hoki</span></code> and other ubiquitous python packages.</p>
+<p>In this last section, we will reproduce with <code class="docutils literal notranslate"><span class="pre">hoki</span></code> Figure 23 of Eldirdge, Stanway et al. (2018). This will show you how you can create a publication ready figure just using <code class="docutils literal notranslate"><span class="pre">hoki</span></code> and other ubiquitous python packages.</p>
 <p><em>Note: This figure will look a little different frmo the published version as the latter was created in IDL</em></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -944,7 +968,7 @@ The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_
 </pre></div></div>
 </div>
 <p>This should return the following message:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">following</span> <span class="n">attributes</span> <span class="n">were</span> <span class="n">updated</span><span class="p">:</span> <span class="o">.</span><span class="n">all_stacked</span><span class="p">,</span> <span class="o">.</span><span class="n">high_H_stacked</span><span class="p">,</span> <span class="o">.</span><span class="n">medium_H_stacked</span><span class="p">,</span> <span class="o">.</span><span class="n">low_H_stacked</span><span class="o">.</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_stacked, .low_H_stacked.
 </pre></div>
 </div>
 <p>It indicates that the stacking was performed successfully, and four attributes of the <code class="docutils literal notranslate"><span class="pre">HRDiagram</span></code> class were update.</p>
@@ -955,7 +979,7 @@ The following attributes were updated: .all_stacked, .high_H_stacked, .medium_H_
 <div class="section" id="Plotting-HRDs-of-stacked-ages">
 <h2>Plotting HRDs of stacked ages<a class="headerlink" href="#Plotting-HRDs-of-stacked-ages" title="Permalink to this headline">¶</a></h2>
 <p>Now, it’s possible you don’t actually need to do any opperations on the stacked HRDs, <strong>you just want to plot</strong> HRDs for a range of ages.</p>
-<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of ‘<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
+<p>For this you don’t even need to use the <code class="docutils literal notranslate"><span class="pre">.stack()</span></code> method, <strong>you can do it directly</strong> in the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method: you need to use the parameter <code class="docutils literal notranslate"><span class="pre">age_range</span></code> instead of ’<code class="docutils literal notranslate"><span class="pre">log_age</span></code> in the plotting method.</p>
 <p>Here is an example of an HRD at 10 Myrs Vs an aggregate of HRDs from 1 to 10 Myrs.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -1012,37 +1036,29 @@ Text(0.5, 1.0, &#39;Stacked Age: log(Age/yrs)= 6.0 - 7.0&#39;)
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Spectra.html" class="btn btn-neutral float-right" title="Spectra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="Transient_rates.html" class="btn btn-neutral float-left" title="Transient rates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="Spectra.html" class="btn btn-neutral float-right" title="Spectra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Transient_rates.html" class="btn btn-neutral float-left" title="Transient rates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020, heloise stevance
+        &#169; Copyright 2020, heloise stevance.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

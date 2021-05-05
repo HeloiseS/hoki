@@ -21,6 +21,9 @@
    Spectra
    CMDs
    AgeWizard
+   ModelDataCompiler
+   ModelSearch
+   ComplexStellarPopulations
    :maxdepth: 1
    :caption: Recipes
 
