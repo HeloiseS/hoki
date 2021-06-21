@@ -16,7 +16,7 @@
 Bridging the Gap Between Observation and Theory
 =================================================
 
-
+dev1.7
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
 
 Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing!
