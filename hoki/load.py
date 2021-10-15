@@ -76,7 +76,7 @@ def set_models_path(path):
 
 def dummy_to_dataframe(filename, bpass_version=DEFAULT_BPASS_VERSION):
     """Reads in dummy to df from a filename"""
-    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()}
+    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()} #inverted bpass dummy dictionary
     cols = [inv_dict[key] if key in inv_dict.keys() else 'Nan'+str(key) for key in range(96)]
     dummy = pd.read_csv(filename, names=cols, sep=r"\s+", engine='python')
     return dummy
