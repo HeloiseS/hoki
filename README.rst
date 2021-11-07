@@ -1,6 +1,5 @@
 .. image:: black_text.png
     :height: 35px
-
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
