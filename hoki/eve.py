@@ -6,7 +6,14 @@ from hoki.utils.hoki_object import HokiObject
 
 #TODO: SHOULD ADD LOGGING TO THIS?
 
+
+
 #TODO: rename to reflect the fact it's a dictionary
+#TODO: A LOT OF THIS IS ERELEVANT WHEN YOU HAVE EVE.H5
+
+#TODO: MAKE PLOTING UTILITY THAT USES THE EVE TABLES
+#TODO: MAKE UTILITY TO VERBOSE DESCRIBE EVOLUTIONARY PATH FROM EVE TABLES
+
 evolution_vector_dict = dict({'0': 'MT CASE A', '1': 'CEE CASE A',
                           '2': 'MT CASE B', '3': 'CEE CASE B',
                           '4': 'MT CASE C', '5': 'CEE CASE C',
