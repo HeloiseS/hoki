@@ -4,6 +4,7 @@ from hoki import load
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 from hoki.utils.hoki_object import HokiObject
 
+#TODO: SHOULD ADD LOGGING TO THIS?
 
 #TODO: rename to reflect the fact it's a dictionary
 evolution_vector_dict = dict({'0': 'MT CASE A', '1': 'CEE CASE A',
@@ -19,24 +20,27 @@ def decode_and_print_evolution_vector(evolution_vector):
         if stage[0] == "S":
             print(f'Secondary {evolution_vector_dict[stage[1]]}')
 
-
+# TODO: might need to break this function down for unitesting
+# TODO: might want a script that does this in a non OOP way to avoid overheads if runnign through whole dataset?
 def make_evolution_vector(dummy_df, PRIM=True):
     """
     This makes a vector (LIST) describing the evolution of the
     Parameters
     ----------
     dummy_df
-    PRIM
+    PRIM  #TODO: MAYBE THIS SHOULD BE AUTOMATIC - from the filename?
 
     Returns
     -------
 
     """
+    FLAG = [] # this is where we're going to record the warnings.
+
     #TODO: should add option to give path to dummy on top of df
     if PRIM is True:
-        code='P'
+        code='P' # marks primary models
     elif PRIM is False:
-        code='S'
+        code='S' # marks secondary models
     elif PRIM is None:
         code=' ' # for single stars
     else:
@@ -47,34 +51,49 @@ def make_evolution_vector(dummy_df, PRIM=True):
 
     # MAIN SEQUENCE
     # TODO: check the condition for MS with jan
-    try:
+    try: # TODO: why this try and except
         i_end_MS = np.argwhere(dummy_df.He_core1.values>0.01)[1][0]
     except IndexError:
         i_end_MS = np.argwhere(dummy_df.He_core1.values>0.01)[0][0]
+
+    try: # TODO: why this try and except
+        i_start_caseC= np.argwhere(dummy_df.CO_core1.values>0.01)[1][0]
+    except IndexError:
+        try:
+            i_start_caseC = np.argwhere(dummy_df.CO_core1.values>0.01)[0][0]
+        except IndexError:
+            i_start_caseC = None # doesn't get far enough in evolution to finish he core burning
+
+    if i_end_MS > i_start_caseC: FLAG.append('BADCASEC')
+    #TODO: LOG IT AS A PROBLEM WITH THE VALUES AND NAME OF FILE
 
     ms_lifetime = dummy_df.age.iloc[i_end_MS]
 
     # CEE AND MASS TRANSFER
     # TODO: check the condition of cee and mt with jan
-    cee = dummy_df[dummy_df['log(a)']* 1.05<dummy_df['log(R1)']]
-    mt = dummy_df[dummy_df.DM1R<0]
-    mt = mt.loc[mt.index.difference(cee.index)]
+    cee = dummy_df[dummy_df['log(a)']* 1.05<dummy_df['log(R1)']] # croped dataframe to contain only the CEE phase
+    mt = dummy_df[dummy_df.DM1R<0] # cropped data frame to contain phases where mass is being lost by primary
+    mt = mt.loc[mt.index.difference(cee.index)] # isolate the mass transfer phase by removing the rows of CEE
 
     try:
-        mt_age_start = mt.age.iloc[0]
-        mt_age_end = mt.age.iloc[-1]
+        mt_age_start = mt.age.iloc[0]  # Start of mass transfer in years
+        mt_age_end = mt.age.iloc[-1]   # End of mass transfer in years
 
-        if mt_age_start <= ms_lifetime:
-            if mt_age_end <= ms_lifetime:
-                evolution_vector.append(f'{code}0')
-            else:
-                evolution_vector.append(f'{code}0')
-                evolution_vector.append(f'{code}2')
+        if mt_age_start <= ms_lifetime: # CASE A MASS TRANSFER
+            evolution_vector.append(f'{code}0')
+            # CASE AB MASS TRANSFER ??? OR IS IT?
+            # TODO: ASK JAN (I DON'T THINK THIS WAS RIGHT -
+            #  CASE AB is when 2 distinct MT phases)
+            #if mt_age_end > ms_lifetime:
+            #    evolution_vector.append(f'{code}2')
 
-        elif mt_age_start > ms_lifetime:
+        elif mt_age_start > ms_lifetime: # CASE B
             evolution_vector.append(f'{code}2')
 
-        if np.isclose(mt_age_end, dummy_df.age.iloc[-1]):
+        if i_start_caseC is not None and  mt_age_start >= dummy_df.age.iloc[i_start_caseC]:
+            evolution_vector.append(f'{code}4') # CASE C
+
+        if np.isclose(mt_age_end, dummy_df.age.iloc[-1]): # MT AT DEATH
             evolution_vector.append(f'{code}6')
 
     except IndexError:
@@ -82,26 +101,28 @@ def make_evolution_vector(dummy_df, PRIM=True):
         pass
 
     try:
-        cee_age_start = cee.age.iloc[0]
-        cee_age_end = cee.age.iloc[-1]
+        cee_age_start = cee.age.iloc[0] # Start of CEE in years
+        cee_age_end = cee.age.iloc[-1] # End of CEE in years
+
         if cee_age_start <= ms_lifetime:
-            if cee_age_end <= ms_lifetime:
-                evolution_vector.append(f'{code}1')
-            else:
-                evolution_vector.append(f'{code}1')
-                evolution_vector.append(f'{code}3')
+            evolution_vector.append(f'{code}1')
+            #TODO: same question about case AB as above
+            #if cee_age_end > ms_lifetime:
+            #    evolution_vector.append(f'{code}3')
 
         elif cee_age_start > ms_lifetime:
-            evolution_vector.append(f'{code}3')
+            evolution_vector.append(f'{code}3') # CASE B
+
+        if i_start_caseC is not None and cee_age_start >= dummy_df.age.iloc[i_start_caseC]:
+            evolution_vector.append(f'{code}5') # CASE C
 
         if np.isclose(cee_age_end, dummy_df.age.iloc[-1]):
-            evolution_vector.append(f'{code}7')
+            evolution_vector.append(f'{code}7') # CEE AT DEATH
+            FLAG.append("CEE@DEATH")
 
     except IndexError:
         # catches cases where the data frame is empty if there is not CEE
         pass
-
-    ## TODO: NEED TO ADD CONDITIONS FOR CASE C
 
     return evolution_vector
 

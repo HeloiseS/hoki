@@ -186,9 +186,12 @@ def model_input(path):
 
     # Once we've goe through the whole file and filled our lists, we can put them in a dataframe
     # with some named columns and set the datatypes to strings and numbers.
-    input_df = pd.DataFrame.from_dict({'filenames': filenames[:-1], 'model_imf': modelimfs,
-                                       'types': modeltypes, 'mixed_imf': mixedimf,
-                                       'mixed_age': mixedage, 'initial_BH': initialBH,
+    input_df = pd.DataFrame.from_dict({'filenames': filenames[:-1], 
+                                       'model_imf': modelimfs,
+                                       'types': modeltypes, 
+                                       'mixed_imf': mixedimf,
+                                       'mixed_age': mixedage, 
+                                       'initial_BH': initialBH,
                                        'initial_P': initialP}).astype({'filenames': str,
                                                                        'model_imf': float,
                                                                        'types': int,
