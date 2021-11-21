@@ -1,8 +1,242 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
 from hoki import load
+import matplotlib.colors as mcolors
+
+plt.style.use('hfs')
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 from hoki.utils.hoki_object import HokiObject
+import warnings
+
+# TODO: docstrings
+# TODO: unittests
+
+class EvEWizard(HokiObject):
+    def __init__(self, met, eve_path='EvE.h5'):
+        # for now only support one metallicity
+
+        super().__init__()
+        self.eve_path = eve_path
+        self.summary_table = pd.read_hdf(self.eve_path, f'/{met}/SUMMARY')
+        self.cee_table = pd.read_hdf(self.eve_path, f'/{met}/COMMON_ENVELOPE')
+        self.mt_table = pd.read_hdf(self.eve_path, f'/{met}/MASS_TRANSFER')
+        self.death_table = pd.read_hdf(self.eve_path, f'/{met}/DEATH')
+        self.dummy_df = None
+
+    def _calc_logg(self):
+        """Adds log_g column (OF STAR 1 - the one with detailed evol) to dummy_data_frame"""
+        self.dummy_df['log_g1'] = np.log10((6.67259 * 10 ** (-8)) * (1.989 * 10 ** 33) * self.dummy_df.M1 / (
+                    ((10 ** self.dummy_df['log(R1)']) * 6.9598 * (10 ** 10)) ** 2))
+
+    def load_model(self, ID, columns=None):
+        self.CURRENT_MODEL_ID = ID
+        self.model_summary = self.summary_table[self.summary_table.MODEL_ID == ID]
+        self.model_cee = self.cee_table[self.cee_table.MODEL_ID == ID]
+        self.model_mt = self.mt_table[self.mt_table.MODEL_ID == ID]
+
+        if columns is None:
+            columns_of_interest = ['timestep',
+                                   'age',
+                                   'log(R1)',
+                                   'log(T1)',
+                                   'log(L1)',
+                                   'log(a)',
+                                   'DM1R',
+                                   'DM1W',
+                                   'M1',
+                                   'M2',
+                                   'X',
+                                   'Y']
+        elif columns == 'all':
+            columns_of_interest = list(load.dummy_dict.keys())
+
+        else:
+            columns_of_interest = columns
+
+        # loading the data
+        self.dummy_df = load.dummy_to_dataframe(load.MODELS_PATH + self.model_summary.filenames.iloc[0])[
+            columns_of_interest]
+        self._calc_logg()
+
+        self._T = self.dummy_df['log(T1)']
+        self._L = self.dummy_df['log(L1)']
+
+        ms_data = self.dummy_df[self.dummy_df.age <= self.model_summary.lifetime_MS.iloc[0]][['log(T1)', 'log(L1)']]
+        self._T_ms = ms_data['log(T1)']
+        self._L_ms = ms_data['log(L1)']
+
+    def plots_RLOF(self, ax=None):
+        if ax is None:
+            f, ax = plt.subplots(ncols=2, figsize=(10, 3))
+
+        ax1, ax2 = ax[0], ax[1]
+
+        ax1.plot(self._T, self._L, c='grey', alpha=0.5)
+        ax1.plot(self._T_ms, self._L_ms, c='k', alpha=0.5, lw=1, zorder=10, ls='--')
+
+        for i in range(self.model_mt.shape[0]):
+            step_mt_i, step_mt_f = self.model_mt[['TIMESTEP_start', 'TIMESTEP_end']].iloc[i]
+            mask_mt = (self.dummy_df.timestep >= step_mt_i) & (self.dummy_df.timestep <= step_mt_f)
+            ax1.plot(self.dummy_df[mask_mt]['log(T1)'], self.dummy_df[mask_mt]['log(L1)'],
+                     c='orange', lw=2)
+
+        for i in range(self.model_cee.shape[0]):
+            step_cee_i, step_cee_f = self.model_cee[['TIMESTEP_start', 'TIMESTEP_end']].iloc[i]
+            mask_cee = (self.dummy_df.timestep >= step_cee_i) & (self.dummy_df.timestep <= step_cee_f)
+            ax1.plot(self.dummy_df[mask_cee]['log(T1)'], self.dummy_df[mask_cee]['log(L1)'],
+                     c='crimson', lw=2)
+
+        # f, ax = plt.subplots(ncols=1, figsize=(4,3))
+        cb = ax2.scatter(self._T, self._L, c=np.abs(self.dummy_df['DM1R']), cmap='Blues', s=40)
+        ax2.plot(self._T, self._L, c='grey', alpha=0.5, zorder=1)
+
+        cbar = plt.colorbar(cb)
+
+        for axis in ax:
+            axis.set_xlim([self._T.max() + 0.2, self._T.min() - 0.2])
+            axis.set_ylim([self._L.min() - 0.2, self._L.max() + 0.2])
+            axis.set_xlabel('log(T1)')
+            axis.set_ylabel('log(L1)')
+
+        ax1.set_title('MS, MT, CEE')
+        ax2.set_title('DM1R')
+
+        return f, ax
+
+    def plots_Lclass_n_winds(self, ax=None, Lclass_logg_boundaries=None):
+        if ax is None:
+            f, ax = plt.subplots(ncols=2, figsize=(10, 3))
+
+        if Lclass_logg_boundaries is None:
+            Lclass_logg_boundaries = [-1, 0, 1, 2, 3.5, 6]
+
+        ax1, ax2 = ax[0], ax[1]
+
+        cmap_rb = plt.get_cmap('RdYlBu')
+        colors = cmap_rb(np.linspace(0, 1, len(Lclass_logg_boundaries) - 1))
+        cmap, norm = mcolors.from_levels_and_colors(Lclass_logg_boundaries, colors)
+
+        ax1.plot(T, L, c='grey', alpha=1, zorder=0.8)
+        cb = ax1.scatter(T, L, c=model_data['log_g1'], cmap=cmap, s=40, norm=norm)
+        cbar = f.colorbar(cb, ticks=Lclass_logg_boundaries, ax=ax1)
+
+        ax2.plot(T, L, c='grey', alpha=10.5, zorder=1)
+        cb = ax2.scatter(T, L, c=model_data['DM1W'], cmap='Purples', s=40)
+        cbar = plt.colorbar(cb, ax=ax2)
+
+        for axis in ax:
+            axis.set_xlim([T.max() + 0.2, T.min() - 0.2])
+            axis.set_ylim([L.min() - 0.2, L.max() + 0.2])
+            axis.set_xlabel('log(T1)')
+            axis.set_ylabel('log(L1)')
+
+        ax1.set_title('Luminosity Class')
+        ax2.set_title('DM1W')
+
+        return f, ax
+
+    def describe_evolution(self):
+        warnings.warn(HokiUserWarning('Multiple CEE and MT will not be described - implementation to come - '
+                                      'CHECK self.model_mt and self.model_cee'))
+
+        print(f'==================\nMODEL_ID = {self.CURRENT_MODEL_ID}\n==================')
+        # MAIN SEQUENCE
+        M1_endMS, M2_endMS = self.dummy_df[np.isclose(self.dummy_df.age.astype(float),
+                                                      self.model_summary.lifetime_MS.astype(float))][['M1',
+                                                                                                      'M2']].values[0]
+
+        # print(f"ZAMS   |\tM1={round(self.model_summary.M1_zams.iloc[0],2)} Msol \tM2={round(self.model_summary.M2_zams.iloc[0],2)} Msol")
+        # print(f"  => MS lifetime {round(self.model_summary.lifetime_MS.values[0]/1e6,3)} Myr")
+        # print(f"END MS |\tM1={round(M1_endMS,2)} Msol \tM2={round(M2_endMS, 2)} Msol")
+
+        print('MS   |        | START |\tM1={:.2f} Msol \tM2={:.2f} Msol '.format(self.model_summary.M1_zams.iloc[0],
+                                                                                 self.model_summary.M2_zams.iloc[0],
+                                                                                 ))
+
+        print('MS   |        |  END  |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs'.format(M1_endMS,
+                                                                                                  M2_endMS,
+                                                                                                  self.model_summary.lifetime_MS.iloc[
+                                                                                                      0],
+                                                                                                  ))
+
+        if self.model_mt.size > 0:  # since MT contains CEE, this is the only necessary condition
+            print('\n-------------------\nBINARY INTERACTIONS\n-------------------')
+            print('RLOF | CASE {} | START |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs'.format(
+                self.model_mt.CASE.iloc[0],
+                self.model_mt.M1_start.iloc[0],
+                self.model_mt.M2_start.iloc[0],
+                self.model_mt.AGE_start.iloc[0] / 1e6))
+            if self.model_cee.size > 0:
+                dt_mt = (self.model_cee.AGE_start - self.model_mt.AGE_start).iloc[0]
+                print(f"  =>      RLOF in semi-detached binary for {round(dt_mt / 1e3, 3)} thousand years")
+                dM1 = (self.model_cee.M1_start - self.model_mt.M1_start).iloc[0]
+                dM2 = (self.model_cee.M2_start - self.model_mt.M2_start).iloc[0]
+                dMsys = dM2 + dM1
+
+                print("  =>      MASS CHANGE |\tM1={:.2f} Msol \tM2={:.2f} Msol \tMsys={:.2f} Msol".format(dM1, dM2,
+                                                                                                           dMsys))
+
+                print('\nCEE  | CASE {} | START |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs'.format(
+                    self.model_cee.CASE.iloc[0],
+                    self.model_cee.M1_start.iloc[0],
+                    self.model_cee.M2_start.iloc[0],
+                    self.model_cee.AGE_start.iloc[0] / 1e6))
+
+                print('CEE  |        |  END  |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs'.format(
+                    self.model_cee.M1_end.iloc[0],
+                    self.model_cee.M2_end.iloc[0],
+                    self.model_cee.AGE_end.iloc[0] / 1e6))
+                dt_cee = self.model_cee.AGE_end.iloc[0] - self.model_cee.AGE_start.iloc[0]
+                print(f"  =>      CEE phase lasts {round(dt_cee / 1e3, 3)} thousand years")
+                print("  =>      MASS CHANGE |\tM1={:.2f} Msol \tM2={:.2f} Msol \tMsys={:.2f} Msol".format(
+                    self.model_cee.DELTA_M1.iloc[0],
+                    self.model_cee.DELTA_M2.iloc[0],
+                    self.model_cee.DELTA_Msys.iloc[0]))
+
+                print('\nRLOF |        |  END  |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs'.format(
+                    self.model_mt.M1_end.iloc[0],
+                    self.model_mt.M2_end.iloc[0],
+                    self.model_mt.AGE_end.iloc[0] / 1e6))
+
+                dt_mt = (self.model_mt.AGE_end - self.model_cee.AGE_end).iloc[0]
+                print(f"  =>      RLOF in semi-detached binary for another {round(dt_mt / 1e3, 3)} thousand years")
+                dM1 = (self.model_mt.M1_end - self.model_cee.M1_end).iloc[0]
+                dM2 = (self.model_mt.M2_end - self.model_cee.M2_end).iloc[0]
+                dMsys = dM2 + dM1
+
+                print("  =>      MASS CHANGE |\tM1={:.2f} Msol \tM2={:.2f} Msol \tMsys={:.2f} Msol".format(dM1, dM2,
+                                                                                                           dMsys))
+
+
+            else:
+                print('RLOF |        |  END  |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs'.format(
+                    self.model_mt.M1_end.iloc[0],
+                    self.model_mt.M2_end.iloc[0],
+                    self.model_mt.AGE_end.iloc[0] / 1e6))
+
+                dt_mt = (self.model_mt.AGE_end - self.model_mt.AGE_start).iloc[0]
+                print(f"  =>      RLOF in semi-detached binary for {round(dt_mt / 1e3, 3)} thousand years")
+
+            print("\nEND BINARY INTERACTION|                                 age = {:.3f} Myrs".format(
+                self.model_mt.AGE_end.iloc[0] / 1e6))
+            print("TOTAL MASS CHANGE     |\tM1={:.2f} Msol \tM2={:.2f} Msol \tMsys={:.2f} Msol".format(
+                self.model_mt.DELTA_M1.iloc[0],
+                self.model_mt.DELTA_M2.iloc[0],
+                self.model_mt.DELTA_Msys.iloc[0]))
+
+
+        else:
+            print('-------------------\nNO BINARY INTERACTIONS')
+
+        print('-------------------\n')
+        print("PROPERTIES AT DEATH  |\tM1={:.2f} Msol \tM2={:.2f} Msol \tage={:.3f} Myrs".format(
+            self.model_summary.M1_end.iloc[0],
+            self.model_summary.M2_end.iloc[0],
+            self.model_summary.lifetime_total.iloc[0] / 1e6))
+
+
+''' OLD SHIT 
 
 #TODO: SHOULD ADD LOGGING TO THIS?
 
@@ -207,6 +441,6 @@ class UniquePathwaysWithProbaForTUI(HokiObject):
             mydict[pathways] = 0
         return mydict
 
-
+'''
 
 
