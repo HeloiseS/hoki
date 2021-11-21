@@ -137,6 +137,7 @@ class EvEWizard(HokiObject):
         return f, ax
 
     def describe_evolution(self):
+        # TODO: need to allow for several MT and CEE phases!!
         warnings.warn(HokiUserWarning('Multiple CEE and MT will not be described - implementation to come - '
                                       'CHECK self.model_mt and self.model_cee'))
 
