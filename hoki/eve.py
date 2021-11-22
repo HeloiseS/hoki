@@ -18,10 +18,10 @@ class EvEWizard(HokiObject):
 
         super().__init__()
         self.eve_path = eve_path
-        self.summary_table = pd.read_hdf(self.eve_path, f'/{met}/SUMMARY')
-        self.cee_table = pd.read_hdf(self.eve_path, f'/{met}/COMMON_ENVELOPE')
-        self.mt_table = pd.read_hdf(self.eve_path, f'/{met}/MASS_TRANSFER')
-        self.death_table = pd.read_hdf(self.eve_path, f'/{met}/DEATH')
+        self.SUMMARY = pd.read_hdf(self.eve_path, f'/{met}/SUMMARY')
+        self.CEE = pd.read_hdf(self.eve_path, f'/{met}/COMMON_ENVELOPE')
+        self.MT = pd.read_hdf(self.eve_path, f'/{met}/MASS_TRANSFER')
+        self.DEATH = pd.read_hdf(self.eve_path, f'/{met}/DEATH')
         self.dummy_df = None
 
     def _calc_logg(self):
@@ -31,9 +31,9 @@ class EvEWizard(HokiObject):
 
     def load_model(self, ID, columns=None):
         self.CURRENT_MODEL_ID = ID
-        self.model_summary = self.summary_table[self.summary_table.MODEL_ID == ID]
-        self.model_cee = self.cee_table[self.cee_table.MODEL_ID == ID]
-        self.model_mt = self.mt_table[self.mt_table.MODEL_ID == ID]
+        self.model_summary = self.SUMMARY[self.SUMMARY.MODEL_ID == ID]
+        self.model_cee = self.CEE[self.CEE.MODEL_ID == ID]
+        self.model_mt = self.MT[self.MT.MODEL_ID == ID]
 
         if columns is None:
             columns_of_interest = ['timestep',
@@ -104,9 +104,9 @@ class EvEWizard(HokiObject):
 
         return f, ax
 
-    def plots_Lclass_n_winds(self, ax=None, Lclass_logg_boundaries=None):
-        if ax is None:
-            f, ax = plt.subplots(ncols=2, figsize=(10, 3))
+    def plots_Lclass_n_winds(self,  Lclass_logg_boundaries=None):
+
+        f, ax = plt.subplots(ncols=2, figsize=(10, 3))
 
         if Lclass_logg_boundaries is None:
             Lclass_logg_boundaries = [-1, 0, 1, 2, 3.5, 6]
@@ -117,17 +117,17 @@ class EvEWizard(HokiObject):
         colors = cmap_rb(np.linspace(0, 1, len(Lclass_logg_boundaries) - 1))
         cmap, norm = mcolors.from_levels_and_colors(Lclass_logg_boundaries, colors)
 
-        ax1.plot(T, L, c='grey', alpha=1, zorder=0.8)
-        cb = ax1.scatter(T, L, c=model_data['log_g1'], cmap=cmap, s=40, norm=norm)
+        ax1.plot(self._T, self._L, c='grey', alpha=1, zorder=0.8)
+        cb = ax1.scatter(self._T, self._L, c=self.dummy_df['log_g1'], cmap=cmap, s=40, norm=norm)
         cbar = f.colorbar(cb, ticks=Lclass_logg_boundaries, ax=ax1)
 
-        ax2.plot(T, L, c='grey', alpha=10.5, zorder=1)
-        cb = ax2.scatter(T, L, c=model_data['DM1W'], cmap='Purples', s=40)
+        ax2.plot(self._T, self._L, c='grey', alpha=10.5, zorder=1)
+        cb = ax2.scatter(self._T, self._L, c=self.dummy_df['DM1W'], cmap='Purples', s=40)
         cbar = plt.colorbar(cb, ax=ax2)
 
         for axis in ax:
-            axis.set_xlim([T.max() + 0.2, T.min() - 0.2])
-            axis.set_ylim([L.min() - 0.2, L.max() + 0.2])
+            axis.set_xlim([self._T.max() + 0.2, self._T.min() - 0.2])
+            axis.set_ylim([self._L.min() - 0.2, self._L.max() + 0.2])
             axis.set_xlabel('log(T1)')
             axis.set_ylabel('log(L1)')
 
