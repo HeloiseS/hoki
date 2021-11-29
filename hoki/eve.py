@@ -27,8 +27,7 @@ class EvEWizard(HokiObject):
         
         except KeyError:
             self.death_table = None
-            print("WARNING: DEATH Table not included HDF5 file!")
-            print("Unable to load the death table")
+            warnings.warn(HokiUserWarning('Unable to load the death table.\nDEATH Table is not included in the HDF5 File!'))
 
         self.dummy_df = None
 
