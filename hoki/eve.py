@@ -57,6 +57,8 @@ class EvEWizard(HokiObject):
         # loading the data
         self.dummy_df = load.dummy_to_dataframe(load.MODELS_PATH + self.model_summary.filenames.iloc[0])[
             columns_of_interest]
+        seconds_to_year = 3600 * 24 * 365.25
+        self.dummy_df.DM1R *= seconds_to_year
         self._calc_logg()
 
         self._T = self.dummy_df['log(T1)']
