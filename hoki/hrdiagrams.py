@@ -184,9 +184,10 @@ class HRDiagram(HokiObject):
             if log_age_min > log_age_max:
                 raise HokiFatalError("Age_max should be greater than age_min")
 
-            if log_age_min < self.t[0] or log_age_max > self.t[-1]:
-                raise HokiFatalError("The age range requested is outside the valid range"
-                                     "(6.0 to 11.1 inclusive)"+str(log_age_min)+" "+str(log_age_max))
+            if log_age_min < np.round(self.t[0], 3) or log_age_max > np.round(self.t[-1], 3):
+                raise HokiFatalError("The age range requested is outside the valid range "
+                                     "(6.0 to 11.0 inclusive). You requested: "
+                                     + str(log_age_min) + " to " + str(log_age_max))
 
         # Now that we have time limits we calculate what bins they correspond to.
         bin_min, bin_max = int(np.round(10*(log_age_min-6))), int(np.round(10*(log_age_max-6)))
