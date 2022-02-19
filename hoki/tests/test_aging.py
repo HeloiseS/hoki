@@ -59,6 +59,7 @@ class TestAgeWizard(object):
         cpdf = wiz.sample_pdf.pdf
         assert np.sum(np.isclose([cpdf[0], cpdf[9]], [0.0,  0.7231526323765232])) == 2, "combined pdf is not right"
 
+
     def test_most_likely_age(self):
         wiz = au.AgeWizard(obs_df=fake_hrd_input, model=hr_file)
         assert np.isclose(wiz.most_likely_age[0], 6.9), "Most likely age wrong"
@@ -72,6 +73,7 @@ class TestAgeWizard(object):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
         wiz.calculate_sample_pdf()
         assert np.isclose(wiz.sample_pdf.pdf[9],0.551756734145878), "Something is wrong with the combined_Age PDF"
+
 
     def test_calculate_p_given_age_range(self):
         wiz = au.AgeWizard(fake_hrd_input, myhrd)
@@ -135,10 +137,10 @@ class TestFindHRDCoordinates(object):
 
 class TestNormalise1D(object):
     def test_it_runs(self):
-        au.normalise_1d(np.array([0, 1, 4, 5, 0, 1, 7, 8]))
+        au.normalise_1d(np.array([0, 1, 4, 5, 0, 1, 7, 8]), crop_the_future=False)
 
     def test_basic(self):
-        norm = au.normalise_1d(np.array([0, 0, 1, 0, 0, 0, 0]))
+        norm = au.normalise_1d(np.array([0, 0, 1, 0, 0, 0, 0]), crop_the_future=False)
         assert norm[2] == 1, 'Normalisation done wrong'
         assert sum(norm) == 1, "Normalisaton done wrong"
 
@@ -176,20 +178,3 @@ class TestCalculateSamplePDF(object):
         assert np.isclose(combined.pdf[9], 0.774602971512809), "combined PDF not right"
 
 
-"""
-class TestMultiplyPDFs(object):
-    def test_basic(self):
-        pdfs_good = au.calculate_pdfs(fake_hrd_input, myhrd)
-        combined = au.multiply_pdfs(pdfs_good)
-        assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
-
-    def test_drop_bad(self):
-        pdfs_good = au.calculate_pdfs(fake_hrd_input, myhrd)
-        combined = au.multiply_pdfs(pdfs_good, not_you=[3])
-        assert np.isclose(combined.pdf[9], 0.9837195045903536), "combined PDF not right"
-
-    def test_drop_good(self):
-        pdfs_good = au.calculate_pdfs(fake_hrd_input, myhrd)
-        combined = au.multiply_pdfs(pdfs_good, not_you=['star1'])
-        assert np.isclose(combined.pdf[9], 0.878162355350702), "combined PDF not right"
-"""

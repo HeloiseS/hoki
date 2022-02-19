@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 from hoki.utils.exceptions import HokiTypeError
 
 
-
 def ratio_with_poisson_errs(n1, n2):
     """
     Returns Star Count Ratio and its error
@@ -36,7 +35,6 @@ def ratio_with_poisson_errs(n1, n2):
     return R, dR
 
 
-#TODO: UNITEST
 class UnderlyingCountRatio(HokiObject):
     """
     Pipeline to calculate the underlying stellar number count ratio from observed stellar numbers
@@ -190,7 +188,7 @@ class UnderlyingCountRatio(HokiObject):
         self.sampler.run_mcmc(p1, nsteps)
         self.samples = self.sampler.get_chain(flat=True)  # emcee v2 not v3 be careful to updates
 
-        self.R_hat, self.n2_hat = map(lambda v: (v[1], v[2] - v[1], v[1] - v[0]),
+        self.R_hat, self.n2_hat = map(lambda v: (v[0], v[1], v[2]),
                                       zip(*np.percentile(self.samples,
                                                          [50 - self.ci_width / 2, 50, 50 + self.ci_width / 2],
                                                          axis=0)))
@@ -204,9 +202,12 @@ class UnderlyingCountRatio(HokiObject):
             return self.summary_df
 
         columns = ['Variable', f'{int(50 - self.ci_width / 2)}th', '50th', f'{int(50 + self.ci_width / 2)}th']
-        self.summary_df = pd.DataFrame(np.array([np.concatenate((np.array(['R_hat']), np.round(self.R_hat, 4))),
-                                                 np.concatenate((np.array(['n2_hat']), np.round(self.n2_hat, 4)))]),
-                                       columns=columns)
+        row1 = np.array(['R_hat', np.round(self.R_hat[2], 4),
+                         np.round(self.R_hat[0], 4), np.round(self.R_hat[1], 4)])
+        row2 = np.array(['n2_hat', np.round(self.n2_hat[2], 4),
+                         np.round(self.n2_hat[1], 4), np.round(self.n2_hat[0], 4)])
+
+        self.summary_df = pd.DataFrame(np.array([row1, row2]), columns=columns)
         return self.summary_df
 
     def corner_plot(self, output_file='corner_plot.png', show=True):

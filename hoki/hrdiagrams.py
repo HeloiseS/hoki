@@ -10,6 +10,7 @@ import matplotlib.cm as cm
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 import warnings
 from hoki.utils.hoki_object import HokiObject
+import copy
 
 
 class HRDiagram(HokiObject):
@@ -360,6 +361,8 @@ class HRDiagram(HokiObject):
     # Now we can index HR diagrams!
     def __getitem__(self, item):
         return self._all_H[item]
+        #return self.low_H[item]
+        #return self.high_H[item]+self.medium_H[item]
 
 
 def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
@@ -437,7 +440,7 @@ def plot_hrdiagram(single_hr_grid, kind='TL', loc=111, cmap='Greys', **kwargs):
     # to make sure the colourmap is sensible we want to ensure the minimum level == minimum value
     levels = [min_level] + [level for level in possible_levels if level > min_level]
 
-    colMap = cm.get_cmap(cmap)
+    colMap = copy.copy(cm.get_cmap(cmap))
 
     colMap.set_under(color='white')
 

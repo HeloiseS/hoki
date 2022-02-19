@@ -76,7 +76,7 @@ def set_models_path(path):
 
 def dummy_to_dataframe(filename, bpass_version=DEFAULT_BPASS_VERSION):
     """Reads in dummy to df from a filename"""
-    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()}
+    inv_dict ={v: k for k, v in dummy_dicts[bpass_version].items()} #inverted bpass dummy dictionary
     cols = [inv_dict[key] if key in inv_dict.keys() else 'Nan'+str(key) for key in range(96)]
     dummy = pd.read_csv(filename, names=cols, sep=r"\s+", engine='python')
     return dummy
@@ -336,13 +336,22 @@ def _sed(path):
     """
     Load One SED file
     """
-    return pd.read_csv(path, sep=r"\s+", engine='python',
-                       names=['WL', '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', '6.7', '6.8',
-                              '6.9', '7.0', '7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7', '7.8',
-                              '7.9', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8',
-                              '8.9', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8',
-                              '9.9', '10.0', '10.1', '10.2', '10.3', '10.4', '10.5', '10.6', '10.7',
-                              '10.8', '10.9', '11.0'])
+    df = pd.read_csv(path, sep=r"\s+", engine='python', header=None)
+    if df.columns.shape[0] == 26:
+        # this to take into account the case where I'm using the files with half time res
+        cols = ['WL', '6.0', '6.2', '6.4', '6.6', '6.8', '7.0', '7.2', '7.4', '7.6',
+                '7.8', '8.0', '8.2', '8.4', '8.6', '8.8', '9.0', '9.2', '9.4', '9.6',
+                '9.8', '10.0', '10.2', '10.4', '10.6', '10.8']
+        
+    if df.columns.shape[0] == 52:
+        cols = ['WL', '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', '6.7', '6.8',
+                '6.9', '7.0', '7.1', '7.2', '7.3', '7.4', '7.5', '7.6', '7.7', '7.8',
+                '7.9', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8',
+                '8.9', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8',
+                '9.9', '10.0', '10.1', '10.2', '10.3', '10.4', '10.5', '10.6', '10.7',
+                '10.8', '10.9', '11.0']
+    df.columns = cols
+    return df
 
 
 def _ionizing_flux(path):

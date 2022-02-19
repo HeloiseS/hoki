@@ -2,10 +2,23 @@ import pandas as pd
 import hoki.hrdiagrams
 import hoki.cmd
 import hoki.load as load
-from hoki.constants import *
+from hoki.constants import BPASS_TIME_BINS
 import warnings
-from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning
+from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiFormatWarning, HokiDeprecationWarning
 from hoki.utils.hoki_object import HokiObject
+from hoki.utils.hoki_dialogue import HokiDialogue
+import numpy as np
+import warnings
+
+Dialogue = HokiDialogue()
+
+deprecation='\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' \
+            '\nDeprecated since hoki v1.6 ' \
+            '\nPLEASE USE THE hoki.age SUBPACKAGE AND MODULES WITHIN. ' \
+            '\ne.g. from hoki.age.wizard import AgeWizard' \
+            '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n'
+            
+warnings.warn(HokiDeprecationWarning(deprecation))
 
 
 class AgeWizard(HokiObject):
@@ -72,7 +85,6 @@ class AgeWizard(HokiObject):
         self._most_likely_age = None
 
     def calculate_sample_pdf(self, not_you=None, return_df=False):
-        # self.sample_pdf = calculate_sample_pdf(self._distributions, not_you=not_you)
         self.sample_pdf = calculate_sample_pdf(self.pdfs, not_you=not_you)
         if return_df: return self.sample_pdf
 
@@ -474,7 +486,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
             message = 'FEATURE DISABLED' + '\nKeyError' + str(
                 e) + '\nHOKI DIALOGUE: Your labels could not be dropped -- ' \
                      'all pdfs will be combined \nDEBUGGING ASSISTANT: ' \
-                     'Make sure the labels your listed are spelled correctly:)'
+                     'Make sure the labels you listed are spelled correctly:)'
             warnings.warn(message, HokiUserWarning)
 
     # We also must be careful not to multiply the time bin column in there so we have a list of the column names
@@ -490,7 +502,7 @@ def calculate_sample_pdf(distributions_df, not_you=None):
         # for col in distributions_df.columns:
         combined_pdf += distributions_df[col].values
 
-    combined_df = pd.DataFrame(normalise_1d(combined_pdf))
+    combined_df = pd.DataFrame(normalise_1d(combined_pdf) )
     combined_df.columns = ['pdf']
 
     return combined_df
@@ -518,3 +530,4 @@ def calculate_p_given_age_range(pdfs, age_range=None):
                        & (np.round(BPASS_TIME_BINS, 2) <= max(age_range))].sum()
 
     return probability
+

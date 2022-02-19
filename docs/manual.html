@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,6 +11,10 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="_static/favicon.png"/>
   
@@ -19,24 +22,23 @@
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Age Wizard" href="AgeWizard.html" /> 
@@ -79,6 +81,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -108,7 +111,7 @@
 <li class="toctree-l1"><a class="reference internal" href="#hoki-constants"><strong>hoki.constants</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#module-hoki.load"><strong>hoki.load</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#module-hoki.spec"><strong>hoki.spec</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#hoki-spec"><strong>hoki.spec</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -119,6 +122,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -157,7 +161,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li><strong>Dependencies</strong></li>
     
@@ -190,13 +194,13 @@
 /* CSS overrides for sphinx_rtd_theme */
 
 /* 24px margin */
-.nbinput.nblast,
-.nboutput.nblast {
+.nbinput.nblast.container,
+.nboutput.nblast.container {
     margin-bottom: 19px;  /* padding has already 5px */
 }
 
 /* ... except between code cells! */
-.nblast + .nbinput {
+.nblast.container + .nbinput.container {
     margin-top: -19px;
 }
 
@@ -223,9 +227,9 @@
 <div class="section" id="module-hoki.cmd">
 <span id="hoki-cmd"></span><h1><strong>hoki.cmd</strong><a class="headerlink" href="#module-hoki.cmd" title="Permalink to this headline">¶</a></h1>
 <p>This module implements the CMD infrastructure</p>
-<dl class="class">
+<dl class="py class">
 <dt id="hoki.cmd.CMD">
-<em class="property">class </em><code class="sig-prename descclassname">hoki.cmd.</code><code class="sig-name descname">CMD</code><span class="sig-paren">(</span><em class="sig-param">file, col_lim=[-3, 7], mag_lim=[-14, 10], res_el=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">hoki.cmd.</code><code class="sig-name descname">CMD</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em>, <em class="sig-param"><span class="n">col_lim</span><span class="o">=</span><span class="default_value">[- 3, 7]</span></em>, <em class="sig-param"><span class="n">mag_lim</span><span class="o">=</span><span class="default_value">[- 14, 10]</span></em>, <em class="sig-param"><span class="n">res_el</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">bpass_version</span><span class="o">=</span><span class="default_value">'v221'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Colour Magnitude Diagram Object</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -235,10 +239,12 @@
 <li><p><strong>mag_lim</strong> (<em>list of 2 integers</em><em> (</em><em>positive</em><em> or </em><em>negative</em><em>)</em><em>, </em><em>optional</em>) – Limits on the magnitude range of the CMD grid. Default is [-14,10].</p></li>
 <li><p><strong>res_el</strong> (<em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Resolution element of the CMD grid. The resolution element is the same for colour and magnitude.
 Default is 0.1.</p></li>
+<li><p><strong>bpass_version</strong> (<em>str</em><em>, </em><em>optional</em><em> (</em><em>v221</em><em> or </em><em>v222</em><em>)</em>) – The BPASS version to consider - this changes the “dummy_dictionary” that is loaded from the settings.yaml file
+Default = hoki.constants.DEFAULT_BPASS_VERSION</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.bpass_input">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">bpass_input</code><a class="headerlink" href="#hoki.cmd.CMD.self.bpass_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input file given by the <cite>file</cite> parameter</p>
@@ -249,7 +255,7 @@ Default is 0.1.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.col_range">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">col_range</code><a class="headerlink" href="#hoki.cmd.CMD.self.col_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Colour range spanned by the grid (with <cite>res_el</cite>-sized intervals)</p>
@@ -260,7 +266,7 @@ Default is 0.1.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.mag_range">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">mag_range</code><a class="headerlink" href="#hoki.cmd.CMD.self.mag_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>Magnitude range spanned by the grid (with <cite>res_el</cite>-sized intervals)</p>
@@ -271,7 +277,7 @@ Default is 0.1.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.grid">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">grid</code><a class="headerlink" href="#hoki.cmd.CMD.self.grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Colour-Magnitude grid.</p>
@@ -282,7 +288,7 @@ Default is 0.1.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.path">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">path</code><a class="headerlink" href="#hoki.cmd.CMD.self.path" title="Permalink to this definition">¶</a></dt>
 <dd><p>The absolute path to the stellar models. It is set to <cite>hoki.cconstants.MODELS_PATH</cite> which you can set to
@@ -294,7 +300,7 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.t">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">t</code><a class="headerlink" href="#hoki.cmd.CMD.self.t" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Class attribute</strong> - The time bins in BPASS - note they are in LOG SPACE</p>
@@ -305,7 +311,7 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.cmd.CMD.self.dt">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">dt</code><a class="headerlink" href="#hoki.cmd.CMD.self.dt" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Class attribute</strong> - Time intervals between bins NOT in log space</p>
@@ -316,9 +322,9 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="hoki.cmd.CMD.at_log_age">
-<code class="sig-name descname">at_log_age</code><span class="sig-paren">(</span><em class="sig-param">log_age</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.at_log_age" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">at_log_age</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_age</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.at_log_age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the HR diagrams at a specific age.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -333,9 +339,9 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="hoki.cmd.CMD.make">
-<code class="sig-name descname">make</code><span class="sig-paren">(</span><em class="sig-param">mag_filter</em>, <em class="sig-param">col_filters</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.make" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">make</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mag_filter</span></em>, <em class="sig-param"><span class="n">col_filters</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.make" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the CMD - a.k.a fill the grid</p>
 <p class="rubric">Notes</p>
 <ul class="simple">
@@ -359,9 +365,9 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="hoki.cmd.CMD.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">log_age=6.8</em>, <em class="sig-param">loc=111</em>, <em class="sig-param">cmap='Greys'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_age</span><span class="o">=</span><span class="default_value">6.8</span></em>, <em class="sig-param"><span class="n">loc</span><span class="o">=</span><span class="default_value">111</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">'Greys'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.cmd.CMD.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the CMD grid at a particular age</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -388,6 +394,33 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <h1><strong>hoki.constants</strong><a class="headerlink" href="#hoki-constants" title="Permalink to this headline">¶</a></h1>
 <p>This module just contains BPASS constants and defines variables used in hoki.</p>
 <span class="target" id="module-hoki.constants"></span><p>Just BPASS things</p>
+<dl class="py function">
+<dt id="hoki.constants.set_default_bpass_version">
+<code class="sig-prename descclassname">hoki.constants.</code><code class="sig-name descname">set_default_bpass_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.constants.set_default_bpass_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>version</strong> (<em>str</em><em>, </em><em>v221</em><em> or </em><em>v222</em>) – Version of BPASS to consider by default.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>You are going to have to reload hoki for your new default version to be taken into account.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="hoki.constants.set_models_path">
+<code class="sig-prename descclassname">hoki.constants.</code><code class="sig-name descname">set_models_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.constants.set_models_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>,</em>) – Absolute path to the top level of the stellar models this could be a directory named something like
+bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and ‘NEWSINMODS’.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>You are going to have to reload hoki for your new path to take effect.</p>
+</dd></dl>
+
 <dl class="simple">
 <dt>path_to_settings</dt><dd><p>path to the <cite>settings.yaml</cite> file located in the package resources</p>
 </dd>
@@ -406,9 +439,9 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <div class="section" id="module-hoki.hrdiagrams">
 <span id="hoki-hrdiagrams"></span><h1><strong>hoki.hrdiagrams</strong><a class="headerlink" href="#module-hoki.hrdiagrams" title="Permalink to this headline">¶</a></h1>
 <p>This module implements the HR diagram infrastructure.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="hoki.hrdiagrams.HRDiagram">
-<em class="property">class </em><code class="sig-prename descclassname">hoki.hrdiagrams.</code><code class="sig-name descname">HRDiagram</code><span class="sig-paren">(</span><em class="sig-param">high_H_input</em>, <em class="sig-param">medium_H_input</em>, <em class="sig-param">low_H_input</em>, <em class="sig-param">hr_type</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">hoki.hrdiagrams.</code><code class="sig-name descname">HRDiagram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">high_H_input</span></em>, <em class="sig-param"><span class="n">medium_H_input</span></em>, <em class="sig-param"><span class="n">low_H_input</span></em>, <em class="sig-param"><span class="n">hr_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>A class containing the HR diagram data produced by BPASS.</strong></p>
 <p>This class is called by the functions hrTL(), hrTg() and hrTTG() in hoki.load and users should
 not need to create an HRDiagram object themselves.</p>
@@ -418,25 +451,28 @@ please refer to the manual:
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p><strong>HRDiagram supports indexing.</strong> The indexed array is a 51x100x100 np.array that stacked the time weighted arrays corresponding to the 3 different abundances.</p></li>
+<li><p><strong>HRDiagram supports indexing.</strong> The indexed array is a 51x100x100 np.array that stacked the time weighted arrays</p></li>
+</ul>
+<p>corresponding to the 3 different abundances.</p>
+<ul class="simple">
 <li><p>Initialisation from a text file is done through the hoki.load functions</p></li>
 </ul>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>high_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance X &gt; 0.4.</p></li>
-<li><p><strong>medium_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance E-3 &lt; X &lt; 0.4.</p></li>
-<li><p><strong>low_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance X &lt; E-3.</p></li>
+<li><p><strong>high_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance n1 &gt; 0.4.</p></li>
+<li><p><strong>medium_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance E-3 &lt; n1 &lt; 0.4.</p></li>
+<li><p><strong>low_H_input</strong> (<em>np.ndarray with shape</em><em> (</em><em>51x100x100</em><em>)</em>) – This inputs the HR diagrams corresponding to a hydrogen abundance n1 &lt; E-3.</p></li>
 <li><p><strong>hr_type</strong> (<em>str - Valid options are 'TL'</em><em> , </em><em>'Tg'</em><em>, </em><em>'TTG'</em>) – This tells the class what type of HR diagrams are being given. For more details on what
 the 3 options mean, consult the BPASS manual section on HR diagram isocontours.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.high_H">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">high_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &gt; 0.4. Time weighted.</p>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance n1 &gt; 0.4. Time weighted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray (51x100x100)</p>
@@ -444,10 +480,10 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.medium_H">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">medium_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.medium_H" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagrams for 51 time bins with a hydrogen abundance E-3 &lt; X &lt; 0.4. Time weighted.</p>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance E-3 &lt; n1 &lt; 0.4. Time weighted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray (51x100x100)</p>
@@ -455,10 +491,10 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.low_H">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">low_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.low_H" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &lt; E-3. Time weighted.</p>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance n1 &lt; E-3. Time weighted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray (51x100x100)</p>
@@ -466,7 +502,7 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.type">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">type</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type of HR diagram: TL, Tg or TTG</p>
@@ -477,10 +513,10 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.high_H_not_weighted">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">high_H_not_weighted</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H_not_weighted" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &gt; 0.4.</p>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance n1 &gt; 0.4.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray (51x100x100)</p>
@@ -488,10 +524,10 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.medium_H_not_weighted">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">medium_H_not_weighted</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.medium_H_not_weighted" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagrams for 51 time bins with a hydrogen abundance E-3 &lt; X &lt; 0.4.</p>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance E-3 &lt; n1 &lt; 0.4.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray (51x100x100)</p>
@@ -499,10 +535,10 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.low_H_not_weighted">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">low_H_not_weighted</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.low_H_not_weighted" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagrams for 51 time bins with a hydrogen abundance X &lt; E-3.</p>
+<dd><p>HR diagrams for 51 time bins with a hydrogen abundance n1 &lt; E-3.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>np.ndarray (51x100x100)</p>
@@ -510,7 +546,7 @@ the 3 options mean, consult the BPASS manual section on HR diagram isocontours.<
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self._all_H">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">_all_H</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self._all_H" title="Permalink to this definition">¶</a></dt>
 <dd><p>HR diagrams for 51 time bins - all hydrogen abundances stacked. This attribute is private
@@ -522,10 +558,10 @@ because it can simply be called using the indexing capabilities of the class.</p
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.high_H_stacked">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">high_H_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.high_H_stacked" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagram stacked for a given age range - hydrogen abundance X &gt; 0.4. None before calling
+<dd><p>HR diagram stacked for a given age range - hydrogen abundance n1 &gt; 0.4. None before calling
 self.stack()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -534,10 +570,10 @@ self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.medium_H_stacked">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">medium_H_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.medium_H_stacked" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagram stacked for a given age range - hydrogen abundance E-3 &lt; X &lt; 0.4. None before
+<dd><p>HR diagram stacked for a given age range - hydrogen abundance E-3 &lt; n1 &lt; 0.4. None before
 calling self.stack()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -546,10 +582,10 @@ calling self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.low_H_stacked">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">low_H_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.low_H_stacked" title="Permalink to this definition">¶</a></dt>
-<dd><p>HR diagram stacked for a given age range - hydrogen abundance E-3 &gt; X. None before calling
+<dd><p>HR diagram stacked for a given age range - hydrogen abundance E-3 &gt; n1. None before calling
 self.stack()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -558,7 +594,7 @@ self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.all_stacked">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">all_stacked</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.all_stacked" title="Permalink to this definition">¶</a></dt>
 <dd><p>HR diagram stacked for a given age range - all abundances added up. None before calling
@@ -570,7 +606,7 @@ self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.t">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">t</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.t" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Class attribute</strong> - The time bins in BPASS - note they are in LOG SPACE</p>
@@ -581,7 +617,7 @@ self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="hoki.hrdiagrams.HRDiagram.self.dt">
 <code class="sig-prename descclassname">self.</code><code class="sig-name descname">dt</code><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.self.dt" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Class attribute</strong> - Time intervals between bins NOT in log space</p>
@@ -592,9 +628,9 @@ self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="hoki.hrdiagrams.HRDiagram.at_log_age">
-<code class="sig-name descname">at_log_age</code><span class="sig-paren">(</span><em class="sig-param">log_age</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.at_log_age" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">at_log_age</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_age</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.at_log_age" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the HR diagrams at a specific age.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -603,9 +639,9 @@ self.stack()</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p>[0] : Stack of all the abundances</p></li>
-<li><p>[1] : High hydrogen abundance X&gt;0.4</p></li>
-<li><p>[2] : Medium hydrogen abundance (E-3 &lt; X &lt; 0.4)</p></li>
-<li><p>[3] : Low hydrogen abundance (X &lt; E-3)</p></li>
+<li><p>[1] : High hydrogen abundance n1&gt;0.4</p></li>
+<li><p>[2] : Medium hydrogen abundance (E-3 &lt; n1 &lt; 0.4)</p></li>
+<li><p>[3] : Low hydrogen abundance (n1 &lt; E-3)</p></li>
 </ul>
 </p>
 </dd>
@@ -615,9 +651,9 @@ self.stack()</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="hoki.hrdiagrams.HRDiagram.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">log_age=None</em>, <em class="sig-param">age_range=None</em>, <em class="sig-param">abundances=(1</em>, <em class="sig-param">1</em>, <em class="sig-param">1)</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_age</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">age_range</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">abundances</span><span class="o">=</span><span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the HR Diagram - calls hoki.hrdiagrams.plot_hrdiagram()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -625,7 +661,7 @@ self.stack()</p>
 <li><p><strong>log_age</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Log(age) at which to plot the HRdiagram.</p></li>
 <li><p><strong>age_range</strong> (<em>tuple</em><em> or </em><em>list of 2 ints</em><em> or </em><em>floats</em><em>, </em><em>optional</em>) – Age range within which you want to plot the HR diagram</p></li>
 <li><p><strong>abundances</strong> (<em>tuple</em><em> or </em><em>list of 3 ints</em><em>, </em><em>zeros</em><em> or </em><em>ones</em><em>, </em><em>optional</em>) – This turns on or off the inclusion of the abundances. The corresponding abundances are:
-(X &gt; 0.4, E-3 &lt; X &lt; 0.4, E-3&gt;X). A 1 means a particular abundance should be included,
+(n1 &gt; 0.4, E-3 &lt; n1 &lt; 0.4, E-3&gt;n1). A 1 means a particular abundance should be included,
 a 0 means it will be ignored. Default is (1,1,1), meaning all abundances are plotted.
 Note that (0,0,0) is not valid and will return and assertion error.</p></li>
 <li><p><strong>**kwargs</strong> (<em>matplotlib keyword arguments</em><em>, </em><em>optional</em>) – </p></li>
@@ -645,9 +681,9 @@ You will get a warning if that happens though.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="hoki.hrdiagrams.HRDiagram.stack">
-<code class="sig-name descname">stack</code><span class="sig-paren">(</span><em class="sig-param">log_age_min=None</em>, <em class="sig-param">log_age_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.stack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">stack</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">log_age_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_age_max</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.HRDiagram.stack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a stack of HR diagrams within a range of ages</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -668,9 +704,9 @@ self.medium_H_stacked, self.low_H_stacked and self.all_stacked.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="hoki.hrdiagrams.plot_hrdiagram">
-<code class="sig-prename descclassname">hoki.hrdiagrams.</code><code class="sig-name descname">plot_hrdiagram</code><span class="sig-paren">(</span><em class="sig-param">single_hr_grid</em>, <em class="sig-param">kind='TL'</em>, <em class="sig-param">loc=111</em>, <em class="sig-param">cmap='Greys'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.plot_hrdiagram" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hoki.hrdiagrams.</code><code class="sig-name descname">plot_hrdiagram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">single_hr_grid</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'TL'</span></em>, <em class="sig-param"><span class="n">loc</span><span class="o">=</span><span class="default_value">111</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">'Greys'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.hrdiagrams.plot_hrdiagram" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots an HR diagram with a contour plot</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -704,9 +740,9 @@ levels fall).</p>
 <div class="section" id="module-hoki.load">
 <span id="hoki-load"></span><h1><strong>hoki.load</strong><a class="headerlink" href="#module-hoki.load" title="Permalink to this headline">¶</a></h1>
 <p>This module implements the tools to easily load BPASS data.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="hoki.load.model_input">
-<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_input</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_input" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads inputs from one file and put them in a dataframe</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -715,9 +751,9 @@ levels fall).</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="hoki.load.model_output">
-<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_output</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">hr_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_output" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">model_output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">hr_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.model_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a BPASS output file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -735,9 +771,9 @@ levels fall).</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="hoki.load.set_models_path">
-<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">set_models_path</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.set_models_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">set_models_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.set_models_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Changes the path to the stellar models in hoki’s settings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -749,153 +785,15 @@ bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and
 <p>You are going to have to reload hoki for your new path to take effect.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="hoki.load.unpickle">
-<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">unpickle</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.unpickle" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hoki.load.</code><code class="sig-name descname">unpickle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.load.unpickle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract pickle files</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-hoki.spec">
-<span id="hoki-spec"></span><h1><strong>hoki.spec</strong><a class="headerlink" href="#module-hoki.spec" title="Permalink to this headline">¶</a></h1>
-<p>Module to hold functions and utilities to be applied to spectra,
-especially BPASS synthetic spectra</p>
-<dl class="function">
-<dt id="hoki.spec.apply_bandpass">
-<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">apply_bandpass</code><span class="sig-paren">(</span><em class="sig-param">spectrum</em>, <em class="sig-param">bandpass</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.apply_bandpass" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies a bandpass filter to a given spectrum.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function overrides the optmized wavelength binning of pysynphot.
-Instead it uses the wavelength binning of the given spectrum.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>spectrum</strong> (<em>pysynphot.spectrum.ArraySourceSpectrum</em>) – The spectrum of a source</p></li>
-<li><p><strong>bandpass</strong> (<em>'pysynphot.spectrum.TabularSpectralElement'</em>) – <dl class="simple">
-<dt>or ‘pysynphot.spectrum.TabularSpectralElement.ObsModeBandpass’</dt><dd><p>or <cite>pysynphot.spectrum.ArraySpectralElement</cite></p>
-</dd>
-</dl>
-<p>A bandpass to apply to the spectrum</p>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The spectrum with the bandpass applied.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pysynphot.observation.Observation</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="hoki.spec.bpass_to_psp_spectrum">
-<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">bpass_to_psp_spectrum</code><span class="sig-paren">(</span><em class="sig-param">wavelength</em>, <em class="sig-param">flux</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.bpass_to_psp_spectrum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creats a pysynphot.ArraySpectrum object from a BPASS wavelength and flux.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>wavelength</strong> (<cite>numpy.array</cite> or <cite>pandas.Series</cite>) – An array or pandas series of wavelength from BPASS</p></li>
-<li><p><strong>flux</strong> (<cite>numpy.array</cite> or <cite>pandas.Series</cite>) – An array containing the flux at each wavelength in units
-Solar luminosity per Angstrom.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An pysynphot ArraySpectrum with the flux in erg/s/Anstrom.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>‘pysynphot.spectrum.ArraySourceSpectrum’</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="hoki.spec.dopcor">
-<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">dopcor</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">z</em>, <em class="sig-param">wl_col_index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.dopcor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Basis doppler correction for hoki’s dataframes</p>
-<p class="rubric">Notes</p>
-<p>The correction is applied IN PLACE.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="hoki.spec.flux_to_vegamag">
-<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">flux_to_vegamag</code><span class="sig-paren">(</span><em class="sig-param">bandpass</em>, <em class="sig-param">observation</em>, <em class="sig-param">distance=10</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.flux_to_vegamag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate a vega magnitude in vega system.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bandpass</strong> (<em>'pysynphot.spectrum.TabularSpectralElement'</em>) – <dl class="simple">
-<dt>or ‘pysynphot.spectrum.TabularSpectralElement.ObsModeBandpass’</dt><dd><p>or <cite>pysynphot.spectrum.ArraySpectralElement</cite></p>
-</dd>
-</dl>
-<p>A bandpass applied to the spectrum.</p>
-</p></li>
-<li><p><strong>observation</strong> (<em>pysynphot.observation.Observation</em>) – A spectrum with the bandpass applied to it.</p></li>
-<li><p><strong>distance</strong> (<em>float</em>) – The distance to the object in pc. Default=10</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Vega Magnitude</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="hoki.spec.import_custom_filter">
-<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">import_custom_filter</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.import_custom_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gives a filter profile class from a filter profile file containing
-a VOTable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The filename conatining a VOTable with the filter profile.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The bandpass filter from the file.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>‘pysynphot.spectrum.ArraySpectralElement’</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="hoki.spec.load_bandpass">
-<code class="sig-prename descclassname">hoki.spec.</code><code class="sig-name descname">load_bandpass</code><span class="sig-paren">(</span><em class="sig-param">string</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.spec.load_bandpass" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a bandpass filter.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><cite>load_bandpass()</cite> first checks if the filter is available in the pysynphot
-directory. If so, this filter is loaded.
-If no built-in filter is found, the function searches for a VOTable file
-at the given <cite>string</cite> parameter.</p>
-<p>If multiple throughputs are used, a <cite>ObsModeBandpass</cite> is returned.
-If a single througput is used a <cite>TabularSpectralElement</cite> is returned.
-And if a custom filter is used, a <cite>ArraySpectralElement</cite> is returned.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>string</strong> (<em>string</em>) – The name of a built-in pysynphot filter or the path to a custom filter
-file.</p></li>
-<li><p><strong>verbose</strong> (<em>boolean</em>) – Print logging output messages if True. Default=False.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><cite>pysynphot.spectrum.ArraySpectralElement</cite></p></li>
-<li><p>or <cite>pysynphot.obsbandpass.ObsModeBandpass</cite></p></li>
-<li><p>or <cite>pysynphot.spectrum.TabularSpectralElement</cite> – A bandpass object</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="hoki-spec">
+<h1><strong>hoki.spec</strong><a class="headerlink" href="#hoki-spec" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -909,11 +807,19 @@ file.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, H. F. Stevance
+        
+        &copy; Copyright 2020, H. F. Stevance
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -924,7 +830,6 @@ file.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
