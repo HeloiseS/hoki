@@ -95,6 +95,8 @@ class GridInterpolator():
         """
         Perform interpolation on this instance's grid.
 
+        Input parameters will be clipped to available range.
+
         Parameters
         ----------
         metallicities : `numpy.ndarray` (N,)
@@ -243,7 +245,8 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
     Interpolate a spectrum grid for single stellar populations (SSPs) with
     fixed IMF provided by BPASS over its metallicity-age grid. The wavelength
     range can be limited to something smaller than the BPASS default to reduce
-    memory footprint.
+    memory footprint. Provided limits beyond the available range will be
+    clipped.
 
     Parameters
     ----------
@@ -255,11 +258,13 @@ class SpectraInterpolator(GridInterpolatorMassScaled):
         Use spectra including binaries or only single stars. Defaults to
         `True`.
     lam_min : `float`, optional
-        Limit the wavelength range on which this instance will perform
-        interpolation. Defaults to `None`, using full range available.
+        Lower limit of the wavelength range on which this instance will perform
+        interpolation. Defaults to `None`, using the minimal wavelength
+        available.
     lam_max : `float`, optional
-        Limit the wavelength range on which this instance will perform
-        interpolation. Defaults to `None`, using full range available.
+        Upper limit of the wavelength range on which this instance will perform
+        interpolation. Defaults to `None`, using the maximal wavelength
+        available.
     dtype : `type`, optional
         The data type to be used by an instance of this class. Defaults to
         `numpy.float64`. Can be used to reduce memory footprint.
