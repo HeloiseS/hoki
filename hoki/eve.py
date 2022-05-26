@@ -12,7 +12,7 @@ import warnings
 # TODO: docstrings
 # TODO: unittests
 
-class EveWizard(object):
+class Eve(object):
     def  __init__(self, met, eve_path, name='NONE'):
         self.ID_TABLE = pd.read_hdf(eve_path, f'{met}/ID_TABLE')
         self.SUMMARY = pd.read_hdf(eve_path, f'{met}/SUMMARY')
