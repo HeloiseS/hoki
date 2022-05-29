@@ -14,6 +14,7 @@ from astropy.units.quantity import Quantity
 c = 299792.458
 
 # TODO: Write test DispersionFromCaIR3
+
 class DispersionFromCaIR3(object):
     """Pipeline to determine the dispersion of a stellar population from the Calcium triplet"""
       
