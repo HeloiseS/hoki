@@ -5,7 +5,6 @@ from hoki import load
 from hoki.constants import BPASS_METALLICITIES
 import matplotlib.colors as mcolors
 
-plt.style.use('hfs')
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
 from hoki.utils.hoki_object import HokiObject
 import warnings
