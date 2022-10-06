@@ -4,9 +4,8 @@ name: Dependency Testing
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  push:
-
-  pull_request:
+  -push
+  -pull_request
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -14,19 +13,17 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    
+    runs-on: ${{ matrix.os }}#ubuntu-latest
     # The matrix of python versions to run
     strategy:
         matrix:
-            python-version: ['3.6','3.7']   #If adjusted here, make sure to also adjust the bindings in tox.ini
-    name: Python ${{ matrix.python-version }}
+            os: [ubuntu-latest, windows-latest]
+            python-version: ['3.6','3.7','3.8','3.9']   #If adjusted here, make sure to also adjust the bindings in tox.ini
 
     # The steps to run for each python version
     steps:
         # Checks out the repository
         - uses: actions/checkout@v2
-          name: Checkout package
         # Setups the required python version
         - name: Setup python ${{  matrix.python-version }}
           uses: actions/setup-python@v2
