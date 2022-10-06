@@ -56,10 +56,10 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
-   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`, `numba`
+   `astropy`, `numpy`, `scipy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`, `numba`, `specutils`, `ppxf`
 
 
-**Note:** Python 2 is not supported
+Tested for python 3.7 and above. Python 2 not supported.
 
 ----
 
