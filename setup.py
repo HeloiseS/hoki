@@ -59,7 +59,7 @@ try:
 except Exception:
     version = '{version}'
 """.lstrip()
-setup(version='1.7.0')
+setup(version='1.7.1')
 #setup(use_scm_version={'write_to': os.path.join('hoki', 'version.py'),
 #                       'write_to_template': VERSION_TEMPLATE})
       #,ext_modules=get_extensions())
