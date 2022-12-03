@@ -10,23 +10,6 @@ from hoki.constants import BPASS_METALLICITIES, BPASS_NUM_METALLICITIES
 from hoki.utils.hoki_object import HokiObject
 from hoki.utils.hoki_dialogue import dialogue
 
-### Logging Set up
-import logging
-from logging.handlers import TimedRotatingFileHandler
-import os
-
-FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(message)s",  
-                              datefmt='%d/%m/%Y %I:%M:%S %p')
-LOG_FOLDER=os.getcwd()
-LOG_FILE = "/.science.log" # wthat makes sense but maybe i'll change my mind some day
-logger = logging.getLogger(__name__) # good practice, or so the internet told me
-logger.setLevel(logging.INFO)
-handler = TimedRotatingFileHandler(LOG_FOLDER+LOG_FILE, when="W0", interval=1)
-handler.suffix = "%Y%m%d"
-handler.setFormatter(FORMATTER)
-logger.addHandler(handler)
-
-
 class LordCommander(HokiObject):
     """
     LordCommander is a pipeline to run the ppxf fits on a whole array of spectra (e.g. galaxy)
@@ -80,8 +63,6 @@ class LordCommander(HokiObject):
         kvn: finalspace.KVN.kvn
             KVN object - templates already made!
         """
-        logger.info(f'\n----------- LORD COMMANDER SET UP ------------')
-        
         self.wl_obs = wl_obs
         self.norm_fluxes = norm_fluxes
         self.norm_noises = norm_noises
@@ -145,16 +126,7 @@ class LordCommander(HokiObject):
         """
         i = 0
         eb_v=[]
-        
-        logger.info(f'FITTING PARAMETERS')
-        logger.info(f'start={start}')
-        logger.info(f'moments={moments}')
-        logger.info(f'degree={degree}')
-        logger.info(f'vsyst={vsyst}')
-        logger.info(f'clean={clean}')
-        logger.info(f'reddening={reddening}')
-        
-        logger.info(f'Fitting LOOP STARTS')
+
         for norm_flux, norm_noise in tqdm(zip(self.norm_fluxes, self.norm_noises)):
             # find velscale and log rebin
             flux, loglamgalaxy, velscale = util.log_rebin([self.wl_obs[0], self.wl_obs[-1]], norm_flux)
@@ -208,8 +180,6 @@ class LordCommander(HokiObject):
                                                                         columns=self.wl_fits))
                 self.bin_id_mpoly += [i]  # there is only every one polynomial
             i += 1
-
-        logger.info(f'Fitting LOOP ENDS -- no errors')
         
         # Chi squared table
         self.CHI2 = pd.DataFrame(np.array(self.chi2_ls), columns=['chi2'])
@@ -338,5 +308,3 @@ class LordCommander(HokiObject):
         file[f'{folder}'].attrs['CHI2'] = 'Table of the Chi squared values for each of the BESTFIT spectra calc by ppxf'
         
         file[f'{folder}'].attrs['REDDENING'] = 'The reddening fit by ppxf if I asked it to do it'
-        
-        logger.info(f'Results recorded under: {filepath}/{folder}')

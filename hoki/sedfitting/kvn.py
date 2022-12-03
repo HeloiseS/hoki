@@ -45,7 +45,7 @@ kvn_header=" \n"+ \
 "    \  \:\       \__\::::/     \  \:\    \n"+ \
 "     \__\/           ~~~~       \__\/  v2.1  \n"
 
-
+kvn_header="~~ KVN ~~ \n"
 #### TESTS TO DO ########
 # TODO: kvn with full time res
 # TODO: kvn with half time res
@@ -54,9 +54,49 @@ kvn_header=" \n"+ \
 # TODO: need to test that the spectra in the ppxf matrix from teh matching indices are consistent with BPASS spectra of matchign indices
 # see `tracing_bug_in_kvn_make_results.ipynb`
 
+
 class KVN(HokiObject):
     """
     Kevin - my pPXF helper
+
+    Attributes
+    ----------
+    model_path : str
+        Path to the BPASS model outputs where the BPASS SED files are located
+    bpass_list_spectra: [str]
+        List of BPASS SED file paths
+    z_list : [str]
+        List of metallicities to include in the templates (BPASS string names)
+    num_z_list : [float]
+        List of metallicities to include in the templates (numerical)
+    wl_obs : 1D array, optional
+        (Linear) Wavelength array of the observational data. If given, don't need log_wl_obs
+    log_wl_obs : 1D array, optional
+        (Natural Logarithm) Wavelength array of the observational data. If given, don't need wl_obs
+    wl_range_tem : np.array
+        Minimum and Maximum wavelength in the template SEDs. Padding is applied to these boundaries.
+    wl_tem : 1D np.array
+        (Linear) Wavelength array of the template SEDs.
+    fwhm_tem : float
+        Resolution element of the templates (it's 1 A in BPASS v2.2.1 unless you're doing something fancy).
+        It's not technically a FWHM but it's the theoretical equivalent to the resolution element calculated
+        for the galaxy at some point in this code so I named it that for visual consistency.
+    velscale_obs : float
+        Velocity scale of the observed spectrum
+    fwhm_obs : float
+        Resolution element of the observed spectrum calculated from dispersion_obs
+    fwhm_dif : float
+        Difference in the resolution element of the observation and templates (subtracted in quadrature)
+    sigma : float
+        fwhm_dif/2.355/fwhm_tem
+    log_age_cols : [float]
+        list of log ages to use from BPASS SEDs
+    templates :
+
+
+    Methods
+    -------
+
     """
 
     # TODO: remove? this is a legacy of a test function that i didn't implement in the end - i just rebinned the files
@@ -78,11 +118,22 @@ class KVN(HokiObject):
         new_spec_df = pd.concat([pd.DataFrame(WL, columns=['WL']), new_spec_df], axis=1)
         new_spec_df.to_csv(filename[-31:], sep=' ', index=False)
 
-    def make_templates(self, path_bpass_spectra,
-                       wl_obs=None, log_wl_obs=None,  fwhm_obs=None, dispersion_obs=None, wl_range_obs=None,
-                       wl_range_padding=[-1,1], velscale_obs=None,
-                       binary=True, single=False, z_list=None, oversample=1,
-                       log_age_cols=None, _max_age=10.2, verbose=True
+    def make_templates(self,
+                       path_bpass_spectra,
+                       wl_obs=None,
+                       log_wl_obs=None,
+                       fwhm_obs=None,
+                       dispersion_obs=None,
+                       wl_range_obs=None,
+                       wl_range_padding=[-1,1],
+                       velscale_obs=None,
+                       binary=True,
+                       single=False,
+                       z_list=None,
+                       oversample=1,
+                       log_age_cols=None,
+                       _max_age=10.2,
+                       verbose=True
                       ):
         """
         Makes the templates
@@ -100,7 +151,7 @@ class KVN(HokiObject):
         dispersion_obs : 1D array, optional
             Dispersion array. Same size ase wl_obs of log_wl_obs. Applies when the dispersion is wavelength dependent.
         wl_range_obs : [min, max], optional
-            Wavelength range of the observations, optional # TODO: does this need to be in or can it just be calculated?
+            Wavelength range of the observations, optional
         wl_range_padding : [-X,Y], optional
             Padding given to the templates on creation. The template wl range will be [wl_range_obs-X, wl_range_obs+Y].
             Default is [-1,1]
@@ -241,7 +292,7 @@ class KVN(HokiObject):
                                                                             self._ssp60, oversample=oversample,
                                                                             # introduced a severe bug where the
                                                                             # templates wouldn't have the right
-                                                                            # size fore the observations
+                                                                            # size for the observations
                                                                             #
                                                                             velscale=self.velscale_obs#/self.velscale_ratio
                                                                             )
@@ -336,6 +387,7 @@ class KVN(HokiObject):
 
             self.wl_tem = np.exp(self.log_wl_tem)
 
+        # TODO: refactor
         ## Some details about the code below (Oct 20th 2021)
         # I realised the order in which the template_properties was recording thing
         # was scrambled compared to ppxf (which isn't obvious from the manual tbf!)
