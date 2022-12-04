@@ -1,8 +1,7 @@
 """
 KVN helper class
 ----------------
-
-author: H. F. Stevance
+Author: H. F. Stevance
 e-mail: hfstevance@gmail.com
 
 /!\ IS BEING DEPRECATED AND REPLACED BY PPXF WIZARD /!\

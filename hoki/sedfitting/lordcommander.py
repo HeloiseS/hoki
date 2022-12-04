@@ -6,9 +6,8 @@ from tqdm import tqdm
 from ppxf.ppxf import ppxf
 import ppxf.ppxf_util as util
 
-from hoki.constants import BPASS_METALLICITIES, BPASS_NUM_METALLICITIES
 from hoki.utils.hoki_object import HokiObject
-from hoki.utils.hoki_dialogue import dialogue
+
 
 class LordCommander(HokiObject):
     """

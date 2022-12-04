@@ -1,13 +1,22 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from hoki import load
-from hoki.constants import BPASS_METALLICITIES
-import matplotlib.colors as mcolors
+"""
+hoki.eve
+--------
+Author: H.F.Stevance
+email: hfstevance@gmail.com
 
+Description
+-----------
+Implements the `Eve` class to be used with EvE.hdf5(alpha) that can be downloaded on Zenodo
+https://zenodo.org/record/7341382#.Y4y9cNLMLLo
+**NOTE** You can just download the `EvE.hdf5` file - the code that is published with it just for record keeping
+as that is the Fortran and python code I used to create the database. If there are issues in the database
+and feel like going through the code to look for bugs.
+
+"""
+
+import pandas as pd
+from hoki.constants import BPASS_METALLICITIES
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError
-from hoki.utils.hoki_object import HokiObject
-import warnings
 from os.path import exists
 
 
@@ -29,14 +38,14 @@ class Eve(object):
         -------
         To instantiate an Eve object:
         >>> eve = Eve(met='z020', eve_path='../../EvE/EvE.hdf5', name='test')
-        To check the schema you can just return the variable were your object is stored
+        To check the schema you can just return the variable where your object is stored
         >>> eve
         <class 'hoki.eve.Eve'>
         METALICITY: z020 
         
         PROJECT NAME:	NONE
         
-        --------- SCHEMA -------
+        --------- TABLES -------
         
         ID_TABLE
         ['filenames']
@@ -67,21 +76,20 @@ class Eve(object):
          'modelimf' 'mixedimf' 'V-I' 'U' 'B' 'V' 'R' 'I' 'J']
     
         """
-        # Need to check the user has given us a valid metallicity
-        if met not in BPASS_METALLICITIES:
+
+        if met not in BPASS_METALLICITIES:                              # Checks user has given us a valid metallicity
             raise HokiFatalError(f'met must be in BPASS_METALLICITIES: {BPASS_METALLICITIES}')
 
-        # Now make sure the path to EvE is correct
-        if exists(eve_path) is False:
+        if exists(eve_path) is False:                                   # Ensures path to EvE is correct
             raise HokiFatalError(f'Path {eve_path} does not exist')
        
-        self.ID_TABLE = pd.read_hdf(eve_path, f'{met}/ID_TABLE')
-        self.SUMMARY = pd.read_hdf(eve_path, f'{met}/SUMMARY')
+        self.ID_TABLE = pd.read_hdf(eve_path, f'{met}/ID_TABLE')        # Loading each table for a given metallicity
+        self.SUMMARY = pd.read_hdf(eve_path, f'{met}/SUMMARY')          # set by the user as `met`
         self.CEE = pd.read_hdf(eve_path, f'{met}/CEE')
         self.MT = pd.read_hdf(eve_path, f'{met}/MT')
         self.DEATH = pd.read_hdf(eve_path, f'{met}/DEATH')
         self.met = met
-        self.name=name
+        self.name = name
         
     def __repr__(self):
         obj_type=f'{type(self)}\n'
