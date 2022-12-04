@@ -565,11 +565,35 @@ class KVN(HokiObject):
                                     columns=['met', 'age', 'weights'])
 
     def save(self, path):
+        """
+        Save the current KVN object to a pickle file
+
+        Parameters
+        ----------
+        path : str
+            location to save the pickle file. Suggested extension .pkl (not automatically added)
+
+        Returns
+        -------
+        None
+        """
         f = open(path, 'wb')
         pickle.dump(self.__dict__, f, 2)
         f.close()
 
     def load(self, path):
+        """
+        Loads a pickled KVN object
+
+        Parameters
+        ----------
+        path : str
+            location of the pickle file to load in.
+
+        Returns
+        -------
+        None
+        """
         f = open(path, 'rb')
         tmp_dict = pickle.load(f)
         f.close()
