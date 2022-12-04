@@ -10,6 +10,10 @@ class TestEve(object):
     def test_bad_met(self):
         with pytest.raises(HokiFatalError) as e_info:
             eve =  Eve(met='010', eve_path='../../../EvE/EvE.hdf5')
+            # THIS TEST ONLY "WORKS" BECAUSE METALLICITY CHECK DONE FIRST
+            # BUT IT THAT IS CHANGED IN THE FUTURE IT WILL EQUALLY FALL APART
+            # IF THE PATH IS INCORRECT.
+
     def test_bad_path(self):
         with pytest.raises(HokiFatalError) as e_info:
             eve = Eve(met='z010', eve_path='sadjkfh')

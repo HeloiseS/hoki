@@ -13,6 +13,7 @@ from hoki.constants import *
 from .kvn import KVN
 from .lordcommander import LordCommander
 from matplotlib import pyplot as plt
+import numpy as np
 
 __minimum_python_version__ = "3.6"
 
@@ -69,17 +70,34 @@ def plot_voronoi(x, y, counts, pixelsize, ax, cmap='hot', origin=None, **kwargs)
 
     Parameters
     ----------
-    x:
-    y:
-    counts:
-    pixelsize:
-    ax:
-    cmap:
-    origin:
+    x : 1D np.array
+        x coordinates of each pixel
+    y : 1D np.array (same length as x)
+        y copordinates of each pixel
+    counts : 1D np.array (same length as x & y)
+        Whatever you are plotting for each voronoi bin: count of SNR, flux, etc..
+    pixelsize : int
+        Use whatever pixel size you used with the vorbin function.
+    ax : matplotlib.axes._subplots.AxesSubplot
+        Axes plot the voronoi bins on
+    cmap : str, optional
+        Your (valid) matplotlib colour map of choice. Default is 'hot'.
+    origin : str, optional
+        The imshow origin parameter. Default is None.
+        **CAN IGNORE** - In truth this was mostly a testing variable
+        when I was trying to figure out why my image wasn't coming out right and trying to rotate
+        it and change the origin until I realised a rotation of 90 degree and x, y flip from the ppxf
+        vorbin results was the solution.
 
     Returns
     -------
+    matplotlib.image.AxesImage object to use for the colour bar
 
+    Examples
+    --------
+    >>> fig, ax = plt.subplots(1,1)
+    >>> sn_color = plot_voronoi(x,y, sn[binNum], pixelsize=1, ax=ax, cmap='rainbow')
+    >>> fig.colorbar(sn_color)
     """
 
     # Bounds of the image
@@ -100,6 +118,7 @@ def plot_voronoi(x, y, counts, pixelsize, ax, cmap='hot', origin=None, **kwargs)
     # fills the image with the "counts"
     img[j, k] = counts
 
+    # TODO: remove the origin thingy it's not used anymore
     # plots the image and returns the mappable needed to make a colour bar if desired
     if origin is not None:
         for_color_bar = ax.imshow(np.rot90(img), interpolation='nearest', cmap=cmap,
@@ -119,12 +138,3 @@ class UnsupportedPythonError(Exception):
 if LooseVersion(sys.version) < LooseVersion(__minimum_python_version__):
     raise UnsupportedPythonError("hoki does not support Python < {}"
                                  .format(__minimum_python_version__))
-
-#if not _ASTROPY_SETUP_:   # noqa
-    # For egg_info test builds to pass, put package imports here.
-    #from .example_mod import *   # noqa
-    # Then you can be explicit to control what ends up in the namespace,
-    #__all__ += ['do_primes']   # noqa
-    #__all__ += ['module_input', 'module_output']
-    # or you can keep everything from the subpackage with the following instead
-    # __all__ += example_mod.__all__

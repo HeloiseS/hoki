@@ -12,7 +12,7 @@ import sys
 from distutils.version import LooseVersion
 from hoki.constants import *
 
-__minimum_python_version__ = "3.6"
+__minimum_python_version__ = "3.7"
 
 __all__ = []
 
@@ -25,11 +25,3 @@ if LooseVersion(sys.version) < LooseVersion(__minimum_python_version__):
     raise UnsupportedPythonError("hoki does not support Python < {}"
                                  .format(__minimum_python_version__))
 
-#if not _ASTROPY_SETUP_:   # noqa
-    # For egg_info test builds to pass, put package imports here.
-    #from .example_mod import *   # noqa
-    # Then you can be explicit to control what ends up in the namespace,
-    #__all__ += ['do_primes']   # noqa
-    #__all__ += ['module_input', 'module_output']
-    # or you can keep everything from the subpackage with the following instead
-    # __all__ += example_mod.__all__
