@@ -1,24 +1,3 @@
-"""
-KVN helper class
-----------------
-
-author: H. F. Stevance
-e-mail: hfstevance@gmail.com
-
-/!\ IS BEING DEPRECATED AND REPLACED BY PPXF WIZARD /!\
-
-This needs to stay in hoki.sedfitting because it is what I used for the Nature Astro paper
-Stevance et al. 2023 and if I accidentally introduce (or fix) a bug during the refactor the results
-will no longer be reproducable.
-
-Some minor changes were made on this code upon release of hoki v1.7 (December 2022)
-- KVN.template_properties replaced by KVN.template_properties_BROKEN
-- KVN.template_properties_ppxf_order replaced by KVN.template_properties
-- KVN header removed from verbose mode altogether. Still defined for posterity and nostalgia.
-
-"""
-
-
 # classic python
 import glob
 import matplotlib.pyplot as plt
@@ -29,10 +8,7 @@ import pickle
 from scipy import ndimage
 
 # Other astro packages
-from astropy.io import fits
 from ppxf import ppxf_util
-from ppxf.ppxf import ppxf, losvd_rfft, rebin
-import ppxf as ppxf_package
 
 # My packages
 from hoki import load
@@ -44,28 +20,18 @@ from hoki.utils.progressbar import print_progress_bar
 
 plt.style.use('hfs')
 
-####  Some useful definitions
-
 __all__ = ['KVN']
 
+# TODO: isn't the thing below already in hoki constants?
 met_to_num={'zem5':1e-5,  'zem4':1e-4, 'z001':1e-3, 'z002':2e-3,'z003':3e-3,'z004':4e-3,'z006':6e-3,'z008':8e-3,
             'z010':1e-2,'z014':1.4e-2,'z020':2e-2,'z030':3e-2, 'z040':4e-2}
 
 c = 299792.458
 
-kvn_header=" \n"+ \
-"      ___                        ___     \n"+ \
-"     /__/|          ___         /__/\    \n"+ \
-"    |  |:|         /__/\        \  \:\   \n"+ \
-"    |  |:|         \  \:\        \  \:\  \n"+ \
-"  __|  |:|          \  \:\   _____\__\:\ \n"+ \
-" /__/\_|:|____  ___  \__\:\ /__/::::::::\ \n"+ \
-" \  \:\/:::::/ /__/\ |  |:| \  \:\~~\~~\/\n"+ \
-"  \  \::/~~~~  \  \:\|  |:|  \  \:\  ~~~ \n"+ \
-"   \  \:\       \  \:\__|:|   \  \:\     \n"+ \
-"    \  \:\       \__\::::/     \  \:\    \n"+ \
-"     \__\/           ~~~~       \__\/  v2.1  \n"
 
+# TODO: run the jupyter notebooks with this and see if it works
+# TODO: comment the shit out of this.
+# TODO: add a warning in KVN that it is being replaced with ppxfwizard
 
 #### TESTS TO DO ########
 # TODO: kvn with full time res
@@ -76,9 +42,9 @@ kvn_header=" \n"+ \
 # see `tracing_bug_in_kvn_make_results.ipynb`
 
 
-class KVN(HokiObject):
+class PpxfWizard(HokiObject):
     """
-    Kevin - my pPXF helper
+    PpxfWizard - my pPXF helper
 
     Attributes
     ----------
@@ -112,118 +78,14 @@ class KVN(HokiObject):
         fwhm_dif/2.355/fwhm_tem
     log_age_cols : [float]
         list of log ages to use from BPASS SEDs
-    templates : 3D np.array
-        Template SEDs. The dimensions are [wavelength, age, metallicity]
-    _template_properties_BROKEN : 2D np.array
-        THIS IS THE ONE THAT IS DEPRECATED.
-    template_properties : 2D np.array
-        Records the weights from ppxf (MAYBE SHOULDN'T BE CALLED PROPERTIES). Is the fixed version of template_properties
-        after I realised that it was in the wrong order compared to ppxf (see BUG FIX note in code).
-    ppxf : ppxf.ppxf.ppxf
-        The ppxf object returned from fitting with PPXF. It contains a whole load of information that is worth
-        saving. See the ppxf manual for more detail.
-    matching_indices : 1D np.array
-        Indices in template_properties corresponding to the sepctra in `matching_raw_spectra`, `matching_spectra`
-    matching_raw_spectra : 2D np.array
-        The 'raw' templates as calculated by KVN during `make_templates` that are used in SED fit. Shape: [N spectra,WL]
-    matching_spectra : 2D np.array
-        The same matching templates as in `matching_raw_spectra` with the kinematic information added in
-        (recession velocity and dispersion).
-    matching_apolynomial : 1D np.array
-        Additive polynomial fitted by ppxf (if you asked for it, otherwise None)
-    matching_mpolynomial : 1D np.array
-        Multiplicative polynomial fitted by ppxf (if you asked for it otherwise None).
-    results : pandas.DataFrame
+    templates :
+
 
     Methods
     -------
-    make_templates : None
-        Returns none but creates `templates`, `template_properties` (and above)
-    make_results : None
-        Returns none but creates `results`, `matching_indices`, `matching_raw_spectra`, `matching_spectra`,
-        `matching_mpolynomial`, `matching_mpolynomial`, `ppxf`
-    save : None
-        Creates a pickle file of the KVN object
-    load : None
-        Loads in a pickle file of a previously created KVN object
 
-    Example
-    -------
-    Below is a very quick 'cheat sheet' of the steps to take to create and fit with KVN
-
-    # Create the templates
-    >>> recessional_vel = z*c # z is the redshift and c the speed of light
-    >>> WL = (WL - WL*z)
-    >>> flux, wl_log_bin, velscale = ppxf.ppxf_util.log_rebin([WL[0], WL[-1]], F)
-    >>> wl_fits = np.exp(wl_log_bin)
-    >>> kvn=hsed.KVN()
-    >>> kvn.make_templates(BPASS_MODEL_PATH,
-                           fwhm_obs=1.25, # delta lambda or resolution element observations
-                           wl_obs=WL, # Wavelength bins of the observations (not log rebinned)
-                           wl_range_obs=[WL[0], WL[-1]], # wavelength range of the observations
-                           velscale_obs=velscale,
-                           wl_range_padding=[-50,50], # number of extra Angstroms befrore and after the range
-                           z_list=['z010','z020','z030'],
-                           verbose=True,
-                           )
-
-    # fit with ppxf
-    >>> start = [0, 180]
-    >>> goodpixels = np.argwhere((flux < FLUXMAX) & (flux > FLUXMIN) # Flux condition
-                                 & ((WL < WLMIN) | (WL > WLMAX)) # Wavelength condition
-                                 ).T[0] # Make it a 1D horizontal vector
-    >>> dv = c*np.log(kvn.wl_tem[0]/kvn.wl_obs[0])
-    >>> ppxf_object  = ppxf.ppxf.ppxf(kvn.templates,           # these are the BPASS SED templates
-                                      flux,                    # observed flux vector
-                                      noise,                   # the standard deviation vector
-                                      velscale,                # the velocity scale calculated by the log rebin ppxf utility
-                                      start,                   # the start guesses for recession vel and dispersion
-                                      goodpixels=goodpixels,   # our goodpixels
-                                      plot=False,              # I set this to false because I made my own in hoki.sedfitting
-                                      moments=4,               # order of the Gauss-Hermit moment to fit (see above)
-                                      degree=2,                # order of the polynomial to fit on top of the SED mixture
-                                      vsyst=dv,                # see above
-                                      clean=False,             # whether to perform sigma clipping and itterative fitting
-                                      lam=WL                   # the observed wavelength vector
-                                     )
-
-    >>> res = hoki.sedfitting.ppxf_plot_fixed(ppxf_object, wl_fits=wl_fits, WL=WL, F=F)
-    >>> kvn.make_results(ppxf_boject)
-    >>> kvn.results
-
-    Notes
-    -----
-    It's important to know which wavelength scale to use to plot which spectra - below a summary table.
-
-    |    WL scale   |       Plotted spectra      |
-    | ------------- | -------------------------- |
-    |  `kvn.wl_tem` | `kvn.matching_raw_spectra` |
-    |    `wl_fits`  | `kvn.matching_spectra`     |
-    |    `wl_fits`  | `kvn.matching_apolynomial` |
-    |    `wl_fits`  | `kvn.matching_mpolynomial` |
     """
-
-    # TODO: remove? this is a legacy of a test function that i didn't implement in the end - i just rebinned the files
-    def halve_time_res_spectra(self, filename):
-        spec = load.model_output(filename)
-        WL = spec.WL
-        spectra = spec.drop(['WL'], axis=1)
-        # step 1
-        spectra_weighted = spectra.multiply(BPASS_TIME_INTERVALS, axis=1)
-        # step 2
-        summed_spectra = spectra_weighted.values[:, :-1:2] + spectra_weighted.values[:, 1::2]
-        # step 3
-        # calculating Delta t_j
-        new_bins_weights = BPASS_TIME_INTERVALS[:-1:2] + BPASS_TIME_INTERVALS[1::2]
-        # weighting
-        new_spectra = summed_spectra / new_bins_weights
-        # making a data frame
-        new_spec_df = pd.DataFrame(new_spectra, columns=np.round(BPASS_TIME_BINS[:-1:2], 2).astype('str'))
-        new_spec_df = pd.concat([pd.DataFrame(WL, columns=['WL']), new_spec_df], axis=1)
-        new_spec_df.to_csv(filename[-31:], sep=' ', index=False)
-
-    def make_templates(self, # In the refactor this should be split into several functions
-                       path_bpass_spectra,
+    def make_templates(self, path_bpass_spectra,
                        wl_obs=None,
                        log_wl_obs=None,
                        fwhm_obs=None,
@@ -287,7 +149,6 @@ class KVN(HokiObject):
         assert os.path.exists(path_bpass_spectra), "HOKI ERROR: The path to the BPASS spectra is incorrect."
 
         self.model_path = path_bpass_spectra
-
         self.log_age_cols = log_age_cols
 
         # Making list of relevant spectra files
@@ -437,7 +298,8 @@ class KVN(HokiObject):
             # it takes the columns of a bpass spectra dataframe, converts the first col is WL, not an age
             self.log_age_cols = np.round(_ssp.columns.to_numpy()[1:self._max_age_index].astype(float),2)
 
-        self._template_properties_BROKEN =  np.zeros((l, 2)) # has shape Num_met*Num_ages x 2
+
+        self.template_properties =  np.zeros((l, 2)) # has shape Num_met*Num_ages x 2
 
         if verbose: print(f"{dialogue.running()} Compiling your templates")
 
@@ -466,7 +328,6 @@ class KVN(HokiObject):
                     ssp_jk = ppxf_util.gaussian_filter1d(ssp_jk, self.sigma)
                     # not the scipy convolution because it can't do variable sigma
 
-
                 # logarithm binning
                 sspNew, self.log_wl_tem, __ = ppxf_util.log_rebin(self.wl_range_tem,
                                                      ssp_jk,
@@ -480,7 +341,7 @@ class KVN(HokiObject):
                 # sspNew = ssp_jk
                 # add to the template array
                 self.templates[:, j, k] = sspNew/np.median(sspNew) # the templates are normalised
-                self._template_properties_BROKEN[i, :] = [met, float(col)]
+                self.template_properties[i, :] = [met, float(col)]
                 i+=1
 
                 print_progress_bar(i, l, prefix = 'Progress:', suffix = 'Complete', length = 50)
@@ -497,12 +358,12 @@ class KVN(HokiObject):
         # and my order is: [[age1 met1], [age2 met1, [age3 met1], [age1 met2], etc...]
         # i am not deleting the _template_properties_BROKEN attribute cuz i'm tired and i don't
         # want to accidentally break something - instead i'm adding a new attribute that recreates ppxf order form mine
-        self.template_properties = []
-        for a in np.unique(self._template_properties_BROKEN[:, 1]):
-            for z in np.unique(self._template_properties_BROKEN[:, 0]):
-                self.template_properties.append([z, a])
+        self.template_properties_ppxf_order = []
+        for a in np.unique(self.template_properties[:, 1]):
+            for z in np.unique(self.template_properties[:, 0]):
+                self.template_properties_ppxf_order.append([z, a])
 
-        self.template_properties = np.array(self.template_properties)
+        self.template_properties_ppxf_order = np.array(self.template_properties_ppxf_order)
         ####  BUG FIX END oct 20 2021 ###
 
         if verbose: print(f"{dialogue.complete()} Templates compiled successfully")
@@ -550,8 +411,8 @@ class KVN(HokiObject):
         """
 
         for INDEX in self.match_indices:
-            i_met = int(np.argwhere(self.num_z_list == self.template_properties[INDEX][0]))
-            i_age = int(np.argwhere(np.isclose(self.log_age_cols, self.template_properties[INDEX][1])))
+            i_met = int(np.argwhere(self.num_z_list == self.template_properties_ppxf_order[INDEX][0]))
+            i_age = int(np.argwhere(np.isclose(self.log_age_cols, self.template_properties_ppxf_order[INDEX][1])))
             self.matching_raw_spectra.append(self.templates[:, i_age, i_met]) # wtf
 
         self.matching_raw_spectra = np.array(self.matching_raw_spectra)
@@ -561,7 +422,7 @@ class KVN(HokiObject):
 
         # compiling summary of the results
         # TODO: ADD LIGHTFRACTION - am tired of calculating it lol
-        self.results = pd.DataFrame(np.vstack((self.template_properties[self.match_indices].T, weights.T)).T,
+        self.results = pd.DataFrame(np.vstack((self.template_properties_ppxf_order[self.match_indices].T, weights.T)).T,
                                     columns=['met', 'age', 'weights'])
 
     def save(self, path):
