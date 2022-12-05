@@ -139,7 +139,7 @@ class LordCommander(HokiObject):
             # RUN PPXF ##
             pp = ppxf(self.kvn.templates, flux, norm_noise, velscale, start, goodpixels=goodpixels,
                       plot=False, moments=moments, degree=degree, vsyst=vsyst, clean=clean,
-                      lam=self.wl_obs, quiet=True, reddening = reddening)
+                      lam=self.wl_obs, quiet=True, reddening=reddening)
             
             # reddening if true
             if reddening is not None:
