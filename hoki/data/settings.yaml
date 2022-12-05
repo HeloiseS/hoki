@@ -205,5 +205,5 @@ dummy_dicts:
     u2: 90
     z: 65
     z2: 94
-models_path: ../../BPASS_hoki_dev/bpass-v2.2-newmodels/
+models_path: /home/fste075/BPASS_hoki_dev/bpass-v2.2-newmodels/
 outputs_path: /home/fste075/BPASS_hoki_dev/bpass_v2.2.1_imf135_300/

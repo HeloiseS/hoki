@@ -303,7 +303,7 @@ def normalise_1d(distribution, crop_the_future=False):
 
 
 def _crop_the_future(distribution):
-    # Anything about 10.1 is the future -  time bin 42 and above must have proba == 0
+    # Anything about 10.1 is the future -  time bin 42 and above must have proba_bool == 0
     array_that_erases_the_future = np.array([1] * 42 + [0] * 9)
     return np.array(distribution) * array_that_erases_the_future
 
@@ -377,7 +377,7 @@ def calculate_distributions(obs_df, model):
         # Here we fill our not-yet-nromalised distribution
         distrib_i = []
         for model_i in model:
-            # For each time step i, we retrieve the proba in CMD_i or HRD_i and fill our distribution element distrib_i
+            # For each time step i, we retrieve the proba_bool in CMD_i or HRD_i and fill our distribution element distrib_i
             # with it. At the end of the for loop we have iterated over all 51 time bins
             distrib_i.append(model_i[xi, yi])
 
@@ -439,7 +439,7 @@ def calculate_distributions_normalised(obs_df, model):
         # Here we fill our not-yet-nromalised distribution
         distrib_i = []
         for model_i in model:
-            # For each time step i, we retrieve the proba in CMD_i or HRD_i and fill our distribution element distrib_i
+            # For each time step i, we retrieve the proba_bool in CMD_i or HRD_i and fill our distribution element distrib_i
             # with it. At the end of the for loop we have iterated over all 51 time bins
             distrib_i.append(model_i[xi, yi])
 

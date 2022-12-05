@@ -1,6 +1,5 @@
 .. image:: black_text.png
     :height: 35px
-
    
 .. image:: https://img.shields.io/pypi/v/hoki?style=flat-square   
     :alt: PyPI
@@ -16,10 +15,9 @@
 Bridging the Gap Between Observation and Theory
 =================================================
 
-
 In order to facilitate the application of **BPASS** to a wide range of scientific investigations, we have developped the tools necessary for observers to take full advantage of our models in an intuitive manner. 
 
-Hoki isn't only versatile, it also takes care of the nitty gritty pre-processing!
+Hoki is not only versatile, it also takes care of the nitty gritty pre-processing!
 
 **Spend less time on coding and more time on the science!**
 
@@ -58,10 +56,10 @@ This way it'll show you each test as they pass or FAIL. In the pip and github ve
 
 .. code-block:: none
 
-   `astropy`, `numpy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`, `numba`
+   `astropy`, `numpy`, `scipy`, `pandas`, `matplotlib`, `pyyaml`, `wheel`, `emcee`, `corner`, `numba`, `specutils`, `ppxf`
 
 
-**Note:** Python 2 is not supported
+Tested for python 3.7 and above. Python 2 not supported.
 
 ----
 
