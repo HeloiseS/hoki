@@ -15,12 +15,9 @@ from .lordcommander import LordCommander
 from matplotlib import pyplot as plt
 import numpy as np
 
-__minimum_python_version__ = "3.6"
-
 __all__ = ['KVN','LordCommander', 'plot_voronoi', 'ppxf_plot_fixed', 'ppxf_manual']
 __author__ = """Heloise F Stevance"""
-__email__ = 'hfstevance@gmail.com'
-__version__ = '0.1.0'
+
 
 
 def ppxf_manual():
