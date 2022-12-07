@@ -1,16 +1,67 @@
 """
-Just BPASS things
+BPASS and hoki constants
+------------------------
+
+
+Functions
+---------
+
+set_outputs_path(path) :
+    Changes the defaullt path to the BPASS outputs in hoki's settings.yaml
+set_default_bpass_version(version):
+    Changes the path to the stellar models in hoki's settings.yaml
+
+
+Variables
+---------
+
+MODELS_PATH : str
+    Absolute local path to the BPASS stellar library set by the `models_path` string in data/settings.yaml
+BPASS_TIME_BINS : 1D np.array
+    Center of the log10 age (years) BPASS time grid bins
+BPASS_TIME_INTERVALS : 1D np.array
+    Edges of the log10 age (years) BPASS time grid bins
+BPASS_TIME_WEIGHT_GRID : 2D np.array (100x100)
+    2D grid to contain the age (time) weights for the HRDiagrams grids
+BPASS_LINEAR_TIME_EDGES : 1D np.array
+    Edges of the BPASS age grid bins transformed to linear space
+BPASS_LINEAR_TIME_INTERVALS : 1D np.array
+    Center of the BPASS age grid bins in linear space
+BPASS_METALLICITIES : list[str]
+    Valid BPASS metallicity strings in ascending metallicity order.
+BPASS_NUM_METALLICITIES : 1D np.array
+    BPASS metallicities (numerical) in ascending metallicit order.
+BPASS_METALLICITY_MID_POINTS : 1D np.array
+    Numerical BPASS metallicity midpoints
+BPASS_EVENT_TYPES : list
+    Transient event types considered in the transient rate model outputs
+HOKI_NOW : float
+    Current age of the Universe in years. 13.799e9
+BPASS_IMFS : list[str]
+    Valid BPASS imf strings (corresponds to the codes used in the naming of the model output files)
+BPASS_WAVELENGTHS : 1D np.array
+    BPASS wavelength range covered by the model SEDs
+dummy_dict : dict
+    DEPRECATED. Dictionary relating the column names in the hoki dataframes containing the stellar model tables
+    and the column numbers of the raw text (*sneplot*) files containing the stellar model tables
+    keys: column name in the hoki dataframes
+    values: column number in the sneplot files
+dummy_dicts : dict
+    Dictionaries relating the column names in the hoki dataframes containing the stellar model tables
+    and the column numbers of the raw text (*sneplot*) files containing the stellar model tables.
+    **Read from settings.yaml** and contains the keys and values for BPASS v2.2.1 and 2.2.2.
+    keys: column name in the hoki dataframes
+    values: column number in the sneplot files
+dummy_manual : dict
+    Dictionary containing the names of the columns (keys) in the hoki dataframes that contain the stellar model tables
+    and their physical meaning in the simulations (values).
 """
+
 import numpy as np
 import yaml
 import pkg_resources
 import os
 import io
-
-#TODO: update documentation and add mentions of set_models path and set_default_bpass_verison in the constants
-
-# module - it will change things in the CMD jupyter notebook I think.
-
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
 
@@ -198,7 +249,7 @@ def set_outputs_path(path):
 
 def set_default_bpass_version(version):
     """
-    Changes the path to the stellar models in hoki'dc settings
+    Changes the path to the stellar models in hoki's settings
 
     Parameters
     ----------
