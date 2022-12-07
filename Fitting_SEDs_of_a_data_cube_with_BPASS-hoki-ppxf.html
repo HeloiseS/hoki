@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>SED fitting of a data cube &mdash; hoki v1.6 documentation</title>
+  <title>SED fitting of a data cube &mdash; hoki v1.7.1 documentation</title>
   
 
   
@@ -42,7 +42,9 @@
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Colour Magnitude Diagrams" href="CMDs.html" />
+    <link rel="prev" title="SED fitting of a transient neighbourhood" href="Fitting_the_region_around_the_transient.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,32 +92,60 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Recipes</span></p>
+<p class="caption"><span class="caption-text">Model Outputs</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SED Fitting</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sedfitting.html">SED fiting with BPASS and hoki</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voronoi_binning_of_SED_data.html">Vornoi Binning and retrieveing SEDs of the binned data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html">SED fitting of a transient neighbourhood</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SED fitting of a data cube</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#1.-Set-up:-Making-templates-and-normalising-sample-of-spectra">1. Set-up: Making templates and normalising sample of spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#2---Running-the-fits-for-the-whole-data-cube">2 - Running the fits for the whole data cube</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#2.1---Quality-control">2.1 - Quality control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#2.1.3---Plotting-spectra-from-individual-vorbins">2.1.3 - Plotting spectra from individual vorbins</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#2.2---Kinematics">2.2 - Kinematics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#2.3---Star-Formation-History">2.3 - Star Formation History</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#2.3.1-Light-Fraction">2.3.1 Light Fraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2.3.2-Mass-fraction">2.3.2 Mass fraction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Final-Plot!">Final Plot!</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Misc Recipes</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.eve"><strong>hoki.eve</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-sedfitting"><strong>hoki.sedfitting</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -175,7 +205,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/Fitting SEDs of a data cube with BPASS-hoki-ppxf.ipynb.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf.ipynb.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -3151,9 +3181,8 @@ any given age bin.</p>
 </div>
 </div>
 </div>
-</div>
 <div class="section" id="Final-Plot!">
-<h1>Final Plot!<a class="headerlink" href="#Final-Plot!" title="Permalink to this headline">¶</a></h1>
+<h2>Final Plot!<a class="headerlink" href="#Final-Plot!" title="Permalink to this headline">¶</a></h2>
 <p>Now we can plot our SFH in terms of light fraction and mass fraction altogether to put in our paper! woop woop!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
@@ -3202,18 +3231,23 @@ Text(19, 0.38, &#39;Metallicity (Z)&#39;)
 </div>
 </div>
 </div>
+</div>
 
 
            </div>
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="CMDs.html" class="btn btn-neutral float-right" title="Colour Magnitude Diagrams" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Fitting_the_region_around_the_transient.html" class="btn btn-neutral float-left" title="SED fitting of a transient neighbourhood" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, heloise stevance.
+        &#169; Copyright 2022, heloise stevance.
 
     </p>
   </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Vornoi Binning and retrieveing SEDs of the binned data &mdash; hoki v1.6 documentation</title>
+  <title>Vornoi Binning and retrieveing SEDs of the binned data &mdash; hoki v1.7.1 documentation</title>
   
 
   
@@ -42,7 +42,9 @@
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SED fitting of a transient neighbourhood" href="Fitting_the_region_around_the_transient.html" />
+    <link rel="prev" title="SED fiting with BPASS and hoki" href="sedfitting.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,32 +92,68 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Recipes</span></p>
+<p class="caption"><span class="caption-text">Model Outputs</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SED Fitting</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sedfitting.html">SED fiting with BPASS and hoki</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Vornoi Binning and retrieveing SEDs of the binned data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Loading-the-cropped-data-cube">Loading the cropped data cube</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Voronoi-Binning">Voronoi Binning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Book-keeping---creating-our-wavelength-array">Book keeping - creating our wavelength array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Book-keeping---creating-the-pixel-coordinate,-signal-and-noise-arrays">Book keeping - creating the pixel coordinate, signal and noise arrays</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Binning!">Binning!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Calculating-SNR-in-a-line-free-region">Calculating SNR in a line-free region</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Comments-and-thoughts-on-the-vorbin-process:">Comments and thoughts on the vorbin process:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Storing-the-results">Storing the results</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Binning-the-spectra">Binning the spectra</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Let’s-bin-the-SEDs!">Let’s bin the SEDs!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repeat-for-the-standard-deviations!">repeat for the standard deviations!</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#SNR-map!">SNR map!</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Next-tutos:">Next tutos:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html">SED fitting of a transient neighbourhood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf.html">SED fitting of a data cube</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc Recipes</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.eve"><strong>hoki.eve</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-sedfitting"><strong>hoki.sedfitting</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -839,9 +877,8 @@ ensure the majority of your bins end up reaching that minimum SNR you desire.</p
 </div>
 </div>
 </div>
-</div>
 <div class="section" id="Binning-the-spectra">
-<h1>Binning the spectra<a class="headerlink" href="#Binning-the-spectra" title="Permalink to this headline">¶</a></h1>
+<h2>Binning the spectra<a class="headerlink" href="#Binning-the-spectra" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have voronoi bins and we know which pixel belongs in which bin, we can put our spectra together to caculate the integrated spectra of each bin. Let’s do this!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -937,6 +974,8 @@ ensure the majority of your bins end up reaching that minimum SNR you desire.</p
 3681
 </pre></div></div>
 </div>
+<div class="section" id="Let’s-bin-the-SEDs!">
+<h3>Let’s bin the SEDs!<a class="headerlink" href="#Let’s-bin-the-SEDs!" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -994,6 +1033,9 @@ ensure the majority of your bins end up reaching that minimum SNR you desire.</p
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="repeat-for-the-standard-deviations!">
+<h3>repeat for the standard deviations!<a class="headerlink" href="#repeat-for-the-standard-deviations!" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
@@ -1034,6 +1076,8 @@ ensure the majority of your bins end up reaching that minimum SNR you desire.</p
 <span></span><span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_spectra.npy&#39;</span><span class="p">,</span> <span class="n">spectra</span><span class="p">)</span>
 <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_specerr.npy&#39;</span><span class="p">,</span> <span class="n">spectra_errs</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="SNR-map!">
@@ -1143,12 +1187,16 @@ and you might see it in your own images when you perform this exercise!</p>
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Fitting_the_region_around_the_transient.html" class="btn btn-neutral float-right" title="SED fitting of a transient neighbourhood" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="sedfitting.html" class="btn btn-neutral float-left" title="SED fiting with BPASS and hoki" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, heloise stevance.
+        &#169; Copyright 2022, heloise stevance.
 
     </p>
   </div>

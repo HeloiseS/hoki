@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; hoki v1.5 documentation</title>
+  <title>Index &mdash; hoki v1.7.1 documentation</title>
   
 
   
@@ -88,32 +88,43 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Recipes</span></p>
+<p class="caption"><span class="caption-text">Model Outputs</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SED Fitting</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sedfitting.html">SED fiting with BPASS and hoki</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voronoi_binning_of_SED_data.html">Vornoi Binning and retrieveing SEDs of the binned data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html">SED fitting of a transient neighbourhood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf.html">SED fitting of a data cube</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc Recipes</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Full Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.eve"><strong>hoki.eve</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-sedfitting"><strong>hoki.sedfitting</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
 <ul>
@@ -202,6 +213,7 @@
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
@@ -375,8 +387,6 @@
         <li><a href="manual.html#module-hoki.csp.csp">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     hoki.csp.eventrate
 
@@ -384,6 +394,8 @@
         <li><a href="manual.html#module-hoki.csp.eventrate">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     hoki.csp.sfh
 
@@ -396,6 +408,13 @@
 
       <ul>
         <li><a href="manual.html#module-hoki.csp.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    hoki.eve
+
+      <ul>
+        <li><a href="manual.html#module-hoki.eve">module</a>
 </li>
       </ul></li>
       <li>
@@ -412,6 +431,13 @@
         <li><a href="manual.html#module-hoki.load">module</a>
 </li>
       </ul></li>
+      <li>
+    hoki.sedfitting.lordcommander
+
+      <ul>
+        <li><a href="manual.html#module-hoki.sedfitting.lordcommander">module</a>
+</li>
+      </ul></li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram">HRDiagram (class in hoki.hrdiagrams)</a>
 </li>
   </ul></td>
@@ -422,10 +448,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="manual.html#hoki.csp.sfh.lognormal">lognormal() (in module hoki.csp.sfh)</a>
 </li>
-      <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.low_H">low_H (hoki.hrdiagrams.HRDiagram.self attribute)</a>
+      <li><a href="manual.html#hoki.sedfitting.lordcommander.LordCommander">LordCommander (class in hoki.sedfitting.lordcommander)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.low_H">low_H (hoki.hrdiagrams.HRDiagram.self attribute)</a>
+</li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.low_H_not_weighted">low_H_not_weighted (hoki.hrdiagrams.HRDiagram.self attribute)</a>
 </li>
       <li><a href="manual.html#hoki.hrdiagrams.HRDiagram.self.low_H_stacked">low_H_stacked (hoki.hrdiagrams.HRDiagram.self attribute)</a>
@@ -478,9 +506,13 @@
 </li>
         <li><a href="manual.html#module-hoki.csp.utils">hoki.csp.utils</a>
 </li>
+        <li><a href="manual.html#module-hoki.eve">hoki.eve</a>
+</li>
         <li><a href="manual.html#module-hoki.hrdiagrams">hoki.hrdiagrams</a>
 </li>
         <li><a href="manual.html#module-hoki.load">hoki.load</a>
+</li>
+        <li><a href="manual.html#module-hoki.sedfitting.lordcommander">hoki.sedfitting.lordcommander</a>
 </li>
       </ul></li>
   </ul></td>
@@ -530,9 +562,19 @@
   </ul></td>
 </tr></table>
 
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.sedfitting.lordcommander.LordCommander.run">run() (hoki.sedfitting.lordcommander.LordCommander method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="manual.html#hoki.sedfitting.lordcommander.LordCommander.save">save() (hoki.sedfitting.lordcommander.LordCommander method)</a>
+</li>
       <li><a href="manual.html#hoki.constants.set_default_bpass_version">set_default_bpass_version() (in module hoki.constants)</a>
 </li>
       <li><a href="manual.html#hoki.constants.set_models_path">set_models_path() (in module hoki.constants)</a>
@@ -593,7 +635,7 @@
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, heloise stevance.
+        &#169; Copyright 2022, heloise stevance.
 
     </p>
   </div>

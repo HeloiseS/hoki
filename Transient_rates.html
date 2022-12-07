@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Transient rates &mdash; hoki v1.5 documentation</title>
+  <title>Transient rates &mdash; hoki v1.7.1 documentation</title>
   
 
   
@@ -98,7 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Recipes</span></p>
+<p class="caption"><span class="caption-text">Some Basic Model Outputs</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Transient rates</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Initial-imports">Initial imports</a><ul>
@@ -115,6 +115,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SED Fitting</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sedfitting.html">SED fiting with BPASS and hoki</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voronoi_binning_of_SED_data.html">Vornoi Binning and retrieveing SEDs of the binned data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voronoi_binning_of_SED_data.html#Binning-the-spectra">Binning the spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html">SED fitting of a transient neighbourhood</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html#1---Separating-Transient-and-Neighbourhood-stars-SEDs">1 - Separating Transient and Neighbourhood stars SEDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html#2---Fitting-the-neighbourhood-SED-with-BPASS!">2 - Fitting the neighbourhood SED with BPASS!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf.html">SED fitting of a data cube</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf.html#Final-Plot!">Final Plot!</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Other Data processing and Analysis tools</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
@@ -482,7 +496,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="k">import</span> <span class="n">load</span>
+<span></span><span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
@@ -799,7 +813,7 @@ div.rendered_html tbody tr:hover {
 
   <div role="contentinfo">
     <p>
-        &#169; Copyright 2020, heloise stevance.
+        &#169; Copyright 2022, heloise stevance.
 
     </p>
   </div>

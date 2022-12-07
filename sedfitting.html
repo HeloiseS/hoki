@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Citing Us &mdash; hoki v1.7.1 documentation</title>
+  <title>SED fiting with BPASS and hoki &mdash; hoki v1.7.1 documentation</title>
   
 
   
@@ -41,8 +41,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Transient rates" href="Transient_rates.html" />
-    <link rel="prev" title="Quick Start" href="quick_start.html" /> 
+    <link rel="next" title="Vornoi Binning and retrieveing SEDs of the binned data" href="Voronoi_binning_of_SED_data.html" />
+    <link rel="prev" title="Spectra" href="Spectra.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,15 +91,10 @@
             
             
               <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Citing Us</strong></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#hoki">Hoki</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#agewizard">AgeWizard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#underlyingcountratio">UnderlyingCountRatio</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
 <p class="caption"><span class="caption-text">Some Basic Model Outputs</span></p>
 <ul>
@@ -108,8 +103,11 @@
 <li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
 </ul>
 <p class="caption"><span class="caption-text">SED Fitting</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="sedfitting.html">SED fiting with BPASS and hoki</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SED fiting with BPASS and hoki</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tutorials-and-datasets-available">Tutorials and datasets available</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Voronoi_binning_of_SED_data.html">Vornoi Binning and retrieveing SEDs of the binned data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Voronoi_binning_of_SED_data.html#Binning-the-spectra">Binning the spectra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html">SED fitting of a transient neighbourhood</a></li>
@@ -188,13 +186,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><strong>Citing Us</strong></li>
+      <li>SED fiting with BPASS and hoki</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/citation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/sedfitting.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -231,79 +229,10 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="citing-us">
-<h1><strong>Citing Us</strong><a class="headerlink" href="#citing-us" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="hoki">
-<h2>Hoki<a class="headerlink" href="#hoki" title="Permalink to this headline">¶</a></h2>
-<p>Hoki has been reviewed and published by the Journal Of Open Source Software! Click the button below to access the online publication.</p>
-<a class="reference external image-reference" href="https://doi.org/10.21105/joss.01987"><img alt="https://joss.theoj.org/papers/10.21105/joss.01987/status.svg" src="https://joss.theoj.org/papers/10.21105/joss.01987/status.svg" /></a>
-<p>If you use <code class="docutils literal notranslate"><span class="pre">hoki</span></code> for your science, please include the following reference in your paper:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@ARTICLE{2020JOSS....5.1987S,
-    author = {{Stevance}, Heloise and {Eldridge}, J. and {Stanway}, Elizabeth},
-    title = &quot;{Hoki: Making BPASS accessible through Python}&quot;,
-    journal = {The Journal of Open Source Software},
-  keywords = {Python, galaxies, Batchfile, SED, astronomy, binary stars, Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies, Astrophysics - Instrumentation and Methods for Astrophysics},
-     year = &quot;2020&quot;,
-     month = &quot;Jan&quot;,
-     volume = {5},
-     number = {45},
-     eid = {1987},
-     pages = {1987},
-     doi = {10.21105/joss.01987},
-     archivePrefix = {arXiv},
-     eprint = {2001.11069},
-     primaryClass = {astro-ph.SR},
-     adsurl = {https://ui.adsabs.harvard.edu/abs/2020JOSS....5.1987S},
-    adsnote = {Provided by the SAO/NASA Astrophysics Data System}
- }
-</pre></div>
-</div>
-</div>
-<div class="section" id="agewizard">
-<h2>AgeWizard<a class="headerlink" href="#agewizard" title="Permalink to this headline">¶</a></h2>
-<p>If you use <code class="docutils literal notranslate"><span class="pre">AgeWizard</span></code>, please cite both the <cite>hoki</cite> paper above and the following publication describing the pipeline:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@ARTICLE{2020arXiv200402883S,
-        author = {{Stevance}, H.~F. and {Eldridge}, J.~J. and {McLeod}, A. and
-              {Stanway}, E.~R. and {Chrimes}, A.~A.},
-             title = &quot;{A systematic aging method I: HII regions D118 and D119 in NGC 300}&quot;,
-       journal = {arXiv e-prints},
-      keywords = {Astrophysics - Solar and Stellar Astrophysics, Astrophysics - Astrophysics of Galaxies},
-              year = 2020,
-             month = apr,
-               eid = {arXiv:2004.02883},
-             pages = {arXiv:2004.02883},
-     archivePrefix = {arXiv},
-        eprint = {2004.02883},
-     primaryClass = {astro-ph.SR},
-        adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv200402883S},
-       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
-</pre></div>
-</div>
-</div>
-<div class="section" id="underlyingcountratio">
-<h2>UnderlyingCountRatio<a class="headerlink" href="#underlyingcountratio" title="Permalink to this headline">¶</a></h2>
-<p>If you use <code class="docutils literal notranslate"><span class="pre">UnderlyingCountRatio</span></code>, please cite both the <cite>hoki</cite> paper above and the following publication describing the method:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>@ARTICLE{2020ApJ...896..164D,
-    author = {{Dorn-Wallenstein}, Trevor Z. and {Levesque}, Emily M.},
-     title = &quot;{A Comparison of Rotating and Binary Stellar Evolution Models: Effects on Massive Star Populations}&quot;,
-   journal = {\apj},
-  keywords = {UAT:1634, UAT:1622, UAT:929, UAT:732, UAT:621, UAT:1568, UAT:1629, UAT:154, Astrophysics - Solar and Stellar Astrophysics},
-      year = 2020,
-     month = jun,
-    volume = {896},
-    number = {2},
-       eid = {164},
-     pages = {164},
-       doi = {10.3847/1538-4357/ab8d28},
-  archivePrefix = {arXiv},
-    eprint = {2004.13040},
-  primaryClass = {astro-ph.SR},
-    adsurl = {https://ui.adsabs.harvard.edu/abs/2020ApJ...896..164D},
-   adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
-</pre></div>
-</div>
+<div class="section" id="sed-fiting-with-bpass-and-hoki">
+<h1>SED fiting with BPASS and hoki<a class="headerlink" href="#sed-fiting-with-bpass-and-hoki" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tutorials-and-datasets-available">
+<h2>Tutorials and datasets available<a class="headerlink" href="#tutorials-and-datasets-available" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -313,8 +242,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="Transient_rates.html" class="btn btn-neutral float-right" title="Transient rates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Voronoi_binning_of_SED_data.html" class="btn btn-neutral float-right" title="Vornoi Binning and retrieveing SEDs of the binned data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Spectra.html" class="btn btn-neutral float-left" title="Spectra" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
