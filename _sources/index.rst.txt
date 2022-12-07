@@ -19,14 +19,25 @@
    Transient_rates
    HR_diagrams
    Spectra
+   :maxdepth: 1
+   :caption: Some Basic Model Outputs
+
+.. toctree::
+   sedfitting
+   Voronoi_binning_of_SED_data
+   Fitting_the_region_around_the_transient
+   Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf
+   :maxdepth: 1
+   :caption: SED Fitting
+
+.. toctree::
    CMDs
    AgeWizard
    ModelDataCompiler
    ModelSearch
    ComplexStellarPopulations
    :maxdepth: 1
-   :caption: Recipes
-
+   :caption: Other Data processing and Analysis tools
 
 .. toctree::
    manual

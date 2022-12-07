@@ -3,10 +3,7 @@ What is Hoki?
 #############
 
 .. version:: 
-   `v1.60 <https://github.com/HeloiseS/hoki>`__!
-
-.. note:: 
-   HOKI 1.6 IS OUT! AgeWizard now takes errors into account - You can make Complex Stellar Populations - You can search through the stellar libraries more easily than ever!
+   `v1.70 <https://github.com/HeloiseS/hoki>`__!
 
 *************************************************
 Bridging the gap between theory and observations 
