@@ -8,7 +8,7 @@ import os
 import io
 
 #TODO: update documentation and add mentions of set_models path and set_default_bpass_verison in the constants
-
+# TODO: put the constants in a dataclass!!
 # module - it will change things in the CMD jupyter notebook I think.
 
 
