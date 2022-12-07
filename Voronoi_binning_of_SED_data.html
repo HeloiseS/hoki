@@ -1,0 +1,1185 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Vornoi Binning and retrieveing SEDs of the binned data &mdash; hoki v1.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #FFA428" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> hoki
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Vornoi Binning and retrieveing SEDs of the binned data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Voronoi_binning_of_SED_data.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># typical python libraries</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="c1"># vorbin package by M. Capellari</span>
+<span class="kn">from</span> <span class="nn">vorbin.voronoi_2d_binning</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># hoki sedfitting subpackage</span>
+<span class="kn">import</span> <span class="nn">hoki.sedfitting</span> <span class="k">as</span> <span class="nn">hsed</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;../tuto.mplstyle&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Vornoi-Binning-and-retrieveing-SEDs-of-the-binned-data">
+<h1>Vornoi Binning and retrieveing SEDs of the binned data<a class="headerlink" href="#Vornoi-Binning-and-retrieveing-SEDs-of-the-binned-data" title="Permalink to this headline">¶</a></h1>
+<p>In this jupyter notebook we will work with a cropped data cube of NGC 4993 (reduced by Joe Lyman) that is centered(-ish) on the galaxy and extends to comfortably contain the galaxy and the transient AT 2017gfo (top left in the image below).</p>
+<p>In this notebook we will mostly use the voronoi binning algorithm of M. Cappellari (<a class="reference external" href="https://www-astro.physics.ox.ac.uk/~cappellari/software/#binning">see website</a>) and a few utilities I wrote and put in <code class="docutils literal notranslate"><span class="pre">hoki.sedfitting</span></code> such as <code class="docutils literal notranslate"><span class="pre">plot_voronoi</span></code>.</p>
+<p><strong>Other dependency:</strong> <code class="docutils literal notranslate"><span class="pre">mpdaf</span></code> was used to create the cropped data cube. It is a pretty commonly used IFU data utility package. For further information see <a class="reference external" href="https://mpdaf.readthedocs.io/en/latest/">their documentation</a>.</p>
+<div class="section" id="Loading-the-cropped-data-cube">
+<h2>Loading the cropped data cube<a class="headerlink" href="#Loading-the-cropped-data-cube" title="Permalink to this headline">¶</a></h2>
+<p>First let’s take a look at the data cube:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/cropped_NGC4993.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
+    <span class="n">cube</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">ima</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># to make the image we sum over the wavelength axis to get the total flux</span>
+<span class="n">ima</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;arcsinh&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span> <span class="c1"># this scaling with arcsinh was copied from mpdaf tutorials - it works</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.image.AxesImage at 0x7fae1be6e7f0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Voronoi_binning_of_SED_data_3_1.png" src="_images/Voronoi_binning_of_SED_data_3_1.png" />
+</div>
+</div>
+<p>okay let’s take a look at what’s in this <code class="docutils literal notranslate"><span class="pre">cube</span></code> object. First checking the shape is quite informative:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cube</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(3681, 150, 150)
+</pre></div></div>
+</div>
+<p>so axis 0 is the wavelength, which is why we summed over axis=0 earlier, and then each side of the image is 150 pixels. The original images from MUSE are much larger but I cropped it to make it easier to upload and download (and also to not fill the RAM when working on the data!)</p>
+<p>Now let’s look at one of the headers, the <code class="docutils literal notranslate"><span class="pre">data_header</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cube</span><span class="o">.</span><span class="n">data_header</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+XTENSION= &#39;IMAGE   &#39;           / Image extension
+BITPIX  =                  -64 / array data type
+NAXIS   =                    3 / number of array dimensions
+NAXIS1  =                  150
+NAXIS2  =                  150
+NAXIS3  =                 3681
+PCOUNT  =                    0 / number of parameters
+GCOUNT  =                    1 / number of groups
+WCSAXES =                    3 / Number of coordinate axes
+CRPIX1  =      53.754912632071 / Pixel coordinate of reference point
+CRPIX2  =      128.27776222996 / Pixel coordinate of reference point
+CUNIT1  = &#39;deg&#39;                / Units of coordinate increment and value
+CUNIT2  = &#39;deg&#39;                / Units of coordinate increment and value
+CTYPE1  = &#39;RA---TAN&#39;           / Right ascension, gnomonic projection
+CTYPE2  = &#39;DEC--TAN&#39;           / Declination, gnomonic projection
+CRVAL1  =           197.450333 / [deg] Coordinate value at reference point
+CRVAL2  =            -23.38117 / [deg] Coordinate value at reference point
+LONPOLE =                180.0 / [deg] Native longitude of celestial pole
+LATPOLE =            -23.38117 / [deg] Native latitude of celestial pole
+CSYER1  =     1.3680091695E-05 / [deg] Systematic error in coordinate
+CSYER2  =    7.77995869722E-06 / [deg] Systematic error in coordinate
+MJDREF  =                  0.0 / [d] MJD of fiducial time
+RADESYS = &#39;FK5&#39;                / Equatorial coordinate system
+EQUINOX =               2000.0 / [yr] Equinox of equatorial coordinates
+CD1_1   = -5.5555555555556E-05
+CD1_2   =                  0.0
+CD2_1   =                  0.0
+CD2_2   =  5.5555555555556E-05
+CRVAL3  =     4749.61767578125 / Coordinate value at reference point
+CRPIX3  =                  1.0 / Pixel coordinate of reference point
+CUNIT3  = &#39;Angstrom&#39;           / Units of coordinate increment and value
+CTYPE3  = &#39;AWAV    &#39;           / Coordinate type code
+CD3_3   =                 1.25
+CD1_3   =                  0.0
+CD2_3   =                  0.0
+CD3_1   =                  0.0
+CD3_2   =                  0.0
+EXTNAME = &#39;DATA    &#39;           / This extension contains data values
+HDUCLASS= &#39;ESO     &#39;           / class name (ESO format)
+HDUDOC  = &#39;DICD    &#39;           / document with class description
+HDUVERS = &#39;DICD version 6&#39;     / version number (according to spec v2.5.1)
+HDUCLAS1= &#39;IMAGE   &#39;           / Image data format
+HDUCLAS2= &#39;DATA    &#39;           / this extension contains the data itself
+ERRDATA = &#39;STAT    &#39;           / pointer to the variance extension
+OBJECT  = &#39;SGRB (DATA)&#39;
+BUNIT   = &#39;10**-20 Angstrom-1 cm-2 erg s-1&#39; / data unit type
+COMMENT These data have been ZAPped!
+ZAPVERS = &#39;1.1.dev workflow&#39;   / ZAP version
+ZAPZLVL = &#39;extSVD  &#39;           / ZAP zero level correction
+ZAPCLEAN=                    T / ZAP NaN cleaning performed for calculation
+ZAPCFTYP= &#39;weight  &#39;           / ZAP continuum filter type
+ZAPCFWID=                   20 / ZAP continuum filter size
+ZAPNSEG =                   11 / Number of segments used for ZAP SVD
+ZAPSEG0 = &#39;0:520   &#39;           / spectrum segment (pixels)
+ZAPNEV0 =                    1 / number of eigenvals/spectra used
+ZAPSEG1 = &#39;521:880 &#39;           / spectrum segment (pixels)
+ZAPNEV1 =                    6 / number of eigenvals/spectra used
+ZAPSEG2 = &#39;881:1352&#39;           / spectrum segment (pixels)
+ZAPNEV2 =                   16 / number of eigenvals/spectra used
+ZAPSEG3 = &#39;1353:1600&#39;          / spectrum segment (pixels)
+ZAPNEV3 =                    2 / number of eigenvals/spectra used
+ZAPSEG4 = &#39;1601:1960&#39;          / spectrum segment (pixels)
+ZAPNEV4 =                    1 / number of eigenvals/spectra used
+ZAPSEG5 = &#39;1961:2360&#39;          / spectrum segment (pixels)
+ZAPNEV5 =                    1 / number of eigenvals/spectra used
+ZAPSEG6 = &#39;2361:2812&#39;          / spectrum segment (pixels)
+ZAPNEV6 =                   11 / number of eigenvals/spectra used
+ZAPSEG7 = &#39;2813:3081&#39;          / spectrum segment (pixels)
+ZAPNEV7 =                    6 / number of eigenvals/spectra used
+ZAPSEG8 = &#39;3082:3185&#39;          / spectrum segment (pixels)
+ZAPNEV8 =                    1 / number of eigenvals/spectra used
+ZAPSEG9 = &#39;3186:3620&#39;          / spectrum segment (pixels)
+ZAPNEV9 =                   12 / number of eigenvals/spectra used
+ZAPSEG10= &#39;3621:3680&#39;          / spectrum segment (pixels)
+ZAPNEV10=                    4 / number of eigenvals/spectra used
+HISTORY Image was compressed by CFITSIO using scaled integer quantization:
+HISTORY   q = 4.000000 / quantized level scaling parameter
+HISTORY &#39;SUBTRACTIVE_DITHER_1&#39; / Pixel Quantization Algorithm
+CHECKSUM= &#39;bODodMAobMAobMAo&#39;   / HDU checksum updated 2021-07-23T23:34:48
+DATASUM = &#39;1413973769&#39;         / data unit checksum updated 2021-07-23T23:34:48
+</pre></div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">CRVAL3</span></code> is the first wavelength bin and <code class="docutils literal notranslate"><span class="pre">CD3_3</span></code> is the <span class="math notranslate nohighlight">\(\Delta \lambda\)</span> = 1.25 in this case. We’re going to need this in a minute.</p>
+</div>
+<div class="section" id="Voronoi-Binning">
+<h2>Voronoi Binning<a class="headerlink" href="#Voronoi-Binning" title="Permalink to this headline">¶</a></h2>
+<p>In this particular situation Voronoi binning is creating tiles over the image in such a way that we homogenise the signal-to-noise-ratio across our bins. At the moment our bins are just pixels, and obviously the pixels on the outside of the image have much lower SNR than the ones in the middle of the galaxy.</p>
+<p>What we’re going to do now is use the <code class="docutils literal notranslate"><span class="pre">vorbin</span></code> algorithm to create tiles of adjacent pixels which, when summed together give use a spectrum with SNR close to our target SNR (and you get to pick what that target is).</p>
+<div class="section" id="Book-keeping---creating-our-wavelength-array">
+<h3>Book keeping - creating our wavelength array<a class="headerlink" href="#Book-keeping---creating-our-wavelength-array" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The first thing we need to do is create the wavelength scale. We&#39;ve only got a starting</span>
+<span class="c1"># wavelength, a Delta lambda and a number of bins in the spectrum (3861 - see above)</span>
+<span class="c1"># The code below creates the wavelength array</span>
+
+<span class="c1"># minimum and maximum wavelength from the header</span>
+<span class="n">wl_min</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CRVAL3&#39;</span><span class="p">]</span>
+<span class="n">wl_max</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CRVAL3&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CD3_3&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cube</span><span class="o">.</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># creating the wavelength array</span>
+<span class="n">WL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CRVAL3&#39;</span><span class="p">],</span> <span class="n">wl_max</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CD3_3&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># just to check our array has indeed got the right size</span>
+<span class="n">WL</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3681
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Book-keeping---creating-the-pixel-coordinate,-signal-and-noise-arrays">
+<h3>Book keeping - creating the pixel coordinate, signal and noise arrays<a class="headerlink" href="#Book-keeping---creating-the-pixel-coordinate,-signal-and-noise-arrays" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># First we need to make lists of pixel Coordinates</span>
+<span class="c1"># note this will be stupid big with large data cubes</span>
+<span class="c1"># in that case find a smartter way to make these arrays</span>
+
+<span class="c1"># ... X is a 1D list of length 150**2</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+    <span class="n">X</span><span class="o">+=</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">*</span><span class="n">cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">x</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># ... Y is a 1D list of length 150**2</span>
+<span class="n">Y</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">Y</span><span class="o">+=</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">y</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Now we store the signal (spectrum) in its own array</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">ima</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># this reshape(-1,1) turns the 2D array in a 1D array.</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># And now we store the errors in their own array</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ima</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Binning!">
+<h2>Binning!<a class="headerlink" href="#Binning!" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># pick a target signal to noise ratio - I picked 40</span>
+<span class="n">TARGET_SNR</span> <span class="o">=</span> <span class="mi">40</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Calculating-SNR-in-a-line-free-region">
+<h3>Calculating SNR in a line-free region<a class="headerlink" href="#Calculating-SNR-in-a-line-free-region" title="Permalink to this headline">¶</a></h3>
+<p>To compare SNR from spectrum to spectrum we need to chose an area of the spectrum that is devoid of strong lines across our whole data set and then calculate the SNR in that range.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># range of wavelength between which we calculate the SNR</span>
+<span class="n">wlmin_snr</span> <span class="o">=</span> <span class="mi">5590</span>
+<span class="n">wlmax_snr</span><span class="o">=</span> <span class="mi">5680</span>
+
+<span class="c1"># Finding the indices corresponding to the min and max wavelengths of our range to calc SNR</span>
+<span class="n">i_min</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">WL</span><span class="o">-</span><span class="n">wlmin_snr</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+<span class="n">i_max</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">WL</span><span class="o">-</span><span class="n">wlmax_snr</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="c1"># Calculating the SNR in that range</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">i_min</span><span class="p">:</span><span class="n">i_max</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># again making it 1D with the reshape trick</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="n">i_min</span><span class="p">:</span><span class="n">i_max</span><span class="p">,:,:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Summoning vorbin!!!</span>
+<span class="n">binNum</span><span class="p">,</span> <span class="n">xNode</span><span class="p">,</span> <span class="n">yNode</span><span class="p">,</span> <span class="n">xBar</span><span class="p">,</span> <span class="n">yBar</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">nPixels</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">voronoi_2d_binning</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">noise</span><span class="p">,</span>
+                                                                          <span class="n">TARGET_SNR</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                                          <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                                                          <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Voronoi_binning_of_SED_data_19_0.png" src="_images/Voronoi_binning_of_SED_data_19_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Comments-and-thoughts-on-the-vorbin-process:">
+<h2>Comments and thoughts on the vorbin process:<a class="headerlink" href="#Comments-and-thoughts-on-the-vorbin-process:" title="Permalink to this headline">¶</a></h2>
+<p>First of all notice that there is a scatter in SNR around the target we chose: that is to be expected, there is a finite number of adjacent pixels to chose from!</p>
+<p>Also note that in the center there are a lot of pixels that are not binned because they already exceed the SNR threshold. This is something we will discuss a little more later because the boudnary between binned and not-binned creates a little bit of structure in our SNR map (see below).</p>
+<p>Finally note that there is a little bit of randomness in the process of optimising for the binning so you might get a slightly different result everytime you run it, but not by much and not enough to mess with your science (given that you picked an SNR that is high enough for what you need to do). This is a good place to point out that the target SNR <strong>is NOT a minimum SNR</strong>, so if you have a minimu SNR in mind, check the plot above after you’ve picked a target SNR and adjust as you need to
+ensure the majority of your bins end up reaching that minimum SNR you desire.</p>
+<div class="section" id="Storing-the-results">
+<h3>Storing the results<a class="headerlink" href="#Storing-the-results" title="Permalink to this headline">¶</a></h3>
+<p>In order to store the vorbin results (temporarily; just for use later in the notebook) I’ve made a little class. It’s v. much not necessary, feel free to amend!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">class</span> <span class="nc">VorbinResults</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Object to contain the quantities returned by vorbin_2d - they don&#39;t fit neatly into a table</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">binNum</span><span class="p">,</span> <span class="n">xNode</span><span class="p">,</span> <span class="n">yNode</span><span class="p">,</span> <span class="n">xBar</span><span class="p">,</span> <span class="n">yBar</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">nPixels</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span> <span class="c1"># x coordinates (size - Nbins, here 150**2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span> <span class="c1"># y coordinates (size - Nbins, here 150**2)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binNum</span> <span class="o">=</span> <span class="n">binNum</span> <span class="c1"># vornoi bin number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xNode</span> <span class="o">=</span>  <span class="n">xNode</span> <span class="c1"># x coordinate of each vorbin center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yNode</span> <span class="o">=</span> <span class="n">yNode</span> <span class="c1"># y coordinate of each vorbin center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xBar</span> <span class="o">=</span> <span class="n">xBar</span> <span class="c1"># see voronoi_2d_binning Output Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yBar</span> <span class="o">=</span> <span class="n">yBar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sn</span> <span class="o">=</span> <span class="n">sn</span> <span class="c1"># SNR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nPixels</span> <span class="o">=</span> <span class="n">nPixels</span> <span class="c1"># number of pixels in each bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span> <span class="c1"># see voronoi_2d_binning Output Parameters</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># storing the results in our little object</span>
+<span class="n">vorbin</span> <span class="o">=</span> <span class="n">VorbinResults</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">binNum</span><span class="p">,</span> <span class="n">xNode</span><span class="p">,</span> <span class="n">yNode</span><span class="p">,</span> <span class="n">xBar</span><span class="p">,</span> <span class="n">yBar</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">nPixels</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Binning-the-spectra">
+<h1>Binning the spectra<a class="headerlink" href="#Binning-the-spectra" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have voronoi bins and we know which pixel belongs in which bin, we can put our spectra together to caculate the integrated spectra of each bin. Let’s do this!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># first I create a dataframe that tells us which bin each (x,y) location belongs to</span>
+<span class="n">bin_keys</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">vorbin</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">vorbin</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">vorbin</span><span class="o">.</span><span class="n">binNum</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span><span class="s1">&#39;binNum&#39;</span><span class="p">])</span>
+<span class="n">bin_keys</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>X</th>
+      <th>Y</th>
+      <th>binNum</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1475</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>1475</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>2</td>
+      <td>1475</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>3</td>
+      <td>1475</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>4</td>
+      <td>1475</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># we&#39;ll need to know the number of wavelength bins</span>
+<span class="n">wl_len</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">wl_len</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3681
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># list of spectra. By the end of the loop there should be binNum spectra corresponding to each vorbin</span>
+<span class="n">spectra</span><span class="o">=</span><span class="p">[]</span>
+
+<span class="c1"># we loop over the number of voronoi bins</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bin_keys</span><span class="o">.</span><span class="n">binNum</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="c1"># Y, X coordinates of all the pixels in the ith voronoi bin (binNum)</span>
+    <span class="n">coords_i</span><span class="o">=</span><span class="n">bin_keys</span><span class="p">[</span><span class="n">bin_keys</span><span class="o">.</span><span class="n">binNum</span><span class="o">==</span><span class="n">i</span><span class="p">][[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># instanciate a np array of the size of the SED filled with zeros</span>
+    <span class="n">spectrum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">wl_len</span><span class="p">)</span>
+
+    <span class="c1"># for each pixel in this voronoi bin...</span>
+    <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">coords_i</span><span class="p">:</span>
+        <span class="c1"># ..add up all the fluxes</span>
+        <span class="n">spectrum</span><span class="o">+=</span><span class="n">cube</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+    <span class="c1"># ... then we add this spectrum to our list of spectra</span>
+    <span class="n">spectra</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spectrum</span><span class="p">)</span>
+
+<span class="c1"># turn the list into an array</span>
+<span class="n">spectra</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">spectra</span><span class="p">)</span>
+
+
+<span class="c1">#### QUALITY CONTROL</span>
+
+<span class="c1"># want to make sure the spectra don&#39;t have negative values or nan values</span>
+<span class="n">spectra</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">spectra</span><span class="o">&gt;</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">spectra</span><span class="p">,</span> <span class="mf">1e-15</span><span class="p">)</span> <span class="c1"># NO NEGATIVES</span>
+<span class="n">spectra</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">spectra</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">spectra</span><span class="p">,</span> <span class="mf">1e-15</span><span class="p">)</span> <span class="c1"># NO NAN</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+&lt;ipython-input-18-ed04e47ac8b7&gt;:26: RuntimeWarning: invalid value encountered in greater
+  spectra = np.where(spectra&gt;0.0, spectra, 1e-15) # NO NEGATIVES
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># finally I like to stack the wavelength array and the spectra</span>
+<span class="c1"># so i=0 is the wavelength</span>
+<span class="c1"># and every row after that is a spectrum</span>
+<span class="n">spectra</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">WL</span><span class="p">,</span><span class="n">spectra</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">stds</span><span class="o">=</span><span class="p">[]</span> <span class="c1"># list of standard deviations</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bin_keys</span><span class="o">.</span><span class="n">binNum</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+    <span class="c1"># Y, X coordinates of all the pixels in the ith voronoi bin (binNum)</span>
+    <span class="n">coords_i</span><span class="o">=</span><span class="n">bin_keys</span><span class="p">[</span><span class="n">bin_keys</span><span class="o">.</span><span class="n">binNum</span><span class="o">==</span><span class="n">i</span><span class="p">][[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;Y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    <span class="c1"># instanciate a np array of the size of the spectrum filled with zeros</span>
+    <span class="n">std_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">wl_len</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">coords_i</span><span class="p">:</span> <span class="c1"># for each pixel in this bin...</span>
+        <span class="n">std_i</span><span class="o">+=</span><span class="n">cube</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="c1">#add the variances - same as adding the std in quadrature</span>
+
+    <span class="c1"># then we square root the whole thing...</span>
+    <span class="n">std_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">std_i</span><span class="p">)</span>
+    <span class="c1"># ... before adding it to our list ...</span>
+    <span class="n">stds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">std_i</span><span class="p">)</span>
+
+
+<span class="c1"># ... and finally we stack our noise spectra together with the wavelengths as the frist row</span>
+<span class="n">spectra_errs</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">WL</span><span class="p">,</span><span class="n">stds</span><span class="p">])</span>
+
+<span class="c1">#### QUALITY CONTROL</span>
+<span class="n">spectra_errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">spectra_errs</span><span class="o">!=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">noises</span><span class="p">,</span> <span class="mf">1e15</span><span class="p">)</span>
+<span class="n">spectra_errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">spectra_errs</span><span class="o">&gt;</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">noises</span><span class="p">,</span> <span class="mf">1e15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_spectra.npy&#39;</span><span class="p">,</span> <span class="n">spectra</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_specerr.npy&#39;</span><span class="p">,</span> <span class="n">spectra_errs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="SNR-map!">
+<h2>SNR map!<a class="headerlink" href="#SNR-map!" title="Permalink to this headline">¶</a></h2>
+<p>To see how good a job we did in homogeneising the SNR we can plot it with a colour map. Here what we’re going to do is take the minimum of the SED/NOISE array for each bin:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">min_snrs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># list of the minimum SNRs</span>
+
+<span class="k">for</span> <span class="n">spec</span><span class="p">,</span> <span class="n">std</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">spectra_errs</span><span class="p">):</span>
+    <span class="n">snr</span> <span class="o">=</span> <span class="n">spec</span><span class="o">/</span><span class="n">std</span> <span class="c1"># calculate SNR for each bin</span>
+    <span class="n">min_snrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">snr</span><span class="p">))</span> <span class="c1"># append the minimum</span>
+
+<span class="n">min_snrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">min_snrs</span><span class="p">)</span> <span class="c1"># make it an array</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># At this point we have to flip x and y in the array so things plot the right way around</span>
+<span class="c1"># not sure if I messed up earlier or if its a &quot;feature&quot;</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">,</span> <span class="n">sn</span><span class="p">[</span><span class="n">binNum</span><span class="p">],</span> <span class="n">binNum</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;sn&#39;</span><span class="p">,</span> <span class="s1">&#39;binNum&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;data/voronoi_bins_NEW.txt&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># note that here  we have to flip the y and x axes to have the plot come out right</span>
+<span class="c1"># that is why we took that weird step above before saving the results.</span>
+<span class="c1"># in future analysis when loading that data frame x and y will be the right way around</span>
+<span class="n">sn_color</span> <span class="o">=</span> <span class="n">hsed</span><span class="o">.</span><span class="n">plot_voronoi</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">,</span> <span class="n">sn</span><span class="p">[</span><span class="n">binNum</span><span class="p">],</span> <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;rainbow&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sn_color</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;SNR&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;SNR&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Voronoi_binning_of_SED_data_35_1.png" src="_images/Voronoi_binning_of_SED_data_35_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">type</span><span class="p">(</span><span class="n">sn_color</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+matplotlib.image.AxesImage
+</pre></div></div>
+</div>
+<p>Our SNR map looks decent! obviously the center glows well above our threshold value because galaxies are bright. We notice a sort of ring of blue (lower SNR) around the bright region ad we transition to larger bins: that is because at this point the algorithm is between a rock and a hard place: the pixel itself is on the cusp of meeting the SNR threshold but combining two of them makes it crazy high compared to what we ask! That transitional phase between unbinned and binned pixels is expected
+and you might see it in your own images when you perform this exercise!</p>
+<div class="section" id="Next-tutos:">
+<h3>Next tutos:<a class="headerlink" href="#Next-tutos:" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>SED fitting integrated spectrum with Kvn</p></li>
+<li><p>SED fitting all the bins with LordCommander</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, heloise stevance.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

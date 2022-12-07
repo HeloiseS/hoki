@@ -1,0 +1,3250 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>SED fitting of a data cube &mdash; hoki v1.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #FFA428" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> hoki
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SED fitting of a data cube</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Fitting SEDs of a data cube with BPASS-hoki-ppxf.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="SED-fitting-of-a-data-cube">
+<h1>SED fitting of a data cube<a class="headerlink" href="#SED-fitting-of-a-data-cube" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial we’re going to go over the steps to fit each spectrum from a data cube that has already been voronoi binned (see <code class="docutils literal notranslate"><span class="pre">Voronoi_binning_of_SED_data.ipynb</span></code>). We are <strong>NOT</strong> going to assume that the BPASS-hoki templates for <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> have been created so we will do that.</p>
+<p>Once we have been through all the steps in this jupyter notebook the actual fitting will be done in the python script <code class="docutils literal notranslate"><span class="pre">make_fits.py</span></code>. The reason we do this in a script and not in the notebook is because it is a time consuming process and jupyter adds overheads. If you’re wondering why we create the templates outside of the <code class="docutils literal notranslate"><span class="pre">make_fits.py</span></code> script and not directly within it, that’s because you might want to try to fit your galaxy with different ensembles of templates with more or fewer
+metallicities. For a discussion on how adding more metallicities to your group of templates can actually make your life worse and not better is the Supplementary Information in Stevance et al. 2023.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ppxf</span> <span class="kn">import</span> <span class="n">ppxf_util</span>
+<span class="kn">from</span> <span class="nn">hoki.sedfitting</span> <span class="kn">import</span> <span class="n">KVN</span><span class="p">,</span> <span class="n">plot_voronoi</span>
+<span class="kn">from</span> <span class="nn">hoki.constants</span> <span class="kn">import</span> <span class="n">BPASS_METALLICITIES</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mf">299792.458</span>  <span class="c1"># speed of light</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="1.-Set-up:-Making-templates-and-normalising-sample-of-spectra">
+<h2>1. Set-up: Making templates and normalising sample of spectra<a class="headerlink" href="#1.-Set-up:-Making-templates-and-normalising-sample-of-spectra" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># THIS WILL NEED UPDATING TO WORK ON YOUR MACHINE</span>
+<span class="n">BPASS_MODEL_PATH</span> <span class="o">=</span> <span class="s1">&#39;../../BPASS_hoki_dev/bpass_v2.2.1_imf135_300/&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># To know how to extract vorbinned spectra and errs see relevant jupyter notebook</span>
+<span class="n">WL0</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_spectra.npy&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>                                  <span class="c1"># 1D np.array of obs. wl</span>
+<span class="n">spectra</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_spectra.npy&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>                             <span class="c1"># 1D np.array of obs. flux</span>
+<span class="n">noise</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/vorbinned_specerr.npy&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>                               <span class="c1"># 1D np.array of errs on flux</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># BPASS metallicities to include in the templates</span>
+<span class="n">met_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;z010&#39;</span><span class="p">,</span><span class="s1">&#39;z020&#39;</span><span class="p">,</span> <span class="s1">&#39;z030&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># list of BPASS metallicities in hoki.constants for reference</span>
+<span class="n">BPASS_METALLICITIES</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;zem5&#39;,
+ &#39;zem4&#39;,
+ &#39;z001&#39;,
+ &#39;z002&#39;,
+ &#39;z003&#39;,
+ &#39;z004&#39;,
+ &#39;z006&#39;,
+ &#39;z008&#39;,
+ &#39;z010&#39;,
+ &#39;z014&#39;,
+ &#39;z020&#39;,
+ &#39;z030&#39;,
+ &#39;z040&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># for NGC4993 MUSE observations the delta_lambda of the spectrum is 1.25 Angstrom</span>
+<span class="n">fwhm_obs</span> <span class="o">=</span> <span class="mf">1.25</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">outfile</span> <span class="o">=</span> <span class="s1">&#39;data/kvn_010_020_030.pkl&#39;</span>  <span class="c1"># save location of the templates</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">################################</span>
+<span class="c1">#  NORMALISING EACH SPECTRUM   #</span>
+<span class="c1">################################</span>
+<span class="c1"># Specifically we are dividing each spectrum by its median so they are all on roughly the same scale</span>
+<span class="n">norm_fluxes</span><span class="p">,</span> <span class="n">norm_errs</span><span class="p">,</span> <span class="n">median_flux_ls</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">spec</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">noise</span><span class="p">):</span>
+    <span class="n">med</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>                                                  <span class="c1"># median of ith spectrum in our sample</span>
+    <span class="n">median_flux_ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">med</span><span class="p">)</span>                                                <span class="c1"># storing the median for later use</span>
+    <span class="n">norm_fluxes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">spec</span><span class="o">/</span><span class="n">med</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>                                      <span class="c1"># normalising the flux</span>
+    <span class="n">norm_errs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">err</span><span class="o">/</span><span class="n">med</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>                                       <span class="c1"># same on the noise to conserve SNR</span>
+
+<span class="n">WL</span> <span class="o">=</span> <span class="n">WL0</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>                                                                <span class="c1"># making sure WL has same shape as flux</span>
+<span class="c1"># NOTE: &quot;Why [1:-1]?&quot; Because when I was working on NGC4993 the data sometimes was messed up</span>
+<span class="c1"># in the first or last (often last) bin of the spectra so I cropped them. This can be removed for your use.</span>
+
+<span class="n">norm_fluxes</span><span class="p">,</span> <span class="n">norm_errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">norm_fluxes</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">norm_errs</span><span class="p">)</span>       <span class="c1"># lists to arrays to do maths</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># A data class would be a good way to put this stuff together and will be coming in future</span>
+<span class="c1"># hoki updates. For now being explicit separating the components of the data so the code</span>
+<span class="c1"># is easier to read.</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/normalised_spectra_WL.npy&#39;</span><span class="p">,</span> <span class="n">WL</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/normalised_spectra.npy&#39;</span><span class="p">,</span> <span class="n">norm_fluxes</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/normalised_specerr.npy&#39;</span><span class="p">,</span> <span class="n">norm_errs</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/median_flux_list.npy&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">median_flux_ls</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">norm_fluxes</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1494, 3679)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">###################################</span>
+<span class="c1"># SET-UP STEPS TO MAKE PPXF HAPPY #</span>
+<span class="c1">###################################</span>
+
+<span class="c1"># Calculating the recessional velocity - that will be our &quot;guess&quot; for the LOSV</span>
+<span class="c1"># LOSV = Line-of-sight velocity. This is what I often call the recessional velocity in tutorials and scripts</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="mf">0.009783</span>                                                                  <span class="c1"># z from Hjorth et al. 2017</span>
+<span class="n">recessional_vel</span> <span class="o">=</span> <span class="n">z</span><span class="o">*</span><span class="n">c</span>                                                         <span class="c1"># redshift * speed of light</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">recessional_vel</span><span class="p">,</span> <span class="mi">160</span><span class="p">]</span>                                                <span class="c1"># start guesses for [LOSV, dispersion]km/s</span>
+
+
+<span class="c1"># Natural log rebinning using ppxf_util</span>
+<span class="n">flux</span><span class="p">,</span> <span class="n">loglamgalaxy</span><span class="p">,</span> <span class="n">velscale</span> <span class="o">=</span> <span class="n">ppxf_util</span><span class="o">.</span><span class="n">log_rebin</span><span class="p">([</span><span class="n">WL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">WL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>           <span class="c1"># wavelength range of observations</span>
+                                                    <span class="n">norm_fluxes</span><span class="p">[</span><span class="mi">200</span><span class="p">]</span>          <span class="c1"># one of the spectra (random)</span>
+                                                  <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">##########################</span>
+<span class="c1"># MAKING THE TEMPLATES   #</span>
+<span class="c1">##########################</span>
+
+<span class="n">kvn</span> <span class="o">=</span> <span class="n">KVN</span><span class="p">()</span>                                                                   <span class="c1"># Instanciating new ppxf helper</span>
+<span class="n">kvn</span><span class="o">.</span><span class="n">make_templates</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="p">,</span>                                          <span class="c1"># set by user at the top</span>
+                   <span class="n">fwhm_obs</span><span class="o">=</span><span class="n">fwhm_obs</span><span class="p">,</span>
+                   <span class="n">wl_obs</span><span class="o">=</span><span class="n">WL</span><span class="p">,</span>
+                   <span class="n">wl_range_obs</span><span class="o">=</span><span class="p">[</span><span class="n">WL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">WL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span>
+                   <span class="n">velscale_obs</span><span class="o">=</span><span class="n">velscale</span><span class="p">,</span>                                     <span class="c1"># calculated by ppxf_util.log_rebin</span>
+                   <span class="n">wl_range_padding</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span>                                 <span class="c1"># only change if needed</span>
+                   <span class="n">z_list</span><span class="o">=</span><span class="n">met_list</span><span class="p">,</span>                                           <span class="c1"># set by user at the top</span>
+                  <span class="p">)</span>
+
+<span class="n">kvn</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> TemplateMaker Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Loading  model spectrum
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Calulating obs. velocity scale -- No dispersion
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Calculating template wavelength (log rebin) and velocity scale
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Calculating sigma
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Instanciating container arrays
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Using all ages from 6.0 to 10.2 (included) - log_age_cols now set
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Compiling your templates
+Progress: |██████████████████████████████████████████████████| 100.00% Complete
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Templates compiled successfully
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2---Running-the-fits-for-the-whole-data-cube">
+<h2>2 - Running the fits for the whole data cube<a class="headerlink" href="#2---Running-the-fits-for-the-whole-data-cube" title="Permalink to this headline">¶</a></h2>
+<p>Note I say “whole” data cube but the cube we are working with has been cropped down to contain NGC 4993 only and it would take significantly longer to do it for a full MUSE cube. Depending on how well or badly the fits go I average between 2 iterations (fits) per seconds and 3 seconds per fit. The better your SNR (generally) the lesser the struggle and different voronoi bins will take more or less time to fit. (note I have 12 CPUs working on this, it’ll be faster if you are more of them or they
+have higher clock rates)</p>
+<p><strong>It is a time consuming process</strong> we are fitting nearly 1500 spectra - if you have more metallicities you try to fit over you’ll also slow the process down.</p>
+<p>As a general rule of thumb I would recommend doing individual fits of some of the voronoi bins in key regions of the galaxy (e.g. center, arms, outskirts) where you can take a close look at what goes in and how it comes out and iterate. You can do fits like we did in the region around AT2017gfo but instead of doing the whole integrating flux in concentric annulii just pick a voronoi bin and fit that.</p>
+<p>For this tutorial, if you’ve gotten to that point you should be able to just run: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">make_fits.py</span></code></p>
+<div class="section" id="2.1---Quality-control">
+<h3>2.1 - Quality control<a class="headerlink" href="#2.1---Quality-control" title="Permalink to this headline">¶</a></h3>
+<p>Now at this point we have nearly 1500 SED fits, all with their star formation histories, kinematic information, etc stored away in an hdf5 file created by <code class="docutils literal notranslate"><span class="pre">make_fits.py</span></code>. The helper function <code class="docutils literal notranslate"><span class="pre">LordCommander</span></code> handled the fits and stored away the solutions that we would have in our individual <code class="docutils literal notranslate"><span class="pre">KVN</span></code> object. We don’t want to have 1500 <code class="docutils literal notranslate"><span class="pre">KVN</span></code> objects, because that would be a tremendous duplication of information (e.g. all the templates).</p>
+<p>Let’s make a few necessary imports and take a look at what <code class="docutils literal notranslate"><span class="pre">LordCommander</span></code> created for us.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">astropy.wcs</span> <span class="kn">import</span> <span class="n">WCS</span>
+<span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">hoki.sedfitting.lordcommander</span> <span class="kn">import</span> <span class="n">LordCommander</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[186]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># to see the tables it created:</span>
+LordCommander<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<p>Okay let’s load our data! you don’t need to open the hdf5 file directly because what we stored in there are pandas data frames (each a dataset within our group), which means you can just read those back into pandas with the <code class="docutils literal notranslate"><span class="pre">pd.read_hdf</span></code> function.</p>
+<p>Note that we didn’t necessarily need to put that data in a group but if you’d wanted to try alternative settings for your fits and put them all in the same files you could have the results in different groups (e.g. if you want to include redenning).</p>
+<p><strong>LOADING THE DATA</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[137]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">FILE</span><span class="o">=</span><span class="s1">&#39;data/ngc4993_010_020_030_clean.h5&#39;</span>                          <span class="c1"># location of the .hdf5 file</span>
+<span class="n">FOLDER</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;kvn_010_020_030_cleanTrue&#39;</span>                               <span class="c1"># group where the datasets are located</span>
+
+<span class="c1"># see LordCommander documentation for the table names</span>
+<span class="n">bestfit</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/BEST_FIT&#39;</span><span class="p">)</span>
+<span class="n">sfh</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/SFH&#39;</span><span class="p">)</span>
+<span class="n">dyn</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/DYNAMICS&#39;</span><span class="p">)</span>
+<span class="n">chi2</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/CHI2&#39;</span><span class="p">)</span>
+<span class="n">scale_factors</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/SCALE_FACTOR&#39;</span><span class="p">)</span>
+<span class="n">match_spectra</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/MATCH_SPECTRA&#39;</span><span class="p">)</span>
+<span class="n">polynomials</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/MATCH_APOLY&#39;</span><span class="p">)</span>
+<span class="n">flags</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">FOLDER</span><span class="si">}</span><span class="s1">/FLAGS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Extra set-up to make pretty plots</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[138]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># this is just to get the WCS info for our plots below</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/cropped_NGC4993.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
+    <span class="n">cube</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)</span>
+
+<span class="n">wcs</span> <span class="o">=</span> <span class="n">WCS</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">get_wcs_header</span><span class="p">())</span>
+<span class="n">wcs</span> <span class="o">=</span> <span class="n">wcs</span><span class="o">.</span><span class="n">dropaxis</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">cube</span>
+
+<span class="c1"># voronoi bin information required for the plots</span>
+<span class="n">voronoi_bins</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/voronoi_bins.txt&#39;</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">binNum</span> <span class="o">=</span> <span class="n">voronoi_bins</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">voronoi_bins</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">voronoi_bins</span><span class="o">.</span><span class="n">sn</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">voronoi_bins</span><span class="o">.</span><span class="n">binNum</span><span class="o">.</span><span class="n">values</span>
+<span class="n">binNum</span><span class="o">=</span><span class="n">binNum</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>2.1.1 Quality control: CHI2 and SNR</strong></p>
+<p>One of the first things to do is to look at the chi2. If it’s high your fits likely don’t have the right kinematics (although we can check on that a little down below). The chi2 will be somewhat dependent on the value of the SNR and that is why I like the plot both next to each other to see if there are any patterns in the chi2 that are not consisttent with the stuff we see in the SNR</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[139]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">3.5</span><span class="p">))</span>
+<span class="n">chi2_cb</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">chi2</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">binNum</span><span class="p">],</span> <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlGn_r&#39;</span><span class="p">)</span>
+<span class="n">divider0</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">cax0</span> <span class="o">=</span> <span class="n">divider0</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;5%&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">chi2_cb</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax0</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;chi2&quot;</span><span class="p">)</span>
+
+<span class="c1">#fig, ax = plt.subplots(1,1, figsize=(5,3.5))</span>
+<span class="n">sn_cb</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="c1">#vmax=2.5,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_heat&#39;</span><span class="p">)</span>
+<span class="n">divider1</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">cax1</span> <span class="o">=</span> <span class="n">divider1</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;5%&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sn_cb</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax1</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;SNR&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[139]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;SNR&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_22_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_22_1.png" />
+</div>
+</div>
+<p>Above you’ll note a few regions of poorer chi2: * the location of AT 2017gfo -&gt; because of the transient light we don’t fit it well with just stars. Makes sense * There is another point source (bottom right) which will naturally be poorly fit by the integrated spectrum of a stellar population and we can see it glow in the chi2. * Two big voronoi bins at the bottom: They are on the edge of the galaxy and massively binned becasue the data is not ideal. There just isn’t much galaxy light in
+their to fit well * The center of the galaxy….. Let’s talk about this a bit more down below with another form of Quality Control</p>
+<p><strong>2.1.2 - FLAGS</strong></p>
+<p>One of the tables we got from our hdf5 file is called FLAGS. In the class that drives the multiple ppxf fits I set up some FLAGS relating to the chi2, LOSV and the dispersion, to track the bins that deviate from the average and by how much: 2 sigma, 3 sigma, 5 sigma.</p>
+<p>Below is a copy-paste of the documentation:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contains the flags. During the fitting procedure, flags are created when the chi2 value or
+dynamical parameters are higher than the median for the whole galaxy.
+=&gt; There are flags for deviations by 2, 3 and 5 standard deviations.
+The value of the flag is:
+    - 2,3,5 for the Chi2
+    - 20,30,50 for the LOSV
+    - 200,300,500 for the dispersion.
+
+So a TOTAL flag with value 553 has a 3 sigma deviation in the Chi2, a 5 sigma diviation in the LOSV
+and a 5 sigma deviation in the dispersion.
+</pre></div>
+</div>
+<p>Now let’s look at the table:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[140]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">flags</span><span class="p">[</span><span class="n">flags</span><span class="o">.</span><span class="n">TOTAL</span><span class="o">!=</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># the mask crops all the bins that show no flags</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[140]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CHI2</th>
+      <th>LOS</th>
+      <th>DISP</th>
+      <th>TOTAL</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>157</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>438</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>447</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>499</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>527</th>
+      <td>5</td>
+      <td>50</td>
+      <td>500</td>
+      <td>555</td>
+    </tr>
+    <tr>
+      <th>531</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>556</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>558</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>562</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>585</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>587</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>637</th>
+      <td>3</td>
+      <td>50</td>
+      <td>500</td>
+      <td>553</td>
+    </tr>
+    <tr>
+      <th>657</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>659</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>661</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>684</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1332</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1397</th>
+      <td>0</td>
+      <td>50</td>
+      <td>500</td>
+      <td>550</td>
+    </tr>
+    <tr>
+      <th>1400</th>
+      <td>0</td>
+      <td>30</td>
+      <td>500</td>
+      <td>530</td>
+    </tr>
+    <tr>
+      <th>1403</th>
+      <td>0</td>
+      <td>0</td>
+      <td>200</td>
+      <td>200</td>
+    </tr>
+    <tr>
+      <th>1405</th>
+      <td>3</td>
+      <td>50</td>
+      <td>500</td>
+      <td>553</td>
+    </tr>
+    <tr>
+      <th>1409</th>
+      <td>3</td>
+      <td>50</td>
+      <td>500</td>
+      <td>553</td>
+    </tr>
+    <tr>
+      <th>1410</th>
+      <td>0</td>
+      <td>0</td>
+      <td>300</td>
+      <td>300</td>
+    </tr>
+    <tr>
+      <th>1413</th>
+      <td>2</td>
+      <td>20</td>
+      <td>500</td>
+      <td>522</td>
+    </tr>
+    <tr>
+      <th>1416</th>
+      <td>3</td>
+      <td>50</td>
+      <td>500</td>
+      <td>553</td>
+    </tr>
+    <tr>
+      <th>1417</th>
+      <td>2</td>
+      <td>50</td>
+      <td>500</td>
+      <td>552</td>
+    </tr>
+    <tr>
+      <th>1420</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1425</th>
+      <td>0</td>
+      <td>0</td>
+      <td>500</td>
+      <td>500</td>
+    </tr>
+    <tr>
+      <th>1427</th>
+      <td>3</td>
+      <td>30</td>
+      <td>500</td>
+      <td>533</td>
+    </tr>
+    <tr>
+      <th>1428</th>
+      <td>3</td>
+      <td>30</td>
+      <td>500</td>
+      <td>533</td>
+    </tr>
+    <tr>
+      <th>1432</th>
+      <td>2</td>
+      <td>0</td>
+      <td>500</td>
+      <td>502</td>
+    </tr>
+    <tr>
+      <th>1434</th>
+      <td>2</td>
+      <td>30</td>
+      <td>500</td>
+      <td>532</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>that’s neat but not very human readable or at least not easy to interpret for a human brain - we need pictures! Let’s plot all of the regions that have at least some issue with their chi2: * Those with a very bad chi2 (more than 5 sigma deivation from average) and or kinematic fit issues (v. problematic, because you can get the kinematics right usually even if the SFH is poor so those bad kinematics are a bad sign). * Those with chi2 deviation of 3 sigma but not more. Those are bad fits, but
+not awful.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[141]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">binNum</span><span class="p">,</span> <span class="n">flags</span><span class="p">[</span><span class="n">flags</span><span class="o">.</span><span class="n">TOTAL</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">mask2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">binNum</span><span class="p">,</span> <span class="n">flags</span><span class="p">[</span><span class="n">flags</span><span class="o">.</span><span class="n">TOTAL</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mf">3.5</span><span class="p">))</span>
+<span class="n">chi2_cb</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">chi2</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">binNum</span><span class="p">],</span> <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlGn_r&#39;</span><span class="p">)</span>
+<span class="n">chi2_cb</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">chi2</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">binNum</span><span class="p">],</span> <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlGn_r&#39;</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Flags&gt;3 over chi2 map&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask2</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">mask2</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">mask</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Flags==3 over chi2 map&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[141]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;Flags==3 over chi2 map&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_26_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_26_1.png" />
+</div>
+</div>
+<p>As we can see things go very wrong where our point sources are - which makes sense! there is no reason our SEDs should fit those well. We could use the FLAGS as a way to filter potential point sources in the way (if you are dealing with a v. crowded field) but that’s not what they were meant for so use caution.</p>
+<p>Now the FLAGS==3 is interesting: Here again we have the voronoi bins at the bottom (which have terrible spectra) and some bins in the middle of the galaxy. Spoiler alert, there is a LIER region in the middle (and other bits of the galaxy) so it could be that… or it could be that the SNR is super high there and so thi chi2 very poor because it’s fitting data with smaller uncertainties.</p>
+<p>Best way to check is to plot all that!</p>
+<div class="section" id="2.1.3---Plotting-spectra-from-individual-vorbins">
+<h4>2.1.3 - Plotting spectra from individual vorbins<a class="headerlink" href="#2.1.3---Plotting-spectra-from-individual-vorbins" title="Permalink to this headline">¶</a></h4>
+<p>There is a little bit of faffing around with indicies to plot spectra from specific bins you identify in your plot as needing an extra look. It’s not particularly complex, just have to know where to look and where pas me decided things should be located, so let me show you:</p>
+<p><strong>Let’s plot all the spectra from the FLAGS==3 voronoi bins</strong></p>
+<p>First we have our bin ID in the flags table so that’s handy</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[142]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">flags</span><span class="p">[</span><span class="n">flags</span><span class="o">.</span><span class="n">TOTAL</span><span class="o">==</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[142]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CHI2</th>
+      <th>LOS</th>
+      <th>DISP</th>
+      <th>TOTAL</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>44</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>556</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>661</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1420</th>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[143]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">binID_flag3</span> <span class="o">=</span> <span class="n">flags</span><span class="p">[</span><span class="n">flags</span><span class="o">.</span><span class="n">TOTAL</span><span class="o">==</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+<span class="n">binID_flag3</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[143]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([  44,  101,  469,  556,  661, 1420])
+</pre></div></div>
+</div>
+<p>These bin_id numbers are directly related to the first dimension of our <code class="docutils literal notranslate"><span class="pre">spectra</span></code> and <code class="docutils literal notranslate"><span class="pre">norm_fluxes</span></code> numpy arrays (which are 2D arrays with shape [number voronoi bins, number of wavelength bins].</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[144]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">spectra</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[144]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1494, 3681)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[145]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">binID_flag3</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL0</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="c1"># first and last bin sometimes ugly so i crop it for the plot</span>
+             <span class="n">spectra</span><span class="p">[</span><span class="n">i</span><span class="p">,:][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># fluxes pre normalisation so they&#39;re not fully on top of each other</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;bin ID: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+             <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[145]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7fa62c695730&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_32_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_32_1.png" />
+</div>
+</div>
+<p>That’s nice but there are 6 binsa nd 6 spectra, which belongs to where? You can sort of figure it out from the bin number but it’s a weird tranformation of a 2D grid into a 1D grid in your head not really remembering where voronoi bin 0 is (top? bottom? righ? left?)</p>
+<p>Instead let’s mark them on our maps!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[146]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">chi2_cb</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">chi2</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">binNum</span><span class="p">],</span> <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greys&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">binID_flag3</span><span class="p">:</span>
+    <span class="n">_mask_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">binNum</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">_mask_i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">_mask_i</span><span class="p">],</span>  <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_34_0.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_34_0.png" />
+</div>
+</div>
+<p>It is no surprise that the super noise spectra belong to the voronoi bins on the edger of the image. The other 4 in the galactic center need zooming in:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[147]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">binID_flag3</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL0</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="c1"># first and last bin sometimes ugly so i crop it for the plot</span>
+             <span class="n">spectra</span><span class="p">[</span><span class="n">i</span><span class="p">,:][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># fluxes pre normalisation so they&#39;re not fully on top of each other</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;bin ID: </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+             <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="mi">4000</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span><span class="mi">9300</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[147]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(5000.0, 9300.0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_36_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_36_1.png" />
+</div>
+</div>
+<p>There seems to be som emission lines that will affect the chi2 and also the spectra are a lot less noisy indeed. One final point we won’t talk about too much here (but you can check the Supplementary information of Stevance et al. 2023 for a discussion) is that these spectra are clearly reddenned and it’s possible our approach of ignoring reddening and hoping the 2nd order polynomial will do the job may have hit its limits.</p>
+<p>With SED fitting there are plenty of little thigns like that you can iterate on to get the best it and in truth you could spend a whole PhD or postdoc refining things. But at the end of the day <em>the</em> solution for our star formation history is impossible to find, we can only hope to get estimates. So as you iterate and do further test consistently check in and ask yourself: is this going to improve my understanding of this galaxy? Is this going to help answer my science question?</p>
+<p>Okay let’s get back to more practical matters…</p>
+</div>
+</div>
+<div class="section" id="2.2---Kinematics">
+<h3>2.2 - Kinematics<a class="headerlink" href="#2.2---Kinematics" title="Permalink to this headline">¶</a></h3>
+<p>The main thing that <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> was designed for originally was extracting the kinematic behaviour of our spatially resolved galaxies. Here is a quick way to plot the dynamical information that is stored in our <code class="docutils literal notranslate"><span class="pre">DYNAMICS</span></code> table (which we called <code class="docutils literal notranslate"><span class="pre">dyn</span></code> earlier). <strong>NOTE:</strong> we are handling the “bad” data in a quick and dirty way below by inputing it with the mean of the LOSV and dispersion velocity (if the values in a given bin are stupid high or stupid low and ruin our colour bar). You can do a
+more thorough job by refitting those bins or jsut flagging them as discrepant (like we had with our flags earlier).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[148]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">quick_plot_dynamics</span><span class="p">(</span><span class="n">los_vel</span><span class="p">,</span>     <span class="c1"># line of sight velocity</span>
+                        <span class="n">disp_vel</span><span class="p">,</span>    <span class="c1"># dispersion velocity</span>
+                        <span class="n">yeet</span><span class="o">=</span><span class="kc">None</span>    <span class="c1"># the bins to ignore (e.g. if you want to not plot the point sources)</span>
+                       <span class="p">):</span>
+
+    <span class="n">disp_vel</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">disp_vel</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">disp_vel</span><span class="o">.</span><span class="n">mean</span><span class="p">()])])</span>
+    <span class="n">los_vel</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">los_vel</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">los_vel</span><span class="p">)])])</span>
+
+
+
+    <span class="c1"># &quot;fixing&quot; the LOSV that are too low or high so the colorbar range isn&#39;t ruined</span>
+
+    <span class="c1"># if LOSV &lt;2700 km/s in that bin, use the recessional_vel value, otherwise keep it as is in the array</span>
+    <span class="n">los_vel_fix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">los_vel</span><span class="o">&lt;</span><span class="mi">2700</span><span class="p">,</span> <span class="n">recessional_vel</span><span class="p">,</span> <span class="n">los_vel</span><span class="p">)</span>
+    <span class="c1"># if LOSV &gt;3000 km/s in that bin, use the recessional_vel value, otherwise keep it as is</span>
+    <span class="c1"># (in our new fixed array that has had its lwo values laready &quot;fixed&quot;)</span>
+    <span class="n">los_vel_fix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">los_vel_fix</span><span class="o">&gt;</span><span class="mi">3000</span><span class="p">,</span> <span class="n">recessional_vel</span><span class="p">,</span> <span class="n">los_vel_fix</span><span class="p">)</span>
+
+    <span class="c1"># same idea for the dispersion - we inpute with the median deispersion of the whole sample</span>
+    <span class="n">disp_vel_fix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">disp_vel</span><span class="o">&gt;</span><span class="mi">210</span><span class="p">,</span>  <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">disp_vel</span><span class="p">),</span> <span class="n">disp_vel</span><span class="p">,)</span>
+    <span class="n">disp_vel_fix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">disp_vel_fix</span><span class="o">&lt;</span><span class="mi">120</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">disp_vel_fix</span><span class="p">),</span>  <span class="n">disp_vel_fix</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">yeet</span><span class="p">:</span> <span class="c1"># if we want to ignore (i.e yeet) bins from our plotting</span>
+            <span class="n">los_vel_fix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">disp_vel_fix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span> <span class="c1"># catches instance when yeet not given - wow that was a lazy way to do it</span>
+        <span class="k">pass</span>
+
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+
+    <span class="c1">## PLOT LOSVD</span>
+    <span class="n">sn_color0</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="c1"># pixel coordinates we extracted from our voronoi_bin table earlier</span>
+                             <span class="n">los_vel_fix</span><span class="p">[</span><span class="n">binNum</span><span class="p">]</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">los_vel_fix</span><span class="p">),</span> <span class="c1"># center on zero using the median</span>
+                             <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                             <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span> <span class="c1"># towards us is red, away from us is blue - DOPPLER!</span>
+                            <span class="p">)</span>
+
+    <span class="c1"># all this to play with the location of the color bar</span>
+    <span class="n">divider0</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">cax0</span> <span class="o">=</span> <span class="n">divider0</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;5%&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sn_color0</span><span class="p">,</span><span class="n">cax</span><span class="o">=</span><span class="n">cax0</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;LOSVD&#39;</span><span class="p">)</span>
+
+    <span class="c1">## PLOT DISPERSION</span>
+    <span class="n">sn_color1</span> <span class="o">=</span> <span class="n">plot_voronoi</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                             <span class="n">disp_vel_fix</span><span class="p">[</span><span class="n">binNum</span><span class="p">],</span>
+                             <span class="n">pixelsize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                             <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">)</span>
+
+    <span class="n">divider1</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">cax1</span> <span class="o">=</span> <span class="n">divider1</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;5%&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sn_color1</span><span class="p">,</span><span class="n">cax</span><span class="o">=</span><span class="n">cax1</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;dispersion&#39;</span><span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[149]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">los_vel</span><span class="p">,</span> <span class="n">disp_vel</span> <span class="o">=</span> <span class="n">dyn</span><span class="o">.</span><span class="n">los</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">dyn</span><span class="o">.</span><span class="n">disp</span><span class="o">.</span><span class="n">values</span>
+<span class="n">quick_plot_dynamics</span><span class="p">(</span><span class="n">los_vel</span><span class="p">,</span> <span class="n">disp_vel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_39_0.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_39_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="2.3---Star-Formation-History">
+<h3>2.3 - Star Formation History<a class="headerlink" href="#2.3---Star-Formation-History" title="Permalink to this headline">¶</a></h3>
+<p>Finally, the reason we’ve done all this in the first place: the Star Formation History. There are two main ways to plot this: first of all the light fraction, which we get directly from the SED fitting and <code class="docutils literal notranslate"><span class="pre">ppxf</span></code>. The other way is the mass fraction, which is a more useful physical quantity the majority of the time. With the BPASS models and our hoki utilities it’ll be easy to derive the mass fraction SFH once we’ve organised our light fraction SFH.</p>
+<div class="section" id="2.3.1-Light-Fraction">
+<h4>2.3.1 Light Fraction<a class="headerlink" href="#2.3.1-Light-Fraction" title="Permalink to this headline">¶</a></h4>
+<p>The first thing to do is to calculate the light fraction for each component in each of our voronoi bins. <strong>The light fraction in each voronoi bin should sum to 1.0</strong>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[150]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">## first we group by bin ID to calculate the sum of the weights</span>
+<span class="c1">## remember form an earlier tuto, the ppxf weights don&#39;t always sum to 1.</span>
+<span class="n">total_light</span> <span class="o">=</span> <span class="n">sfh</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;bin_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">weights</span>
+
+<span class="c1"># this will make our life easier (see below)</span>
+<span class="n">sfh</span> <span class="o">=</span> <span class="n">sfh</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;bin_id&#39;</span><span class="p">)</span>
+
+<span class="c1"># then we calculate the light fraction</span>
+<span class="n">light_fraction</span> <span class="o">=</span> <span class="n">sfh</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">total_light</span><span class="p">)</span>
+<span class="n">sfh</span><span class="p">[</span><span class="s1">&#39;light_fraction&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">light_fraction</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[151]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sfh</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[151]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>age</th>
+      <th>weights</th>
+      <th>light_fraction</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>8.9</td>
+      <td>0.092715</td>
+      <td>0.134078</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.028412</td>
+      <td>0.041088</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.01</td>
+      <td>9.7</td>
+      <td>0.138911</td>
+      <td>0.200882</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>10.1</td>
+      <td>0.044917</td>
+      <td>0.064955</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.03</td>
+      <td>10.1</td>
+      <td>0.386549</td>
+      <td>0.558997</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>say we want to know the star formation history of bin 200, we can use <code class="docutils literal notranslate"><span class="pre">.loc</span></code> because we set the index to be <code class="docutils literal notranslate"><span class="pre">bin_id</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[152]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sfh</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">200</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[152]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>age</th>
+      <th>weights</th>
+      <th>light_fraction</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>200</th>
+      <td>0.02</td>
+      <td>8.9</td>
+      <td>0.064498</td>
+      <td>0.082065</td>
+    </tr>
+    <tr>
+      <th>200</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.097817</td>
+      <td>0.124459</td>
+    </tr>
+    <tr>
+      <th>200</th>
+      <td>0.01</td>
+      <td>10.0</td>
+      <td>0.623623</td>
+      <td>0.793476</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Okay now we are going to separate out the components from different metallicities, because at the end of the day we’d like to plot those individually. You could create your own functions or a data class to handle the stuff below if it gets too repetitive with added metallicities</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[153]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># New SFH data frames that only contain one metallicity</span>
+<span class="n">sfh010</span><span class="o">=</span><span class="n">sfh</span><span class="p">[</span><span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">==</span><span class="mf">0.010</span><span class="p">]</span>
+<span class="n">sfh020</span><span class="o">=</span><span class="n">sfh</span><span class="p">[</span><span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">==</span><span class="mf">0.020</span><span class="p">]</span>
+<span class="n">sfh030</span><span class="o">=</span><span class="n">sfh</span><span class="p">[</span><span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">==</span><span class="mf">0.030</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[154]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Creating pandas Series grouping the light fraction by log age bin</span>
+<span class="n">lf_z010</span><span class="o">=</span><span class="n">sfh010</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()[</span><span class="s1">&#39;light_fraction&#39;</span><span class="p">]</span>
+<span class="n">lf_z020</span><span class="o">=</span><span class="n">sfh020</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()[</span><span class="s1">&#39;light_fraction&#39;</span><span class="p">]</span>
+<span class="n">lf_z030</span><span class="o">=</span><span class="n">sfh030</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()[</span><span class="s1">&#39;light_fraction&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[156]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">lf_z010</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[156]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+age
+6.6       0.005236
+6.9       0.093890
+8.6       1.458261
+8.9      12.964961
+9.0       1.123147
+9.1      12.245958
+9.2       0.287909
+9.3       2.236460
+9.4       4.510080
+9.5      13.695983
+9.6       0.011081
+9.7     309.547829
+9.8       5.104481
+9.9     461.526415
+10.0    288.287897
+10.1     56.685633
+Name: light_fraction, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[157]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># summing those light fractions so that we can...</span>
+<span class="n">total_lf</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lf_z010</span><span class="p">)</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">lf_z020</span><span class="p">)</span><span class="o">+</span><span class="nb">sum</span><span class="p">(</span><span class="n">lf_z030</span><span class="p">)</span>
+
+<span class="c1"># ... normalise our Series</span>
+<span class="n">lf_z010</span><span class="o">/=</span><span class="n">total_lf</span>
+<span class="n">lf_z020</span><span class="o">/=</span><span class="n">total_lf</span>
+<span class="n">lf_z030</span><span class="o">/=</span><span class="n">total_lf</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[158]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">lf_z010</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[158]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+age
+6.6     0.000004
+6.9     0.000063
+8.6     0.000976
+8.9     0.008678
+9.0     0.000752
+9.1     0.008197
+9.2     0.000193
+9.3     0.001497
+9.4     0.003019
+9.5     0.009167
+9.6     0.000007
+9.7     0.207194
+9.8     0.003417
+9.9     0.308920
+10.0    0.192964
+10.1    0.037942
+Name: light_fraction, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[169]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Creating a new data frame to store the SFH we want to plot</span>
+<span class="c1"># it groups the results by metallicity and age</span>
+<span class="n">df_sfh</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">38</span><span class="p">)),</span>
+                     <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;met&#39;</span><span class="p">]</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">10.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+                    <span class="p">)</span>
+<span class="n">df_sfh</span><span class="p">[</span><span class="s1">&#39;met&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.010</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[170]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df_sfh</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> <span class="c1"># currently filled with 0</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[170]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>6.5</th>
+      <th>6.6</th>
+      <th>6.7</th>
+      <th>6.8</th>
+      <th>6.9</th>
+      <th>7.0</th>
+      <th>7.1</th>
+      <th>7.2</th>
+      <th>7.3</th>
+      <th>...</th>
+      <th>9.2</th>
+      <th>9.3</th>
+      <th>9.4</th>
+      <th>9.5</th>
+      <th>9.6</th>
+      <th>9.7</th>
+      <th>9.8</th>
+      <th>9.9</th>
+      <th>10.0</th>
+      <th>10.1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.01</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.02</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.03</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>3 rows × 38 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[171]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># now for each light fraction value in our SFH data frames split by metallicity</span>
+<span class="c1"># we add that light fraction to the corresponding age and metallicity cell</span>
+<span class="c1"># in the df_sfh dataframe which summarises the results</span>
+
+<span class="k">for</span> <span class="n">lf</span><span class="p">,</span> <span class="n">age</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sfh010</span><span class="o">.</span><span class="n">light_fraction</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">sfh010</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="c1"># the rounding of the age is important below because otherwise</span>
+    <span class="c1"># your string can be 6.9999999999999999 instead of 7.0</span>
+    <span class="n">df_sfh</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="mi">2</span><span class="p">))][(</span><span class="n">df_sfh</span><span class="o">.</span><span class="n">met</span> <span class="o">==</span> <span class="mf">0.010</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">lf</span>
+
+<span class="k">for</span> <span class="n">lf</span><span class="p">,</span> <span class="n">age</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sfh020</span><span class="o">.</span><span class="n">light_fraction</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">sfh020</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">df_sfh</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="mi">2</span><span class="p">))][(</span><span class="n">df_sfh</span><span class="o">.</span><span class="n">met</span> <span class="o">==</span> <span class="mf">0.020</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">lf</span>
+
+<span class="k">for</span> <span class="n">lf</span><span class="p">,</span> <span class="n">age</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sfh030</span><span class="o">.</span><span class="n">light_fraction</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">sfh030</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">df_sfh</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="mi">2</span><span class="p">))][(</span><span class="n">df_sfh</span><span class="o">.</span><span class="n">met</span> <span class="o">==</span> <span class="mf">0.030</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">lf</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[172]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df_sfh</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[172]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>6.5</th>
+      <th>6.6</th>
+      <th>6.7</th>
+      <th>6.8</th>
+      <th>6.9</th>
+      <th>7.0</th>
+      <th>7.1</th>
+      <th>7.2</th>
+      <th>7.3</th>
+      <th>...</th>
+      <th>9.2</th>
+      <th>9.3</th>
+      <th>9.4</th>
+      <th>9.5</th>
+      <th>9.6</th>
+      <th>9.7</th>
+      <th>9.8</th>
+      <th>9.9</th>
+      <th>10.0</th>
+      <th>10.1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.01</td>
+      <td>0.0</td>
+      <td>0.005236</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.093890</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.287909</td>
+      <td>2.23646</td>
+      <td>4.510080</td>
+      <td>13.695983</td>
+      <td>0.011081</td>
+      <td>309.547829</td>
+      <td>5.104481</td>
+      <td>461.526415</td>
+      <td>288.287897</td>
+      <td>56.685633</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.02</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.156487</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>31.516823</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>77.343859</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.03</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.159848</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>2.138571</td>
+      <td>0.10079</td>
+      <td>0.063345</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.340492</td>
+      <td>0.000000</td>
+      <td>0.282719</td>
+      <td>18.450697</td>
+    </tr>
+  </tbody>
+</table>
+<p>3 rows × 38 columns</p>
+</div></div>
+</div>
+<p>Now to make plotting easier we can do some pandas <em>magic</em>…</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[173]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># we set the index to the met column and then transpose</span>
+<span class="n">df_sfh</span><span class="o">=</span><span class="n">df_sfh</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;met&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">df_sfh</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[173]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>met</th>
+      <th>0.01</th>
+      <th>0.02</th>
+      <th>0.03</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>6.5</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6.6</th>
+      <td>0.005236</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6.7</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6.8</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6.9</th>
+      <td>0.093890</td>
+      <td>1.156487</td>
+      <td>0.159848</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[174]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># we also normalise the results</span>
+<span class="n">df_sfh</span> <span class="o">/=</span> <span class="n">df_sfh</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[176]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df_sfh</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[176]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>met</th>
+      <th>0.01</th>
+      <th>0.02</th>
+      <th>0.03</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>9.7</th>
+      <td>0.207194</td>
+      <td>0.021096</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>9.8</th>
+      <td>0.003417</td>
+      <td>0.000000</td>
+      <td>0.000228</td>
+    </tr>
+    <tr>
+      <th>9.9</th>
+      <td>0.308920</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>10.0</th>
+      <td>0.192964</td>
+      <td>0.000000</td>
+      <td>0.000189</td>
+    </tr>
+    <tr>
+      <th>10.1</th>
+      <td>0.037942</td>
+      <td>0.051770</td>
+      <td>0.012350</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[177]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># then we can directly plot the stacked bar plot from pandas!</span>
+<span class="c1"># so much easier than creating it from scratch in matplotlib!</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">df_sfh</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">{</span><span class="mf">0.01</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+                                            <span class="mf">0.02</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+                                            <span class="mf">0.03</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
+                                             <span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">16</span><span class="p">,</span><span class="mi">37</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[177]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(16.0, 37.0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_59_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_59_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="2.3.2-Mass-fraction">
+<h4>2.3.2 Mass fraction<a class="headerlink" href="#2.3.2-Mass-fraction" title="Permalink to this headline">¶</a></h4>
+<p>Okay so the final step is to turn this light fraction plot into a mass fraction one: 1) We need to turn the light fraction into a <em>current</em> mass fraction by comparing their absolute amplitude to our template SEDs absolute amplitude (and we know they are for 10^6 solar masses <em>at birth</em> 2) The discrepancy between the <em>current</em> mass fraction and the BPASS 10^6 solar masses <em>at birth</em> can be dealt with because we have in the BPASS outputs a table that tells us how much mass stellar mass remains at
+any given age bin.</p>
+<p>Let’s do this step by step</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># a) we load the BPASS SEDs (not the templates made with hoki) from the model outputs</span>
+
+<span class="n">spectra_010</span><span class="o">=</span><span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="o">+</span><span class="s1">&#39;spectra-bin-imf135_300.z010.dat&#39;</span><span class="p">)</span>
+<span class="n">spectra_020</span><span class="o">=</span><span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="o">+</span><span class="s1">&#39;spectra-bin-imf135_300.z020.dat&#39;</span><span class="p">)</span>
+<span class="n">spectra_030</span><span class="o">=</span><span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="o">+</span><span class="s1">&#39;spectra-bin-imf135_300.z030.dat&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[178]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">spectra_010</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[178]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WL</th>
+      <th>6.0</th>
+      <th>6.1</th>
+      <th>6.2</th>
+      <th>6.3</th>
+      <th>6.4</th>
+      <th>6.5</th>
+      <th>6.6</th>
+      <th>6.7</th>
+      <th>6.8</th>
+      <th>...</th>
+      <th>10.1</th>
+      <th>10.2</th>
+      <th>10.3</th>
+      <th>10.4</th>
+      <th>10.5</th>
+      <th>10.6</th>
+      <th>10.7</th>
+      <th>10.8</th>
+      <th>10.9</th>
+      <th>11.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>3.967282e-40</td>
+      <td>4.218233e-40</td>
+      <td>4.603921e-40</td>
+      <td>6.073403e-40</td>
+      <td>1.315608e-39</td>
+      <td>3.371735e-39</td>
+      <td>7.411536e-39</td>
+      <td>3.407992e-38</td>
+      <td>5.704377e-38</td>
+      <td>...</td>
+      <td>3.527645e-40</td>
+      <td>4.776701e-40</td>
+      <td>5.914132e-40</td>
+      <td>2.209390e-40</td>
+      <td>1.870472e-40</td>
+      <td>1.753484e-40</td>
+      <td>1.592896e-40</td>
+      <td>3.193369e-40</td>
+      <td>1.166236e-40</td>
+      <td>4.273201e-41</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>3.967282e-40</td>
+      <td>4.218233e-40</td>
+      <td>4.603921e-40</td>
+      <td>6.073403e-40</td>
+      <td>1.315608e-39</td>
+      <td>3.371735e-39</td>
+      <td>7.411536e-39</td>
+      <td>3.407992e-38</td>
+      <td>5.704377e-38</td>
+      <td>...</td>
+      <td>3.527645e-40</td>
+      <td>4.776701e-40</td>
+      <td>5.914132e-40</td>
+      <td>2.209390e-40</td>
+      <td>1.870472e-40</td>
+      <td>1.753484e-40</td>
+      <td>1.592896e-40</td>
+      <td>3.193369e-40</td>
+      <td>1.166236e-40</td>
+      <td>4.273201e-41</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.0</td>
+      <td>3.967282e-40</td>
+      <td>4.218233e-40</td>
+      <td>4.603921e-40</td>
+      <td>6.073403e-40</td>
+      <td>1.315608e-39</td>
+      <td>3.371735e-39</td>
+      <td>7.411536e-39</td>
+      <td>3.407992e-38</td>
+      <td>5.704377e-38</td>
+      <td>...</td>
+      <td>3.527645e-40</td>
+      <td>4.776701e-40</td>
+      <td>5.914132e-40</td>
+      <td>2.209390e-40</td>
+      <td>1.870472e-40</td>
+      <td>1.753484e-40</td>
+      <td>1.592896e-40</td>
+      <td>3.193369e-40</td>
+      <td>1.166236e-40</td>
+      <td>4.273201e-41</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.0</td>
+      <td>3.967282e-40</td>
+      <td>4.218233e-40</td>
+      <td>4.603921e-40</td>
+      <td>6.073403e-40</td>
+      <td>1.315608e-39</td>
+      <td>3.371735e-39</td>
+      <td>7.411536e-39</td>
+      <td>3.407992e-38</td>
+      <td>5.704377e-38</td>
+      <td>...</td>
+      <td>3.527645e-40</td>
+      <td>4.776701e-40</td>
+      <td>5.914132e-40</td>
+      <td>2.209390e-40</td>
+      <td>1.870472e-40</td>
+      <td>1.753484e-40</td>
+      <td>1.592896e-40</td>
+      <td>3.193369e-40</td>
+      <td>1.166236e-40</td>
+      <td>4.273201e-41</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.967282e-40</td>
+      <td>4.218233e-40</td>
+      <td>4.603921e-40</td>
+      <td>6.073403e-40</td>
+      <td>1.315608e-39</td>
+      <td>3.371735e-39</td>
+      <td>7.411536e-39</td>
+      <td>3.407992e-38</td>
+      <td>5.704377e-38</td>
+      <td>...</td>
+      <td>3.527645e-40</td>
+      <td>4.776701e-40</td>
+      <td>5.914132e-40</td>
+      <td>2.209390e-40</td>
+      <td>1.870472e-40</td>
+      <td>1.753484e-40</td>
+      <td>1.592896e-40</td>
+      <td>3.193369e-40</td>
+      <td>1.166236e-40</td>
+      <td>4.273201e-41</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 52 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[179]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># b) we load in the starmass table as well</span>
+<span class="n">starmass_bin_010</span><span class="o">=</span><span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="o">+</span><span class="s2">&quot;starmass-bin-imf135_300.z010.dat&quot;</span><span class="p">)</span>
+<span class="n">starmass_bin_020</span><span class="o">=</span><span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="o">+</span><span class="s2">&quot;starmass-bin-imf135_300.z020.dat&quot;</span><span class="p">)</span>
+<span class="n">starmass_bin_030</span><span class="o">=</span><span class="n">load</span><span class="o">.</span><span class="n">model_output</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="o">+</span><span class="s2">&quot;starmass-bin-imf135_300.z030.dat&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[180]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">starmass_bin_010</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[180]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>log_age</th>
+      <th>stellar_mass</th>
+      <th>remnant_mass</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>6.0</td>
+      <td>1000000.00</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6.1</td>
+      <td>1000000.00</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6.2</td>
+      <td>1000000.00</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6.3</td>
+      <td>997982.20</td>
+      <td>0.002659</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>6.4</td>
+      <td>988740.77</td>
+      <td>840.775590</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[181]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># c) we set a few useful variables</span>
+<span class="n">wl_fits</span><span class="o">=</span><span class="n">bestfit</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
+<span class="n">wl_min</span><span class="p">,</span> <span class="n">wl_max</span> <span class="o">=</span> <span class="n">wl_fits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wl_fits</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">L_sol</span> <span class="o">=</span> <span class="mf">3.846e33</span> <span class="c1"># luminosity of the sun in cgs</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mf">1.23e26</span> <span class="c1"># distance to NGC4993 in cm</span>
+<span class="n">scale_to_observer_units</span> <span class="o">=</span> <span class="n">L_sol</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># inverse square law!</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[182]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># d) add some colums to our sfh table so we can store our results</span>
+<span class="c1">#    for the current mass and the ZAMS mass</span>
+<span class="n">sfh</span><span class="p">[</span><span class="s1">&#39;Mzams&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sfh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sfh</span><span class="p">[</span><span class="s1">&#39;Mnow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">sfh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[183]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sfh</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[183]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>age</th>
+      <th>weights</th>
+      <th>light_fraction</th>
+      <th>Mzams</th>
+      <th>Mnow</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>8.9</td>
+      <td>0.092715</td>
+      <td>0.134078</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.028412</td>
+      <td>0.041088</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.01</td>
+      <td>9.7</td>
+      <td>0.138911</td>
+      <td>0.200882</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>10.1</td>
+      <td>0.044917</td>
+      <td>0.064955</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.03</td>
+      <td>10.1</td>
+      <td>0.386549</td>
+      <td>0.558997</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1492</th>
+      <td>0.01</td>
+      <td>9.9</td>
+      <td>0.283420</td>
+      <td>0.345728</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.102584</td>
+      <td>0.113960</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.01</td>
+      <td>9.7</td>
+      <td>0.311537</td>
+      <td>0.346084</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.01</td>
+      <td>9.9</td>
+      <td>0.473166</td>
+      <td>0.525637</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.01</td>
+      <td>10.0</td>
+      <td>0.012889</td>
+      <td>0.014318</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>6047 rows × 6 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[185]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># another table we haven&#39;t talked about yet is going to come in handy</span>
+<span class="c1"># the scale_factors: it allows use to transform our fit and template spectra from</span>
+<span class="c1"># normalised no-units spectra to real things with real units.</span>
+<span class="n">scale_factors</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[185]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>median</th>
+      <th>to_ergs</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3199.449463</td>
+      <td>3.199449e-17</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2818.566162</td>
+      <td>2.818566e-17</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2808.959717</td>
+      <td>2.808960e-17</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3148.326416</td>
+      <td>3.148326e-17</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2370.432861</td>
+      <td>2.370433e-17</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1489</th>
+      <td>2894.474315</td>
+      <td>2.894474e-17</td>
+    </tr>
+    <tr>
+      <th>1490</th>
+      <td>4660.632334</td>
+      <td>4.660632e-17</td>
+    </tr>
+    <tr>
+      <th>1491</th>
+      <td>3839.647448</td>
+      <td>3.839647e-17</td>
+    </tr>
+    <tr>
+      <th>1492</th>
+      <td>3379.250118</td>
+      <td>3.379250e-17</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>4145.672011</td>
+      <td>4.145672e-17</td>
+    </tr>
+  </tbody>
+</table>
+<p>1494 rows × 2 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[187]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">####### CALCULATE M ZAMS ############</span>
+
+<span class="c1"># for each row in sfh</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sfh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="c1"># we load the matching template (it contains the kinematics, that&#39;s okay), the light fraction</span>
+    <span class="c1"># the age and the metallicity, and we keep track of which bin_id we&#39;re looking at</span>
+    <span class="n">spec</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">match_spectra</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span> <span class="n">sfh</span><span class="o">.</span><span class="n">light_fraction</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sfh</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">bin_id</span> <span class="o">=</span> <span class="n">sfh</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="c1"># our template spectrum is converted to ergs and we multipled by its sfh light fraction weight w</span>
+    <span class="n">template_i</span> <span class="o">=</span> <span class="n">spec</span><span class="o">*</span><span class="n">scale_factors</span><span class="o">.</span><span class="n">to_ergs</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">bin_id</span><span class="p">]</span><span class="o">*</span><span class="n">w</span>
+
+    <span class="c1"># bpass_i is the BPASS SED scaled to observer units, cropped to the right wavelengtth and</span>
+    <span class="c1"># at the right age and metallicity (this could be streamlined)</span>
+    <span class="k">if</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">0.01</span><span class="p">:</span>
+        <span class="c1"># could do the iloc crop outside the loop...</span>
+        <span class="n">bpass_i</span> <span class="o">=</span> <span class="n">spectra_010</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">wl_min</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">wl_max</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:][</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">2</span><span class="p">))]</span><span class="o">*</span><span class="n">scale_to_observer_units</span>
+
+    <span class="k">elif</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">0.02</span><span class="p">:</span>
+        <span class="n">bpass_i</span> <span class="o">=</span> <span class="n">spectra_020</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">wl_min</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">wl_max</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:][</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">2</span><span class="p">))]</span><span class="o">*</span><span class="n">scale_to_observer_units</span>
+
+    <span class="k">elif</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">0.030</span><span class="p">:</span>
+        <span class="n">bpass_i</span> <span class="o">=</span> <span class="n">spectra_030</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">wl_min</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">wl_max</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:][</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">2</span><span class="p">))]</span><span class="o">*</span><span class="n">scale_to_observer_units</span>
+
+    <span class="c1"># Now to get the ZAMS mass we basically compare the mean flux of the template SED</span>
+    <span class="c1"># that corresponds to a given SFH component (e.g. log age=8.0, Z=0.020) to the raw BPASS SED</span>
+    <span class="c1"># converted to observer units</span>
+    <span class="n">sfh</span><span class="p">[</span><span class="s1">&#39;Mzams&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">template_i</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bpass_i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[189]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1">###### CALCULATE MASS &#39;NOW&#39; (AT GIVEN LOG AGE) ####</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sfh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="c1"># store the age, met and mass at zams for this particular row of the sfh</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">zams</span> <span class="o">=</span> <span class="n">sfh</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sfh</span><span class="o">.</span><span class="n">Mzams</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="c1"># then calculate the current mass by scaling by the corresponding row</span>
+    <span class="c1"># in the starmass table from the bpass models.</span>
+    <span class="c1"># also dividing by 1e6 so that it&#39;s in PER 1 MILLION Msol like the Mzams is</span>
+    <span class="k">if</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">0.01</span><span class="p">:</span>
+        <span class="n">current_mass_i</span> <span class="o">=</span> <span class="n">zams</span><span class="o">*</span><span class="n">starmass_bin_010</span><span class="p">[</span><span class="n">starmass_bin_010</span><span class="o">.</span><span class="n">log_age</span><span class="o">==</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">stellar_mass</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">1e6</span>
+    <span class="k">elif</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">0.02</span><span class="p">:</span>
+        <span class="n">current_mass_i</span> <span class="o">=</span> <span class="n">zams</span><span class="o">*</span><span class="n">starmass_bin_020</span><span class="p">[</span><span class="n">starmass_bin_020</span><span class="o">.</span><span class="n">log_age</span><span class="o">==</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">stellar_mass</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">1e6</span>
+    <span class="k">elif</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">0.030</span><span class="p">:</span>
+        <span class="n">current_mass_i</span> <span class="o">=</span> <span class="n">zams</span><span class="o">*</span><span class="n">starmass_bin_030</span><span class="p">[</span><span class="n">starmass_bin_030</span><span class="o">.</span><span class="n">log_age</span><span class="o">==</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">stellar_mass</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">1e6</span>
+    <span class="n">sfh</span><span class="p">[</span><span class="s1">&#39;Mnow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_mass_i</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[190]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sfh</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[190]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>age</th>
+      <th>weights</th>
+      <th>light_fraction</th>
+      <th>Mzams</th>
+      <th>Mnow</th>
+    </tr>
+    <tr>
+      <th>bin_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>8.9</td>
+      <td>0.092715</td>
+      <td>0.134078</td>
+      <td>0.898908</td>
+      <td>0.600884</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.028412</td>
+      <td>0.041088</td>
+      <td>0.422087</td>
+      <td>0.275592</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.01</td>
+      <td>9.7</td>
+      <td>0.138911</td>
+      <td>0.200882</td>
+      <td>7.425133</td>
+      <td>3.949804</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>10.1</td>
+      <td>0.044917</td>
+      <td>0.064955</td>
+      <td>6.836699</td>
+      <td>3.445810</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.03</td>
+      <td>10.1</td>
+      <td>0.386549</td>
+      <td>0.558997</td>
+      <td>60.280893</td>
+      <td>30.022886</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1492</th>
+      <td>0.01</td>
+      <td>9.9</td>
+      <td>0.283420</td>
+      <td>0.345728</td>
+      <td>39.295878</td>
+      <td>19.853163</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.102584</td>
+      <td>0.113960</td>
+      <td>2.056300</td>
+      <td>1.342613</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.01</td>
+      <td>9.7</td>
+      <td>0.311537</td>
+      <td>0.346084</td>
+      <td>22.545483</td>
+      <td>11.993084</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.01</td>
+      <td>9.9</td>
+      <td>0.473166</td>
+      <td>0.525637</td>
+      <td>70.939023</td>
+      <td>35.839992</td>
+    </tr>
+    <tr>
+      <th>1493</th>
+      <td>0.01</td>
+      <td>10.0</td>
+      <td>0.012889</td>
+      <td>0.014318</td>
+      <td>1.819800</td>
+      <td>0.911607</td>
+    </tr>
+  </tbody>
+</table>
+<p>6047 rows × 6 columns</p>
+</div></div>
+</div>
+<p><strong>NOTE: Mzams and Mnow are in PER 1 MILLION Msol</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[195]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># now we create our summary sfh dataframe just like we did for the light fraction!</span>
+<span class="n">df_sfh_mass</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">38</span><span class="p">)),</span>
+                           <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;met&#39;</span><span class="p">]</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mf">10.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+                          <span class="p">)</span>
+
+<span class="n">df_sfh_mass</span><span class="p">[</span><span class="s1">&#39;met&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mf">0.010</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[196]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># do this again to update the sfh010 020 030 tables to contain the mass information</span>
+<span class="n">sfh010</span><span class="o">=</span><span class="n">sfh</span><span class="p">[</span><span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">==</span><span class="mf">0.010</span><span class="p">]</span>
+<span class="n">sfh020</span><span class="o">=</span><span class="n">sfh</span><span class="p">[</span><span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">==</span><span class="mf">0.020</span><span class="p">]</span>
+<span class="n">sfh030</span><span class="o">=</span><span class="n">sfh</span><span class="p">[</span><span class="n">sfh</span><span class="o">.</span><span class="n">met</span><span class="o">==</span><span class="mf">0.030</span><span class="p">]</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[197]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">mass</span><span class="p">,</span> <span class="n">age</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sfh010</span><span class="o">.</span><span class="n">Mnow</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">sfh010</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="mi">2</span><span class="p">))][(</span><span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">met</span> <span class="o">==</span> <span class="mf">0.010</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">mass</span>
+
+<span class="k">for</span> <span class="n">mass</span><span class="p">,</span> <span class="n">age</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sfh020</span><span class="o">.</span><span class="n">Mnow</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">sfh020</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="mi">2</span><span class="p">))][(</span><span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">met</span> <span class="o">==</span> <span class="mf">0.020</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">mass</span>
+
+<span class="k">for</span> <span class="n">mass</span><span class="p">,</span> <span class="n">age</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sfh030</span><span class="o">.</span><span class="n">Mnow</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">sfh030</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="mi">2</span><span class="p">))][(</span><span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">met</span> <span class="o">==</span> <span class="mf">0.030</span><span class="p">)]</span> <span class="o">+=</span> <span class="n">mass</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[198]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># *magic* (see above when did it for df_shf)</span>
+<span class="n">df_sfh_mass</span><span class="o">=</span><span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;met&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="c1"># normalise</span>
+<span class="n">df_sfh_mass</span> <span class="o">/=</span> <span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[199]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># plot!</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">{</span><span class="mf">0.01</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+                                                <span class="mf">0.02</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+                                                <span class="mf">0.03</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
+                                             <span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">16</span><span class="p">,</span><span class="mi">37</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[199]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(16.0, 37.0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_77_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_77_1.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="Final-Plot!">
+<h1>Final Plot!<a class="headerlink" href="#Final-Plot!" title="Permalink to this headline">¶</a></h1>
+<p>Now we can plot our SFH in terms of light fraction and mass fraction altogether to put in our paper! woop woop!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">df_sfh</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="p">{</span><span class="mf">0.01</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+                                                <span class="mf">0.02</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+                                                <span class="mf">0.03</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
+                                             <span class="p">})</span>
+
+<span class="n">df_sfh_mass</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="p">{</span><span class="mf">0.01</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+                                                <span class="mf">0.02</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+                                                <span class="mf">0.03</span><span class="p">:</span> <span class="s2">&quot;cornflowerblue&quot;</span><span class="p">,</span>
+                                             <span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mf">15.1</span><span class="p">,</span><span class="mi">37</span><span class="p">])</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.49</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;log(age/years)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Light Fraction&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Mass Fraction&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">19</span><span class="p">,</span> <span class="mf">0.38</span><span class="p">,</span> <span class="s1">&#39;Metallicity (Z)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(19, 0.38, &#39;Metallicity (Z)&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_79_1.png" src="_images/Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf_79_1.png" />
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, heloise stevance.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

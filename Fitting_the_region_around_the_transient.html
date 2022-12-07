@@ -1,0 +1,1925 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>SED fitting of a transient neighbourhood &mdash; hoki v1.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #FFA428" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> hoki
+          
+
+          
+            
+            <img src="_static/hoki_white.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Recipes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Transient_rates.html">Transient rates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HR_diagrams.html">HR diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Spectra.html">Spectra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AgeWizard.html">Age Wizard</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelDataCompiler.html">Model Data Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModelSearch.html">Complex Model Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ComplexStellarPopulations.html">Complex Stellar Histories</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Full Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual.html"><strong>Dependencies</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.load"><strong>hoki.load</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.hrdiagrams"><strong>hoki.hrdiagrams</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.age.wizard"><strong>hoki.age</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html#module-hoki.csp.csp"><strong>hoki.csp</strong></a></li>
+</ul>
+<p class="caption"><span class="caption-text">GITHUB LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki">Hoki</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/HeloiseS/hoki_tutorials">Notebooks</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">hoki</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>SED fitting of a transient neighbourhood</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Fitting_the_region_around_the_transient.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="SED-fitting-of-a-transient-neighbourhood">
+<h1>SED fitting of a transient neighbourhood<a class="headerlink" href="#SED-fitting-of-a-transient-neighbourhood" title="Permalink to this headline">¶</a></h1>
+<p>In this jupyter notebook we go over how to integrate the SED of the transient neighbourhood and remove the contribution from the transient spectrum before fitting with BPASS SEDs using <code class="docutils literal notranslate"><span class="pre">hoki</span></code> and <code class="docutils literal notranslate"><span class="pre">ppxf</span></code>.</p>
+<p>For a kilonova the region around the transient is unlikely to be the region where the system was born so it is not all that relevant but you could do the same thing for a core collapse supernova in which case you transient is a lot more likely to be near its birth environment (although there are many caveats to that such as the type of CCSN and how distant the galaxy etc…).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># standard python libraries</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="c1"># ppxf stuff for fitting</span>
+<span class="kn">from</span> <span class="nn">ppxf.ppxf</span> <span class="kn">import</span> <span class="n">ppxf</span>
+<span class="kn">import</span> <span class="nn">ppxf.ppxf_util</span> <span class="k">as</span> <span class="nn">util</span>
+
+<span class="c1"># hoki things for fitting</span>
+<span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">load</span>
+<span class="kn">from</span> <span class="nn">hoki</span> <span class="kn">import</span> <span class="n">sedfitting</span> <span class="k">as</span> <span class="n">hsed</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;../tuto.mplstyle&#39;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mf">299792.458</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="1---Separating-Transient-and-Neighbourhood-stars-SEDs">
+<h1>1 - Separating Transient and Neighbourhood stars SEDs<a class="headerlink" href="#1---Separating-Transient-and-Neighbourhood-stars-SEDs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="1.1---Neighbourhood-SED">
+<h2>1.1 - Neighbourhood SED<a class="headerlink" href="#1.1---Neighbourhood-SED" title="Permalink to this headline">¶</a></h2>
+<p>First let’s plot our galaxy and the situate our transient. I’ve already marked it and given you the pixel coordinate of the “centroid” (or as close as you can get it when the center is a 2 by 2 pixel section).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/cropped_NGC4993.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
+    <span class="n">cube</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ima</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ima</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;arcsinh&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="mi">49</span><span class="p">],</span> <span class="p">[</span><span class="mi">119</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;AT 2017gfo&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f3e1c2019a0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_4_1.png" src="_images/Fitting_the_region_around_the_transient_4_1.png" />
+</div>
+</div>
+<p>A very important thing to note is that the <strong># NOTE THAT THE X AND Y ARE REVERESED IN THE DATA COMPARED TO MATPLOTLIB</strong>. So when plotting and handling data we need to keep in mind the axes are transposed and all is well. If you forget it gets confusing quick.</p>
+<p>Here we’re going to integrate the SEDs for the pixels that are between 1.5 and 2.5 arcseconds away from the centroid of the transient. That follows Levant et al. 2017 for GW170817 and we didn’t see a need to change it. Play with it for your transient and pick the best option for your particular cases.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># NOTE THAT THE X AND Y ARE REVERESED IN THE DATA COMPARED TO MATPLOTLIB!!!</span>
+
+<span class="n">cube2</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">subcube_circle_aperture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">119</span><span class="p">,</span><span class="mi">49</span><span class="p">],</span> <span class="c1"># centroid y,x</span>
+                                     <span class="n">radius</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>  <span class="c1"># this is for the OUTER BOUNDARY</span>
+                                     <span class="n">unit_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># the center is given in Pixels so the Units are None</span>
+                                     <span class="n">unit_radius</span><span class="o">=</span><span class="s1">&#39;arcsec&#39;</span> <span class="c1"># the radii are in arcsec which we need to state here</span>
+                                    <span class="p">)</span>
+
+<span class="n">cube15</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">subcube_circle_aperture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">119</span><span class="p">,</span><span class="mi">49</span><span class="p">],</span>
+                                      <span class="n">radius</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>  <span class="c1"># this will be for the INNER BOUNDARY</span>
+                                      <span class="n">unit_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                      <span class="n">unit_radius</span><span class="o">=</span><span class="s1">&#39;arcsec&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ima</span> <span class="o">=</span> <span class="n">cube2</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">maplot</span> <span class="o">=</span> <span class="n">ima</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;arcsinh&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2.5 Arcsec annulus&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;2.5 Arcsec annulus&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_7_1.png" src="_images/Fitting_the_region_around_the_transient_7_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ima</span> <span class="o">=</span> <span class="n">cube15</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">maplot</span> <span class="o">=</span> <span class="n">ima</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;arcsinh&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;1.5 Arcsec annulus&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;1.5 Arcsec annulus&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_8_1.png" src="_images/Fitting_the_region_around_the_transient_8_1.png" />
+</div>
+</div>
+<p>Now all we need to do is integrate the SED in the 1.5 Arsec radius and subtract it from the integrated 2.5 arcsec flux and we’ll ahve recovered the flux from the pixels between the inner and the outer boundary.</p>
+<div class="section" id="Book-keeping:-We-need-a-wavelength-scale">
+<h3>Book keeping: We need a wavelength scale<a class="headerlink" href="#Book-keeping:-We-need-a-wavelength-scale" title="Permalink to this headline">¶</a></h3>
+<p>Like in the voronoi binning notebook we create our 1D wavelength vector from the information we have in the headers.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># The first thing we need to do is create the wavelength scale. We&#39;ve only got a starting</span>
+<span class="c1"># wavelength, a Delta lambda and a number of bins in the spectrum (3861 - see above)</span>
+<span class="c1"># The code below creates the wavelength array</span>
+
+<span class="c1"># minimum and maximum wavelength from the header</span>
+<span class="n">wl_min</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CRVAL3&#39;</span><span class="p">]</span>
+<span class="n">wl_max</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CRVAL3&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CD3_3&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">cube</span><span class="o">.</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># creating the wavelength array</span>
+<span class="n">WL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CRVAL3&#39;</span><span class="p">],</span> <span class="n">wl_max</span><span class="p">,</span> <span class="n">cube</span><span class="o">.</span><span class="n">data_header</span><span class="p">[</span><span class="s1">&#39;CD3_3&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Now-we-go-fetch-our-data">
+<h3>Now we go fetch our data<a class="headerlink" href="#Now-we-go-fetch-our-data" title="Permalink to this headline">¶</a></h3>
+<p>In order to go get our data and extract the flux and the noise to integrate we need to do a bit of reshapeing.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># we need the shape information</span>
+<span class="n">shape_2</span>  <span class="o">=</span> <span class="n">cube2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">shape_15</span> <span class="o">=</span> <span class="n">cube15</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">shape_2</span><span class="p">,</span> <span class="n">shape_15</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+((3681, 25, 25), (3681, 15, 15))
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># then we reshape the data to be 2D</span>
+<span class="n">data_2arsec</span> <span class="o">=</span> <span class="n">cube2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">shape_2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">data_15arsec</span> <span class="o">=</span> <span class="n">cube15</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_15</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape_15</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">shape_15</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># axis = 0 is the spectrum; axis = 1 is the pixels all in a row</span>
+<span class="n">data_2arsec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data_15arsec</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+((3681, 625), (3681, 225))
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># now we sum our spectra over all pixels and we subtract the 1.5 arcsec region from the 2.5 arcsec region</span>
+<span class="n">flux_annulus</span><span class="o">=</span><span class="n">data_2arsec</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">data_15arsec</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># for the noise I did the same thing but in one line that&#39;s harder to look at</span>
+<span class="c1"># take your pick on how you want to do that stuff in your own work</span>
+<span class="c1"># also note I sqrt the variance to get the standard deviation</span>
+<span class="n">noise_annulus</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cube2</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">cube15</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Now we need to know what area on the sky (in pixels) we covered so we can</span>
+<span class="c1"># turn our sum SED into an average SED</span>
+<span class="n">arrea_annulus</span><span class="o">=</span><span class="n">shape_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">shape_2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">shape_15</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">shape_15</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Let’s-plot-it!">
+<h3>Let’s plot it!<a class="headerlink" href="#Let’s-plot-it!" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span>
+         <span class="n">flux_annulus</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">flux_annulus</span><span class="p">),</span>
+         <span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+         <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+         <span class="n">where</span><span class="o">=</span><span class="s1">&#39;mid&#39;</span>
+        <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span>
+             <span class="n">flux_annulus</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">flux_annulus</span><span class="p">),</span>
+             <span class="n">yerr</span><span class="o">=</span><span class="n">noise_annulus</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">flux_annulus</span><span class="p">)</span>
+            <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Annulus 1.5&#39; to 2.5&#39;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#34;Annulus 1.5&#39; to 2.5&#39;&#34;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_19_1.png" src="_images/Fitting_the_region_around_the_transient_19_1.png" />
+</div>
+</div>
+<p><strong>Let’s store this</strong> in a neat dataframe.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data_annulus</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">WL</span><span class="p">,</span>
+                            <span class="n">flux_annulus</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">flux_annulus</span><span class="p">),</span>
+                            <span class="n">noise_annulus</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">flux_annulus</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WL&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;ERR&#39;</span><span class="p">])</span>
+
+<span class="n">data_annulus</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">data_annulus</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># because the last one was messed up</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data_annulus</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WL</th>
+      <th>F</th>
+      <th>ERR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4749.617676</td>
+      <td>0.869223</td>
+      <td>0.018855</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4750.867676</td>
+      <td>0.835849</td>
+      <td>0.012889</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4752.117676</td>
+      <td>0.850857</td>
+      <td>0.012228</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4753.367676</td>
+      <td>0.877018</td>
+      <td>0.011718</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4754.617676</td>
+      <td>0.886446</td>
+      <td>0.011199</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>3675</th>
+      <td>9343.367676</td>
+      <td>0.624510</td>
+      <td>0.004571</td>
+    </tr>
+    <tr>
+      <th>3676</th>
+      <td>9344.617676</td>
+      <td>0.731427</td>
+      <td>0.005021</td>
+    </tr>
+    <tr>
+      <th>3677</th>
+      <td>9345.867676</td>
+      <td>0.832288</td>
+      <td>0.005965</td>
+    </tr>
+    <tr>
+      <th>3678</th>
+      <td>9347.117676</td>
+      <td>0.900837</td>
+      <td>0.007194</td>
+    </tr>
+    <tr>
+      <th>3679</th>
+      <td>9348.367676</td>
+      <td>0.907726</td>
+      <td>0.008474</td>
+    </tr>
+  </tbody>
+</table>
+<p>3680 rows × 3 columns</p>
+</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="1.2-Extracting-the-Transient-data">
+<h2>1.2 Extracting the Transient data<a class="headerlink" href="#1.2-Extracting-the-Transient-data" title="Permalink to this headline">¶</a></h2>
+<p>We’re not done! We can now use this to extract our transient data and remove the galaxy background. This is actually not important for the galaxy SED fitting we’re doing in these tutorials but it is likely to be something that you will want to do when you are studying your shiny new transient.</p>
+<p>Here we’re going to focus on the inner 1 arcsecond so a radius of 0.5 arcseconds. This value depends on your seeing when you’re observing as this is what will affect the full width half maximum.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># same as we did before but smaller</span>
+<span class="n">cube1</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">subcube_circle_aperture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">119</span><span class="p">,</span><span class="mi">49</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>  <span class="n">unit_center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unit_radius</span><span class="o">=</span><span class="s1">&#39;arcsec&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">ima</span> <span class="o">=</span> <span class="n">cube1</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ima</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s1">&#39;arcsinh&#39;</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.image.AxesImage at 0x7f3e12b5e6a0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_24_1.png" src="_images/Fitting_the_region_around_the_transient_24_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ima</span><span class="o">.</span><span class="n">unmask</span><span class="p">()</span> <span class="c1"># we need to do this to access the data - because.</span>
+
+<span class="c1"># same as earlier we do some reshaping to get all our ducks in a row, i mean pixels</span>
+<span class="n">shape_1</span>  <span class="o">=</span> <span class="n">cube1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">data_1arsec</span> <span class="o">=</span> <span class="n">cube1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">shape_1</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">data_1arsec</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(3681, 25)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># let&#39;s see what they all look like!</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">data_1arsec</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">4800</span><span class="p">,</span><span class="mi">7500</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(4800.0, 7500.0)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_26_1.png" src="_images/Fitting_the_region_around_the_transient_26_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># let&#39;s sum our caterpillars</span>
+<span class="n">transient_flux</span> <span class="o">=</span> <span class="n">data_1arsec</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># spectrum</span>
+<span class="n">noise_transient</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">cube1</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># standard deviation</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Let’s-plot-the-transient-(uncorrected)">
+<h3>Let’s plot the transient (uncorrected)<a class="headerlink" href="#Let’s-plot-the-transient-(uncorrected)" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">transient_flux</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">),</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">transient_flux</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">),</span> <span class="n">yerr</span> <span class="o">=</span> <span class="n">noise_transient</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">4800</span><span class="p">,</span><span class="mi">7500</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Within 0.5 arsecond of the transient&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;Within 0.5 arsecond of the transient&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_29_1.png" src="_images/Fitting_the_region_around_the_transient_29_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Now-we-need-to-remove-the-galaxy-background">
+<h3>Now we need to remove the galaxy background<a class="headerlink" href="#Now-we-need-to-remove-the-galaxy-background" title="Permalink to this headline">¶</a></h3>
+<p>To do this we need to first figure out how much “weight” the galactic SED has in our transient SED given the number of pixels we have summed together.</p>
+<p>The weight is the fraction of the light in the transient spectra that comes from the galaxy based on the surface brightness of the neighbours in the annulus. We need to compare the areas of we’ve been looking at so far:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">cube2</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">cube15</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">cube1</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+((3681, 25, 25), (3681, 15, 15), (3681, 5, 5))
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">area_cube1</span> <span class="o">=</span> <span class="p">(</span><span class="n">cube1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">cube1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">area_cube2</span> <span class="o">=</span> <span class="p">(</span><span class="n">cube2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">cube2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">area_cube15</span><span class="o">=</span> <span class="p">(</span><span class="n">cube15</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">cube15</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="c1"># fraction we need to multiply to our galactic SED</span>
+<span class="n">weight_gal_spec</span> <span class="o">=</span> <span class="n">area_cube1</span><span class="o">/</span><span class="p">(</span><span class="n">area_cube2</span><span class="o">-</span><span class="n">area_cube15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># correcting the transient flux by removing (subtracting) the weighted galactic SED</span>
+<span class="n">flux_gal_removed</span> <span class="o">=</span> <span class="p">(</span><span class="n">transient_flux</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_annulus</span><span class="o">.</span><span class="n">F</span><span class="o">*</span><span class="n">weight_gal_spec</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Let’s-plot-the-whole-thing!">
+<h3>Let’s plot the whole thing!<a class="headerlink" href="#Let’s-plot-the-whole-thing!" title="Permalink to this headline">¶</a></h3>
+<p>as it so happens here it didn’t make much of a difference to our transient but it might have! Also note the scales between the transient and the galactic neighrbourhood because everything is normalised to be around 1 (which we need for fitting later).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">flux_gal_removed</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Galaxy removed&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">,</span> <span class="n">transient_flux</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">)</span><span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;raw - 0.12&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">4800</span><span class="p">,</span><span class="mi">9000</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;AT 2017gfo&#39;</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">WL</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">data_annulus</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Galaxy aroudn transient&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">4800</span><span class="p">,</span><span class="mi">9000</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;NGC 4993 around AT 2017gfo&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Wavelength ($\AA$)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 0, &#39;Wavelength ($\\AA$)&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_35_1.png" src="_images/Fitting_the_region_around_the_transient_35_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">flux_annulus</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+27978.792442321777
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Let’s-save-our-extracted-spectra-to-a-data-frame">
+<h3>Let’s save our extracted spectra to a data frame<a class="headerlink" href="#Let’s-save-our-extracted-spectra-to-a-data-frame" title="Permalink to this headline">¶</a></h3>
+<p>And we can then pickle the data frame (there are other ways to save dataframe data I just used to pickle them and I’ve left it as such here - make your prefered choice)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WL&#39;</span><span class="p">,</span> <span class="s1">&#39;transient&#39;</span><span class="p">,</span> <span class="s1">&#39;t_err&#39;</span><span class="p">,</span> <span class="s1">&#39;transient_raw&#39;</span><span class="p">,</span> <span class="s1">&#39;neighbours&#39;</span><span class="p">,</span> <span class="s1">&#39;n_err&#39;</span><span class="p">])</span>
+<span class="n">data</span><span class="o">.</span><span class="n">WL</span> <span class="o">=</span> <span class="n">WL</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">data</span><span class="o">.</span><span class="n">transient</span> <span class="o">=</span> <span class="n">flux_gal_removed</span>
+<span class="n">data</span><span class="o">.</span><span class="n">transient_raw</span> <span class="o">=</span> <span class="n">transient_flux</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">t_err</span><span class="o">=</span><span class="n">noise_transient</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nanmedian</span><span class="p">(</span><span class="n">transient_flux</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">neighbours</span><span class="o">=</span><span class="n">data_annulus</span><span class="o">.</span><span class="n">F</span>
+<span class="n">data</span><span class="o">.</span><span class="n">n_err</span><span class="o">=</span><span class="n">data_annulus</span><span class="o">.</span><span class="n">ERR</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span><span class="o">.</span><span class="n">metadata</span><span class="o">=</span><span class="s2">&quot;WL: Wavelength in angstrom // Transient: Normalised transiant flux GALAXY REMOVED // Trasnient_raw: Normalised transient flux - galaxy NOT removed // neighbours: galaxy flux in anulus 1.5-2 arcsec around transient&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="s2">&quot;data/transient_and_neighbour_flux.pkl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="2---Fitting-the-neighbourhood-SED-with-BPASS!">
+<h1>2 - Fitting the neighbourhood SED with BPASS!<a class="headerlink" href="#2---Fitting-the-neighbourhood-SED-with-BPASS!" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have extracted our host environment spectral information let’s fit it to see what it is made of.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>WL</th>
+      <th>transient</th>
+      <th>t_err</th>
+      <th>transient_raw</th>
+      <th>neighbours</th>
+      <th>n_err</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4749.617676</td>
+      <td>0.868068</td>
+      <td>0.025423</td>
+      <td>0.922394</td>
+      <td>0.869223</td>
+      <td>0.018855</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4750.867676</td>
+      <td>0.821615</td>
+      <td>0.015944</td>
+      <td>0.873856</td>
+      <td>0.835849</td>
+      <td>0.012889</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4752.117676</td>
+      <td>0.835267</td>
+      <td>0.015323</td>
+      <td>0.888445</td>
+      <td>0.850857</td>
+      <td>0.012228</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4753.367676</td>
+      <td>0.851539</td>
+      <td>0.014860</td>
+      <td>0.906352</td>
+      <td>0.877018</td>
+      <td>0.011718</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4754.617676</td>
+      <td>0.834517</td>
+      <td>0.014208</td>
+      <td>0.889920</td>
+      <td>0.886446</td>
+      <td>0.011199</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="section" id="2.1---Create-ppxf-templates">
+<h2>2.1 - Create ppxf templates<a class="headerlink" href="#2.1---Create-ppxf-templates" title="Permalink to this headline">¶</a></h2>
+<p>I recommend checking the ppxf manual for extra detail but I am going to walk you through the essentials</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># just to make some of our code less long we&#39;ll store some columns in short variable names</span>
+<span class="n">WL</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">WL</span><span class="o">.</span><span class="n">values</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">neighbours</span><span class="o">.</span><span class="n">values</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n_err</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Now we need to de-redshift</span>
+<span class="n">z</span> <span class="o">=</span> <span class="mf">0.009783</span>
+<span class="n">recessional_vel</span> <span class="o">=</span> <span class="n">z</span><span class="o">*</span><span class="n">c</span>
+<span class="n">WL</span> <span class="o">=</span> <span class="p">(</span><span class="n">WL</span> <span class="o">-</span> <span class="n">WL</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="2.1.1---BPASS-models">
+<h3>2.1.1 - BPASS models<a class="headerlink" href="#2.1.1---BPASS-models" title="Permalink to this headline">¶</a></h3>
+<p>To make templates we’ll need the BPASS models. To download the models you can check the <a class="reference external" href="https://zenodo.org/record/7340797#.Y4ok-NLMLLo">BPASSv2.2.1 starter kit</a> on Zenodo. Then we’ll need to be able to locate them so <strong>you’ll need to change the code below</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">BPASS_MODEL_PATH</span> <span class="o">=</span> <span class="s1">&#39;../../BPASS_hoki_dev/bpass_v2.2.1_imf135_300/&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="2.1.3---Log-(natural-not-log10)-rebin-the-wavelength">
+<h3>2.1.3 - Log (natural not log10) rebin the wavelength<a class="headerlink" href="#2.1.3---Log-(natural-not-log10)-rebin-the-wavelength" title="Permalink to this headline">¶</a></h3>
+<p>This is required by the <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> magic. Feel free to check out Capellari 2003 and 2017 if you want to read more on how <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> works and why the log rebin is a really neat mathematical trick ;)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># ppxf.util gives us the log_rebin function</span>
+<span class="n">flux</span><span class="p">,</span> <span class="n">wl_log_bin</span><span class="p">,</span> <span class="n">velscale</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">log_rebin</span><span class="p">([</span><span class="n">WL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">WL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">F</span><span class="p">)</span>
+
+<span class="c1"># later we&#39;ll need the linear scale of our log rebinned spectra to plot our fits</span>
+<span class="c1"># this step ensures we have a linear wavelength scale for those fits with the</span>
+<span class="c1"># right number (and location) of wavelenght bins!</span>
+<span class="n">wl_fits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">wl_log_bin</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="2.1.4---Creating-templates-for-ppxf-with-KVN">
+<h3>2.1.4 - Creating templates for ppxf with KVN<a class="headerlink" href="#2.1.4---Creating-templates-for-ppxf-with-KVN" title="Permalink to this headline">¶</a></h3>
+<p>KVN is a helper class in <code class="docutils literal notranslate"><span class="pre">hoki.sedfitting</span></code> that does the dirty work of creating templates that can be fed to <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> - it also has utilities to decipher what <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> has found.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>hsed.KVN<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">=</span><span class="n">hsed</span><span class="o">.</span><span class="n">KVN</span><span class="p">()</span>
+<span class="n">kvn</span><span class="o">.</span><span class="n">make_templates</span><span class="p">(</span><span class="n">BPASS_MODEL_PATH</span><span class="p">,</span>
+                   <span class="n">fwhm_obs</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+                   <span class="n">wl_obs</span><span class="o">=</span><span class="n">WL</span><span class="p">,</span> <span class="c1"># Wavelength bins of the observations (not log rebinned)</span>
+                   <span class="n">wl_range_obs</span><span class="o">=</span><span class="p">[</span><span class="n">WL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">WL</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="c1"># wavelength range of the observations</span>
+                   <span class="n">velscale_obs</span><span class="o">=</span><span class="n">velscale</span><span class="p">,</span>
+                   <span class="n">wl_range_padding</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="c1"># number of extra Angstroms befrore and after the range</span>
+                   <span class="n">z_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;z010&#39;</span><span class="p">,</span><span class="s1">&#39;z020&#39;</span><span class="p">,</span><span class="s1">&#39;z030&#39;</span><span class="p">],</span>
+                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> TemplateMaker Starting
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Initial Checks
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Loading  model spectrum
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Calulating obs. velocity scale -- No dispersion
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Calculating template wavelength (log rebin) and velocity scale
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Calculating sigma
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Instanciating container arrays
+<span class="ansi-green-intense-fg ansi-bold">[---INFO---]</span> Using all ages from 6.0 to 10.2 (included) - log_age_cols now set
+<span class="ansi-yellow-intense-fg ansi-bold">[--RUNNING-]</span> Compiling your templates
+Progress: |██████████████████████████████████████████████████| 100.00% Complete
+<span class="ansi-cyan-intense-fg ansi-bold">[-COMPLETE-]</span> Templates compiled successfully
+</pre></div></div>
+</div>
+<p><strong>Padding</strong>: When creating the templates some rebinning has to occur and if we only load the exact wavelength range this can cause problems with the templates and the fitting later. Then you might ask why we crop our BPASS SEDs at all then, and the answer is simple: size! The BPASS SEDs cover everything from 1 A to 100,000 A. We’d be creating unnecessary work for our computer so it’s better to crop.</p>
+</div>
+<div class="section" id="Where-and-how-are-the-templates-stored">
+<h3>Where and how are the templates stored<a class="headerlink" href="#Where-and-how-are-the-templates-stored" title="Permalink to this headline">¶</a></h3>
+<p>The SED templates are BPASS SEDs that have been appropriately processed to be used by <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> for use on our specific data set. Unfortunately processing needs to happen on the templates for different observations with different properties like resolution element and wavelength range. That is why the helper class is so necessary and I can’t just give you a library of template to slap into your fit.</p>
+<p>Let’s look at where to find our newly created templates:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">templates</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(3766, 42, 3)
+</pre></div></div>
+</div>
+<p>The dimensions are <code class="docutils literal notranslate"><span class="pre">[Wavelength,</span> <span class="pre">age,</span> <span class="pre">metallicity]</span></code>. But obviously age = 42 and metallicity = 1 is not useful physically, we need to know what that corresponds to. The template properties are stored in the attribute <code class="docutils literal notranslate"><span class="pre">template_properties</span></code> which has 2D <code class="docutils literal notranslate"><span class="pre">[N</span> <span class="pre">templates,</span> <span class="pre">properties]</span></code> where the properties are numpy arrays containing [metallicity, age].</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">template_properties</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.01, 6.  ])
+</pre></div></div>
+</div>
+<p>Tempalte 0 has a metallicity Z=0.010 and an age of 10^6 or 1 million years.</p>
+<p>Note that here <strong>metallicity comes before the age dimension (in practice you should never need to think about it)</strong>. The order the templates come in and the order the template properties are arranged is according to what is needed to talk to <code class="docutils literal notranslate"><span class="pre">ppxf</span></code>: feed it the templates in the order it requries and reading its solutions in the order it provides.</p>
+<p>This ordering thing is why we have a helper class so we can abstract it away.</p>
+</div>
+</div>
+<div class="section" id="2.2---Seting-up-fit-with-PPXF">
+<h2>2.2 - Seting up fit with PPXF<a class="headerlink" href="#2.2---Seting-up-fit-with-PPXF" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="2.2.1---Start-guesses-for-the-kinematics">
+<h3>2.2.1 - Start guesses for the kinematics<a class="headerlink" href="#2.2.1---Start-guesses-for-the-kinematics" title="Permalink to this headline">¶</a></h3>
+<p>Below we define two start guesses for the recession velocity and the dispersion velocity of the galaxy. <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> will fit the kinematics at the same time as looking for a best SED template combination so we need to give it a fighting chance.</p>
+<p>Here we have already corrected for the average recession velocity so our initial guess is 0. It’s likely the final fitted guess will differ since galaxies rotated and our transient is on the outskirts so likely spining towards or away from us.</p>
+<p>In terms of dispersion velocity you can make guesses using breadth of lines you know to be narrow, or you can eyeball it given the galaxy type and then tweak the number if the fits come out garbage. It doens’t need to be spot on to be decent usually.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">]</span> <span class="c1">#180km/s from previous fits</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="2.2.2--Good-pixels">
+<h3>2.2.2- Good pixels<a class="headerlink" href="#2.2.2--Good-pixels" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> you can provide information on which pixels to take into account and which to ignore. Let’s see an example here (some more artificial than others but here for the pedagogy):</p>
+<p><strong>CUTTING BASED ON FLUX</strong></p>
+<ol class="arabic simple">
+<li><p>Imagine if we have an emission line we don’t want to fit (NOTE: ppxf has some stuff to take into account emission features which you can read into in their manual). A stupid but often effective way to handle this is to crop anything that rises to high! Here we don’t have have any to worry about but when fitting all voronoi bins we do because the center of NGC 4993 is a LIER region (see Levan et al. 2017). <strong>Say we want to crop everything that rises above 2.5</strong> (determined through visual
+anlysis in other spectra)</p></li>
+<li><p>Our flux should be positive - if it’s not something is probably messed up so let’s cut everything that drops below 0.</p></li>
+</ol>
+<p><strong>CUTTING BASED ON WAVELENGTH</strong></p>
+<ol class="arabic simple" start="3">
+<li><p>Let’s say we want to hide specific line because we thing our templates won’t be able to fit it well; here we pick the first absorption region; we can also do this by telling ppxf the pixels between that range are not good.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># 1</span>
+<span class="n">FLUXMAX</span> <span class="o">=</span><span class="mf">2.5</span>
+<span class="c1"># 2</span>
+<span class="n">FLUXMIN</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="c1"># 3</span>
+<span class="n">WLMIN</span> <span class="o">=</span> <span class="mi">4875</span>
+<span class="n">WLMAX</span> <span class="o">=</span> <span class="mi">4975</span>
+
+<span class="c1"># This looks convoluted but this is the format ppxf wants</span>
+<span class="c1"># A list of which wavelenght pixels are good (THEIR INDEX not their value)</span>
+
+<span class="n">goodpixels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">((</span><span class="n">flux</span> <span class="o">&lt;</span> <span class="n">FLUXMAX</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">flux</span> <span class="o">&gt;</span> <span class="n">FLUXMIN</span><span class="p">)</span> <span class="c1"># Flux condition</span>
+                         <span class="o">&amp;</span> <span class="p">((</span><span class="n">WL</span> <span class="o">&lt;</span> <span class="n">WLMIN</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">WL</span> <span class="o">&gt;</span> <span class="n">WLMAX</span><span class="p">))</span> <span class="c1"># Wavelength condition</span>
+                         <span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Make it a 1D horizontal vector</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="2.2.3---Fitting-with-ppxf">
+<h3>2.2.3 - Fitting with ppxf<a class="headerlink" href="#2.2.3---Fitting-with-ppxf" title="Permalink to this headline">¶</a></h3>
+<p>The method was originally described in 2004 but the most extensive paper on ppxf is <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2017MNRAS.466..798C/abstract">Capellari 2017</a>. When you download <code class="docutils literal notranslate"><span class="pre">ppxf</span></code> there are also exmaple scripts provided with the code and what I use is adapted from those scripts. You can also consult the online <a class="reference external" href="https://pypi.org/project/ppxf/">PyPi manual</a>.</p>
+<p>A few quick start things to know:</p>
+<ul class="simple">
+<li><p><strong>moments</strong>: if set to 2, will only fit the kinematic parameters [recession velocity, dispersion]. We set it to 4 because we are also fitting for SFH and metallcity</p></li>
+<li><p><strong>degree</strong>: adding a polynomial can help if your spectrum is not super well calibrated or if there is a little bit of reddening are not fitting for with the reddening utilities (which I’m not here because there is not a lot of dust and I don’t care about the nature of the dust).</p></li>
+<li><p><strong>clean</strong>: this does sigma clipping and can help or hinder. See the Supplementary Information in Stevance et al. 2023 (UPDATE) to see how that played a role in our fitting of NGC 4993.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># From the ppxf manual:</span>
+<span class="c1"># Reference velocity in km/s (default 0). The input initial guess and the output velocities</span>
+<span class="c1"># are measured with respect to this velocity. This keyword can be used to account for</span>
+<span class="c1"># the difference in the starting wavelength of the templates and the galaxy spectrum.</span>
+<span class="n">dv</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">kvn</span><span class="o">.</span><span class="n">wl_tem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">kvn</span><span class="o">.</span><span class="n">wl_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1">### FEEDING PPXF AND FITTING</span>
+<span class="n">pp</span> <span class="o">=</span> <span class="n">ppxf</span><span class="p">(</span><span class="n">kvn</span><span class="o">.</span><span class="n">templates</span><span class="p">,</span>           <span class="c1"># these are the BPASS SED templates</span>
+          <span class="n">flux</span><span class="p">,</span>                    <span class="c1"># observed flux vector</span>
+          <span class="n">noise</span><span class="p">,</span>                   <span class="c1"># the standard deviation vector</span>
+          <span class="n">velscale</span><span class="p">,</span>                <span class="c1"># the velocity scale calculated by the log rebin ppxf utility</span>
+          <span class="n">start</span><span class="p">,</span>                   <span class="c1"># the start guesses for recession vel and dispersion</span>
+          <span class="n">goodpixels</span><span class="o">=</span><span class="n">goodpixels</span><span class="p">,</span>   <span class="c1"># our goodpixels</span>
+          <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>              <span class="c1"># I set this to false because I made my own in hoki.sedfitting</span>
+          <span class="n">moments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>               <span class="c1"># order of the Gauss-Hermit moment to fit (see above)</span>
+          <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>                <span class="c1"># order of the polynomial to fit on top of the SED mixture</span>
+          <span class="n">vsyst</span><span class="o">=</span><span class="n">dv</span><span class="p">,</span>                <span class="c1"># see above</span>
+          <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether to perform sigma clipping and itterative fitting</span>
+          <span class="n">lam</span><span class="o">=</span><span class="n">WL</span>                   <span class="c1"># the observed wavelength vector</span>
+         <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+
+
+<span class="c1"># FITTING THE RESULTS!</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">hsed</span><span class="o">.</span><span class="n">ppxf_plot_fixed</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span>
+                           <span class="n">wl_fits</span><span class="o">=</span><span class="n">wl_fits</span><span class="p">,</span>
+                           <span class="n">WL</span><span class="o">=</span><span class="n">WL</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">F</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ Best Fit:       Vel     sigma        h3        h4
+ comp.  0:       -36       164     0.005     0.064
+chi2/DOF: 23.05; degree = 2; mdegree = 0
+method = capfit; Jac calls: 2; Func calls: 12; Status: 2
+linear_method = lsq_box; Nonzero Templates (&gt;0.1%):  5 / 126
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_62_1.png" src="_images/Fitting_the_region_around_the_transient_62_1.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="2.3---Saving-and-exploring-the-results-with-KVN">
+<h2>2.3 - Saving and exploring the results with KVN<a class="headerlink" href="#2.3---Saving-and-exploring-the-results-with-KVN" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="2.3.1-``make_results``-and-SED-weights">
+<h3>2.3.1 <strong>``make_results`` and SED weights</strong><a class="headerlink" href="#2.3.1-``make_results``-and-SED-weights" title="Permalink to this headline">¶</a></h3>
+<p>KVN is not only a template creator, it also deciphers the results from ppxf to give them to us in a neat table and (as we’ll see later) we can save KVN as a pickle file so that our templates and fitting results are stored in one place and can be called back into other codes or shared with colleagues without needed to rerun the fitting.</p>
+<p>First we need to ‘make the results’ by putting the <code class="docutils literal notranslate"><span class="pre">ppxf.ppxf.ppxf</span></code> object we created (here called <code class="docutils literal notranslate"><span class="pre">pp</span></code>) during fitting into our KVN</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">make_results</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">results</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>met</th>
+      <th>age</th>
+      <th>weights</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.02</td>
+      <td>8.9</td>
+      <td>0.039217</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.03</td>
+      <td>9.0</td>
+      <td>0.077932</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.01</td>
+      <td>9.5</td>
+      <td>0.282404</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.01</td>
+      <td>9.7</td>
+      <td>0.316477</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.01</td>
+      <td>9.9</td>
+      <td>0.094677</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The results are stored in a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. * <code class="docutils literal notranslate"><span class="pre">met</span></code> is the metallicity (absolute, not with respect to solar Z=0.010 is 1% metals) * <code class="docutils literal notranslate"><span class="pre">age</span></code> is the log10 age. That’s the way ages are binned in BPASS there is not other option * <code class="docutils literal notranslate"><span class="pre">weights</span></code> are the weights ppxf gives those respective SEDs. They <strong>don’t necessarily add up to 1</strong>. If you want percentages or fractions you’ll need to rescale.</p>
+<p>The only SED properties shown in the table are the SEDs ppxf actually uses for the fit.</p>
+</div>
+<div class="section" id="2.3.2---The-matching_-spectra-and-polynomials">
+<h3>2.3.2 - The <code class="docutils literal notranslate"><span class="pre">matching_</span></code> spectra and polynomials<a class="headerlink" href="#2.3.2---The-matching_-spectra-and-polynomials" title="Permalink to this headline">¶</a></h3>
+<p>When we make the results KVN also goes to fetch the SEDs used to match the observed SED so we can have a convenient access to them: * <code class="docutils literal notranslate"><span class="pre">kvn.matching_raw_spectra</span></code>: the raw templates pre-fit (NOT THE RAW BPASS SEDs - they are processed for ppxf) * <code class="docutils literal notranslate"><span class="pre">kvn.matching_spectra</span></code>: the spectra processed with the <strong>kinematics</strong> found by ppxf * <code class="docutils literal notranslate"><span class="pre">kvn.matching_apolynomial</span></code>: the additive polynomial (if you included one) * <code class="docutils literal notranslate"><span class="pre">kvn.matching_mpolynomial</span></code>: the multiplicative polynomial (if you included one)</p>
+<p><strong>MAJOR NOTE:</strong> The <code class="docutils literal notranslate"><span class="pre">kvn.matching_spectra</span></code> need to be plotted with <code class="docutils literal notranslate"><span class="pre">wl_fits</span></code> <strong>NOT</strong> with <code class="docutils literal notranslate"><span class="pre">kvn.wl_tem</span></code> or <code class="docutils literal notranslate"><span class="pre">kvn.wl_obs</span></code> and it can’t be either any of the logarithming wavelength scales we have flowting around otherwise it will have weird offsets compared to NGC4993 (or your galaxy). <strong>There are a lot of different wavelength scales we deal with in this process, remembering which goes with what is one of the main beginner pit falls</strong> so if your spectra don’t line up this should be your
+first port of call - what wavelength scale am I using and is it the right one?</p>
+<p><strong>CORRESPONDING WAVELENGTH SCALE FOR PLOTTING</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>WL scale</p></th>
+<th class="head"><p>Plotted spectra</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kvn.wl_tem</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kvn.matching_raw_spectra</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">wl_fits</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kvn.matching_spectra</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wl_fits</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kvn.matching_apolynomial</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">wl_fits</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kvn.matching_mpolynomial</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Let’s have a look at what these various templates look like. We’ll also plot the fit.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># TEMPLATE (RAW POST-FIT)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kvn</span><span class="o">.</span><span class="n">wl_tem</span><span class="p">,</span>
+         <span class="n">kvn</span><span class="o">.</span><span class="n">matching_raw_spectra</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;A RAW template&#39;</span>
+        <span class="p">)</span>
+
+<span class="c1"># TEMPLATE (WITH KINEMATICS)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wl_fits</span><span class="p">,</span>
+         <span class="n">kvn</span><span class="o">.</span><span class="n">matching_spectra</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;A template kinematically processed&#39;</span>
+        <span class="p">)</span>
+
+<span class="c1"># TEMPLATE (WITH KINEMATICS)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wl_fits</span><span class="p">,</span>
+         <span class="n">kvn</span><span class="o">.</span><span class="n">matching_apolynomial</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;maroon&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;The added polynomial&#39;</span>
+        <span class="p">)</span>
+
+<span class="c1"># OBSERVED NGC 4993</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wl_fits</span><span class="p">,</span>
+         <span class="n">flux</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NGC 4993&#39;</span>
+        <span class="p">)</span>
+
+<span class="c1"># FIT TO NGC 4993</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wl_fits</span><span class="p">,</span>
+         <span class="n">kvn</span><span class="o">.</span><span class="n">ppxf</span><span class="o">.</span><span class="n">bestfit</span><span class="p">,</span>
+         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;The fit&#39;</span>
+        <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f3e0aada8e0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_67_1.png" src="_images/Fitting_the_region_around_the_transient_67_1.png" />
+</div>
+</div>
+<p>Note that to get the full fit that has put together the SEDs with the right weights and included the kinematics and the polynomial we call <code class="docutils literal notranslate"><span class="pre">kvn.ppxf.bestfit</span></code>. Here we are directly looking into the ppxf object which contains all the results. The kinematically process tempaltes and polynomial can also be found in there alongside a lot more info (consult the manual for full details) such as the chi2 and a record of all the parameters we gave like the velscale.</p>
+<p>Now a final point we need to address is <strong>What’s the age and metallicity of that template we just plotted?</strong>. I don’t know that it will necessarily match the order in which things are reported in the <code class="docutils literal notranslate"><span class="pre">results</span></code> table so you need a way to link your matching templates to their template properties - for that we have <code class="docutils literal notranslate"><span class="pre">kvn.match_indices</span></code>. As the name suggestes they are the indices identifying the template spectra in our full long list of teemplate spectra.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">match_indices</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 88,  92, 105, 111, 117])
+</pre></div></div>
+</div>
+<p>So the properties are:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">template_properties</span><span class="p">[</span><span class="n">kvn</span><span class="o">.</span><span class="n">match_indices</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[0.02, 8.9 ],
+       [0.03, 9.  ],
+       [0.01, 9.5 ],
+       [0.01, 9.7 ],
+       [0.01, 9.9 ]])
+</pre></div></div>
+</div>
+<p>Which matches what’s in the result table at the minute, but if you had processed that table and re-ordered things (which you might do in some circumstances) you’d be in trouble so this is the most sure way to get your matching template properties.</p>
+</div>
+<div class="section" id="2.3.3-Pickling-KVN">
+<h3>2.3.3 Pickling KVN<a class="headerlink" href="#2.3.3-Pickling-KVN" title="Permalink to this headline">¶</a></h3>
+<p>The final thing we’re going to do is pickle our KVN object so we can save our work and then load it again next time we want to plot our fit or look at the star formation weights found by ppxf. This way we have everything in one place: the templates, the full fit solutions (with the ppxf object contained within KVN), and some convenient summaries of our results like the <code class="docutils literal notranslate"><span class="pre">results</span></code> table.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[104]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">kvn</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;data/pwiz_at2017gfo.pkl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>To load the pickle file we need create a KVN object and then <strong>load</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pwiz2</span> <span class="o">=</span> <span class="n">hsed</span><span class="o">.</span><span class="n">KVN</span><span class="p">()</span>
+<span class="n">pwiz2</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/pwiz_at2017gfo.pkl&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># just to show it&#39;s the same</span>
+<span class="nb">sum</span><span class="p">(</span><span class="n">pwiz2</span><span class="o">.</span><span class="n">ppxf</span><span class="o">.</span><span class="n">bestfit</span><span class="o">-</span><span class="n">kvn</span><span class="o">.</span><span class="n">ppxf</span><span class="o">.</span><span class="n">bestfit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.0
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="BONUS---Example-of-a-bad-fit">
+<h3>BONUS - Example of a bad fit<a class="headerlink" href="#BONUS---Example-of-a-bad-fit" title="Permalink to this headline">¶</a></h3>
+<p>A common source of bad fit with ppxf is something wrong with the wavelenghts or velocities, either the templates weren’t created right because a log wavelength was given where a linear wavelength vector was expected (or vice versa),or the dv are wrong.</p>
+<p>The result will be a spectrum that CLEARLY doesn’t have the right kinematics: it’s too broad. Let’s see an example below so you can identify that problem quickly and double check your steps.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">pp</span> <span class="o">=</span> <span class="n">ppxf</span><span class="p">(</span><span class="n">kvn</span><span class="o">.</span><span class="n">templates</span><span class="p">,</span>           <span class="c1"># these are the BPASS SED templates</span>
+          <span class="n">flux</span><span class="p">,</span>                    <span class="c1"># observed flux vector</span>
+          <span class="n">noise</span><span class="p">,</span>                   <span class="c1"># the standard deviation vector</span>
+          <span class="n">velscale</span><span class="p">,</span>                <span class="c1"># the velocity scale calculated by the log rebin ppxf utility</span>
+          <span class="n">start</span><span class="p">,</span>                   <span class="c1"># the start guesses for recession vel and dispersion</span>
+          <span class="n">goodpixels</span><span class="o">=</span><span class="n">goodpixels</span><span class="p">,</span>   <span class="c1"># our goodpixels</span>
+          <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>              <span class="c1"># I set this to false because I made my own in hoki.sedfitting</span>
+          <span class="n">moments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>               <span class="c1"># order of the Gauss-Hermit moment to fit (see above)</span>
+          <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>                <span class="c1"># order of the polynomial to fit on top of the SED mixture</span>
+          <span class="n">vsyst</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>                 <span class="c1"># CHANGED THIS TO 0</span>
+          <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>             <span class="c1"># whether to perform sigma clipping and itterative fitting</span>
+          <span class="n">lam</span><span class="o">=</span><span class="n">WL</span>                   <span class="c1"># the observed wavelength vector</span>
+         <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">1.2</span><span class="p">])</span>
+
+
+<span class="c1"># PLOTTING THE RESULTS!</span>
+<span class="n">hsed</span><span class="o">.</span><span class="n">ppxf_plot_fixed</span><span class="p">(</span><span class="n">pp</span><span class="p">,</span> <span class="n">wl_fits</span><span class="o">=</span><span class="n">wl_fits</span><span class="p">,</span> <span class="n">WL</span><span class="o">=</span><span class="n">WL</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="n">F</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ Best Fit:       Vel     sigma        h3        h4
+ comp.  0:     -2000      1000    -0.300    -0.081
+chi2/DOF: 45.83; degree = 2; mdegree = 0
+method = capfit; Jac calls: 10; Func calls: 52; Status: 2
+linear_method = lsq_box; Nonzero Templates (&gt;0.1%):  3 / 126
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-0.11513668, -0.14540687, -0.12683344, ..., -0.11569206,
+       -0.04607372, -0.03827896])
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Fitting_the_region_around_the_transient_78_2.png" src="_images/Fitting_the_region_around_the_transient_78_2.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, heloise stevance.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
