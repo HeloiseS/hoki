@@ -89,7 +89,8 @@
               
             
             
-              <ul>
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">What is Hoki?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citation.html"><strong>Citing Us</strong></a></li>
 </ul>
@@ -107,6 +108,10 @@
 <li class="toctree-l1"><a class="reference internal" href="Fitting_the_region_around_the_transient.html">SED fitting of a transient neighbourhood</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Fitting_SEDs_of_a_data_cube_with_BPASS-hoki-ppxf.html">SED fitting of a data cube</a></li>
 </ul>
+<p class="caption"><span class="caption-text">Searching BPASS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="MIAPBP_EvE_tutorial.html">Searching for specific star systems in BPASS using EvE</a></li>
+</ul>
 <p class="caption"><span class="caption-text">Misc Recipes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="CMDs.html">Colour Magnitude Diagrams</a></li>
@@ -119,7 +124,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Dependencies</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#module-hoki.cmd"><strong>hoki.cmd</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="#hoki-constants"><strong>hoki.constants</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#hoki-constants"><strong>hoki.constants</strong></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bpass-and-hoki-constants">BPASS and hoki constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#module-hoki.eve"><strong>hoki.eve</strong></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id3">hoki.eve</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
@@ -412,11 +422,66 @@ the right path by using <cite>hoki.load.set_models.path()</cite>.</p>
 <div class="section" id="hoki-constants">
 <h1><strong>hoki.constants</strong><a class="headerlink" href="#hoki-constants" title="Permalink to this headline">¶</a></h1>
 <p>This module just contains BPASS constants and defines variables used in hoki.</p>
-<span class="target" id="module-hoki.constants"></span><p>Just BPASS things</p>
+<span class="target" id="module-hoki.constants"></span><div class="section" id="bpass-and-hoki-constants">
+<h2>BPASS and hoki constants<a class="headerlink" href="#bpass-and-hoki-constants" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>set_outputs_path(path) :</dt><dd><p>Changes the defaullt path to the BPASS outputs in hoki’s settings.yaml</p>
+</dd>
+<dt>set_default_bpass_version(version):</dt><dd><p>Changes the path to the stellar models in hoki’s settings.yaml</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>MODELS_PATH<span class="classifier">str</span></dt><dd><p>Absolute local path to the BPASS stellar library set by the <cite>models_path</cite> string in data/settings.yaml</p>
+</dd>
+<dt>BPASS_TIME_BINS<span class="classifier">1D np.array</span></dt><dd><p>Center of the log10 age (years) BPASS time grid bins</p>
+</dd>
+<dt>BPASS_TIME_INTERVALS<span class="classifier">1D np.array</span></dt><dd><p>Edges of the log10 age (years) BPASS time grid bins</p>
+</dd>
+<dt>BPASS_TIME_WEIGHT_GRID<span class="classifier">2D np.array (100x100)</span></dt><dd><p>2D grid to contain the age (time) weights for the HRDiagrams grids</p>
+</dd>
+<dt>BPASS_LINEAR_TIME_EDGES<span class="classifier">1D np.array</span></dt><dd><p>Edges of the BPASS age grid bins transformed to linear space</p>
+</dd>
+<dt>BPASS_LINEAR_TIME_INTERVALS<span class="classifier">1D np.array</span></dt><dd><p>Center of the BPASS age grid bins in linear space</p>
+</dd>
+<dt>BPASS_METALLICITIES<span class="classifier">list[str]</span></dt><dd><p>Valid BPASS metallicity strings in ascending metallicity order.</p>
+</dd>
+<dt>BPASS_NUM_METALLICITIES<span class="classifier">1D np.array</span></dt><dd><p>BPASS metallicities (numerical) in ascending metallicit order.</p>
+</dd>
+<dt>BPASS_METALLICITY_MID_POINTS<span class="classifier">1D np.array</span></dt><dd><p>Numerical BPASS metallicity midpoints</p>
+</dd>
+<dt>BPASS_EVENT_TYPES<span class="classifier">list</span></dt><dd><p>Transient event types considered in the transient rate model outputs</p>
+</dd>
+<dt>HOKI_NOW<span class="classifier">float</span></dt><dd><p>Current age of the Universe in years. 13.799e9</p>
+</dd>
+<dt>BPASS_IMFS<span class="classifier">list[str]</span></dt><dd><p>Valid BPASS imf strings (corresponds to the codes used in the naming of the model output files)</p>
+</dd>
+<dt>BPASS_WAVELENGTHS<span class="classifier">1D np.array</span></dt><dd><p>BPASS wavelength range covered by the model SEDs</p>
+</dd>
+<dt>dummy_dict<span class="classifier">dict</span></dt><dd><p>DEPRECATED. Dictionary relating the column names in the hoki dataframes containing the stellar model tables
+and the column numbers of the raw text (<em>sneplot</em>) files containing the stellar model tables
+keys: column name in the hoki dataframes
+values: column number in the sneplot files</p>
+</dd>
+<dt>dummy_dicts<span class="classifier">dict</span></dt><dd><p>Dictionaries relating the column names in the hoki dataframes containing the stellar model tables
+and the column numbers of the raw text (<em>sneplot</em>) files containing the stellar model tables.
+<strong>Read from settings.yaml</strong> and contains the keys and values for BPASS v2.2.1 and 2.2.2.
+keys: column name in the hoki dataframes
+values: column number in the sneplot files</p>
+</dd>
+<dt>dummy_manual<span class="classifier">dict</span></dt><dd><p>Dictionary containing the names of the columns (keys) in the hoki dataframes that contain the stellar model tables
+and their physical meaning in the simulations (values).</p>
+</dd>
+</dl>
 <dl class="py function">
 <dt id="hoki.constants.set_default_bpass_version">
 <code class="sig-prename descclassname"><span class="pre">hoki.constants.</span></code><code class="sig-name descname"><span class="pre">set_default_bpass_version</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hoki.constants.set_default_bpass_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Changes the path to the stellar models in hoki’dc settings</p>
+<dd><p>Changes the path to the stellar models in hoki’s settings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>version</strong> (<em>str</em><em>, </em><em>v221</em><em> or </em><em>v222</em>) – Version of BPASS to consider by default.</p>
@@ -453,6 +518,7 @@ bpass-v2.2-newmodels and the next level down should contain ‘NEWBINMODS’ and
 <p>You are going to have to reload hoki for your new path to take effect.</p>
 </dd></dl>
 
+</div>
 </div>
 <div class="section" id="module-hoki.eve">
 <span id="hoki-eve"></span><h1><strong>hoki.eve</strong><a class="headerlink" href="#module-hoki.eve" title="Permalink to this headline">¶</a></h1>
