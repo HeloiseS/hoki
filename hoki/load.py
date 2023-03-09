@@ -57,7 +57,7 @@ def set_models_path(path):
 
     assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
-    path_to_settings = data_path+'/settings.yaml'
+    path_to_settings = os.path.join(data_path, 'settings.yaml')
     with open(path_to_settings, 'r') as stream:
         settings = yaml.safe_load(stream)
 
@@ -504,9 +504,8 @@ def rates_all_z(data_path, imf, binary=True):
 
     # load supernova count files
     for num, metallicity in enumerate(BPASS_METALLICITIES):
-        data = model_output(
-            f"{data_path}/supernova-{star}-{imf}.{metallicity}.dat"
-        )
+        _path = path_to_settings = os.path.join(data_path, f'supernova-{star}-{imf}.{metallicity}.dat')
+        data = model_output(_path)
         data = data.loc[:, slice(BPASS_EVENT_TYPES[0], BPASS_EVENT_TYPES[-1])]
 
         rates.loc[:, (BPASS_NUM_METALLICITIES[num], slice(None))] = data.to_numpy()
@@ -573,9 +572,10 @@ def spectra_all_z(data_path, imf, binary=True):
          raise HokiTypeError("The folder location is expected to be a string.")
 
     # check if compiled file exists
-    if os.path.isfile(f"{data_path}/all_spectra-{star}-{imf}.npy"):
+    _spec_path = os.path.join(data_path, f"all_spectra-{star}-{imf}.npy")
+    if os.path.isfile(_spec_path):
         print("Loading precompiled file.")
-        spectra = np.load(f"{data_path}/all_spectra-{star}-{imf}.npy")
+        spectra = np.load(_spec_path)
         print("Done Loading.")
     # Otherwise compile
     else:
@@ -644,9 +644,10 @@ def emissivities_all_z(data_path, imf, binary=True):
          raise HokiTypeError("The folder location is expected to be a string.")
 
     # Check if compiled spectra are already present in data folder
-    if os.path.isfile(f"{data_path}/all_ionizing-{star}-{imf}.npy"):
+    _spec_path = os.path.join(data_path, f"all_ionizing-{star}-{imf}.npy")
+    if os.path.isfile(_spec_path):
         print("Load precompiled file.")
-        emissivities = np.load(f"{data_path}/all_ionizing-{star}-{imf}.npy")
+        emissivities = np.load(_spec_path)
         print("Done Loading.")
 
     # Compile the spectra for faster reading next time otherwise

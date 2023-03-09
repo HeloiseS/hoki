@@ -12,6 +12,8 @@ from hoki.constants import (DEFAULT_BPASS_VERSION, MODELS_PATH,
 import hoki.load
 import pandas as pd
 import re
+import os
+
 from os.path import isfile
 from hoki.utils.progressbar import print_progress_bar
 from hoki.utils.exceptions import HokiFatalError, HokiUserWarning, HokiFormatError, HokiKeyError
@@ -38,13 +40,13 @@ class _CompilerBase(abc.ABC):
         for num, metallicity in enumerate(BPASS_METALLICITIES):
             print_progress_bar(num, 12)
             # Check if file exists
-            assert isfile(f"{input_folder}/spectra-{star}-{imf}.{metallicity}.dat"),\
+            _spec_path = os.path.join(input_folder, f'spectra-{star}-{imf}.{metallicity}.dat')
+            assert isfile(_spec_path),\
                    "HOKI ERROR: This file does not exist, or its path is incorrect."
-            output[num] = self._load_single(
-                f"{input_folder}/{self._input_name()}-{star}-{imf}.{metallicity}.dat"
-            )
-
-        np.save(f"{output_folder}/{self._output_name()}-{star}-{imf}", output)
+            output[num] = self._load_single(_spec_path)
+        
+        _out_path = os.path.join(input_folder, f"{self._output_name()}-{star}-{imf}")
+        np.save(_out_path, output)
         # pickle the datafile
         self.output = output
         print(

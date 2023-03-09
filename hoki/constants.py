@@ -13,8 +13,7 @@ import io
 
 
 data_path = pkg_resources.resource_filename('hoki', 'data')
-
-path_to_settings = pkg_resources.resource_filename('hoki', 'data/settings.yaml')
+path_to_settings = os.path.join(data_path, 'settings.yaml')
 
 with open(os.path.relpath(path_to_settings), 'rb') as stream:
     settings = yaml.safe_load(stream)
@@ -156,7 +155,8 @@ def set_models_path(path):
     """
     assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
-    path_to_settings = data_path+'/settings.yaml'
+    path_to_settings = os.path.join(data_path, 'settings.yaml')
+    
     with open(path_to_settings, 'r') as stream:
         settings = yaml.safe_load(stream)
 
@@ -184,7 +184,8 @@ def set_outputs_path(path):
     """
     assert os.path.isdir(path), 'HOKI ERROR: The path provided does not correspond to a valid directory'
 
-    path_to_settings = data_path+'/settings.yaml'
+    path_to_settings = os.path.join(data_path, 'settings.yaml')
+    
     with open(path_to_settings, 'r') as stream:
         settings = yaml.safe_load(stream)
 
@@ -212,7 +213,7 @@ def set_default_bpass_version(version):
     """
     assert version in ['v221', 'v222'], 'HOKI ERROR: Invalid Version - your options are v221 or v222'
 
-    path_to_settings = data_path+'/settings.yaml'
+    path_to_settings = os.path.join(data_path, 'settings.yaml')
     with open(path_to_settings, 'r') as stream:
         settings = yaml.safe_load(stream)
 
