@@ -6,9 +6,9 @@
     
 .. image:: https://zenodo.org/badge/197853216.svg
     :target: https://zenodo.org/badge/latestdoi/197853216
-   
-.. image:: https://github.com/HeloiseS/hoki/workflows/CI/badge.svg   
-    :alt: tests
+    
+.. image:: https://github.com/HeloiseS/hoki/actions/workflows/ci_release.yml/badge.svg
+    :target: https://github.com/HeloiseS/hoki/actions/workflows/ci_release.yml)
     
 .. image:: https://img.shields.io/pypi/dm/hoki
     
