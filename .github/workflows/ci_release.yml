@@ -33,6 +33,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
+        pip install pytest-cov
         # pip install . should see what's in my setup.cfg
         pip install . 
     - name: Lint with flake8
