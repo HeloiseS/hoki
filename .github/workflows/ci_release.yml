@@ -19,7 +19,7 @@ jobs:
     strategy:
         matrix:
             os: [ubuntu-latest, macos-latest, windows-latest]
-            python-version: ['3.7','3.8','3.9', '3.10']   
+            python-version: ['3.8','3.9', '3.10']   
             #If adjusted here, make sure to also adjust the bindings in tox.ini
 
     # The steps to run for each python version
