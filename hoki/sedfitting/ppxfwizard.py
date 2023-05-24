@@ -18,9 +18,9 @@ from hoki.utils.hoki_dialogue import dialogue
 from hoki.utils.exceptions import HokiFatalError
 from hoki.utils.progressbar import print_progress_bar
 
-plt.style.use('hfs')
+#plt.style.use('hfs')
 
-__all__ = ['KVN']
+#__all__ = ['KVN']
 
 # TODO: isn't the thing below already in hoki constants?
 met_to_num={'zem5':1e-5,  'zem4':1e-4, 'z001':1e-3, 'z002':2e-3,'z003':3e-3,'z004':4e-3,'z006':6e-3,'z008':8e-3,
