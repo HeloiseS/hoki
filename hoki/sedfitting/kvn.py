@@ -289,6 +289,7 @@ class KVN(HokiObject):
 
         self.log_age_cols = log_age_cols
 
+        ### TODO: put this in a function and make bpass_list_spectra a cached property? (Make binray and single priv.att)
         # Making list of relevant spectra files
         if binary and single:
             self.bpass_list_spectra = glob.glob(self.model_path + 'spectra*')
@@ -304,6 +305,7 @@ class KVN(HokiObject):
 
         self.bpass_list_spectra.sort()
 
+        ### TODO: also make this a cached property (z_list will need to be a private attribute we can use in the func)
         # Allow user to select a list of metallicities?
         if z_list is not None:
             self.z_list=z_list
