@@ -1,5 +1,34 @@
-[build-system]
+[build-sys[project.optional-dependencies]tem]
 requires = ["setuptools",
             "setuptools_scm",
             "wheel"]
+[project]
+name = "hoki"
+version = "1.7.2"
+description = "A Python interface to BPASS - Bridging the gap between observation and theory"
+authors = [{name = "Heloise F. Stevance", email = "hfstevance@gmail.com"}]
+readme = "READEME.rst"
+homepage = "https://heloises.github.io/hoki/intro.html"
+license = "BSD 3-Clause"
+
+[project.urls]
+Source = "https://heloises.github.io/hoki/intro.html" 
+
+
+[project.dependencies]
+numpy = "*"
+pandas = "*"
+maptplotlib = "*"
+pyyaml = "*"
+wheel = "*"
+numba = "*"
+emcee = "*"
+corner = "*"
+scipy = "*"
+astropy = "*"
+specutils = "*"
+ppxf = "*"
+h5py = "*"
+
 build-backend = 'setuptools.build_meta'
+
