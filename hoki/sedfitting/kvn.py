@@ -45,7 +45,7 @@ plt.style.use('hfs')
 
 ####  Some useful definitions
 
-__all__ = ['KVN']
+#__all__ = ['KVN']
 
 met_to_num={'zem5':1e-5,  'zem4':1e-4, 'z001':1e-3, 'z002':2e-3,'z003':3e-3,'z004':4e-3,'z006':6e-3,'z008':8e-3,
             'z010':1e-2,'z014':1.4e-2,'z020':2e-2,'z030':3e-2, 'z040':4e-2}
