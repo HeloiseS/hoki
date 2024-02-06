@@ -1,11 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
-# Packages may add whatever they like to this file, but
-# should keep this content at the top.
-# ----------------------------------------------------------------------------
-from ._astropy_init import *   # noqa
-# ----------------------------------------------------------------------------
-
 # Enforce Python version check during package import.
 # This is the same check as the one at the top of setup.py
 import sys
@@ -22,6 +16,6 @@ class UnsupportedPythonError(Exception):
 
 
 if LooseVersion(sys.version) < LooseVersion(__minimum_python_version__):
-    raise UnsupportedPythonError("hoki does not support Python < {}"
-                                 .format(__minimum_python_version__))
-
+    raise UnsupportedPythonError(
+        "hoki does not support Python < {}".format(__minimum_python_version__)
+    )
