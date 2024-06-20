@@ -138,6 +138,9 @@ class CMD(HokiObject):
                                            f"If you've just done that and it looks like it didn't work, try to restart " \
                                            f"your notebook or terminal ;). "
 
+        assert MODELS_PATH[-1]=="/" or MODELS_PATH[-1]=='\\', f"DEBUGGING ASSISTANT: Directory MODELS_PATH = {MODELS_PATH}"\
+                                                             f"does not end with '/' or '\\' "
+
         self.path = MODELS_PATH
 
 
