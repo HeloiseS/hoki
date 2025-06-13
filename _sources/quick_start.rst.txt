@@ -35,7 +35,7 @@ BPASS models can be downloaded from the BPASS:
      - Hoki Compatible
      - Release Date
      - Reference
-   * - `BPASSv2.2 <https://drive.google.com/drive/folders/1BS2w9hpdaJeul6-YtZum--F4gxWIPYXl>`__
+   * - `BPASSv2.2 <https://www.dropbox.com/scl/fo/mpuas1xh5owmdadu0vpev/h?rlkey>`__
      - Yes
      - July 2018
      - `Stanway & Eldridge (2018) <https://ui.adsabs.harvard.edu/abs/2018MNRAS.479...75S/abstract>`__
